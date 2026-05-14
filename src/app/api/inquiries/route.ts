@@ -1,9 +1,9 @@
-import { createSupabaseServerClient } from "@/shared/api/SupabaseServer";
+import { createSupabaseServiceClient } from "@/shared/api/SupabaseServer";
 import { apiError, apiOk } from "@/shared/lib/api/server";
 
 export async function POST(request: Request) {
     const body = await request.json();
-    const supabase = createSupabaseServerClient();
+    const supabase = createSupabaseServiceClient();
     const { data, error } = await supabase
         .from("inquiries")
         .insert({

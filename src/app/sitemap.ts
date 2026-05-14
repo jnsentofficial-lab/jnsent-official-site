@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getPublishedNewsFetch } from "@/entities/news/api/news.api";
+import { createSupabaseServiceClient } from "@/shared/api/SupabaseServer";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
 
@@ -8,7 +8,13 @@ export const dynamic = "force-dynamic";
 const routes = ["", "/about", "/setupGuide", "/equipmentRental", "/studioRental", "/bjSupport", "/news", "/consulting"];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const news = (await getPublishedNewsFetch()).result;
+    const supabase = createSupabaseServiceClient();
+    const { data } = await supabase
+        .from("news")
+        .select("slug,updated_at")
+        .eq("is_published", true)
+        .order("published_at", { ascending: false });
+    const news = data ?? [];
     const routeItems = routes.map((route) => ({
         url: `${siteUrl}${route}`,
         lastModified: new Date(),
