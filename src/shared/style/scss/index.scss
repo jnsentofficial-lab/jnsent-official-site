@@ -1,0 +1,15 @@
+@charset "UTF-8";
+
+// base 초기 세팅 스타일
+// @use "base/fonts";
+@use "base/resets";
+// @use "base/utils";
+
+// components 재사용 가능한 컴포넌트
+// @use "components/common";
+
+// abstracts 전역변수
+@use "abstracts/variables";
+
+// 반응형 모바일
+// @use "layout/mobile";

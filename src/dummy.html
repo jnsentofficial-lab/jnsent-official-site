@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JNS Entertainment — BJ 파트너 모집</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&family=Noto+Sans+KR:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      color: #2c2c2c;
+      background: #ffffff;
+      overflow-x: hidden;
+    }
+
+    /* ─── Design Tokens ────────────────────────────────────── */
+    :root {
+      --white:      #ffffff;
+      --off-white:  #faf8f6;
+      --cream:      #f5f0eb;
+      --rose:       #e8a89c;        /* coral-rose accent */
+      --rose-light: #f7ede9;
+      --rose-mid:   #d4897b;
+      --gold:       #c9a96e;
+      --gold-light: #e8d5b0;
+      --gold-dark:  #a8874a;
+      --text-dark:  #1e1e1e;
+      --text-mid:   #555555;
+      --text-light: #888888;
+      --border:     #ede8e3;
+      --section-pad: clamp(8rem, 10vw, 14rem);
+    }
+
+    /* ─── Utility ──────────────────────────────────────────── */
+    .serif { font-family: 'Noto Serif KR', serif; }
+    .container {
+      width: min(112rem, 90%);
+      margin-inline: auto;
+    }
+    .gold-line {
+      display: block;
+      width: 4.8rem;
+      height: 0.15rem;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      margin-bottom: 2rem;
+    }
+    .section-label {
+      font-size: 1.1rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 1.2rem;
+    }
+    .section-title {
+      font-size: clamp(2.6rem, 3.5vw, 4.2rem);
+      font-weight: 400;
+      line-height: 1.45;
+      color: var(--text-dark);
+    }
+    .section-title strong { font-weight: 600; }
+    .section-desc {
+      font-size: clamp(1.4rem, 1.5vw, 1.6rem);
+      line-height: 1.9;
+      color: var(--text-mid);
+      margin-top: 2rem;
+    }
+
+    /* ─── Navbar ───────────────────────────────────────────── */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 0 5%;
+      height: 6.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s, box-shadow 0.4s;
+    }
+    #navbar.scrolled {
+      background: rgba(255,255,255,0.96);
+      box-shadow: 0 0.1rem 2rem rgba(0,0,0,0.06);
+      backdrop-filter: blur(1.2rem);
+    }
+    .nav-logo {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.8rem;
+      font-weight: 500;
+      color: var(--text-dark);
+      letter-spacing: 0.04em;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1rem 2.4rem;
+      background: linear-gradient(135deg, var(--rose) 0%, var(--rose-mid) 100%);
+      color: #fff;
+      font-size: 1.3rem;
+      font-weight: 500;
+      border-radius: 5rem;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.88; transform: translateY(-0.1rem); }
+
+    /* ─── Hero ─────────────────────────────────────────────── */
+    #hero {
+      min-height: 100dvh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background: var(--off-white);
+    }
+    .hero-bg-decor {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .hero-bg-decor::before {
+      content: '';
+      position: absolute;
+      top: -12rem; right: -12rem;
+      width: 52rem; height: 52rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,168,156,0.18) 0%, transparent 70%);
+    }
+    .hero-bg-decor::after {
+      content: '';
+      position: absolute;
+      bottom: -8rem; left: -8rem;
+      width: 38rem; height: 38rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,169,110,0.12) 0%, transparent 70%);
+    }
+    .hero-content {
+      padding: 12rem 6% 8rem 8%;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 1.1rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 3.2rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 3.2rem; height: 0.1rem;
+      background: var(--gold);
+    }
+    .hero-headline {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(3rem, 3.8vw, 5.2rem);
+      font-weight: 400;
+      line-height: 1.4;
+      color: var(--text-dark);
+      margin-bottom: 2.8rem;
+    }
+    .hero-headline em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--rose) 0%, var(--rose-mid) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: clamp(1.4rem, 1.5vw, 1.6rem);
+      line-height: 1.9;
+      color: var(--text-mid);
+      max-width: 44rem;
+      margin-bottom: 4.4rem;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 1.6rem;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1.6rem 3.6rem;
+      background: linear-gradient(135deg, var(--rose) 0%, var(--rose-mid) 100%);
+      color: #fff;
+      font-size: 1.4rem;
+      font-weight: 500;
+      border-radius: 5rem;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      box-shadow: 0 0.8rem 2.8rem rgba(212,137,123,0.35);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .btn-primary:hover { transform: translateY(-0.2rem); box-shadow: 0 1.2rem 3.6rem rgba(212,137,123,0.45); }
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1.5rem 3.2rem;
+      border: 0.15rem solid var(--gold);
+      color: var(--gold-dark);
+      font-size: 1.4rem;
+      font-weight: 500;
+      border-radius: 5rem;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: background 0.25s, color 0.25s;
+    }
+    .btn-outline:hover { background: var(--gold); color: #fff; }
+    .hero-badges {
+      display: flex;
+      gap: 2.4rem;
+      margin-top: 5.2rem;
+      flex-wrap: wrap;
+    }
+    .hero-badge {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .hero-badge-num {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 2.2rem;
+      font-weight: 500;
+      color: var(--text-dark);
+    }
+    .hero-badge-num span { color: var(--rose-mid); }
+    .hero-badge-label {
+      font-size: 1.1rem;
+      color: var(--text-light);
+      letter-spacing: 0.06em;
+    }
+    .hero-badge-divider {
+      width: 0.1rem;
+      background: var(--border);
+      align-self: stretch;
+    }
+    .hero-image-wrap {
+      position: relative;
+      height: 100dvh;
+      overflow: hidden;
+    }
+    .hero-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+    .hero-image-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, var(--off-white) 0%, transparent 25%);
+    }
+
+    /* ─── Intro Band ───────────────────────────────────────── */
+    #intro-band {
+      background: linear-gradient(135deg, var(--rose-light) 0%, var(--cream) 100%);
+      padding: 3.6rem 0;
+      overflow: hidden;
+    }
+    .marquee-track {
+      display: flex;
+      gap: 4.8rem;
+      animation: marquee 22s linear infinite;
+      white-space: nowrap;
+    }
+    .marquee-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 1.6rem;
+      font-size: 1.3rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--rose-mid);
+      font-weight: 500;
+    }
+    .marquee-item::after {
+      content: '✦';
+      color: var(--gold);
+      font-size: 1rem;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ─── About ────────────────────────────────────────────── */
+    #about {
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      padding: var(--section-pad) 0;
+      background: var(--white);
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8rem;
+      align-items: center;
+    }
+    .about-image-wrap {
+      position: relative;
+    }
+    .about-image-wrap img {
+      width: 100%;
+      border-radius: 0.4rem;
+      display: block;
+    }
+    .about-image-decor {
+      position: absolute;
+      top: -2rem; left: -2rem;
+      width: 100%; height: 100%;
+      border: 0.15rem solid var(--gold-light);
+      border-radius: 0.4rem;
+      z-index: -1;
+    }
+    .about-tag {
+      position: absolute;
+      bottom: -2.4rem; right: -2.4rem;
+      background: var(--white);
+      border: 0.1rem solid var(--border);
+      border-radius: 1.2rem;
+      padding: 2rem 2.4rem;
+      box-shadow: 0 0.8rem 3.2rem rgba(0,0,0,0.06);
+    }
+    .about-tag-num {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 2.8rem;
+      font-weight: 500;
+      color: var(--text-dark);
+      line-height: 1;
+    }
+    .about-tag-num span { color: var(--rose-mid); }
+    .about-tag-label { font-size: 1.1rem; color: var(--text-light); margin-top: 0.4rem; }
+    .about-list {
+      list-style: none;
+      margin-top: 3.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+    }
+    .about-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.4rem;
+      font-size: 1.5rem;
+      line-height: 1.7;
+      color: var(--text-mid);
+    }
+    .about-list li::before {
+      content: '';
+      flex-shrink: 0;
+      margin-top: 0.8rem;
+      width: 0.6rem; height: 0.6rem;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--rose), var(--gold));
+    }
+
+    /* ─── Stats ────────────────────────────────────────────── */
+    #stats {
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      padding: var(--section-pad) 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .stats-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('jns_stats_bg.png');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.55;
+    }
+    .stats-content { position: relative; z-index: 2; width: 100%; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.2rem;
+      margin-top: 6rem;
+      background: var(--border);
+    }
+    .stat-card {
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(0.8rem);
+      padding: 4.8rem 4rem;
+      text-align: center;
+      transition: background 0.3s;
+    }
+    .stat-card:hover { background: rgba(255,255,255,0.98); }
+    .stat-icon {
+      font-size: 2.8rem;
+      margin-bottom: 1.6rem;
+      display: block;
+    }
+    .stat-num {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(2.8rem, 3.5vw, 4.4rem);
+      font-weight: 500;
+      color: var(--text-dark);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+    .stat-num span { color: var(--rose-mid); }
+    .stat-label {
+      font-size: 1.3rem;
+      color: var(--text-light);
+      line-height: 1.6;
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── Strengths ────────────────────────────────────────── */
+    #strengths {
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      padding: var(--section-pad) 0;
+      background: var(--off-white);
+    }
+    .strengths-header { text-align: center; margin-bottom: 7.2rem; }
+    .strengths-header .gold-line { margin-inline: auto; }
+    .strengths-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2.4rem;
+    }
+    .strength-card {
+      background: var(--white);
+      border: 0.1rem solid var(--border);
+      border-radius: 1.2rem;
+      padding: 3.6rem 2.8rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .strength-card:hover {
+      transform: translateY(-0.6rem);
+      box-shadow: 0 1.6rem 4.8rem rgba(0,0,0,0.07);
+    }
+    .strength-icon-wrap {
+      width: 5.2rem; height: 5.2rem;
+      border-radius: 1.4rem;
+      background: linear-gradient(135deg, var(--rose-light), var(--cream));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.2rem;
+      margin-bottom: 2rem;
+    }
+    .strength-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+    .strength-desc {
+      font-size: 1.3rem;
+      color: var(--text-mid);
+      line-height: 1.8;
+    }
+
+    /* ─── Support ──────────────────────────────────────────── */
+    #support {
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      padding: var(--section-pad) 0;
+      background: var(--white);
+    }
+    .support-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8rem;
+      align-items: center;
+    }
+    .support-image-wrap img {
+      width: 100%;
+      border-radius: 0.4rem;
+      display: block;
+    }
+    .support-list {
+      list-style: none;
+      margin-top: 3.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .support-item {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      padding: 2rem 0;
+      border-bottom: 0.1rem solid var(--border);
+    }
+    .support-item:first-child { border-top: 0.1rem solid var(--border); }
+    .support-num {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.3rem;
+      color: var(--gold);
+      font-weight: 500;
+      flex-shrink: 0;
+      width: 2.4rem;
+    }
+    .support-text {
+      font-size: 1.4rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+    .support-text strong { color: var(--text-dark); font-weight: 600; }
+
+    /* ─── Recruit ──────────────────────────────────────────── */
+    #recruit {
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      padding: var(--section-pad) 0;
+      background: var(--off-white);
+    }
+    .recruit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4.8rem;
+      margin-top: 6rem;
+    }
+    .recruit-card {
+      background: var(--white);
+      border-radius: 1.6rem;
+      padding: 4.4rem 4rem;
+      border: 0.1rem solid var(--border);
+    }
+    .recruit-card-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.8rem;
+      font-weight: 500;
+      color: var(--text-dark);
+      margin-bottom: 2.8rem;
+      padding-bottom: 2rem;
+      border-bottom: 0.1rem solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .recruit-card-title .dot {
+      width: 0.8rem; height: 0.8rem;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--rose), var(--gold));
+      flex-shrink: 0;
+    }
+    .recruit-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+    .recruit-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.2rem;
+      font-size: 1.4rem;
+      line-height: 1.7;
+      color: var(--text-mid);
+    }
+    .recruit-list li::before {
+      content: '✓';
+      color: var(--rose-mid);
+      font-weight: 600;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+    .recruit-highlight {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, var(--rose-light) 0%, var(--cream) 100%);
+      border-radius: 1.6rem;
+      padding: 4.4rem 4.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 3.2rem;
+      border: 0.1rem solid rgba(232,168,156,0.3);
+    }
+    .recruit-highlight-text {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(1.8rem, 2vw, 2.4rem);
+      font-weight: 400;
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+    .recruit-highlight-text strong { color: var(--rose-mid); }
+
+    /* ─── Notice ───────────────────────────────────────────── */
+    #notice {
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      padding: var(--section-pad) 0;
+      background: var(--white);
+    }
+    .notice-box {
+      background: var(--off-white);
+      border: 0.1rem solid var(--border);
+      border-left: 0.4rem solid var(--gold);
+      border-radius: 0 1.2rem 1.2rem 0;
+      padding: 4rem 4.4rem;
+      margin-top: 4.8rem;
+    }
+    .notice-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--gold-dark);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .notice-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+    .notice-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.2rem;
+      font-size: 1.4rem;
+      line-height: 1.8;
+      color: var(--text-mid);
+    }
+    .notice-list li::before {
+      content: '·';
+      color: var(--gold);
+      font-size: 2rem;
+      line-height: 1.4;
+      flex-shrink: 0;
+    }
+    .notice-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.4rem;
+      margin-top: 2.4rem;
+    }
+
+    /* ─── CTA ──────────────────────────────────────────────── */
+    #cta {
+      min-height: 60dvh;
+      display: flex;
+      align-items: center;
+      padding: var(--section-pad) 0;
+      background: linear-gradient(135deg, #1e1e1e 0%, #2d2420 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    #cta::before {
+      content: '';
+      position: absolute;
+      top: -20rem; right: -20rem;
+      width: 60rem; height: 60rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,168,156,0.12) 0%, transparent 65%);
+    }
+    #cta::after {
+      content: '';
+      position: absolute;
+      bottom: -15rem; left: -15rem;
+      width: 45rem; height: 45rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,169,110,0.1) 0%, transparent 65%);
+    }
+    .cta-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+    .cta-label {
+      font-size: 1.1rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 2.4rem;
+    }
+    .cta-headline {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(2.8rem, 4vw, 5.2rem);
+      font-weight: 400;
+      color: #ffffff;
+      line-height: 1.45;
+      margin-bottom: 2rem;
+    }
+    .cta-headline em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--rose) 0%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .cta-sub {
+      font-size: 1.5rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.8;
+      margin-bottom: 4.8rem;
+    }
+    .cta-actions {
+      display: flex;
+      gap: 1.6rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-cta-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.8rem 4.8rem;
+      background: linear-gradient(135deg, var(--rose) 0%, var(--rose-mid) 100%);
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: 500;
+      border-radius: 5rem;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      box-shadow: 0 1rem 3.6rem rgba(212,137,123,0.4);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .btn-cta-primary:hover { transform: translateY(-0.3rem); box-shadow: 0 1.6rem 4.8rem rgba(212,137,123,0.5); }
+    .btn-cta-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.7rem 4rem;
+      border: 0.15rem solid rgba(201,169,110,0.6);
+      color: var(--gold-light);
+      font-size: 1.5rem;
+      font-weight: 500;
+      border-radius: 5rem;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: border-color 0.25s, color 0.25s;
+    }
+    .btn-cta-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ─── Footer ───────────────────────────────────────────── */
+    footer {
+      background: #161616;
+      padding: 4.8rem 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+    .footer-logo {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.6rem;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 0.06em;
+    }
+    .footer-logo span { color: var(--gold); }
+    .footer-copy {
+      font-size: 1.2rem;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── Scroll Reveal ────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(3rem);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ─── Responsive ───────────────────────────────────────── */
+    @media (max-width: 90rem) {
+      #hero { grid-template-columns: 1fr; }
+      .hero-image-wrap { display: none; }
+      .hero-content { padding: 12rem 6% 8rem; }
+      .about-grid, .support-grid { grid-template-columns: 1fr; gap: 4.8rem; }
+      .about-image-wrap { order: -1; }
+      .strengths-grid { grid-template-columns: repeat(2, 1fr); }
+      .recruit-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .notice-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 56rem) {
+      .strengths-grid { grid-template-columns: 1fr; }
+      .hero-badges { gap: 1.6rem; }
+      .recruit-highlight { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navbar ─────────────────────────────────────────────── -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">JNS<span>.</span> Entertainment</a>
+    <a href="#cta" class="nav-cta">지금 지원하기 →</a>
+  </nav>
+
+  <!-- ── Hero ───────────────────────────────────────────────── -->
+  <section id="hero">
+    <div class="hero-bg-decor"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">JNS Entertainment · BJ Partner Recruit</div>
+      <h1 class="hero-headline">
+        혼자 시작하지 마세요.<br />
+        <em>제이엔에스가 방송 시작부터</em><br />
+        성장까지 함께합니다.
+      </h1>
+      <p class="hero-sub">
+        플랫폼 신기록을 보유한 라이브 콘텐츠 운영사.<br />
+        초보·투잡·방송 경험 없는 분들도 체계적인 시스템 안에서 안정적으로 시작할 수 있습니다.
+      </p>
+      <div class="hero-actions">
+        <a href="#cta" class="btn-primary">BJ 파트너 지원하기</a>
+        <a href="#about" class="btn-outline">더 알아보기</a>
+      </div>
+      <div class="hero-badges">
+        <div class="hero-badge">
+          <span class="hero-badge-num">8<span>년+</span></span>
+          <span class="hero-badge-label">운영 경험</span>
+        </div>
+        <div class="hero-badge-divider"></div>
+        <div class="hero-badge">
+          <span class="hero-badge-num">120<span>명+</span></span>
+          <span class="hero-badge-label">BJ 네트워크</span>
+        </div>
+        <div class="hero-badge-divider"></div>
+        <div class="hero-badge">
+          <span class="hero-badge-num">10<span>:0</span></span>
+          <span class="hero-badge-label">최대 계약 조건</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-image-wrap">
+      <img src="jns_hero.png" alt="JNS 방송 환경" />
+      <div class="hero-image-overlay"></div>
+    </div>
+  </section>
+
+  <!-- ── Intro Band ──────────────────────────────────────────── -->
+  <div id="intro-band">
+    <div class="marquee-track">
+      <span class="marquee-item">플랫폼 직속 엔터테인먼트</span>
+      <span class="marquee-item">초보 BJ 환영</span>
+      <span class="marquee-item">전담 매니저 배정</span>
+      <span class="marquee-item">고성능 방송 장비 지원</span>
+      <span class="marquee-item">공정 계약 운영</span>
+      <span class="marquee-item">사내 스튜디오 이용 가능</span>
+      <span class="marquee-item">플랫폼 신기록 보유</span>
+      <span class="marquee-item">투잡·초보 지원 가능</span>
+      <!-- duplicate for seamless loop -->
+      <span class="marquee-item">플랫폼 직속 엔터테인먼트</span>
+      <span class="marquee-item">초보 BJ 환영</span>
+      <span class="marquee-item">전담 매니저 배정</span>
+      <span class="marquee-item">고성능 방송 장비 지원</span>
+      <span class="marquee-item">공정 계약 운영</span>
+      <span class="marquee-item">사내 스튜디오 이용 가능</span>
+      <span class="marquee-item">플랫폼 신기록 보유</span>
+      <span class="marquee-item">투잡·초보 지원 가능</span>
+    </div>
+  </div>
+
+  <!-- ── About ───────────────────────────────────────────────── -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-image-wrap reveal">
+          <img src="jns_trust.png" alt="JNS 매니저와 BJ 상담" />
+          <div class="about-image-decor"></div>
+          <div class="about-tag">
+            <div class="about-tag-num">5<span>년+</span></div>
+            <div class="about-tag-label">라이브 콘텐츠 운영 경험</div>
+          </div>
+        </div>
+        <div class="reveal reveal-delay-2">
+          <span class="section-label">About JNS</span>
+          <span class="gold-line"></span>
+          <h2 class="section-title serif">
+            체계적인 시스템으로<br />
+            <strong>당신의 방송을 함께 만들어갑니다</strong>
+          </h2>
+          <p class="section-desc">
+            제이엔에스엔터테인먼트는 플랫폼 직속 운영사로서 5년 이상의 라이브 콘텐츠 운영 경험을 바탕으로 BJ 파트너 한 분 한 분의 성장을 책임지는 매니지먼트 시스템을 운영하고 있습니다.
+          </p>
+          <ul class="about-list">
+            <li>플랫폼 직속 엔터테인먼트 운영으로 안정적인 방송 환경 제공</li>
+            <li>협력 포함 120명 이상의 BJ 네트워크를 통한 크루 방송 운영</li>
+            <li>방송 컨설팅 및 전담 매니저 1:1 배정 시스템</li>
+            <li>콘텐츠 방향성 설계부터 장비 세팅까지 전 과정 지원</li>
+            <li>공정 계약 운영 지향 — 최대 10:0 계약 조건 가능</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Stats ───────────────────────────────────────────────── -->
+  <section id="stats">
+    <div class="stats-bg"></div>
+    <div class="stats-content">
+      <div class="container">
+        <div class="reveal" style="text-align:center;">
+          <span class="section-label">Platform Records</span>
+          <span class="gold-line" style="margin-inline:auto;"></span>
+          <h2 class="section-title serif" style="text-align:center;">
+            숫자로 증명하는<br /><strong>JNS의 운영 성과</strong>
+          </h2>
+        </div>
+        <div class="stats-grid reveal reveal-delay-1">
+          <div class="stat-card">
+            <span class="stat-icon">🏆</span>
+            <div class="stat-num">7,324,<span>709</span></div>
+            <div class="stat-label">크루 방송 단일 회차 최고 달성</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">⭐</span>
+            <div class="stat-num">6,230,<span>000</span></div>
+            <div class="stat-label">주간 BJ 최고 달성</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">✨</span>
+            <div class="stat-num">2,500,<span>000+</span></div>
+            <div class="stat-label">개인방송 단일 방송 최고 달성</div>
+          </div>
+        </div>
+        <p class="section-desc reveal reveal-delay-2" style="text-align:center; margin-top:3.2rem;">
+          단순한 수치가 아닌, 실제 운영을 통해 쌓아온 플랫폼 신기록입니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Strengths ──────────────────────────────────────────── -->
+  <section id="strengths">
+    <div class="container">
+      <div class="strengths-header reveal">
+        <span class="section-label">Why JNS</span>
+        <span class="gold-line"></span>
+        <h2 class="section-title serif">JNS와 함께해야 하는 이유</h2>
+        <p class="section-desc" style="max-width:52rem; margin-inline:auto;">
+          단순한 소속사가 아닙니다. 방송 시작부터 성장까지 모든 단계를 함께하는 파트너입니다.
+        </p>
+      </div>
+      <div class="strengths-grid">
+        <div class="strength-card reveal reveal-delay-1">
+          <div class="strength-icon-wrap">📋</div>
+          <div class="strength-title">공정 계약 운영</div>
+          <p class="strength-desc">불공정 조항 없는 투명한 계약 구조. 최대 10:0 계약 조건으로 파트너의 수익을 최우선으로 생각합니다.</p>
+        </div>
+        <div class="strength-card reveal reveal-delay-2">
+          <div class="strength-icon-wrap">👩‍💼</div>
+          <div class="strength-title">전담 매니저 배정</div>
+          <p class="strength-desc">1:1 전담 매니저가 방송 방향성 설계, 일정 관리, 성장 전략을 함께 고민합니다.</p>
+        </div>
+        <div class="strength-card reveal reveal-delay-3">
+          <div class="strength-icon-wrap">🎙️</div>
+          <div class="strength-title">장비 & 스튜디오 지원</div>
+          <p class="strength-desc">방송용 PC, 마이크, 조명, 캠, 오디오 인터페이스 지원. 사내 스튜디오 이용도 가능합니다.</p>
+        </div>
+        <div class="strength-card reveal reveal-delay-4">
+          <div class="strength-icon-wrap">🌐</div>
+          <div class="strength-title">플랫폼 직속 운영</div>
+          <p class="strength-desc">플랫폼과의 직속 관계를 통해 더 빠르고 안정적인 방송 환경과 지원을 받을 수 있습니다.</p>
+        </div>
+        <div class="strength-card reveal reveal-delay-1">
+          <div class="strength-icon-wrap">📈</div>
+          <div class="strength-title">크루 방송 운영</div>
+          <p class="strength-desc">자체 크루 및 엑셀 방송 운영으로 개인 방송 외에도 다양한 수익 창출 기회를 제공합니다.</p>
+        </div>
+        <div class="strength-card reveal reveal-delay-2">
+          <div class="strength-icon-wrap">🎓</div>
+          <div class="strength-title">초보자 교육 지원</div>
+          <p class="strength-desc">방송 경험이 전혀 없어도 괜찮습니다. 방송 세팅부터 콘텐츠 기획까지 체계적인 교육을 제공합니다.</p>
+        </div>
+        <div class="strength-card reveal reveal-delay-3">
+          <div class="strength-icon-wrap">🤝</div>
+          <div class="strength-title">120명+ BJ 네트워크</div>
+          <p class="strength-desc">협력 포함 120명 이상의 BJ 네트워크를 통해 다양한 협업과 성장 기회를 경험할 수 있습니다.</p>
+        </div>
+        <div class="strength-card reveal reveal-delay-4">
+          <div class="strength-icon-wrap">💻</div>
+          <div class="strength-title">원격 세팅 지원</div>
+          <p class="strength-desc">직접 방문이 어려운 경우에도 원격으로 방송 환경 세팅 및 프로그램 설치를 지원합니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Support ─────────────────────────────────────────────── -->
+  <section id="support">
+    <div class="container">
+      <div class="support-grid">
+        <div class="reveal">
+          <span class="section-label">Broadcast Support</span>
+          <span class="gold-line"></span>
+          <h2 class="section-title serif">
+            방송 시작에 필요한<br /><strong>모든 것을 지원합니다</strong>
+          </h2>
+          <p class="section-desc">
+            장비가 없어도, 공간이 없어도, 경험이 없어도 괜찮습니다. 제이엔에스는 방송 시작에 필요한 모든 환경을 함께 준비해드립니다.
+          </p>
+          <ul class="support-list">
+            <li class="support-item">
+              <span class="support-num">01</span>
+              <span class="support-text"><strong>방송 장비 세팅</strong> — 방송용 PC, 마이크, 조명, 캠, 오디오 인터페이스 지원</span>
+            </li>
+            <li class="support-item">
+              <span class="support-num">02</span>
+              <span class="support-text"><strong>원격 세팅 지원</strong> — 방송 프로그램 설치 및 원격 환경 구성 가능</span>
+            </li>
+            <li class="support-item">
+              <span class="support-num">03</span>
+              <span class="support-text"><strong>방송 컨설팅</strong> — 콘텐츠 방향성 및 방송 환경 전반에 대한 1:1 컨설팅</span>
+            </li>
+            <li class="support-item">
+              <span class="support-num">04</span>
+              <span class="support-text"><strong>사내 스튜디오</strong> — 고성능 방송 장비를 갖춘 사내 스튜디오 이용 가능</span>
+            </li>
+          </ul>
+        </div>
+        <div class="support-image-wrap reveal reveal-delay-2">
+          <img src="jns_feature.png" alt="방송 장비 지원" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Recruit ─────────────────────────────────────────────── -->
+  <section id="recruit">
+    <div class="container">
+      <div class="reveal">
+        <span class="section-label">Recruitment</span>
+        <span class="gold-line"></span>
+        <h2 class="section-title serif">
+          지원 자격 및<br /><strong>모집 요강</strong>
+        </h2>
+      </div>
+      <div class="recruit-grid">
+        <div class="recruit-card reveal reveal-delay-1">
+          <div class="recruit-card-title">
+            <span class="dot"></span>지원 자격
+          </div>
+          <ul class="recruit-list">
+            <li>만 20세 이상 여성 지원 가능</li>
+            <li>주 5일 / 일 최소 4시간 이상 방송 가능자 우대</li>
+            <li>원하는 시간 및 요일에 방송 가능</li>
+            <li>투잡 및 초보 지원 가능</li>
+            <li>방송 경험이 없어도 교육 및 세팅 지원</li>
+          </ul>
+        </div>
+        <div class="recruit-card reveal reveal-delay-2">
+          <div class="recruit-card-title">
+            <span class="dot"></span>지원 절차
+          </div>
+          <ul class="recruit-list">
+            <li>지원서 제출 (하단 버튼 클릭)</li>
+            <li>담당 매니저 1:1 상담 진행</li>
+            <li>계약 조건 안내 및 협의</li>
+            <li>방송 환경 세팅 및 교육</li>
+            <li>방송 시작 및 전담 매니저 배정</li>
+          </ul>
+        </div>
+        <div class="recruit-highlight reveal reveal-delay-3">
+          <div class="recruit-highlight-text">
+            경험이 없어도 괜찮습니다.<br />
+            <strong>제이엔에스가 처음부터 함께합니다.</strong>
+          </div>
+          <a href="#cta" class="btn-primary" style="flex-shrink:0;">지금 지원하기 →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Notice ─────────────────────────────────────────────── -->
+  <section id="notice">
+    <div class="container">
+      <div class="reveal">
+        <span class="section-label">Important Notice</span>
+        <span class="gold-line"></span>
+        <h2 class="section-title serif">
+          지원 전 꼭 확인하세요<br />
+          <strong>예비 BJ를 위한 주의사항</strong>
+        </h2>
+        <p class="section-desc" style="max-width:60rem;">
+          신뢰할 수 있는 파트너를 선택하는 것이 무엇보다 중요합니다. 아래 내용을 꼭 확인하시고 현명한 선택을 하시기 바랍니다.
+        </p>
+      </div>
+      <div class="notice-grid reveal reveal-delay-1">
+        <div class="notice-box">
+          <div class="notice-title">⚠️ 이런 업체는 주의하세요</div>
+          <ul class="notice-list">
+            <li>과도한 수익 보장을 약속하는 업체</li>
+            <li>장기 계약을 강요하거나 위약금 조항이 불명확한 업체</li>
+            <li>계약서 없이 구두 약속만으로 진행하는 업체</li>
+            <li>초기 비용 또는 장비 구매를 강요하는 업체</li>
+            <li>수익 배분 구조가 불투명한 업체</li>
+          </ul>
+        </div>
+        <div class="notice-box" style="border-left-color: var(--rose-mid);">
+          <div class="notice-title" style="color: var(--rose-mid);">✅ JNS의 약속</div>
+          <ul class="notice-list">
+            <li>모든 계약은 서면으로 진행하며 계약서를 반드시 제공합니다</li>
+            <li>수익 배분 구조를 투명하게 공개합니다</li>
+            <li>강제 장기 계약 없이 합리적인 조건으로 운영합니다</li>
+            <li>초기 비용 없이 방송 시작이 가능합니다</li>
+            <li>언제든지 궁금한 점을 담당 매니저에게 문의할 수 있습니다</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ─────────────────────────────────────────────────── -->
+  <section id="cta">
+    <div class="container">
+      <div class="cta-content reveal">
+        <div class="cta-label">Join JNS Entertainment</div>
+        <h2 class="cta-headline">
+          지금 바로 시작하세요.<br />
+          <em>당신의 첫 방송, JNS와 함께.</em>
+        </h2>
+        <p class="cta-sub">
+          초보도, 투잡도, 경험 없어도 괜찮습니다.<br />
+          제이엔에스엔터테인먼트가 방송 시작부터 성장까지 함께합니다.
+        </p>
+        <div class="cta-actions">
+          <a href="https://open.kakao.com" class="btn-cta-primary">카카오톡으로 문의하기</a>
+          <a href="tel:010-0000-0000" class="btn-cta-outline">전화 상담 신청</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ─────────────────────────────────────────────── -->
+  <footer>
+    <div class="footer-logo">JNS<span>.</span> Entertainment</div>
+    <div class="footer-copy">© 2024 JNS Entertainment. All rights reserved.</div>
+  </footer>
+
+  <!-- ── Scripts ─────────────────────────────────────────────── -->
+  <script>
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

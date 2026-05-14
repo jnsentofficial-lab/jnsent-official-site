@@ -1,0 +1,27 @@
+import { clientApi, type ApiResponse } from "@/shared/lib/api/client";
+import type { CreateInquiryCommentPayload, CreateInquiryPayload, Inquiry, InquiryComment, UpdateInquiryStatusPayload } from "@/entities/inquiry/model/inquiry.type";
+
+export async function createInquiryFetch(payload: CreateInquiryPayload) {
+    return clientApi.post<ApiResponse<Inquiry>>("/api/inquiries", payload);
+}
+
+export async function getAdminInquiriesFetch() {
+    return clientApi.get<ApiResponse<Inquiry[]>>("/api/admin/inquiries");
+}
+
+export async function updateInquiryStatusFetch(payload: UpdateInquiryStatusPayload) {
+    return clientApi.patch<ApiResponse<Inquiry>>(`/api/admin/inquiries/${payload.id}`, {
+        status: payload.status,
+    });
+}
+
+export async function getInquiryCommentsFetch(inquiryId: string) {
+    return clientApi.get<ApiResponse<InquiryComment[]>>(`/api/admin/inquiries/${inquiryId}/comments`);
+}
+
+export async function createInquiryCommentFetch(payload: CreateInquiryCommentPayload) {
+    return clientApi.post<ApiResponse<InquiryComment>>(`/api/admin/inquiries/${payload.inquiry_id}/comments`, {
+        manager_name: payload.manager_name,
+        message: payload.message,
+    });
+}

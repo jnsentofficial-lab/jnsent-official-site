@@ -1,0 +1,26 @@
+"use client";
+
+import { Button } from "./kit/Button";
+import { Link } from "./kit/Link";
+import Skeleton from "./kit/Skeleton";
+
+// import { buildAppUi } from "./buildAppUi";
+
+// export { Card, CardItem, CardItemRow } from "@/shared/ui/kit/Card";
+// export type { CreateDocumentGuideItem, CreateDocumentItem } from "@/shared/config/guideList";
+
+// const UI = buildAppUi();
+const KIT = {
+    Skeleton,
+    Button,
+    Link,
+};
+
+const COMPOSED = {};
+
+const UI = {
+    ...KIT,
+    ...COMPOSED,
+};
+
+export default UI;

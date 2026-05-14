@@ -1,0 +1,58 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createManagerAccountFetch, getManagerAccountsFetch, updateManagerAccountFetch } from "@/entities/managerAccount/api/managerAccount.api";
+import type { ManagerAccount, UpsertManagerAccountPayload } from "@/entities/managerAccount/model/managerAccount.type";
+import { useToastStore } from "@/shared/model/stores/useToastStore";
+
+export const ManagerAccountRoutes = {
+    ADMIN_MANAGER_ACCOUNTS: "admin:managerAccounts",
+} as const;
+
+export const useManagerAccountsQuery = () => {
+    const MUTATION_KEY = ManagerAccountRoutes.ADMIN_MANAGER_ACCOUNTS;
+    const { data, isLoading, isError, error, isFetching, isFetched, refetch } = useQuery({
+        queryKey: [MUTATION_KEY, "useManagerAccountsQuery"],
+        queryFn: () => getManagerAccountsFetch(),
+        staleTime: 0,
+    });
+
+    const response: ManagerAccount[] = data?.result ?? [];
+    return { data: response, isLoading, isError, error, isFetching, isFetched, refetch };
+};
+
+export const useCreateManagerAccountMutation = () => {
+    const { setToast } = useToastStore();
+    const MUTATION_KEY = ManagerAccountRoutes.ADMIN_MANAGER_ACCOUNTS;
+    const queryClient = useQueryClient();
+    const { data, mutate, mutateAsync, error, isError, isSuccess, isIdle, isPending, isPaused, reset } = useMutation({
+        mutationKey: [MUTATION_KEY, "useCreateManagerAccountMutation"],
+        mutationFn: (payload: UpsertManagerAccountPayload) => createManagerAccountFetch(payload),
+        onSuccess: () => {
+            setToast({ msg: "담당자 계정을 등록했어요", time: 3, type: "success" });
+            queryClient.invalidateQueries({ queryKey: [MUTATION_KEY] });
+        },
+        onError: (err: Error) => {
+            setToast({ msg: err.message ?? "에러 발생", time: 2, type: "fail" });
+        },
+    });
+
+    return { mutate, mutateAsync, isError, isIdle, isSuccess, isPending, isPaused, data, error, reset };
+};
+
+export const useUpdateManagerAccountMutation = () => {
+    const { setToast } = useToastStore();
+    const MUTATION_KEY = ManagerAccountRoutes.ADMIN_MANAGER_ACCOUNTS;
+    const queryClient = useQueryClient();
+    const { data, mutate, mutateAsync, error, isError, isSuccess, isIdle, isPending, isPaused, reset } = useMutation({
+        mutationKey: [MUTATION_KEY, "useUpdateManagerAccountMutation"],
+        mutationFn: (payload: UpsertManagerAccountPayload) => updateManagerAccountFetch(payload),
+        onSuccess: () => {
+            setToast({ msg: "담당자 계정을 수정했어요", time: 3, type: "success" });
+            queryClient.invalidateQueries({ queryKey: [MUTATION_KEY] });
+        },
+        onError: (err: Error) => {
+            setToast({ msg: err.message ?? "에러 발생", time: 2, type: "fail" });
+        },
+    });
+
+    return { mutate, mutateAsync, isError, isIdle, isSuccess, isPending, isPaused, data, error, reset };
+};
