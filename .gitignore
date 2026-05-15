@@ -8,7 +8,7 @@ supabase/.temp/
 *.tsbuildinfo
 next-env.d.ts
 .DS_Store
-docs/
+# docs/
 *.zip
 *.tar
 *.tar.gz

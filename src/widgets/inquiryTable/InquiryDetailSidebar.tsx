@@ -1,8 +1,13 @@
 "use client";
 
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
+import { useUploadImageMutation } from "@/entities/asset/api/asset.query";
 import { useCreateInquiryCommentMutation, useInquiryCommentsQuery } from "@/entities/inquiry/api/inquiry.query";
 import type { Inquiry } from "@/entities/inquiry/model/inquiry.type";
+import { emptyRichTextContent, extractRichTextPlainText, toJsonContent } from "@/shared/lib/richText/richText";
+import type { RichTextContent } from "@/shared/lib/richText/richText";
+import { RichTextEditor } from "@/shared/ui/richText/RichTextEditor";
+import { RichTextRenderer } from "@/shared/ui/richText/RichTextRenderer";
 
 type InquiryDetailSidebarProps = {
     inquiry: Inquiry | null;
@@ -17,7 +22,15 @@ function formatDate(value: string) {
 
 export function InquiryDetailSidebar({ inquiry }: InquiryDetailSidebarProps) {
     const { data: comments = [], isLoading } = useInquiryCommentsQuery(inquiry?.id);
+    const [commentBody, setCommentBody] = useState<RichTextContent>(emptyRichTextContent);
+    const uploadImage = useUploadImageMutation();
     const createComment = useCreateInquiryCommentMutation();
+
+    async function handleImageUpload(file: File) {
+        const response = await uploadImage.mutateAsync(file);
+
+        return response.result.url;
+    }
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -27,12 +40,15 @@ export function InquiryDetailSidebar({ inquiry }: InquiryDetailSidebarProps) {
         }
 
         const formData = new FormData(event.currentTarget);
+        const commentMessage = extractRichTextPlainText(commentBody);
         await createComment.mutateAsync({
             inquiry_id: inquiry.id,
             manager_name: String(formData.get("managerName") ?? "").trim(),
-            message: String(formData.get("message") ?? "").trim(),
+            message: commentMessage,
+            message_body: toJsonContent(commentBody),
         });
         event.currentTarget.reset();
+        setCommentBody(emptyRichTextContent);
     }
 
     if (!inquiry) {
@@ -68,7 +84,12 @@ export function InquiryDetailSidebar({ inquiry }: InquiryDetailSidebarProps) {
                     </div>
                     <div>
                         <dt className="font-bold text-slate-500">메세지</dt>
-                        <dd className="mt-2 whitespace-pre-wrap rounded-lg bg-slate-50 p-4 leading-[1.7] text-slate-800">{inquiry.message}</dd>
+                        <dd className="mt-2 rounded-lg bg-slate-50 p-4">
+                            <RichTextRenderer
+                                content={inquiry.message_body}
+                                fallback={inquiry.message}
+                            />
+                        </dd>
                     </div>
                 </dl>
             </section>
@@ -93,11 +114,11 @@ export function InquiryDetailSidebar({ inquiry }: InquiryDetailSidebarProps) {
                     </label>
                     <label className="grid gap-2 text-sm font-bold text-slate-700">
                         답변 내용
-                        <textarea
-                            className="min-h-28 resize-y rounded-lg border border-slate-300 px-3 py-3"
-                            name="message"
+                        <RichTextEditor
+                            value={commentBody}
+                            onChange={setCommentBody}
+                            onImageUpload={handleImageUpload}
                             placeholder="문의에 대한 코멘트를 작성하세요."
-                            required
                         />
                     </label>
                     <button
@@ -121,7 +142,11 @@ export function InquiryDetailSidebar({ inquiry }: InquiryDetailSidebarProps) {
                                 <strong className="text-sm text-slate-900">{comment.manager_name}</strong>
                                 <span className="text-xs text-slate-500">{formatDate(comment.created_at)}</span>
                             </div>
-                            <p className="m-0 whitespace-pre-wrap text-sm leading-[1.7] text-slate-700">{comment.message}</p>
+                            <RichTextRenderer
+                                className="text-sm"
+                                content={comment.message_body}
+                                fallback={comment.message}
+                            />
                         </article>
                     ))}
                 </div>

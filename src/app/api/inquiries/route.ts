@@ -10,6 +10,7 @@ export async function POST(request: Request) {
             name: String(body.name ?? "").trim(),
             phone: String(body.phone ?? "").trim(),
             message: String(body.message ?? "").trim(),
+            message_body: body.message_body ?? null,
             category: "bj_support",
             status: "new",
         })

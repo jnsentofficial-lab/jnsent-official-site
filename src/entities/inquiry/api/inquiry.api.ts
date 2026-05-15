@@ -2,7 +2,12 @@ import { clientApi, type ApiResponse } from "@/shared/lib/api/client";
 import type { CreateInquiryCommentPayload, CreateInquiryPayload, Inquiry, InquiryComment, UpdateInquiryStatusPayload } from "@/entities/inquiry/model/inquiry.type";
 
 export async function createInquiryFetch(payload: CreateInquiryPayload) {
-    return clientApi.post<ApiResponse<Inquiry>>("/api/inquiries", payload);
+    return clientApi.post<ApiResponse<Inquiry>>("/api/inquiries", {
+        name: payload.name,
+        phone: payload.phone,
+        message: payload.message,
+        message_body: payload.message_body,
+    });
 }
 
 export async function getAdminInquiriesFetch() {
@@ -23,5 +28,6 @@ export async function createInquiryCommentFetch(payload: CreateInquiryCommentPay
     return clientApi.post<ApiResponse<InquiryComment>>(`/api/admin/inquiries/${payload.inquiry_id}/comments`, {
         manager_name: payload.manager_name,
         message: payload.message,
+        message_body: payload.message_body,
     });
 }

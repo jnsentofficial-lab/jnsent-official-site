@@ -1,7 +1,9 @@
 "use client";
 
 import { usePublishedPageContentQuery } from "@/entities/pageContent/api/pageContent.query";
+import { hasRichTextContent } from "@/shared/lib/richText/richText";
 import Skeleton from "@/shared/ui/kit/Skeleton";
+import { RichTextRenderer } from "@/shared/ui/richText/RichTextRenderer";
 
 const equipmentItems = [
     {
@@ -35,6 +37,14 @@ export function EquipmentRentalView() {
                     <span className="mt-6 block max-w-[72rem] text-lg leading-[1.7] text-slate-600">{content?.description ?? "관리자에서 공개 콘텐츠를 입력하면 이 영역에 반영됩니다."}</span>
                 </div>
             </Skeleton.Section>
+
+            {hasRichTextContent(content?.body) ? (
+                <section className="border-b border-slate-100 py-12">
+                    <div className="mx-auto w-[min(92rem,calc(100%_-_3.2rem))]">
+                        <RichTextRenderer content={content?.body} />
+                    </div>
+                </section>
+            ) : null}
 
             <section className="py-[8.4rem]">
                 <div className="mx-auto w-[min(112rem,calc(100%_-_3.2rem))]">

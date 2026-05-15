@@ -32,6 +32,7 @@ export async function POST(request: Request, { params }: RouteProps) {
             inquiry_id: id,
             manager_name: managerName,
             message,
+            message_body: body.message_body ?? null,
         })
         .select("*")
         .single();

@@ -1,7 +1,11 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useUploadImageMutation } from "@/entities/asset/api/asset.query";
 import { useCreateInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
+import { emptyRichTextContent, extractRichTextPlainText, toJsonContent } from "@/shared/lib/richText/richText";
+import type { RichTextContent } from "@/shared/lib/richText/richText";
+import { RichTextEditor } from "@/shared/ui/richText/RichTextEditor";
 import UI from "@/shared/ui/UIComponent";
 
 type InquiryStatus = "idle" | "submitting" | "success" | "error";
@@ -9,7 +13,15 @@ type InquiryStatus = "idle" | "submitting" | "success" | "error";
 export function InquiryForm() {
     const [status, setStatus] = useState<InquiryStatus>("idle");
     const [message, setMessage] = useState("필요한 지원 내용을 남겨주세요.");
+    const [inquiryBody, setInquiryBody] = useState<RichTextContent>(emptyRichTextContent);
+    const uploadImage = useUploadImageMutation();
     const createInquiry = useCreateInquiryMutation();
+
+    async function handleImageUpload(file: File) {
+        const response = await uploadImage.mutateAsync(file);
+
+        return response.result.url;
+    }
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -19,7 +31,7 @@ export function InquiryForm() {
         const formData = new FormData(event.currentTarget);
         const name = String(formData.get("name") ?? "").trim();
         const phone = String(formData.get("phone") ?? "").trim();
-        const inquiryMessage = String(formData.get("message") ?? "").trim();
+        const inquiryMessage = extractRichTextPlainText(inquiryBody);
 
         if (!name || !phone || !inquiryMessage) {
             setStatus("error");
@@ -28,7 +40,12 @@ export function InquiryForm() {
         }
 
         try {
-            await createInquiry.mutateAsync({ name, phone, message: inquiryMessage });
+            await createInquiry.mutateAsync({
+                name,
+                phone,
+                message: inquiryMessage,
+                message_body: toJsonContent(inquiryBody),
+            });
         } catch {
             setStatus("error");
             setMessage("상담 신청 저장에 실패했습니다.");
@@ -36,6 +53,7 @@ export function InquiryForm() {
         }
 
         event.currentTarget.reset();
+        setInquiryBody(emptyRichTextContent);
         setStatus("success");
         setMessage("상담 신청이 저장되었습니다.");
     }
@@ -65,10 +83,11 @@ export function InquiryForm() {
             </label>
             <label className="grid gap-2 font-bold text-slate-700">
                 상담 내용
-                <textarea
-                    className="min-h-[13.2rem] w-full resize-y rounded-lg border border-slate-300 px-4 py-3.5"
-                    name="message"
-                    placeholder="필요한 지원 내용을 적어주세요"
+                <RichTextEditor
+                    value={inquiryBody}
+                    onChange={setInquiryBody}
+                    onImageUpload={handleImageUpload}
+                    placeholder="필요한 지원 내용을 적어주세요."
                 />
             </label>
             <p

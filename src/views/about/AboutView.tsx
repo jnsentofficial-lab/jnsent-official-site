@@ -1,7 +1,9 @@
 "use client";
 
 import { usePublishedPageContentQuery } from "@/entities/pageContent/api/pageContent.query";
+import { hasRichTextContent } from "@/shared/lib/richText/richText";
 import Skeleton from "@/shared/ui/kit/Skeleton";
+import { RichTextRenderer } from "@/shared/ui/richText/RichTextRenderer";
 
 const strengths = ["방송 세팅부터 운영 관리까지 이어지는 실무형 프로세스", "장비, 공간, 콘텐츠 운영을 함께 설계하는 통합 지원", "관리자가 직접 콘텐츠와 SEO를 수정할 수 있는 CMS 기반 구조"];
 
@@ -26,6 +28,14 @@ export function AboutView() {
                     <span className="mt-6 block max-w-[72rem] text-lg leading-[1.7] text-slate-600">{content?.description ?? "관리자에서 공개 콘텐츠를 입력하면 이 영역에 반영됩니다."}</span>
                 </div>
             </Skeleton.Section>
+
+            {hasRichTextContent(content?.body) ? (
+                <section className="border-b border-slate-100 py-12">
+                    <div className="mx-auto w-[min(92rem,calc(100%_-_3.2rem))]">
+                        <RichTextRenderer content={content?.body} />
+                    </div>
+                </section>
+            ) : null}
 
             <section className="py-[8.4rem]">
                 <div className="mx-auto grid w-[min(112rem,calc(100%_-_3.2rem))] grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)] items-start gap-14 max-[86rem]:grid-cols-1">
