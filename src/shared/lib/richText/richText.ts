@@ -49,13 +49,21 @@ export function extractRichTextPlainText(value: RichTextContent): string {
 export function hasRichTextContent(value: Json | null | undefined): boolean {
     const richText = toRichTextContent(value);
 
-    function hasImage(node: JSONContent): boolean {
+    return extractRichTextPlainText(richText).length > 0 || extractRichTextImages(richText).length > 0;
+}
+
+export function extractRichTextImages(value: RichTextContent): string[] {
+    const images: string[] = [];
+
+    function visit(node: JSONContent) {
         if (node.type === "image" && typeof node.attrs?.src === "string" && node.attrs.src) {
-            return true;
+            images.push(node.attrs.src);
         }
 
-        return (node.content ?? []).some(hasImage);
+        (node.content ?? []).forEach(visit);
     }
 
-    return extractRichTextPlainText(richText).length > 0 || hasImage(richText);
+    visit(value);
+
+    return Array.from(new Set(images));
 }

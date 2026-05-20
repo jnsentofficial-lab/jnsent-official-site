@@ -18,12 +18,23 @@ export function LatestNews({ news }: LatestNewsProps) {
                     {news.length ? (
                         news.map((item) => (
                             <UI.Link
-                                className="flex min-h-[12rem] flex-col justify-between rounded-lg border border-slate-200 bg-white p-6"
+                                className="grid grid-cols-[13rem_minmax(0,1fr)] gap-4 rounded-lg border border-slate-200 bg-white p-4 max-[86rem]:grid-cols-1"
                                 href={`/news/${item.slug}`}
                                 key={item.id}
                             >
-                                <strong className="text-xl leading-[1.35]">{item.title}</strong>
-                                <span className="leading-[1.6] text-slate-600">{item.summary ?? "상세 내용을 확인하세요."}</span>
+                                {item.thumbnail_url ? (
+                                    <img
+                                        alt={item.title}
+                                        className="h-28 w-full rounded-md object-cover"
+                                        src={item.thumbnail_url}
+                                    />
+                                ) : (
+                                    <span className="flex h-28 items-center justify-center rounded-md bg-slate-100 text-xs font-bold text-slate-400">No image</span>
+                                )}
+                                <span className="grid content-center gap-2">
+                                    <strong className="text-xl leading-[1.35]">{item.title}</strong>
+                                    <span className="leading-[1.6] text-slate-600">{item.summary ?? "상세 내용을 확인하세요."}</span>
+                                </span>
                             </UI.Link>
                         ))
                     ) : (

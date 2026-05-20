@@ -3,13 +3,15 @@
 import UI from "@/shared/ui/UIComponent";
 
 const navigationItems = [
-    { href: "/about", label: "회사소개" },
-    { href: "/setupGuide", label: "세팅안내" },
-    { href: "/equipmentRental", label: "장비렌탈" },
-    { href: "/studioRental", label: "스튜디오" },
-    { href: "/bjSupport", label: "BJ 지원" },
+    // { href: "/about", label: "회사소개" },
+    // { href: "/setupGuide", label: "세팅안내" },
+    // { href: "/equipmentRental", label: "장비렌탈" },
+    // { href: "/studioRental", label: "스튜디오" },
+    { href: "/bjSupport", label: "엔터창업" },
+    { href: "/bjSupport", label: "장비렌탈" },
+    { href: "/bjSupport", label: "스튜디오 대여/대관" },
     { href: "/news", label: "NEWS" },
-    { href: "/consulting", label: "창업컨설팅" },
+    // { href: "/consulting", label: "창업컨설팅" },
 ];
 
 export function SiteHeader() {
