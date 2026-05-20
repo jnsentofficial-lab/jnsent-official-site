@@ -1,9 +1,17 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { createJsonLd } from "@/shared/lib/JsonLd";
-import { QueryProvider } from "@/shared/lib/QueryProvider";
+import { AuthProvider } from "@/app/providers/AuthProvider";
+import { GlobalErrorBoundary } from "@/app/providers/GlobalErrorBoundary";
+import { GlobalErrorListener } from "@/app/providers/GlobalErrorListener";
+import { PopupProvider } from "@/app/providers/PopupProvider";
+import { QueryProvider } from "@/app/providers/QueryProvider";
+import { Footer } from "@/widgets/layout/Footer";
+import { Header } from "@/widgets/layout/Header";
+import { Progress } from "@/widgets/layout/Progress";
+import { Sidebar } from "@/widgets/layout/Sidebar";
+import { Toast } from "@/widgets/layout/Toast";
 import "./globals.css";
-import Script from "next/script";
 
 const suit = localFont({
     src: [
@@ -98,7 +106,21 @@ export default function RootLayout({
                 /> */}
             </head>
             <body className={`${suit.variable} ${suit.className} m-0 min-h-screen bg-white font-sans text-slate-900`}>
-                <QueryProvider>{children}</QueryProvider>
+                <GlobalErrorBoundary>
+                    <QueryProvider>
+                        <AuthProvider>
+                            <GlobalErrorListener />
+                            <Header />
+                            <Sidebar />
+                            <PopupProvider>
+                                <div className="flex min-h-screen flex-col">{children}</div>
+                            </PopupProvider>
+                            <Footer />
+                            <Progress />
+                            <Toast />
+                        </AuthProvider>
+                    </QueryProvider>
+                </GlobalErrorBoundary>
             </body>
         </html>
     );

@@ -1,0 +1,29 @@
+"use client";
+
+import { ReactNode } from "react";
+import { usePathname } from "next/navigation";
+
+type MainProps = {
+    children: ReactNode;
+    id?: string;
+    className?: {
+        container?: string;
+        inner?: string;
+    };
+};
+
+export default function Main({ children, id, className }: MainProps) {
+    const pathname = usePathname();
+    const isAdmin = pathname.startsWith("/admin") && pathname !== "/admin/login";
+    const containerClassName = ["flex-1", isAdmin ? "bg-slate-100 pl-[24rem] max-[86rem]:pl-0" : "bg-white", className?.container ?? ""].join(" ");
+    const innerClassName = [isAdmin ? "p-8 max-[86rem]:px-4 max-[86rem]:py-6" : "", className?.inner ?? ""].join(" ");
+
+    return (
+        <main
+            className={containerClassName}
+            id={id}
+        >
+            <div className={innerClassName}>{children}</div>
+        </main>
+    );
+}
