@@ -1,5 +1,3 @@
-export { Title } from "./Title";
-export { Analysis } from "./Analysis";
 export { AboutSection } from "./AboutSection";
 export { CtaSection } from "./CtaSection";
 export { HeroSection } from "./HeroSection";
