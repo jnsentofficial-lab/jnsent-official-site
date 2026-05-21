@@ -1,9 +1,8 @@
 "use client";
 
 import { usePublishedPageContentQuery } from "@/entities/pageContent/api/pageContent.query";
-import { hasRichTextContent } from "@/shared/lib/richText/richText";
 import Skeleton from "@/shared/ui/kit/Skeleton";
-import { RichTextRenderer } from "@/shared/ui/richText/RichTextRenderer";
+import { InfoCard, InquiryRequestForm, SubPageHero, SubPageSplit } from "@/widgets/layout/ui";
 
 const consultingAreas = [
     {
@@ -26,61 +25,37 @@ export function Analysis() {
     const { data: content, isLoading } = usePublishedPageContentQuery("consulting");
 
     return (
-        <>
-            <Skeleton.Section
-                target={!isLoading}
-                className={{ element: "border-b border-slate-200 bg-slate-50 py-24 max-[86rem]:py-18" }}
-            >
-                <div className="mx-auto w-[min(112rem,calc(100%_-_3.2rem))]">
-                    <p className="mb-3 text-[1.3rem] font-bold text-teal-700">Consulting</p>
-                    <h1 className="m-0 max-w-[82rem] text-5xl leading-[1.14] max-[86rem]:text-4xl">{content?.title ?? "엔터창업컨설팅 콘텐츠가 준비되지 않았습니다"}</h1>
-                    <span className="mt-6 block max-w-[72rem] text-lg leading-[1.7] text-slate-600">{content?.description ?? "관리자에서 공개 콘텐츠를 입력하면 이 영역에 반영됩니다."}</span>
-                </div>
-            </Skeleton.Section>
-
-            {hasRichTextContent(content?.body) ? (
-                <section className="border-b border-slate-100 py-12">
-                    <div className="mx-auto w-[min(92rem,calc(100%_-_3.2rem))]">
-                        <RichTextRenderer content={content?.body} />
-                    </div>
-                </section>
-            ) : null}
-
-            <section className="bg-white py-[8.4rem]">
-                <div className="mx-auto w-[min(112rem,calc(100%_-_3.2rem))]">
-                    <div className="grid grid-cols-3 gap-4 max-[86rem]:grid-cols-1 min-[86.1rem]:max-[108rem]:grid-cols-2">
+        <Skeleton.Section target={!isLoading}>
+            <SubPageHero
+                current="엔터창업"
+                title={content?.title ?? "엔터창업"}
+                description={content?.description ?? "라이브 콘텐츠 및 BJ 매니지먼트 운영 경험을 바탕으로 엔터테인먼트 및 방송 관련 창업 컨설팅을 진행하고 있습니다."}
+            />
+            <SubPageSplit
+                left={(
+                    <div className="grid gap-8">
+                        <h2 className="m-0 text-3xl font-black text-black">컨설팅 분야</h2>
                         {consultingAreas.map((area) => (
-                            <article
-                                className="min-h-[24rem] rounded-lg border border-slate-200 bg-slate-50 p-7"
+                            <InfoCard
                                 key={area.title}
+                                title={area.title}
                             >
-                                <h2 className="mt-0 mb-[1.8rem] text-2xl text-slate-900">{area.title}</h2>
-                                <p className="m-0 leading-[1.7] text-slate-700">{area.description}</p>
-                            </article>
+                                {area.description}
+                            </InfoCard>
                         ))}
+                        <div className="pt-10">
+                            <h2 className="mb-6 text-3xl font-black text-black">이런 분들께 추천드립니다</h2>
+                            <ul className="m-0 grid gap-2 pl-5 text-lg font-semibold leading-[1.8] text-black">
+                                <li>엔터테인먼트 사업을 처음 시작하시는 분</li>
+                                <li>방송 스튜디오 운영을 준비 중이신 분</li>
+                                <li>BJ 매니지먼트 운영 방향이 필요한 분</li>
+                                <li>실제 운영 경험 기반의 현실적인 조언이 필요한 분</li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-            </section>
-
-            <section className="bg-blue-50 pt-[7.6rem] pb-[9.2rem]">
-                <div className="mx-auto grid w-[min(112rem,calc(100%_-_3.2rem))] grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)] gap-14 max-[86rem]:grid-cols-1">
-                    <div>
-                        <p className="mb-3 text-[1.3rem] font-bold text-teal-700">Process</p>
-                        <h2 className="m-0 text-[3.4rem] leading-[1.25] text-slate-900">컨설팅 진행 단계</h2>
-                    </div>
-                    <ol className="m-0 grid list-none gap-3 p-0">
-                        {phases.map((phase, index) => (
-                            <li
-                                className="rounded-lg border border-slate-200 bg-white px-5 py-[1.8rem] font-bold text-slate-700"
-                                key={phase}
-                            >
-                                <span className="mr-3.5 text-blue-700">{String(index + 1).padStart(2, "0")}</span>
-                                {phase}
-                            </li>
-                        ))}
-                    </ol>
-                </div>
-            </section>
-        </>
+                )}
+                right={<InquiryRequestForm category="consulting" showEmail />}
+            />
+        </Skeleton.Section>
     );
 }

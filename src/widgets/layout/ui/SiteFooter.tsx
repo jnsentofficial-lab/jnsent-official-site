@@ -1,29 +1,34 @@
 "use client";
 
-import UI from "@/shared/ui/UIComponent";
-
 export function SiteFooter() {
     return (
         <footer className="bg-black py-16 text-white">
-            <div className="mx-auto flex w-[min(112rem,calc(100%_-_3.2rem))] items-start justify-between gap-10 max-[86rem]:flex-col">
+            <div className="mx-auto grid w-[min(112rem,calc(100%_-_3.2rem))] grid-cols-2 gap-20 max-[86rem]:grid-cols-1">
                 <div>
-                    <strong className="block text-xl font-black">JNS ENTERTAINMENT</strong>
-                    <p className="mt-3 mb-0 text-sm font-semibold leading-[1.7] text-white/45">검증된 운영구조와 투명한 정산을 기반으로 성장하는 콘텐츠 파트너</p>
+                    <strong className="block text-5xl font-black">JNS</strong>
+                    <p className="mt-5 mb-0 text-xl font-black leading-[1.4] text-white/45">JNS ENTERTAINMENT<br />제이엔에스엔터테인먼트</p>
                 </div>
-                <nav
-                    className="flex gap-[2rem] text-sm font-bold text-white/70 max-[86rem]:w-full max-[86rem]:flex-wrap max-[86rem]:justify-start [&_a:hover]:text-white"
-                    aria-label="하단 메뉴"
-                >
-                    <UI.Link href="/news">NEWS</UI.Link>
-                    <UI.Link href="/bjSupport">상담 문의</UI.Link>
-                    <UI.Link href="/consulting">창업컨설팅</UI.Link>
-                </nav>
-                <address className="not-italic text-sm font-semibold leading-[1.8] text-white/45">
-                    서울특별시 강남구
+                <address className="not-italic text-base font-semibold leading-[1.9] text-white/55">
+                    <strong className="text-white/35">INFORMATION</strong>
                     <br />
-                    CONTACT. help@jns-ent.com
+                    제이엔에스 엔터테인먼트
                     <br />
-                    Copyright JNS Entertainment. All rights reserved.
+                    대표 우인식
+                    <br />
+                    사업자등록번호 -
+                    <br />
+                    <br />
+                    <strong className="text-white/35">CONTACT</strong>
+                    <br />
+                    02-6949-0286
+                    <br />
+                    <br />
+                    <strong className="text-white/35">ADDRESS</strong>
+                    <br />
+                    서울특별시 강남구 강남대로 100길 30
+                    <br />
+                    <br />
+                    Copyright 제이엔에스. All rights reserved.
                 </address>
             </div>
         </footer>

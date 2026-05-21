@@ -9,9 +9,10 @@ export async function POST(request: Request) {
         .insert({
             name: String(body.name ?? "").trim(),
             phone: String(body.phone ?? "").trim(),
+            email: body.email ? String(body.email).trim() : null,
             message: String(body.message ?? "").trim(),
             message_body: body.message_body ?? null,
-            category: "bj_support",
+            category: String(body.category ?? "bj_support").trim() || "bj_support",
             status: "new",
         })
         .select("*")

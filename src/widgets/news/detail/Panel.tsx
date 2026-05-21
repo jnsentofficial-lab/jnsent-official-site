@@ -10,7 +10,6 @@ type PanelProps = {
 export default function Panel({ slug }: PanelProps) {
     return (
         <NewsDetailPageProvider slug={slug}>
-            <NewsDetailLayer.Title />
             <NewsDetailLayer.Analysis slug={slug} />
         </NewsDetailPageProvider>
     );

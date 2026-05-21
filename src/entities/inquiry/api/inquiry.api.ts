@@ -5,6 +5,8 @@ export async function createInquiryFetch(payload: CreateInquiryPayload) {
     return clientApi.post<ApiResponse<Inquiry>>("/api/inquiries", {
         name: payload.name,
         phone: payload.phone,
+        email: payload.email,
+        category: payload.category,
         message: payload.message,
         message_body: payload.message_body,
     });
