@@ -18,6 +18,7 @@ const labelClassName = "grid gap-3 text-xl font-black text-black";
 const inputClassName = "h-14 border border-black px-4 text-lg font-semibold";
 const statusClassName = "m-0 text-base font-bold text-[var(--adaptiveGreen700)]";
 const buttonClassName = "fixed right-0 bottom-0 min-h-16 w-[calc((100vw-24rem)*0.42)] bg-black text-xl font-black text-white max-[120rem]:static max-[120rem]:w-full";
+const thumbnailButtonClassName = "grid gap-3 border p-3 text-left transition hover:border-black";
 
 export function NewsEditor({ news }: NewsEditorProps) {
     const [statusMessage, setStatusMessage] = useState("");
@@ -112,37 +113,31 @@ export function NewsEditor({ news }: NewsEditorProps) {
                     value={summary}
                 />
             </label>
-            <section className="grid gap-3">
-                <strong className="text-xl font-black text-black">이미지 업로드 <span className="text-[var(--adaptiveRed500)]">*</span></strong>
-                <div className="grid min-h-40 place-items-center bg-[var(--adaptiveGrey100)] p-8 text-center text-xl font-black text-[var(--adaptiveGrey500)]">
-                    Tiptap 본문 에디터에서 이미지를 업로드해주세요
-                </div>
-            </section>
-            <section className="grid gap-3 bg-[var(--adaptiveGrey100)] p-4">
+            <section className="grid gap-4 border border-[var(--adaptiveGrey200)] bg-[var(--adaptiveGrey50)] p-5">
                 <div className="flex items-center justify-between gap-3">
-                    <strong className="text-sm text-slate-800">첨부 이미지</strong>
-                    <span className="text-xs font-bold text-slate-500">{effectiveThumbnailUrl ? "선택 썸네일 적용" : "썸네일 없음"}</span>
+                    <strong className="text-xl font-black text-black">첨부된 이미지</strong>
+                    <span className="text-sm font-black text-[var(--adaptiveGrey600)]">{effectiveThumbnailUrl ? "선택한 이미지가 썸네일로 저장됩니다" : "본문 이미지가 없으면 썸네일 없이 저장됩니다"}</span>
                 </div>
                 {imageUrls.length ? (
                     <div className="grid grid-cols-2 gap-3 max-[86rem]:grid-cols-1">
                         {imageUrls.map((imageUrl, index) => (
-                            <button
-                                className={`grid gap-2 rounded-lg border p-2 text-left ${effectiveThumbnailUrl === imageUrl ? "border-blue-500 bg-blue-50" : "border-slate-200 bg-white"}`}
+                            <UI.Button
+                                className={`${thumbnailButtonClassName} ${effectiveThumbnailUrl === imageUrl ? "border-black bg-white" : "border-[var(--adaptiveGrey200)] bg-white"}`}
                                 key={imageUrl}
                                 onClick={() => setSelectedThumbnailUrl(imageUrl)}
                                 type="button"
                             >
                                 <img
                                     alt={`첨부 이미지 ${index + 1}`}
-                                    className="h-24 w-full rounded-md object-cover"
+                                    className="h-28 w-full object-cover"
                                     src={imageUrl}
                                 />
-                                <span className="text-xs font-bold text-slate-700">{index + 1}번째 이미지{effectiveThumbnailUrl === imageUrl ? " / 썸네일" : ""}</span>
-                            </button>
+                                <span className="text-base font-black text-black">{index + 1}번째 이미지{effectiveThumbnailUrl === imageUrl ? " / 현재 썸네일" : ""}</span>
+                            </UI.Button>
                         ))}
                     </div>
                 ) : (
-                    <p className="m-0 text-sm text-slate-500">본문에 업로드한 이미지가 없습니다.</p>
+                    <p className="m-0 text-base font-semibold text-[var(--adaptiveGrey600)]">본문 에디터에서 이미지를 업로드하면 이 영역에 썸네일 후보로 표시됩니다.</p>
                 )}
             </section>
             <label className={labelClassName}>
