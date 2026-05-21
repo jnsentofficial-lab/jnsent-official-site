@@ -13,11 +13,11 @@ type NewsEditorProps = {
     news?: News | null;
 };
 
-const formClassName = "grid gap-3.5";
-const labelClassName = "grid gap-2 font-bold text-slate-800";
-const inputClassName = "min-h-11 rounded-lg border border-slate-300 px-3.5";
-const statusClassName = "m-0 text-sm font-bold text-green-700";
-const buttonClassName = "min-h-11 rounded-lg bg-blue-500 font-bold text-white";
+const formClassName = "grid gap-8";
+const labelClassName = "grid gap-3 text-xl font-black text-black";
+const inputClassName = "h-14 border border-black px-4 text-lg font-semibold";
+const statusClassName = "m-0 text-base font-bold text-[var(--adaptiveGreen700)]";
+const buttonClassName = "fixed right-0 bottom-0 min-h-16 w-[calc((100vw-24rem)*0.42)] bg-black text-xl font-black text-white max-[120rem]:static max-[120rem]:w-full";
 
 export function NewsEditor({ news }: NewsEditorProps) {
     const [statusMessage, setStatusMessage] = useState("");
@@ -76,6 +76,22 @@ export function NewsEditor({ news }: NewsEditorProps) {
             onSubmit={handleSubmit}
         >
             <label className={labelClassName}>
+                제목 <span className="text-[var(--adaptiveRed500)]">*</span>
+                <input
+                    className={inputClassName}
+                    onChange={(event) => {
+                        setTitle(event.target.value);
+                        if (!news) {
+                            setSlug(event.target.value.trim().toLowerCase().replace(/\s+/g, "-") || `news-${Date.now()}`);
+                        }
+                    }}
+                    placeholder="제목을 입력해주세요"
+                    required
+                    type="text"
+                    value={title}
+                />
+            </label>
+            <label className={labelClassName}>
                 slug
                 <input
                     className={inputClassName}
@@ -84,17 +100,6 @@ export function NewsEditor({ news }: NewsEditorProps) {
                     required
                     type="text"
                     value={slug}
-                />
-            </label>
-            <label className={labelClassName}>
-                제목
-                <input
-                    className={inputClassName}
-                    onChange={(event) => setTitle(event.target.value)}
-                    placeholder="NEWS 제목"
-                    required
-                    type="text"
-                    value={title}
                 />
             </label>
             <label className={labelClassName}>
@@ -107,16 +112,13 @@ export function NewsEditor({ news }: NewsEditorProps) {
                     value={summary}
                 />
             </label>
-            <label className={labelClassName}>
-                본문
-                <RichTextEditor
-                    value={body}
-                    onChange={setBody}
-                    onImageUpload={handleImageUpload}
-                    placeholder="NEWS 본문을 입력하세요."
-                />
-            </label>
-            <section className="grid gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4">
+            <section className="grid gap-3">
+                <strong className="text-xl font-black text-black">이미지 업로드 <span className="text-[var(--adaptiveRed500)]">*</span></strong>
+                <div className="grid min-h-40 place-items-center bg-[var(--adaptiveGrey100)] p-8 text-center text-xl font-black text-[var(--adaptiveGrey500)]">
+                    Tiptap 본문 에디터에서 이미지를 업로드해주세요
+                </div>
+            </section>
+            <section className="grid gap-3 bg-[var(--adaptiveGrey100)] p-4">
                 <div className="flex items-center justify-between gap-3">
                     <strong className="text-sm text-slate-800">첨부 이미지</strong>
                     <span className="text-xs font-bold text-slate-500">{effectiveThumbnailUrl ? "선택 썸네일 적용" : "썸네일 없음"}</span>
@@ -143,6 +145,15 @@ export function NewsEditor({ news }: NewsEditorProps) {
                     <p className="m-0 text-sm text-slate-500">본문에 업로드한 이미지가 없습니다.</p>
                 )}
             </section>
+            <label className={labelClassName}>
+                본문
+                <RichTextEditor
+                    value={body}
+                    onChange={setBody}
+                    onImageUpload={handleImageUpload}
+                    placeholder="NEWS 본문을 입력하세요."
+                />
+            </label>
             <label className={labelClassName}>
                 SEO 제목
                 <input
@@ -176,7 +187,7 @@ export function NewsEditor({ news }: NewsEditorProps) {
                 disabled={upsertNews.isPending}
                 type="submit"
             >
-                {upsertNews.isPending ? "저장 중" : news ? "NEWS 수정" : "NEWS 저장"}
+                {upsertNews.isPending ? "저장 중" : news ? "수정하기" : "답변 등록하기"}
             </UI.Button>
         </form>
     );

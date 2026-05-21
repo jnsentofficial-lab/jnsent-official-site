@@ -2,15 +2,13 @@ import { AdminLoginForm } from "@/features/auth/AdminLoginForm";
 
 export function Analysis() {
     return (
-        <>
-            <section className="grid w-[min(92rem,100%)] grid-cols-[minmax(0,0.9fr)_minmax(32rem,1fr)] gap-8 rounded-lg border border-slate-200 bg-white p-8 max-[86rem]:grid-cols-1">
-                <div className="flex flex-col justify-center">
-                    <p className="mb-3 text-[1.3rem] font-bold text-blue-700">Admin</p>
-                    <h1 className="m-0 text-4xl text-slate-900">관리자 로그인</h1>
-                    <span className="mt-4 leading-[1.7] text-slate-700">콘텐츠와 문의 관리를 위해 인증된 계정으로 로그인하세요.</span>
-                </div>
+        <section className="grid min-h-screen place-items-center bg-white px-6">
+            <div className="w-[min(38rem,100%)]">
+                <strong className="mb-5 block text-center text-6xl font-black leading-none text-black">JNS</strong>
+                <h1 className="m-0 text-center text-3xl font-black text-black">어드민 로그인</h1>
+                <p className="mt-6 mb-16 text-center text-lg font-semibold leading-[1.7] text-[var(--adaptiveGrey600)]">콘텐츠와 문의 관리를 위해 인증된 계정으로 로그인하세요.</p>
                 <AdminLoginForm />
-            </section>
-        </>
+            </div>
+        </section>
     );
 }

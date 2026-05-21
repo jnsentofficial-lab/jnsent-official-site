@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useManagerAccountsQuery } from "@/entities/managerAccount/api/managerAccount.query";
 import type { ManagerAccount } from "@/entities/managerAccount/model/managerAccount.type";
+import UI from "@/shared/ui/UIComponent";
+import { AdminTwoPanel, AdminWorkspace } from "@/widgets/admin/shared/AdminLayout";
 import { ManagerAccountList } from "@/widgets/admin/account/manager/ui/ManagerAccountList";
 import { ManagerAccountSidebar } from "@/widgets/admin/account/manager/ui/ManagerAccountSidebar";
 
@@ -14,34 +16,50 @@ export function Analysis() {
     const [sidebarMode, setSidebarMode] = useState<SidebarMode>("empty");
 
     return (
-        <div className="grid grid-cols-[minmax(0,1fr)_38rem] gap-6 max-[120rem]:grid-cols-1">
-            <section className="rounded-lg border border-slate-200 bg-white p-6">
-                <h2 className="mt-0 mb-[1.8rem] text-xl text-slate-900">계정 목록</h2>
+        <AdminWorkspace
+            current="관리자 계정 관리"
+            title="관리자 계정 관리"
+            action={(
+                <UI.Button
+                    className="min-h-14 bg-black px-6 text-lg font-black text-white"
+                    onClick={() => {
+                        setSelectedAccount(null);
+                        setSidebarMode("create");
+                    }}
+                    type="button"
+                >
+                    + 관리자 계정 만들기
+                </UI.Button>
+            )}
+        >
+            <AdminTwoPanel
+                left={(
+                    <>
                 {isLoading ? (
-                    <p className="m-0 text-slate-500">계정을 불러오는 중입니다.</p>
+                    <p className="m-0 text-2xl font-black text-[var(--adaptiveGrey500)]">계정을 불러오는 중입니다.</p>
                 ) : (
                     <ManagerAccountList
                         accounts={accounts}
                         selectedAccountId={selectedAccount?.id}
-                        onCreateAccount={() => {
-                            setSelectedAccount(null);
-                            setSidebarMode("create");
-                        }}
                         onSelectAccount={(account) => {
                             setSelectedAccount(account);
                             setSidebarMode("edit");
                         }}
                     />
                 )}
-            </section>
-            <ManagerAccountSidebar
-                account={selectedAccount}
-                mode={sidebarMode}
-                onSaved={(account) => {
-                    setSelectedAccount(account);
-                    setSidebarMode("edit");
-                }}
+                    </>
+                )}
+                right={(
+                    <ManagerAccountSidebar
+                        account={selectedAccount}
+                        mode={sidebarMode}
+                        onSaved={(account) => {
+                            setSelectedAccount(account);
+                            setSidebarMode("edit");
+                        }}
+                    />
+                )}
             />
-        </div>
+        </AdminWorkspace>
     );
 }

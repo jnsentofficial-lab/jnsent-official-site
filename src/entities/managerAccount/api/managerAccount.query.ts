@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createManagerAccountFetch, getManagerAccountsFetch, updateManagerAccountFetch } from "@/entities/managerAccount/api/managerAccount.api";
-import type { ManagerAccount, UpsertManagerAccountPayload } from "@/entities/managerAccount/model/managerAccount.type";
+import { createManagerAccountFetch, deleteManagerAccountFetch, getManagerAccountsFetch, updateManagerAccountFetch } from "@/entities/managerAccount/api/managerAccount.api";
+import type { DeleteManagerAccountPayload, ManagerAccount, UpsertManagerAccountPayload } from "@/entities/managerAccount/model/managerAccount.type";
 import { useToastStore } from "@/shared/model/stores/useToastStore";
 
 export const ManagerAccountRoutes = {
@@ -47,6 +47,25 @@ export const useUpdateManagerAccountMutation = () => {
         mutationFn: (payload: UpsertManagerAccountPayload) => updateManagerAccountFetch(payload),
         onSuccess: () => {
             setToast({ msg: "담당자 계정을 수정했어요", time: 3, type: "success" });
+            queryClient.invalidateQueries({ queryKey: [MUTATION_KEY] });
+        },
+        onError: (err: Error) => {
+            setToast({ msg: err.message ?? "에러 발생", time: 2, type: "fail" });
+        },
+    });
+
+    return { mutate, mutateAsync, isError, isIdle, isSuccess, isPending, isPaused, data, error, reset };
+};
+
+export const useDeleteManagerAccountMutation = () => {
+    const { setToast } = useToastStore();
+    const MUTATION_KEY = ManagerAccountRoutes.ADMIN_MANAGER_ACCOUNTS;
+    const queryClient = useQueryClient();
+    const { data, mutate, mutateAsync, error, isError, isSuccess, isIdle, isPending, isPaused, reset } = useMutation({
+        mutationKey: [MUTATION_KEY, "useDeleteManagerAccountMutation"],
+        mutationFn: (payload: DeleteManagerAccountPayload) => deleteManagerAccountFetch(payload),
+        onSuccess: () => {
+            setToast({ msg: "담당자 계정을 삭제했어요", time: 3, type: "success" });
             queryClient.invalidateQueries({ queryKey: [MUTATION_KEY] });
         },
         onError: (err: Error) => {

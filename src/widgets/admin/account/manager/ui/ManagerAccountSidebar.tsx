@@ -1,8 +1,9 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
-import { useCreateManagerAccountMutation, useUpdateManagerAccountMutation } from "@/entities/managerAccount/api/managerAccount.query";
+import { useCreateManagerAccountMutation, useDeleteManagerAccountMutation, useUpdateManagerAccountMutation } from "@/entities/managerAccount/api/managerAccount.query";
 import type { ManagerAccount, ManagerAccountRole } from "@/entities/managerAccount/model/managerAccount.type";
+import { ConfirmDialog } from "@/widgets/admin/shared/AdminLayout";
 
 type ManagerAccountSidebarProps = {
     account: ManagerAccount | null;
@@ -18,6 +19,9 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
     const [loginId, setLoginId] = useState("");
     const createAccount = useCreateManagerAccountMutation();
     const updateAccount = useUpdateManagerAccountMutation();
+    const deleteAccount = useDeleteManagerAccountMutation();
+    const [confirm, setConfirm] = useState<"create" | "delete" | null>(null);
+    const [pendingForm, setPendingForm] = useState<HTMLFormElement | null>(null);
     const isCreateMode = mode === "create";
     const isEditMode = mode === "edit" && account;
     const isPending = createAccount.isPending || updateAccount.isPending;
@@ -28,10 +32,8 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
         setLoginId(account?.login_id ?? "");
     }, [account]);
 
-    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-
-        const formData = new FormData(event.currentTarget);
+    async function saveAccount(form: HTMLFormElement) {
+        const formData = new FormData(form);
         const payload = {
             id: account?.id,
             name,
@@ -44,34 +46,43 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
             ? await createAccount.mutateAsync(payload)
             : await updateAccount.mutateAsync(payload);
 
-        event.currentTarget.reset();
+        form.reset();
         onSaved(response.result);
+    }
+
+    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+
+        if (isCreateMode) {
+            setPendingForm(event.currentTarget);
+            setConfirm("create");
+            return;
+        }
+
+        await saveAccount(event.currentTarget);
     }
 
     if (mode === "empty") {
         return (
-            <aside className="rounded-lg border border-slate-200 bg-white p-6 text-slate-500">
+            <aside className="p-12 text-2xl font-black text-[var(--adaptiveGrey500)]">
                 계정을 선택하거나 담당자 계정 생성을 눌러 등록을 시작하세요.
             </aside>
         );
     }
 
     return (
-        <aside className="sticky top-6 rounded-lg border border-slate-200 bg-white p-6">
-            <div className="mb-5">
-                <p className="m-0 text-sm font-bold text-blue-700">{isCreateMode ? "계정 생성" : "계정 편집"}</p>
-                <h2 className="mt-1 mb-0 text-xl text-slate-900">{isCreateMode ? "새 담당자 계정" : account?.name}</h2>
-            </div>
+        <aside className="sticky top-0 max-h-screen overflow-auto p-12">
+            <h2 className="mt-0 mb-12 text-4xl font-black text-black">{isCreateMode ? "관리자 계정 만들기" : "관리자 계정 편집"}</h2>
             <form
-                className="grid gap-3.5"
+                className="grid gap-10"
                 onSubmit={(event) => {
                     void handleSubmit(event);
                 }}
             >
-                <label className="grid gap-2 text-sm font-bold text-slate-700">
+                <label className="grid gap-3 text-xl font-black text-black">
                     이름
                     <input
-                        className="min-h-11 rounded-lg border border-slate-300 px-3"
+                        className="h-14 border border-black px-4 text-lg font-semibold"
                         onChange={(event) => setName(event.target.value)}
                         placeholder="담당자 이름"
                         required
@@ -79,10 +90,10 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                         value={name}
                     />
                 </label>
-                <label className="grid gap-2 text-sm font-bold text-slate-700">
+                <label className="grid gap-3 text-xl font-black text-black">
                     권한
                     <select
-                        className="min-h-11 rounded-lg border border-slate-300 px-3"
+                        className="h-14 border border-black px-4 text-lg font-semibold"
                         onChange={(event) => setRole(event.target.value as ManagerAccountRole)}
                         value={role}
                     >
@@ -96,10 +107,10 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                         ))}
                     </select>
                 </label>
-                <label className="grid gap-2 text-sm font-bold text-slate-700">
+                <label className="grid gap-3 text-xl font-black text-black">
                     아이디
                     <input
-                        className="min-h-11 rounded-lg border border-slate-300 px-3"
+                        className="h-14 border border-black px-4 text-lg font-semibold"
                         onChange={(event) => setLoginId(event.target.value)}
                         placeholder="login-id"
                         required
@@ -107,20 +118,20 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                         value={loginId}
                     />
                 </label>
-                <label className="grid gap-2 text-sm font-bold text-slate-700">
+                <label className="grid gap-3 text-xl font-black text-black">
                     비밀번호
                     <input
-                        className="min-h-11 rounded-lg border border-slate-300 px-3"
+                        className="h-14 border border-black px-4 text-lg font-semibold"
                         name="password"
                         placeholder={isEditMode ? "변경 시에만 입력" : "비밀번호"}
                         required={isCreateMode}
                         type="password"
                     />
                 </label>
-                <label className="grid gap-2 text-sm font-bold text-slate-700">
+                <label className="grid gap-3 text-xl font-black text-black">
                     비밀번호 재입력
                     <input
-                        className="min-h-11 rounded-lg border border-slate-300 px-3"
+                        className="h-14 border border-black px-4 text-lg font-semibold"
                         name="passwordConfirm"
                         placeholder={isEditMode ? "변경 시에만 입력" : "비밀번호 재입력"}
                         required={isCreateMode}
@@ -128,13 +139,52 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                     />
                 </label>
                 <button
-                    className="mt-2 min-h-11 rounded-lg bg-blue-600 px-4 font-bold text-white disabled:bg-slate-300"
+                    className="fixed right-0 bottom-0 min-h-16 w-[calc((100vw-24rem)*0.42)] bg-black px-4 text-xl font-black text-white disabled:bg-[var(--adaptiveGrey400)] max-[120rem]:static max-[120rem]:w-full"
                     disabled={isPending}
                     type="submit"
                 >
                     {isPending ? "저장 중" : "등록하기"}
                 </button>
+                {isEditMode ? (
+                    <button
+                        className="min-h-14 border border-[var(--adaptiveRed500)] text-lg font-black text-[var(--adaptiveRed500)]"
+                        onClick={() => setConfirm("delete")}
+                        type="button"
+                    >
+                        삭제하기
+                    </button>
+                ) : null}
             </form>
+            <ConfirmDialog
+                open={confirm === "create"}
+                title="입력하신 계정으로 생성할까요?"
+                description="입력하신 계정으로 계정을 생성할게요."
+                targetLabel={loginId}
+                confirmLabel="생성하기"
+                tone="create"
+                onCancel={() => setConfirm(null)}
+                onConfirm={() => {
+                    if (pendingForm) {
+                        void saveAccount(pendingForm);
+                    }
+                    setConfirm(null);
+                }}
+            />
+            <ConfirmDialog
+                open={confirm === "delete"}
+                title="선택한 계정을 삭제 할까요?"
+                description="선택하신 계정을 삭제합니다. 신중하게 선택해주세요."
+                targetLabel={account?.login_id}
+                confirmLabel="삭제하기"
+                tone="delete"
+                onCancel={() => setConfirm(null)}
+                onConfirm={() => {
+                    if (account) {
+                        deleteAccount.mutate({ id: account.id });
+                    }
+                    setConfirm(null);
+                }}
+            />
         </aside>
     );
 }

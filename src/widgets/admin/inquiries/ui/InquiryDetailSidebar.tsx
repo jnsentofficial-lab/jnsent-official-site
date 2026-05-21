@@ -53,66 +53,65 @@ export function InquiryDetailSidebar({ inquiry }: InquiryDetailSidebarProps) {
 
     if (!inquiry) {
         return (
-            <aside className="rounded-lg border border-slate-200 bg-white p-6 text-slate-500">
+            <aside className="p-12 text-2xl font-black text-[var(--adaptiveGrey500)]">
                 문의를 선택하면 상세 내용과 담당자 답변을 확인할 수 있습니다.
             </aside>
         );
     }
 
     return (
-        <aside className="sticky top-6 grid max-h-[calc(100vh-4.8rem)] gap-4 overflow-auto rounded-lg border border-slate-200 bg-white p-6">
-            <section>
-                <div className="mb-4 flex items-start justify-between gap-3">
-                    <div>
-                        <p className="m-0 text-sm font-bold text-blue-700">문의 내용</p>
-                        <h3 className="mt-1 mb-0 text-xl text-slate-900">{inquiry.name}</h3>
-                    </div>
-                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-700">{inquiry.status}</span>
+        <aside className="sticky top-0 grid max-h-screen overflow-auto">
+            <section className="bg-[var(--adaptiveGrey100)] p-12">
+                <p className="mb-10 text-3xl font-black text-black">선택한 질문</p>
+                <h2 className="mt-0 mb-8 text-5xl font-black leading-[1.2] text-black">{inquiry.message}</h2>
+                <p className="mb-12 text-lg font-black text-black">{new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.created_at))} ~ {new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.updated_at))}</p>
+                <div className="text-2xl font-black leading-[1.7] text-black">
+                    <RichTextRenderer
+                        content={inquiry.message_body}
+                        fallback={inquiry.message}
+                    />
                 </div>
-                <dl className="grid gap-3 text-sm">
-                    <div>
-                        <dt className="font-bold text-slate-500">연락처</dt>
-                        <dd className="m-0 text-slate-800">{inquiry.phone}</dd>
-                    </div>
-                    <div>
-                        <dt className="font-bold text-slate-500">분류</dt>
-                        <dd className="m-0 text-slate-800">{inquiry.category}</dd>
-                    </div>
-                    <div>
-                        <dt className="font-bold text-slate-500">접수일</dt>
-                        <dd className="m-0 text-slate-800">{formatDate(inquiry.created_at)}</dd>
-                    </div>
-                    <div>
-                        <dt className="font-bold text-slate-500">메세지</dt>
-                        <dd className="mt-2 rounded-lg bg-slate-50 p-4">
-                            <RichTextRenderer
-                                content={inquiry.message_body}
-                                fallback={inquiry.message}
-                            />
-                        </dd>
-                    </div>
-                </dl>
             </section>
 
-            <section className="border-t border-slate-200 pt-4">
-                <p className="m-0 mb-3 text-sm font-bold text-blue-700">담당자 답변</p>
+            <section className="bg-white p-12">
+                <p className="mb-8 text-2xl font-black text-[var(--adaptiveGrey600)]">관리자 답변</p>
+                <div className="mb-8 grid gap-4">
+                    {isLoading ? <p className="m-0 text-lg font-semibold text-[var(--adaptiveGrey500)]">답변을 불러오는 중입니다.</p> : null}
+                    {!isLoading && comments.length === 0 ? <p className="m-0 text-2xl font-black text-black">이곳에 답변을 적어주세요</p> : null}
+                    {comments.map((comment) => (
+                        <article
+                            className="border-b border-[var(--adaptiveGrey200)] pb-5"
+                            key={comment.id}
+                        >
+                            <div className="mb-2 flex items-center justify-between gap-3">
+                                <strong className="text-lg font-black text-black">{comment.manager_name}</strong>
+                                <span className="text-sm font-semibold text-[var(--adaptiveGrey500)]">{formatDate(comment.created_at)}</span>
+                            </div>
+                            <RichTextRenderer
+                                className="text-lg"
+                                content={comment.message_body}
+                                fallback={comment.message}
+                            />
+                        </article>
+                    ))}
+                </div>
                 <form
-                    className="grid gap-3"
+                    className="grid gap-5"
                     onSubmit={(event) => {
                         void handleSubmit(event);
                     }}
                 >
-                    <label className="grid gap-2 text-sm font-bold text-slate-700">
+                    <label className="grid gap-2 text-lg font-black text-black">
                         담당자 이름
                         <input
-                            className="min-h-11 rounded-lg border border-slate-300 px-3"
+                            className="h-14 border border-black px-4 text-lg font-semibold"
                             name="managerName"
                             placeholder="담당자 이름"
                             required
                             type="text"
                         />
                     </label>
-                    <label className="grid gap-2 text-sm font-bold text-slate-700">
+                    <label className="grid gap-2 text-lg font-black text-black">
                         답변 내용
                         <RichTextEditor
                             value={commentBody}
@@ -122,34 +121,13 @@ export function InquiryDetailSidebar({ inquiry }: InquiryDetailSidebarProps) {
                         />
                     </label>
                     <button
-                        className="min-h-11 rounded-lg bg-blue-600 px-4 font-bold text-white disabled:bg-slate-300"
+                        className="fixed right-0 bottom-0 min-h-16 w-[calc((100vw-24rem)*0.42)] bg-black px-4 text-xl font-black text-white disabled:bg-[var(--adaptiveGrey400)] max-[120rem]:static max-[120rem]:w-full"
                         disabled={createComment.isPending}
                         type="submit"
                     >
-                        {createComment.isPending ? "저장 중" : "답변 저장"}
+                        {createComment.isPending ? "저장 중" : "답변 등록하기"}
                     </button>
                 </form>
-
-                <div className="mt-5 grid gap-3">
-                    {isLoading ? <p className="m-0 text-sm text-slate-500">답변을 불러오는 중입니다.</p> : null}
-                    {!isLoading && comments.length === 0 ? <p className="m-0 text-sm text-slate-500">아직 작성된 담당자 답변이 없습니다.</p> : null}
-                    {comments.map((comment) => (
-                        <article
-                            className="rounded-lg border border-slate-200 bg-slate-50 p-4"
-                            key={comment.id}
-                        >
-                            <div className="mb-2 flex items-center justify-between gap-3">
-                                <strong className="text-sm text-slate-900">{comment.manager_name}</strong>
-                                <span className="text-xs text-slate-500">{formatDate(comment.created_at)}</span>
-                            </div>
-                            <RichTextRenderer
-                                className="text-sm"
-                                content={comment.message_body}
-                                fallback={comment.message}
-                            />
-                        </article>
-                    ))}
-                </div>
             </section>
         </aside>
     );

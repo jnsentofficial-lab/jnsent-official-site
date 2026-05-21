@@ -52,3 +52,16 @@ export async function PATCH(request: Request, { params }: RouteProps) {
 
     return error ? apiError(error.message, 400) : apiOk(sanitizeAccount(data));
 }
+
+export async function DELETE(_request: Request, { params }: RouteProps) {
+    const { id } = await params;
+    const supabase = createSupabaseServiceClient();
+    const { data, error } = await supabase
+        .from("manager_accounts")
+        .delete()
+        .eq("id", id)
+        .select("*")
+        .single();
+
+    return error ? apiError(error.message, 400) : apiOk(sanitizeAccount(data));
+}

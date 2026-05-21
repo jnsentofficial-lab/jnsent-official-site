@@ -1,17 +1,17 @@
 import { cookies } from "next/headers";
-import { AdminLoginView } from "@/views/admin/login/AdminLoginView";
+import { AdminAccountManagerView } from "@/views/admin/account/manager/AdminAccountManagerView";
 import Main from "@/widgets/layout/Main";
 
-export default async function AdminLoginPage() {
+export default async function AdminAccountsPage() {
     const cookieStore = await cookies();
     void cookieStore;
 
     return (
         <Main
-            id="admin-login"
+            id="admin-accounts"
             className={{ inner: "", container: "min-h-screen" }}
         >
-            <AdminLoginView />
+            <AdminAccountManagerView />
         </Main>
     );
 }

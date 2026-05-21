@@ -15,8 +15,8 @@ type MainProps = {
 export default function Main({ children, id, className }: MainProps) {
     const pathname = usePathname();
     const isAdmin = pathname.startsWith("/admin") && pathname !== "/admin/login";
-    const containerClassName = ["flex-1", isAdmin ? "bg-slate-100 pl-[24rem] max-[86rem]:pl-0" : "bg-white", className?.container ?? ""].join(" ");
-    const innerClassName = [isAdmin ? "p-8 max-[86rem]:px-4 max-[86rem]:py-6" : "", className?.inner ?? ""].join(" ");
+    const containerClassName = ["flex-1", isAdmin ? "bg-[var(--adaptiveGrey50)] pl-[24rem] max-[86rem]:pl-0" : "bg-white", className?.container ?? ""].join(" ");
+    const innerClassName = [isAdmin ? "" : "", className?.inner ?? ""].join(" ");
 
     return (
         <main

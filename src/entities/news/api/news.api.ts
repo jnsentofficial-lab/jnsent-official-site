@@ -1,6 +1,6 @@
 import { clientApi, type ApiResponse } from "@/shared/lib/api/client";
 import { serverApi } from "@/shared/lib/api/server";
-import type { News, ToggleNewsPayload, UpsertNewsPayload } from "@/entities/news/model/news.type";
+import type { DeleteNewsPayload, News, ToggleNewsPayload, UpsertNewsPayload } from "@/entities/news/model/news.type";
 
 export async function getPublishedNewsFetch(limit?: number) {
     const query = limit ? `?limit=${limit}` : "";
@@ -23,4 +23,8 @@ export async function toggleNewsFetch(payload: ToggleNewsPayload) {
     return clientApi.patch<ApiResponse<News>>(`/api/admin/news/${payload.id}`, {
         is_published: payload.is_published,
     });
+}
+
+export async function deleteNewsFetch(payload: DeleteNewsPayload) {
+    return clientApi.delete<ApiResponse<News>>(`/api/admin/news/${payload.id}`);
 }

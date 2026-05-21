@@ -32,26 +32,26 @@ export function AdminLoginForm() {
 
     return (
         <form
-            className="grid gap-4"
+            className="grid gap-6"
             onSubmit={handleSubmit}
         >
-            <label className="grid gap-2 font-bold text-slate-800">
-                이메일
+            <label className="grid gap-3 text-xl font-black text-black">
+                아이디
                 <input
-                    className="min-h-12 w-full rounded-lg border border-slate-300 px-3.5"
+                    className="h-14 w-full border-0 border-b border-black px-0 text-xl font-semibold outline-none placeholder:text-[var(--adaptiveGrey500)]"
                     autoComplete="email"
                     name="email"
-                    placeholder="admin@example.com"
+                    placeholder="아이디를 입력해주세요"
                     type="email"
                 />
             </label>
-            <label className="grid gap-2 font-bold text-slate-800">
+            <label className="grid gap-3 text-xl font-black text-black">
                 비밀번호
                 <input
-                    className="min-h-12 w-full rounded-lg border border-slate-300 px-3.5"
+                    className="h-14 w-full border-0 border-b border-black px-0 text-xl font-semibold outline-none placeholder:text-[var(--adaptiveGrey500)]"
                     autoComplete="current-password"
                     name="password"
-                    placeholder="비밀번호"
+                    placeholder="비밀번호를 입력해주세요"
                     type="password"
                 />
             </label>
@@ -64,12 +64,18 @@ export function AdminLoginForm() {
                 </p>
             ) : null}
             <UI.Button
-                className="min-h-12 rounded-lg bg-blue-500 font-bold text-white disabled:cursor-not-allowed disabled:bg-blue-300"
+                className="mt-2 min-h-16 bg-black text-xl font-black text-white disabled:cursor-not-allowed disabled:bg-[var(--adaptiveGrey400)]"
                 disabled={isSubmitting}
                 type="submit"
             >
                 {isSubmitting ? "로그인 중" : "로그인"}
             </UI.Button>
+            <UI.Link
+                className="mt-10 text-center text-lg font-black text-black"
+                href="/"
+            >
+                ‹ 메인으로 돌아가기
+            </UI.Link>
         </form>
     );
 }

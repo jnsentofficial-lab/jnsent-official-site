@@ -1,58 +1,46 @@
 "use client";
 
 import type { ManagerAccount } from "@/entities/managerAccount/model/managerAccount.type";
+import { AdminPagination } from "@/widgets/admin/shared/AdminLayout";
+import { useState } from "react";
 
 type ManagerAccountListProps = {
     accounts: ManagerAccount[];
     selectedAccountId?: string;
     onSelectAccount: (account: ManagerAccount) => void;
-    onCreateAccount: () => void;
 };
 
-export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccount, onCreateAccount }: ManagerAccountListProps) {
+export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccount }: ManagerAccountListProps) {
+    const [page, setPage] = useState(1);
+    const pageSize = 5;
+    const totalPages = Math.max(1, Math.ceil(accounts.length / pageSize));
+    const visibleAccounts = accounts.slice((page - 1) * pageSize, page * pageSize);
+
     return (
-        <div className="grid gap-4">
-            <button
-                className="min-h-11 rounded-lg bg-blue-600 px-4 font-bold text-white"
-                onClick={onCreateAccount}
-                type="button"
-            >
-                담당자 계정 생성
-            </button>
-            <div
-                className="grid overflow-hidden rounded-lg border border-slate-200"
-                role="table"
-                aria-label="담당자 계정 목록"
-            >
-                <div
-                    className="grid grid-cols-[1fr_1fr_1fr] bg-slate-50 font-bold max-[86rem]:grid-cols-1"
-                    role="row"
-                >
-                    <span className="px-4 py-3.5 text-slate-700" role="columnheader">이름</span>
-                    <span className="px-4 py-3.5 text-slate-700" role="columnheader">권한</span>
-                    <span className="px-4 py-3.5 text-slate-700" role="columnheader">아이디</span>
-                </div>
+        <div className="grid gap-0">
                 {accounts.length ? (
-                    accounts.map((account) => (
+                    visibleAccounts.map((account) => (
                         <button
-                            className={`grid w-full grid-cols-[1fr_1fr_1fr] border-t border-slate-200 bg-white text-left transition hover:bg-slate-50 max-[86rem]:grid-cols-1 ${selectedAccountId === account.id ? "bg-blue-50" : ""}`}
+                            className={`grid w-full grid-cols-[minmax(0,1fr)_14rem] items-center gap-6 border-b border-[var(--adaptiveGrey200)] py-8 text-left transition hover:bg-white max-[86rem]:grid-cols-1 ${selectedAccountId === account.id ? "text-[var(--adaptiveRed300)]" : "text-black"}`}
                             key={account.id}
                             onClick={() => onSelectAccount(account)}
                             type="button"
                         >
-                            <span className="px-4 py-3.5 text-slate-800">{account.name}</span>
-                            <span className="px-4 py-3.5 text-slate-700">{account.role}</span>
-                            <span className="px-4 py-3.5 text-slate-700">{account.login_id}</span>
+                            <span className="grid gap-4">
+                                <span className="text-lg font-semibold text-black">{account.name} <span className="mx-3">|</span> {account.role} <span className="mx-3">|</span> {new Intl.DateTimeFormat("ko-KR").format(new Date(account.created_at))} 생성</span>
+                                <strong className="text-3xl font-black">{account.login_id}</strong>
+                            </span>
+                            <span className="flex justify-end gap-8 text-center text-base font-black text-black">
+                                <span>▱<br />삭제</span>
+                                <span className="h-10 w-px bg-black" />
+                                <span>□<br />편집</span>
+                            </span>
                         </button>
                     ))
                 ) : (
-                    <div className="grid grid-cols-[1fr_1fr_1fr] border-t border-slate-200 max-[86rem]:grid-cols-1">
-                        <span className="px-4 py-3.5 text-slate-500">등록된 계정이 없습니다.</span>
-                        <span className="px-4 py-3.5 text-slate-500">-</span>
-                        <span className="px-4 py-3.5 text-slate-500">-</span>
-                    </div>
+                    <p className="py-16 text-2xl font-black text-[var(--adaptiveGrey500)]">등록된 계정이 없습니다.</p>
                 )}
-            </div>
+            <AdminPagination page={page} totalPages={totalPages} onChange={setPage} />
         </div>
     );
 }

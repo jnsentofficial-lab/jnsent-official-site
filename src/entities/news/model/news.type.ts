@@ -11,3 +11,4 @@ export type UpsertNewsPayload = {
     seo_description: string | null;
 };
 export type ToggleNewsPayload = Pick<News, "id" | "is_published">;
+export type DeleteNewsPayload = Pick<News, "id">;

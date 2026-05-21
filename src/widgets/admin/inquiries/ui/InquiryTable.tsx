@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { useAdminInquiriesQuery, useUpdateInquiryStatusMutation } from "@/entities/inquiry/api/inquiry.query";
 import type { Inquiry } from "@/entities/inquiry/model/inquiry.type";
+import { AdminPagination } from "@/widgets/admin/shared/AdminLayout";
 
 type InquiryTableProps = {
     selectedInquiryId?: string;
@@ -11,80 +13,32 @@ type InquiryTableProps = {
 export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTableProps) {
     const { data: inquiries = [] } = useAdminInquiriesQuery();
     const updateStatus = useUpdateInquiryStatusMutation();
+    const pageSize = 5;
+    const [page, setPage] = useState(1);
+    const totalPages = Math.max(1, Math.ceil(inquiries.length / pageSize));
+    const visibleInquiries = inquiries.slice((page - 1) * pageSize, page * pageSize);
 
     return (
-        <div
-            className="grid overflow-hidden rounded-lg border border-slate-200"
-            role="table"
-            aria-label="문의 목록"
-        >
-            <div
-                className="grid grid-cols-[1fr_1fr_minmax(22rem,2fr)_0.8fr] bg-slate-50 font-bold max-[86rem]:grid-cols-1"
-                role="row"
-            >
-                <span
-                    className="px-4 py-3.5 leading-[1.5] text-slate-700"
-                    role="columnheader"
-                >
-                    이름
-                </span>
-                <span
-                    className="px-4 py-3.5 leading-[1.5] text-slate-700"
-                    role="columnheader"
-                >
-                    분류
-                </span>
-                <span
-                    className="px-4 py-3.5 leading-[1.5] text-slate-700"
-                    role="columnheader"
-                >
-                    내용
-                </span>
-                <span
-                    className="px-4 py-3.5 leading-[1.5] text-slate-700"
-                    role="columnheader"
-                >
-                    상태
-                </span>
-            </div>
+        <div className="grid gap-0">
             {inquiries.length ? (
-                inquiries.map((inquiry) => (
-                    <div
-                        className={`grid w-full cursor-pointer grid-cols-[1fr_1fr_minmax(22rem,2fr)_0.8fr] border-t border-slate-200 bg-white text-left transition hover:bg-slate-50 max-[86rem]:grid-cols-1 ${selectedInquiryId === inquiry.id ? "bg-blue-50" : ""}`}
+                visibleInquiries.map((inquiry) => (
+                    <button
+                        className={`grid w-full grid-cols-[minmax(0,1fr)_13rem] items-center gap-6 border-b border-[var(--adaptiveGrey200)] py-8 text-left transition hover:bg-white max-[86rem]:grid-cols-1 ${selectedInquiryId === inquiry.id ? "text-[var(--adaptiveRed300)]" : "text-black"}`}
                         key={`${inquiry.name}-${inquiry.category}`}
-                        onKeyDown={(event) => {
-                            if (event.key === "Enter" || event.key === " ") {
-                                onSelectInquiry(inquiry);
-                            }
-                        }}
                         onClick={() => onSelectInquiry(inquiry)}
-                        role="row"
-                        tabIndex={0}
+                        type="button"
                     >
-                        <span
-                            className="px-4 py-3.5 leading-[1.5] text-slate-700"
-                            role="cell"
-                        >
-                            {inquiry.name}
-                        </span>
-                        <span
-                            className="px-4 py-3.5 leading-[1.5] text-slate-700"
-                            role="cell"
-                        >
-                            {inquiry.category}
-                        </span>
-                        <span
-                            className="px-4 py-3.5 leading-[1.5] text-slate-700"
-                            role="cell"
-                        >
-                            {inquiry.message}
-                        </span>
-                        <span
-                            className="px-4 py-3.5 leading-[1.5] text-slate-700"
-                            role="cell"
-                        >
+                        <span className="grid gap-5">
+                            <strong className="text-2xl font-black leading-[1.35]">{inquiry.message}</strong>
+                            <span className="flex flex-wrap items-center gap-4 text-lg font-semibold text-black">
+                                <span>{inquiry.name}</span>
+                                <span>|</span>
+                                <span>{new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.created_at))}</span>
+                                <span>~</span>
+                                <span>{new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.updated_at))}</span>
+                            </span>
                             <select
-                                className="min-h-10 rounded-lg border border-slate-300 px-3"
+                                className="h-10 w-fit bg-black px-4 text-base font-black text-white"
                                 aria-label={`${inquiry.name} 문의 상태`}
                                 onChange={(event) => void updateStatus.mutate({ id: inquiry.id, status: event.target.value as Inquiry["status"] })}
                                 onClick={(event) => event.stopPropagation()}
@@ -96,39 +50,17 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
                                 <option value="spam">spam</option>
                             </select>
                         </span>
-                    </div>
+                        <span className="flex items-center justify-end gap-8 text-center text-xl font-black">
+                            <span>♧<br /><small>50+</small></span>
+                            <span className="h-10 w-px bg-black" />
+                            <span>◉<br /><small>50+</small></span>
+                        </span>
+                    </button>
                 ))
             ) : (
-                <div
-                    className="grid grid-cols-[1fr_1fr_minmax(22rem,2fr)_0.8fr] border-t border-slate-200 max-[86rem]:grid-cols-1"
-                    role="row"
-                >
-                    <span
-                        className="px-4 py-3.5 leading-[1.5] text-slate-700"
-                        role="cell"
-                    >
-                        등록된 문의가 없습니다.
-                    </span>
-                    <span
-                        className="px-4 py-3.5 leading-[1.5] text-slate-700"
-                        role="cell"
-                    >
-                        -
-                    </span>
-                    <span
-                        className="px-4 py-3.5 leading-[1.5] text-slate-700"
-                        role="cell"
-                    >
-                        -
-                    </span>
-                    <span
-                        className="px-4 py-3.5 leading-[1.5] text-slate-700"
-                        role="cell"
-                    >
-                        -
-                    </span>
-                </div>
+                <p className="py-16 text-2xl font-black text-[var(--adaptiveGrey500)]">등록된 문의가 없습니다.</p>
             )}
+            <AdminPagination page={page} totalPages={totalPages} onChange={setPage} />
         </div>
     );
 }
