@@ -6,7 +6,7 @@ import UI from "@/shared/ui/UIComponent";
 
 const adminNavItems = [
     { href: "/admin/inquiries", label: "문의 관리" },
-    { href: "/admin/accounts", label: "관리자 계정 관리" },
+    { href: "/admin/account/manager", label: "관리자 계정 관리" },
     { href: "/admin/modals", label: "팝업 관리" },
     { href: "/admin/news", label: "뉴스 관리" },
 ];
@@ -37,7 +37,7 @@ export function AdminSidebar() {
             >
                 {adminNavItems.map((item) => (
                     <UI.Link
-                        className={`${pathname === item.href || (item.href === "/admin/accounts" && pathname === "/admin/account/manager") ? "text-[var(--adaptiveRed300)]" : "text-black"} hover:text-[var(--adaptiveRed300)]`}
+                        className={`${pathname === item.href ? "text-[var(--adaptiveRed300)]" : "text-black"} hover:text-[var(--adaptiveRed300)]`}
                         href={item.href}
                         key={item.href}
                     >

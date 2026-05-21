@@ -17,7 +17,7 @@ export function AdminLoginForm() {
         setIsSubmitting(true);
 
         const formData = new FormData(event.currentTarget);
-        const email = String(formData.get("email") ?? "");
+        const email = String(formData.get("email") ?? "").trim();
         const password = String(formData.get("password") ?? "");
 
         try {
@@ -39,10 +39,10 @@ export function AdminLoginForm() {
                 아이디
                 <input
                     className="h-14 w-full border-0 border-b border-black px-0 text-xl font-semibold outline-none placeholder:text-[var(--adaptiveGrey500)]"
-                    autoComplete="email"
+                    autoComplete="username"
                     name="email"
                     placeholder="아이디를 입력해주세요"
-                    type="email"
+                    type="text"
                 />
             </label>
             <label className="grid gap-3 text-xl font-black text-black">
