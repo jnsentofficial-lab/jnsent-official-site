@@ -135,6 +135,13 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
             return;
         }
 
+        const missingRequiredChip = chips.find((group) => group.required && !selected[group.label]);
+
+        if (missingRequiredChip) {
+            setStatus(`${missingRequiredChip.label}을 선택해주세요.`);
+            return;
+        }
+
         const plainMessage = message || `${category} 문의`;
         const payload: CreateInquiryPayload = {
             name,

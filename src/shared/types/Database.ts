@@ -143,6 +143,7 @@ export type Database = {
                     name: string;
                     role: "manager" | "admin" | "viewer";
                     login_id: string;
+                    auth_user_id: string | null;
                     password_hash: string;
                     created_at: string;
                     updated_at: string;
@@ -152,6 +153,7 @@ export type Database = {
                     name: string;
                     role?: "manager" | "admin" | "viewer";
                     login_id: string;
+                    auth_user_id?: string | null;
                     password_hash: string;
                     created_at?: string;
                     updated_at?: string;

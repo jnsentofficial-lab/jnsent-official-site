@@ -1,6 +1,9 @@
 "use client";
 
+import { useSectionTheme } from "@/shared/hooks";
+import Text from "@/shared/ui/reveal";
 import { motion } from "framer-motion";
+import { useRef } from "react";
 
 const principleItems = [
     { title: "정확한 계약서", text: "계약 전 모든 조건을 문서로 먼저 확인합니다." },
@@ -9,8 +12,16 @@ const principleItems = [
 ];
 
 export function TrustPrinciples() {
+    const sectionRef = useRef<HTMLElement>(null);
+
+    useSectionTheme(sectionRef, { activeTheme: "mild", defaultTheme: "light", threshold: 0.5 });
+
     return (
-        <section className="bg-[#f3f6f7] py-[16rem] max-[86rem]:py-24">
+        // <section className="bg-[#f3f6f7] py-[16rem] max-[86rem]:py-24">
+        <section
+            ref={sectionRef}
+            className="h-[100dvh] flex justify-center items-center"
+        >
             <div className="mx-auto grid w-[min(112rem,calc(100%_-_3.2rem))] grid-cols-[minmax(0,1fr)_44rem] items-center gap-14 max-[86rem]:grid-cols-1">
                 <motion.div
                     initial={{ opacity: 0, y: 28 }}
@@ -18,11 +29,24 @@ export function TrustPrinciples() {
                     viewport={{ once: true, amount: 0.25 }}
                     whileInView={{ opacity: 1, y: 0 }}
                 >
-                    <h2 className="m-0 text-5xl font-black leading-[1.3] text-black max-[86rem]:text-4xl">
+                    {/* <h2 className="m-0 text-5xl font-black leading-[1.3] text-black max-[86rem]:text-4xl">
                         투명한 인터넷 방송 생태계를 위한,
                         <br />
                         제이엔에스가 지키는 단호한 <span className="text-[#ff6673]">원칙</span>
-                    </h2>
+                    </h2> */}
+                    <Text.Reveal
+                        as="h2"
+                        className="text-[3.8rem] leading-[1.5]"
+                        initialColor="#00000000"
+                        midColor="rgb(255, 92, 118)"
+                        revealColor="rgb(0, 0, 0)"
+                        revealWindow={0.5}
+                        align="left"
+                        // transition={2}
+                        delay={2}
+                    >
+                        {`투명한 인터넷 방송 생태계를 위한,\n제이엔에스가 지키는 단호한 원칙`}
+                    </Text.Reveal>
                     <div className="mt-12 grid max-w-[56rem] gap-5">
                         {principleItems.map((item) => (
                             <article

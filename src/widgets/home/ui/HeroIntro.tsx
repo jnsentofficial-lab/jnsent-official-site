@@ -1,25 +1,64 @@
 "use client";
 
-import { motion } from "framer-motion";
+import Text from "@/shared/ui/reveal";
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
 
 const socialItems = ["bj", "Talk", "Insta", "Blog"];
 
 export function HeroIntro() {
+    const [introStep, setIntroStep] = useState<1 | 2>(1);
+
     return (
-        <section className="relative flex min-h-[75rem] items-center justify-center overflow-hidden bg-white px-6 pt-10 text-center max-[86rem]:min-h-[62rem]">
+        <section className="relative flex justify-center items-center h-[100dvh]">
             <motion.div
                 className="mx-auto max-w-[92rem]"
                 initial={{ opacity: 0, y: 26 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.75, ease: "easeOut" }}
             >
-                <p className="mb-8 text-4xl font-extrabold leading-tight text-neutral-300 max-[86rem]:text-3xl">수많은 초보 BJ들이 선택한 이유,</p>
-                <h1 className="m-0 text-6xl font-black leading-[1.22] text-black max-[86rem]:text-4xl">
+                <AnimatePresence mode="wait">
+                    <Text.Reveal
+                        as="h2"
+                        className="text-[3.8rem] leading-[1.5] transition-colors"
+                        initialColor="#00000000"
+                        midColor="rgb(255, 92, 118)"
+                        revealColor={introStep === 1 ? "rgb(0, 0, 0)" : "#00000050"}
+                        revealWindow={0.5}
+                        delay={2}
+                        onRevealComplete={() => {
+                            console.log(1);
+                            setIntroStep(2);
+                        }}
+                    >
+                        {`수 많은 초보 BJ들이 선택한 이유`}
+                    </Text.Reveal>
+                    <div className="h-[5.8rem]">
+                        {introStep === 2 ? (
+                            <Text.Reveal
+                                as="h2"
+                                className="text-[3.8rem] leading-[1.5]  transition-colors"
+                                initialColor="#00000000"
+                                midColor="rgb(255, 92, 118)"
+                                revealColor="rgb(0, 0, 0)"
+                                revealWindow={0.5}
+                                delay={2}
+                                onRevealComplete={() => {
+                                    console.log(2);
+                                }}
+                            >
+                                {`검증된 운영구조 투명한 정산 제이엔에스에 있습니다.`}
+                            </Text.Reveal>
+                        ) : null}
+                    </div>
+                </AnimatePresence>
+                {/* <h1 className="m-0 text-6xl font-black leading-[1.22] text-black max-[86rem]:text-4xl">
                     검증된 <span className="text-[#ff6673]">운영구조 투명한 정산</span> 제이엔에스에 있습니다.
-                </h1>
+                </h1> */}
                 <div className="mx-auto mt-28 h-16 w-px bg-gradient-to-b from-black via-black to-[#ff6673] max-[86rem]:mt-16" />
+
                 <motion.a
-                    className="mx-auto mt-12 inline-flex max-w-full items-center gap-5 rounded-full bg-black px-7 py-4 text-sm font-bold text-white shadow-[0_2rem_5rem_rgba(0,0,0,0.18)] max-[86rem]:flex-wrap max-[86rem]:justify-center"
+                    className="fixed bottom-[1.6rem] left-[50%] transform translate-x-[-50%] z-10 flex items-center bg-black rounded-full p-[0.4rem] text-white"
                     href="/bjSupport"
                     whileHover={{ y: -2 }}
                 >

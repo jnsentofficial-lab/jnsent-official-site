@@ -1,15 +1,12 @@
 "use client";
 
-import { useConfirmModalStore } from "@/entities/common/store/useConfirmModalStore";
 import { useDashboardSummaryQuery } from "@/entities/dashboard/api/dashboard.query";
 import Skeleton from "@/shared/ui/kit/Skeleton";
-import UI from "@/shared/ui/UIComponent";
 
 const workItems = ["메인 배너 상태 확인", "페이지 콘텐츠 최신화", "NEWS 공개 여부 점검", "문의 응대 상태 확인"];
 
 export function Analysis() {
-    const { setConfirmModalState, confirmModalStateSync } = useConfirmModalStore();
-    const { data, refetch } = useDashboardSummaryQuery();
+    const { data } = useDashboardSummaryQuery();
     const summaryItems = [
         { label: "공개 페이지", value: String(data?.pages ?? 0) },
         { label: "메인 배너", value: String(data?.banners ?? 0) },
@@ -35,15 +32,6 @@ export function Analysis() {
             </Skeleton.Div>
             <section className="mt-[1.8rem] rounded-lg border border-slate-200 bg-white p-6">
                 <h2 className="mt-0 mb-[1.8rem] text-xl text-slate-900">운영 체크리스트</h2>
-                <UI.Button
-                    onClick={async () => {
-                        setConfirmModalState("proxySubscription", true);
-                        const { isAgree } = await confirmModalStateSync("proxySubscription");
-                        if (isAgree) refetch();
-                    }}
-                >
-                    테스트 버튼
-                </UI.Button>
                 <ul className="m-0 grid list-none gap-2.5 p-0">
                     {workItems.map((item) => (
                         <li

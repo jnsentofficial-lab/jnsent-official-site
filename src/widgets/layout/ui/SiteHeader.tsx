@@ -1,5 +1,6 @@
 "use client";
 
+import { useLayoutStore } from "@/shared/stores/useLayoutStore";
 import UI from "@/shared/ui/UIComponent";
 
 const navigationItems = [
@@ -12,17 +13,22 @@ const navigationItems = [
 ];
 
 export function SiteHeader() {
+    const { isNowDarkMode } = useLayoutStore();
     return (
-        <header className="sticky top-0 z-40 border-b border-black/5 bg-white/95 backdrop-blur-md">
+        <header className="sticky top-0 z-40">
             <div className="mx-auto flex min-h-24 w-[min(112rem,calc(100%_-_3.2rem))] items-center justify-between gap-8 max-[86rem]:min-h-0 max-[86rem]:flex-wrap max-[86rem]:py-4">
                 <UI.Link
-                    className="shrink-0 text-2xl font-black text-black"
+                    className="shrink-0 text-2xl"
                     href="/"
                 >
-                    JNS
+                    <img
+                        src={"/images/common/ico-logo.svg"}
+                        alt=""
+                        className={`${isNowDarkMode ? "invert" : ""}`}
+                    />
                 </UI.Link>
                 <nav
-                    className="flex items-center justify-center gap-[2.4rem] text-base font-black text-black max-[86rem]:order-3 max-[86rem]:w-full max-[86rem]:flex-wrap max-[86rem]:justify-start max-[86rem]:gap-x-4 max-[86rem]:gap-y-3"
+                    className="flex items-center justify-center gap-[2.4rem] text-base max-[86rem]:order-3 max-[86rem]:w-full max-[86rem]:flex-wrap max-[86rem]:justify-start max-[86rem]:gap-x-4 max-[86rem]:gap-y-3"
                     aria-label="주요 메뉴"
                 >
                     {navigationItems.map((item) => (
@@ -36,7 +42,7 @@ export function SiteHeader() {
                     ))}
                 </nav>
                 <UI.Link
-                    className="inline-flex shrink-0 items-center justify-center rounded-full bg-black px-6 py-3 text-base font-black text-white"
+                    className="text-[1.6rem] inline-flex shrink-0 items-center justify-center rounded-full bg-black px-6 py-[0.2rem] text-base text-white"
                     href="/bjSupport"
                 >
                     BJ 지원하기

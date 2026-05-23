@@ -6,6 +6,7 @@ import * as HomeLayer from "@/widgets/home/ui";
 export default function Panel() {
     return (
         <HomePageProvider>
+            {/* <HomeLayer.Landing /> */}
             <HomeLayer.HeroIntro />
             <HomeLayer.TransparencyProof />
             <HomeLayer.RecordGraph />

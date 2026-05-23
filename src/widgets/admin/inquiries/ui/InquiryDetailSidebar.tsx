@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useUploadImageMutation } from "@/entities/asset/api/asset.query";
-import { useCreateInquiryCommentMutation, useInquiryCommentsQuery } from "@/entities/inquiry/api/inquiry.query";
+import { useCreateInquiryCommentMutation, useDeleteInquiryMutation, useInquiryCommentsQuery } from "@/entities/inquiry/api/inquiry.query";
 import type { Inquiry } from "@/entities/inquiry/model/inquiry.type";
 import { emptyRichTextContent, extractRichTextPlainText, toJsonContent } from "@/shared/lib/richText/richText";
 import type { RichTextContent } from "@/shared/lib/richText/richText";
@@ -11,6 +11,7 @@ import { RichTextRenderer } from "@/shared/ui/richText/RichTextRenderer";
 
 type InquiryDetailSidebarProps = {
     inquiry: Inquiry | null;
+    onDeleted?: () => void;
 };
 
 function formatDate(value: string) {
@@ -20,11 +21,12 @@ function formatDate(value: string) {
     }).format(new Date(value));
 }
 
-export function InquiryDetailSidebar({ inquiry }: InquiryDetailSidebarProps) {
+export function InquiryDetailSidebar({ inquiry, onDeleted }: InquiryDetailSidebarProps) {
     const { data: comments = [], isLoading } = useInquiryCommentsQuery(inquiry?.id);
     const [commentBody, setCommentBody] = useState<RichTextContent>(emptyRichTextContent);
     const uploadImage = useUploadImageMutation();
     const createComment = useCreateInquiryCommentMutation();
+    const deleteInquiry = useDeleteInquiryMutation();
 
     async function handleImageUpload(file: File) {
         const response = await uploadImage.mutateAsync(file);
@@ -51,6 +53,15 @@ export function InquiryDetailSidebar({ inquiry }: InquiryDetailSidebarProps) {
         setCommentBody(emptyRichTextContent);
     }
 
+    async function handleDelete() {
+        if (!inquiry || !window.confirm("선택한 문의를 삭제할까요?")) {
+            return;
+        }
+
+        await deleteInquiry.mutateAsync({ id: inquiry.id });
+        onDeleted?.();
+    }
+
     if (!inquiry) {
         return (
             <aside className="p-12 text-2xl font-black text-[var(--adaptiveGrey500)]">
@@ -63,6 +74,16 @@ export function InquiryDetailSidebar({ inquiry }: InquiryDetailSidebarProps) {
         <aside className="sticky top-0 grid max-h-screen overflow-auto">
             <section className="bg-[var(--adaptiveGrey100)] p-12">
                 <p className="mb-10 text-3xl font-black text-black">선택한 질문</p>
+                <button
+                    className="mb-8 min-h-12 rounded-xl border border-[var(--adaptiveGrey300)] bg-white px-5 text-base font-black text-black"
+                    disabled={deleteInquiry.isPending}
+                    onClick={() => {
+                        void handleDelete();
+                    }}
+                    type="button"
+                >
+                    {deleteInquiry.isPending ? "삭제 중" : "문의 삭제"}
+                </button>
                 <h2 className="mt-0 mb-8 text-5xl font-black leading-[1.2] text-black">{inquiry.message}</h2>
                 <p className="mb-12 text-lg font-black text-black">{new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.created_at))} ~ {new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.updated_at))}</p>
                 <div className="text-2xl font-black leading-[1.7] text-black">

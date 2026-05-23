@@ -21,7 +21,12 @@ export function Analysis() {
                         onSelectInquiry={setSelectedInquiry}
                     />
                 )}
-                right={<InquiryDetailSidebar inquiry={selectedInquiry} />}
+                right={(
+                    <InquiryDetailSidebar
+                        inquiry={selectedInquiry}
+                        onDeleted={() => setSelectedInquiry(null)}
+                    />
+                )}
             />
         </AdminWorkspace>
     );

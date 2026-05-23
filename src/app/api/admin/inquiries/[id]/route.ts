@@ -10,3 +10,10 @@ export async function PATCH(request: Request, { params }: RouteProps) {
     const { data, error } = await supabase.from("inquiries").update(body).eq("id", id).select("*").single();
     return error ? apiError(error.message, 400) : apiOk(data);
 }
+
+export async function DELETE(_request: Request, { params }: RouteProps) {
+    const { id } = await params;
+    const supabase = createSupabaseServiceClient();
+    const { data, error } = await supabase.from("inquiries").delete().eq("id", id).select("*").single();
+    return error ? apiError(error.message, 400) : apiOk(data);
+}

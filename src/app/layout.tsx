@@ -1,68 +1,47 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { createJsonLd } from "@/shared/lib/JsonLd";
+
 import { AuthProvider } from "@/app/providers/AuthProvider";
-import { GlobalErrorBoundary } from "@/app/providers/GlobalErrorBoundary";
-import { GlobalErrorListener } from "@/app/providers/GlobalErrorListener";
 import { PopupProvider } from "@/app/providers/PopupProvider";
 import { QueryProvider } from "@/app/providers/QueryProvider";
-import { Footer } from "@/widgets/layout/Footer";
-import { Header } from "@/widgets/layout/Header";
-import { Progress } from "@/widgets/layout/Progress";
-import { Sidebar } from "@/widgets/layout/Sidebar";
-import { Toast } from "@/widgets/layout/Toast";
-import "./globals.css";
+import { GlobalErrorBoundary } from "@/app/providers/GlobalErrorBoundary";
+import { GlobalErrorListener } from "@/app/providers/GlobalErrorListener";
 
-const suit = localFont({
+import { Toast } from "@/widgets/layout/Toast";
+import { Header } from "@/widgets/layout/Header";
+import { Sidebar } from "@/widgets/layout/Sidebar";
+import { Progress } from "@/widgets/layout/Progress";
+
+import { createJsonLd } from "@/shared/lib/JsonLd";
+
+import "./globals.css";
+import { Footer } from "@/widgets/layout/Footer";
+
+const nanumSquare = localFont({
     src: [
         {
-            path: "../../public/suit/woff2/SUIT-Thin.woff2",
-            weight: "100",
-            style: "normal",
-        },
-        {
-            path: "../../public/suit/woff2/SUIT-ExtraLight.woff2",
-            weight: "200",
-            style: "normal",
-        },
-        {
-            path: "../../public/suit/woff2/SUIT-Light.woff2",
+            path: "../../public/fonts/NanumSquare/NanumSquareL.woff2",
             weight: "300",
             style: "normal",
         },
         {
-            path: "../../public/suit/woff2/SUIT-Regular.woff2",
+            path: "../../public/fonts/NanumSquare/NanumSquareR.woff2",
             weight: "400",
             style: "normal",
         },
         {
-            path: "../../public/suit/woff2/SUIT-Medium.woff2",
-            weight: "500",
-            style: "normal",
-        },
-        {
-            path: "../../public/suit/woff2/SUIT-SemiBold.woff2",
-            weight: "600",
-            style: "normal",
-        },
-        {
-            path: "../../public/suit/woff2/SUIT-Bold.woff2",
+            path: "../../public/fonts/NanumSquare/NanumSquareB.woff2",
             weight: "700",
             style: "normal",
         },
         {
-            path: "../../public/suit/woff2/SUIT-ExtraBold.woff2",
+            path: "../../public/fonts/NanumSquare/NanumSquareEB.woff2",
             weight: "800",
-            style: "normal",
-        },
-        {
-            path: "../../public/suit/woff2/SUIT-Heavy.woff2",
-            weight: "900",
             style: "normal",
         },
     ],
     display: "swap",
-    variable: "--font-suit",
+    variable: "--font-nanum-square",
 });
 
 export const metadata: Metadata = {
@@ -105,7 +84,7 @@ export default function RootLayout({
                     }}
                 /> */}
             </head>
-            <body className={`${suit.variable} ${suit.className} m-0 min-h-screen bg-white font-sans text-slate-900`}>
+            <body className={`${nanumSquare.variable} ${nanumSquare.className}`}>
                 <GlobalErrorBoundary>
                     <QueryProvider>
                         <AuthProvider>
@@ -113,7 +92,9 @@ export default function RootLayout({
                             <Header />
                             <Sidebar />
                             <PopupProvider>
-                                <div className="flex min-h-screen flex-col">{children}</div>
+                                {children}
+                                {/* <RouteTransition className="flex min-h-screen flex-col">{children}</RouteTransition> */}
+                                {/* <Transition.FadeInOut>{children}</Transition.FadeInOut> */}
                             </PopupProvider>
                             <Footer />
                             <Progress />

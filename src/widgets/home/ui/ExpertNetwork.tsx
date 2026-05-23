@@ -1,6 +1,9 @@
 "use client";
 
+import { useSectionTheme } from "@/shared/hooks";
+import Text from "@/shared/ui/reveal";
 import { motion } from "framer-motion";
+import { useRef } from "react";
 
 const experts = [
     { title: "전담 매니저", text: "방송 일정 및 성장 방향 관리" },
@@ -12,20 +15,29 @@ const experts = [
 ];
 
 export function ExpertNetwork() {
+    const sectionRef = useRef<HTMLElement>(null);
+
+    // useSectionTheme(sectionRef, { activeTheme: "semiMild", defaultTheme: "dark", threshold: 0.5 });
+
     return (
-        <section className="bg-[#e8eef0] py-[15rem] max-[86rem]:py-24">
+        <section
+            ref={sectionRef}
+            className="h-[100dvh] flex justify-center items-center"
+        >
             <div className="mx-auto w-[min(112rem,calc(100%_-_3.2rem))] text-center">
-                <motion.h2
-                    className="m-0 text-5xl font-black leading-[1.32] text-black max-[86rem]:text-4xl"
-                    initial={{ opacity: 0, y: 24 }}
-                    transition={{ duration: 0.65 }}
-                    viewport={{ once: true, amount: 0.3 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                <Text.Reveal
+                    as="h2"
+                    className="text-[3.8rem] leading-[1.5]"
+                    initialColor="#00000000"
+                    midColor="rgb(255, 92, 118)"
+                    revealColor="rgb(0, 0, 0)"
+                    revealWindow={0.5}
+                    align="center"
+                    // transition={2}
+                    delay={2}
                 >
-                    성장을 위한
-                    <br />
-                    모든 분야의 전문가들이 함께합니다.
-                </motion.h2>
+                    {`성장을 위한\n모든 분야의 전문가들이 함께합니다.`}
+                </Text.Reveal>
                 <div className="mt-16 grid gap-5 md:grid-cols-3 xl:grid-cols-6">
                     {experts.map((item, index) => (
                         <motion.article
