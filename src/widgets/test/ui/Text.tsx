@@ -1,9 +1,8 @@
 "use client";
 
 import type { MotionValue } from "motion/react";
-import type { ReactNode } from "react";
 import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { animate, motion, useAnimationFrame, useMotionTemplate, useMotionValue, useScroll, useTransform, useVelocity } from "motion/react";
+import { animate, motion, useMotionTemplate, useMotionValue, useScroll, useTransform } from "motion/react";
 import { util } from "@/shared/utils/util";
 
 type TextElement = "h1" | "h2" | "h3" | "p" | "span";
@@ -26,16 +25,6 @@ type RevealTextProps = {
     stiffness?: number;
     transition?: number;
     onRevealComplete?: () => void;
-};
-
-type TextMarqueeProps = {
-    children: ReactNode;
-    className?: string;
-    contentClassName?: string;
-    direction?: "left" | "right";
-    interaction?: boolean;
-    repeat?: number;
-    speed?: number;
 };
 
 type Line = {
@@ -586,67 +575,18 @@ const TextShimmer = ({
     );
 };
 
-function wrap(min: number, max: number, value: number) {
-    const range = max - min;
-    return ((((value - min) % range) + range) % range) + min;
-}
-
-function TextMarquee({
-    children,
-    className = "",
-    contentClassName = "",
-    direction = "left",
-    interaction = false,
-    repeat = 4,
-    speed = 40,
-}: TextMarqueeProps) {
-    const baseX = useMotionValue(0);
-    const { scrollY } = useScroll();
-    const scrollVelocity = useVelocity(scrollY);
-    const x = useTransform(baseX, (value) => `${wrap(-100, 0, value)}%`);
-    const directionFactor = direction === "left" ? -1 : 1;
-
-    useAnimationFrame((_, delta) => {
-        const scrollBoost = interaction ? Math.min(Math.abs(scrollVelocity.get()) * 0.025, speed * 3) : 0;
-        const moveBy = directionFactor * (speed + scrollBoost) * (delta / 1000);
-
-        baseX.set(baseX.get() + moveBy);
-    });
-
-    return (
-        <div className={`overflow-hidden whitespace-nowrap ${className}`}>
-            <motion.div
-                aria-hidden="true"
-                className="flex w-max"
-                style={{ x }}
-            >
-                {Array.from({ length: Math.max(2, repeat) }).map((_, index) => (
-                    <div
-                        className={`flex shrink-0 items-center ${contentClassName}`}
-                        key={index}
-                    >
-                        {children}
-                    </div>
-                ))}
-            </motion.div>
-        </div>
-    );
-}
-
 const Text = {
     Reveal: RevealText,
     Text: RevealText,
     Rolling,
     Shimmer: TextShimmer,
-    Marquee: TextMarquee,
 };
 
 const Reveal = {
     Reveal: RevealText,
     Text: RevealText,
     Rolling,
-    Marquee: TextMarquee,
 };
 
-export { Reveal, RevealText, Rolling, Text, TextMarquee };
+export { Reveal, RevealText, Rolling, Text };
 export default Text;

@@ -9,6 +9,10 @@ type AnalysisProps = {
     slug: string;
 };
 
+function formatViewCount(value?: number) {
+    return new Intl.NumberFormat("ko-KR").format(value ?? 0);
+}
+
 export function Analysis({ slug }: AnalysisProps) {
     const { data: news, isLoading } = usePublishedNewsDetailQuery(slug);
     const { data: newsList } = usePublishedNewsQuery();
@@ -24,7 +28,11 @@ export function Analysis({ slug }: AnalysisProps) {
             >
                 <div className="mx-auto w-[min(68rem,calc(100%_-_3.2rem))]">
                     <h1 className="mt-0 mb-6 text-5xl font-black leading-[1.35] text-black max-[86rem]:text-4xl">{news?.title ?? "뉴스를 찾을 수 없습니다"}</h1>
-                    <p className="mb-12 text-lg font-black text-[var(--adaptiveGrey500)]">{news?.published_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(news.published_at)) : "날짜 미정"}</p>
+                    <p className="mb-12 text-lg font-black text-[var(--adaptiveGrey500)]">
+                        {news?.published_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(news.published_at)) : "날짜 미정"}
+                        <span className="mx-3">|</span>
+                        조회 {formatViewCount(news?.view_count)}
+                    </p>
                     {news?.thumbnail_url ? (
                         <img
                             alt={news.title}
