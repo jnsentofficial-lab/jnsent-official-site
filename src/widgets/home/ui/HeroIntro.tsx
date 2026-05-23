@@ -69,7 +69,8 @@ export function HeroIntro() {
                     <span className="border-l border-white/20 pl-5 text-[#ff6673] max-[86rem]:border-l-0 max-[86rem]:pl-0">문의하기 ↑</span>
                 </motion.a>
             </motion.div>
-            <aside className="fixed right-7 top-1/2 z-30 grid -translate-y-1/2 gap-4 max-[86rem]:hidden">
+
+            <aside className="fixed right-7 bottom-[0] z-30 grid -translate-y-1/2 gap-4 max-[86rem]:hidden">
                 {socialItems.map((item) => (
                     <a
                         className="grid h-14 w-14 place-items-center rounded-full bg-white text-sm font-black text-black shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.14)]"

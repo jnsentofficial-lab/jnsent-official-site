@@ -38,7 +38,7 @@ export function OperationKnowhow() {
                     style={{
                         maskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
                         WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
-                        objectPosition: `0 ${progress / 3}%`,
+                        objectPosition: `0 ${progress / 1}%`,
                     }}
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 0.2 }}
@@ -54,10 +54,10 @@ export function OperationKnowhow() {
                 <motion.div
                     // className="relative z-[1] ml-auto w-[min(72rem,calc(100%_-_3.2rem))] pr-[max(1.6rem,calc((100vw_-_112rem)/2))]"
                     className="w-full h-full flex flex-col justify-center items-start"
-                    initial={{ opacity: 0, x: 34 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, amount: 0.25 }}
-                    transition={{ duration: 0.75 }}
+                    // initial={{ opacity: 0, x: 34 }}
+                    // whileInView={{ opacity: 1, x: 0 }}
+                    // viewport={{ once: true, amount: 0.25 }}
+                    // transition={{ duration: 0.75 }}
                 >
                     <Text.Reveal
                         as="h2"
@@ -76,25 +76,25 @@ export function OperationKnowhow() {
 
                     <motion.div
                         className="mt-14 grid gap-9"
-                        variants={{
-                            visible: {
-                                transition: {
-                                    staggerChildren: 0.22,
-                                },
-                            },
-                        }}
-                        initial="hidden"
-                        animate={progress === 100 ? "visible" : "hidden"}
+                        // variants={{
+                        //     visible: {
+                        //         transition: {
+                        //             staggerChildren: 0.22,
+                        //         },
+                        //     },
+                        // }}
+                        // initial="hidden"
+                        // animate={progress === 100 ? "visible" : "hidden"}
                     >
                         {knowhowItems.map((item, index) => (
                             <motion.div
                                 key={item.title}
                                 className="flex flex-col gap-[0.8rem]"
-                                variants={{
-                                    hidden: { opacity: 0, y: 132 },
-                                    visible: { opacity: 1, y: 0 },
-                                }}
-                                transition={{ duration: 0, ease: "easeInOut" }}
+                                // variants={{
+                                //     hidden: { opacity: 0, y: 132 },
+                                //     visible: { opacity: 1, y: 0 },
+                                // }}
+                                // transition={{ duration: 0, ease: "easeInOut" }}
                             >
                                 <h3 className="text-[2.8rem]">{item.title}</h3>
                                 <p className="text-[1.8rem]">{item.text}</p>
