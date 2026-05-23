@@ -36,6 +36,7 @@ export function ExpertNetwork() {
                     revealStartPosition={20}
                     revealEndPosition={60}
                     delay={2}
+                    transition={0}
                 >
                     {`성장을 위한\n모든 분야의 전문가들이 함께합니다.`}
                 </Text.Reveal>

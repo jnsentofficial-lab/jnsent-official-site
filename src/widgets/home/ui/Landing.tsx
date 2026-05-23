@@ -11,8 +11,8 @@ export const Landing = () => {
                 midColor="rgb(255, 92, 118)"
                 revealColor="rgb(255, 255, 255)"
                 revealWindow={0.5}
-                // transition={2}
                 delay={2}
+                transition={0}
                 align="left"
             >
                 {`수 많은 초보 BJ들이 선택한 이유`}

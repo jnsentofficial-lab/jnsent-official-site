@@ -72,6 +72,7 @@ export function OperationKnowhow() {
                         revealStartPosition={20}
                         revealEndPosition={60}
                         delay={2}
+                        transition={0}
                     >
                         {`2017년부터 쌓아온 운영 노하우\n당신의 성장에만 집중합니다.`}
                     </Text.Reveal>

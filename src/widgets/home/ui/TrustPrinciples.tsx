@@ -45,6 +45,7 @@ export function TrustPrinciples() {
                         revealStartPosition={20}
                         revealEndPosition={60}
                         delay={2}
+                        transition={0}
                     >
                         {`투명한 인터넷 방송 생태계를 위한,\n제이엔에스가 지키는 단호한 원칙`}
                     </Text.Reveal>

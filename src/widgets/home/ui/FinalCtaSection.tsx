@@ -55,6 +55,7 @@ export function FinalCtaSection() {
                     revealStartPosition={20}
                     revealEndPosition={60}
                     delay={2}
+                    transition={0}
                 >
                     {`제이엔에스와 함께\n신뢰할 수 있는 미래를 만들어보세요`}
                 </Text.Reveal>

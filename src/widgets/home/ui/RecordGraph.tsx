@@ -51,6 +51,7 @@ export function RecordGraph() {
                         revealEndPosition={60}
                         align="left"
                         delay={2}
+                        transition={0}
                     >
                         {`기록은 거짓말하지 않습니다\n결과로 증명된 운영성과`}
                     </Text.Reveal>

@@ -7,7 +7,7 @@ const navigationItems = [
     { href: "/", label: "메인" },
     { href: "/consulting", label: "엔터창업" },
     { href: "/equipmentRental", label: "장비렌탈" },
-    { href: "/setupGuide", label: "시스템/지원내용" },
+    // { href: "/setupGuide", label: "시스템/지원내용" },
     { href: "/studioRental", label: "스튜디오 대여/대관" },
     { href: "/news", label: "뉴스" },
 ];

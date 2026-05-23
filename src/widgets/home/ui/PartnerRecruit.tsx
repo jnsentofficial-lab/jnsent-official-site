@@ -52,6 +52,7 @@ export function PartnerRecruit() {
                         revealStartPosition={20}
                         revealEndPosition={60}
                         delay={2}
+                        transition={0}
                     >
                         {`제이엔에스와 함께\성장할 파트너를 찾습니다`}
                     </Text.Reveal>

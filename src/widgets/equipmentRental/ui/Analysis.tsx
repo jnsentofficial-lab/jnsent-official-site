@@ -1,8 +1,9 @@
 "use client";
 
+import { Fragment } from "react/jsx-runtime";
+
 import { usePublishedPageContentQuery } from "@/entities/pageContent/api/pageContent.query";
-import Skeleton from "@/shared/ui/kit/Skeleton";
-import { InfoCard, InquiryRequestForm, NoticeBox, SubPageHero, SubPageSplit } from "@/widgets/layout/ui";
+import { InquiryRequestForm, NoticeBox, SubPageHero, SubPageSplit } from "@/widgets/layout/ui";
 
 const equipmentChips = [
     { label: "PC 본체", options: ["i5 5400", "i7 10700k"], required: true },
@@ -16,16 +17,18 @@ export function Analysis() {
     const { data: content, isLoading } = usePublishedPageContentQuery("equipmentRental");
 
     return (
-        <Skeleton.Section target={!isLoading}>
+        <Fragment>
             <SubPageHero
                 current="장비렌탈"
                 title={content?.title ?? "장비렌탈"}
                 description={content?.description ?? "최고의 장비를 합리적인 비용으로 렌탈해드립니다."}
             />
             <SubPageSplit
-                left={(
+                left={
                     <div className="grid gap-8">
-                        <h2 className="m-0 text-3xl font-black text-black">주의사항 <span className="text-[#f04452]">*</span></h2>
+                        <h2 className="m-0 text-3xl font-black text-black">
+                            주의사항 <span className="text-[#f04452]">*</span>
+                        </h2>
                         <div className="rounded bg-[var(--adaptiveGrey50)] px-5 py-4 text-lg font-black">필요한 장비 선택 → 장비렌탈 신청 및 상담 → 출장 스케줄 예약 및 방문 설치</div>
                         <ul className="m-0 grid gap-3 p-0 pl-5 text-lg font-semibold leading-[1.7] text-black">
                             <li>1개월 기준 렌탈료는 선입금 해주셔야합니다.</li>
@@ -37,15 +40,15 @@ export function Analysis() {
                         </ul>
                         <NoticeBox />
                     </div>
-                )}
-                right={(
+                }
+                right={
                     <InquiryRequestForm
                         category="equipment_rental"
                         chips={equipmentChips}
                         buttonLabel="요청하기"
                     />
-                )}
+                }
             />
-        </Skeleton.Section>
+        </Fragment>
     );
 }

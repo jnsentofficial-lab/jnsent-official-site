@@ -24,6 +24,7 @@ export function BroadcastEnvironment() {
                     revealEndPosition={60}
                     align="right"
                     delay={2}
+                    transition={0}
                 >
                     {`최상의 결과는\n최상의 환경에서 시작됩니다`}
                 </Text.Reveal>

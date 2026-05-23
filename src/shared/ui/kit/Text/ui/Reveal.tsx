@@ -250,13 +250,14 @@ export function Reveal({
     revealStartPosition = 0,
     revealEndPosition = 50,
     softness = 22,
-    transition = delay,
+    transition,
     interaction = true,
     onRevealComplete,
 }: RevealTextProps) {
     const targetRef = useRef<HTMLElement | null>(null);
     const baseRef = useRef<HTMLSpanElement | null>(null);
     const [lines, setLines] = useState<Line[]>([]);
+    const resolvedTransition = transition ?? delay;
     const scrollOffset = useMemo(
         () => [`start ${100 - revealStartPosition}%`, `center ${100 - revealEndPosition}%`] as [`start ${number}%`, `center ${number}%`],
         [revealEndPosition, revealStartPosition],
@@ -265,9 +266,9 @@ export function Reveal({
         target: targetRef,
         offset: scrollOffset,
     });
-    const autoProgress = useAutoRevealProgress(interaction, scrollYProgress, transition, delay, children);
+    const autoProgress = useAutoRevealProgress(interaction, scrollYProgress, resolvedTransition, delay, children);
     const rawProgress = interaction ? scrollYProgress : autoProgress;
-    const transitionProgress = useTransitionProgress(rawProgress, interaction ? transition : 0);
+    const transitionProgress = useTransitionProgress(rawProgress, 0);
     const Tag = as;
     const completeRef = useRef(false);
     const resolvedHighlightColor = highlightColor ?? midColor;
