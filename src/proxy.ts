@@ -12,7 +12,7 @@ function canManageAccounts(request: NextRequest) {
     return role === "manager" || role === "admin";
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
     const isAdminApi = pathname.startsWith("/api/admin");
     const isAdminPage = pathname.startsWith("/admin");

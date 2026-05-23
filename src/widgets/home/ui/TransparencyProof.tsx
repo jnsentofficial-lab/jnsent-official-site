@@ -83,7 +83,7 @@ export function TransparencyProof() {
                 </div>
 
                 <div className="mt-24 grid gap-6 md:grid-cols-3">
-                    {proofCards.map((item, index) => (
+                    {/* {proofCards.map((item, index) => (
                         <section
                             key={item.title}
                             className="rounded-[3.2rem] overflow-hidden"
@@ -101,7 +101,7 @@ export function TransparencyProof() {
                                 <p className="m-0 text-base leading-[1.75] text-white/70">{item.text}</p>
                             </section>
                         </section>
-                    ))}
+                    ))} */}
                 </div>
             </div>
         </section>
