@@ -1,8 +1,8 @@
-import type { MotionValue } from "motion/react";
 import type { ReactNode } from "react";
-import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { animate, motion, useAnimationFrame, useMotionTemplate, useMotionValue, useScroll, useTransform, useVelocity } from "motion/react";
-import { util } from "@/shared/utils/util";
+import type { MotionValue } from "motion/react";
+
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { animate, motion, useMotionTemplate, useMotionValue, useScroll, useTransform } from "motion/react";
 
 type TextElement = "h1" | "h2" | "h3" | "p" | "span";
 
