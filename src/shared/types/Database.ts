@@ -172,6 +172,7 @@ export type Database = {
                     seo_title: string | null;
                     seo_description: string | null;
                     is_published: boolean;
+                    view_count: number;
                     published_at: string | null;
                     created_at: string;
                     updated_at: string;
@@ -186,11 +187,28 @@ export type Database = {
                     seo_title?: string | null;
                     seo_description?: string | null;
                     is_published?: boolean;
+                    view_count?: number;
                     published_at?: string | null;
                     created_at?: string;
                     updated_at?: string;
                 };
                 Update: Partial<Database["public"]["Tables"]["news"]["Insert"]>;
+                Relationships: [];
+            };
+            news_view_logs: {
+                Row: {
+                    id: string;
+                    news_id: string;
+                    ip_address: string;
+                    viewed_at: string;
+                };
+                Insert: {
+                    id?: string;
+                    news_id: string;
+                    ip_address: string;
+                    viewed_at?: string;
+                };
+                Update: Partial<Database["public"]["Tables"]["news_view_logs"]["Insert"]>;
                 Relationships: [];
             };
             page_contents: {
@@ -225,7 +243,15 @@ export type Database = {
             };
         };
         Views: Record<string, never>;
-        Functions: Record<string, never>;
+        Functions: {
+            increment_news_view_once: {
+                Args: {
+                    target_news_id: string;
+                    viewer_ip: string;
+                };
+                Returns: number;
+            };
+        };
         Enums: Record<string, never>;
         CompositeTypes: Record<string, never>;
     };

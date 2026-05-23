@@ -18,6 +18,10 @@ function formatDate(value: string | null) {
     }).format(new Date(value));
 }
 
+function formatViewCount(value?: number) {
+    return new Intl.NumberFormat("ko-KR").format(value ?? 0);
+}
+
 export function Analysis() {
     const { data: news, isLoading } = usePublishedNewsQuery();
     const [page, setPage] = useState(1);
@@ -55,7 +59,11 @@ export function Analysis() {
                                         ) : (
                                             <span className="flex aspect-square w-full items-center justify-center rounded-[3rem] bg-[var(--adaptiveGrey100)] text-lg font-black text-[var(--adaptiveGrey500)]">이미지 없음</span>
                                         )}
-                                        <span className="mt-6 block text-lg font-black text-[var(--adaptiveGrey500)]">{formatDate(item.published_at)}</span>
+                                        <span className="mt-6 block text-lg font-black text-[var(--adaptiveGrey500)]">
+                                            {formatDate(item.published_at)}
+                                            <span className="mx-3">|</span>
+                                            조회 {formatViewCount(item.view_count)}
+                                        </span>
                                         <strong className="mt-3 block text-3xl font-black leading-[1.35] text-black">{item.title}</strong>
                                     </UI.Link>
                                 ))}

@@ -16,6 +16,7 @@ import { createJsonLd } from "@/shared/lib/JsonLd";
 
 import "./globals.css";
 import { Footer } from "@/widgets/layout/Footer";
+import Script from "next/script";
 
 const nanumSquare = localFont({
     src: [
@@ -63,7 +64,7 @@ export default function RootLayout({
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                     type="application/ld+json"
                 />
-                {/* <Script
+                <Script
                     id="smartlog-script"
                     strategy="afterInteractive" // 주석 풀고 사용하시는 걸 추천합니다
                     dangerouslySetInnerHTML={{
@@ -82,7 +83,7 @@ export default function RootLayout({
       })();
     `,
                     }}
-                /> */}
+                />
             </head>
             <body className={`${nanumSquare.variable} ${nanumSquare.className}`}>
                 <GlobalErrorBoundary>
