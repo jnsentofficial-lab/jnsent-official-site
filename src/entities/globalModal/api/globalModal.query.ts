@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createGlobalModalFetch, deleteGlobalModalFetch, getAdminGlobalModalsFetch, getVisibleGlobalModalsFetch, toggleGlobalModalFetch } from "@/entities/globalModal/api/globalModal.api";
-import type { CreateGlobalModalPayload, DeleteGlobalModalPayload, GlobalModal, ToggleGlobalModalPayload } from "@/entities/globalModal/model/globalModal.type";
+import { createGlobalModalFetch, deleteGlobalModalFetch, getAdminGlobalModalsFetch, getVisibleGlobalModalsFetch, toggleGlobalModalFetch, updateGlobalModalFetch } from "@/entities/globalModal/api/globalModal.api";
+import type { CreateGlobalModalPayload, DeleteGlobalModalPayload, GlobalModal, ToggleGlobalModalPayload, UpdateGlobalModalPayload } from "@/entities/globalModal/model/globalModal.type";
 import { useToastStore } from "@/shared/model/stores/useToastStore";
 
 export const GlobalModalRoutes = {
@@ -59,6 +59,25 @@ export const useToggleGlobalModalMutation = () => {
         mutationFn: (payload: ToggleGlobalModalPayload) => toggleGlobalModalFetch(payload),
         onSuccess: () => {
             setToast({ msg: "모달 상태를 변경했어요", time: 3, type: "success" });
+            queryClient.invalidateQueries({ queryKey: [MUTATION_KEY] });
+        },
+        onError: (err: Error) => {
+            setToast({ msg: err.message ?? "에러 발생", time: 2, type: "fail" });
+        },
+    });
+
+    return { mutate, mutateAsync, isError, isIdle, isSuccess, isPending, isPaused, data, error, reset };
+};
+
+export const useUpdateGlobalModalMutation = () => {
+    const { setToast } = useToastStore();
+    const MUTATION_KEY = GlobalModalRoutes.ADMIN_GLOBAL_MODALS;
+    const queryClient = useQueryClient();
+    const { data, mutate, mutateAsync, error, isError, isSuccess, isIdle, isPending, isPaused, reset } = useMutation({
+        mutationKey: [MUTATION_KEY, "useUpdateGlobalModalMutation"],
+        mutationFn: (payload: UpdateGlobalModalPayload) => updateGlobalModalFetch(payload),
+        onSuccess: () => {
+            setToast({ msg: "모달을 수정했어요", time: 3, type: "success" });
             queryClient.invalidateQueries({ queryKey: [MUTATION_KEY] });
         },
         onError: (err: Error) => {

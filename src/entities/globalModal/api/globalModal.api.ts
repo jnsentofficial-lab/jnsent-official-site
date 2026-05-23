@@ -1,6 +1,6 @@
 import { clientApi, type ApiResponse } from "@/shared/lib/api/client";
 import { serverApi } from "@/shared/lib/api/server";
-import type { CreateGlobalModalPayload, DeleteGlobalModalPayload, GlobalModal, ToggleGlobalModalPayload } from "@/entities/globalModal/model/globalModal.type";
+import type { CreateGlobalModalPayload, DeleteGlobalModalPayload, GlobalModal, ToggleGlobalModalPayload, UpdateGlobalModalPayload } from "@/entities/globalModal/model/globalModal.type";
 
 export async function getVisibleGlobalModalsFetch() {
     return clientApi.get<ApiResponse<GlobalModal[]>>("/api/global-modals");
@@ -12,6 +12,10 @@ export async function getAdminGlobalModalsFetch() {
 
 export async function createGlobalModalFetch(payload: CreateGlobalModalPayload) {
     return clientApi.post<ApiResponse<GlobalModal>>("/api/admin/global-modals", payload);
+}
+
+export async function updateGlobalModalFetch(payload: UpdateGlobalModalPayload) {
+    return clientApi.patch<ApiResponse<GlobalModal>>(`/api/admin/global-modals/${payload.id}`, payload);
 }
 
 export async function toggleGlobalModalFetch(payload: ToggleGlobalModalPayload) {

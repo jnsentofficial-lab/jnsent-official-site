@@ -15,9 +15,14 @@ export function AdminAuthGuard({ children }: AdminAuthGuardProps) {
     const pathname = usePathname();
     const router = useRouter();
     const isLoginPath = pathname === adminLoginPath;
+    const isAdminPath = pathname.startsWith("/admin");
     const { data, isError, isLoading } = useAdminSessionQuery();
 
     useEffect(() => {
+        if (!isAdminPath) {
+            return;
+        }
+
         if (isLoading) {
             return;
         }
@@ -32,7 +37,7 @@ export function AdminAuthGuard({ children }: AdminAuthGuardProps) {
         if (isAdmin && isLoginPath) {
             router.replace(adminDashboardPath);
         }
-    }, [data?.isAdmin, isError, isLoading, isLoginPath, router]);
+    }, [data?.isAdmin, isAdminPath, isError, isLoading, isLoginPath, router]);
 
     return children;
 }

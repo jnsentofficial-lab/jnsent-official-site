@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createInquiryCommentFetch, createInquiryFetch, getAdminInquiriesFetch, getInquiryCommentsFetch, updateInquiryStatusFetch } from "@/entities/inquiry/api/inquiry.api";
-import type { CreateInquiryCommentPayload, CreateInquiryPayload, Inquiry, InquiryComment, UpdateInquiryStatusPayload } from "@/entities/inquiry/model/inquiry.type";
+import { createInquiryCommentFetch, createInquiryFetch, deleteInquiryFetch, getAdminInquiriesFetch, getInquiryCommentsFetch, updateInquiryStatusFetch } from "@/entities/inquiry/api/inquiry.api";
+import type { CreateInquiryCommentPayload, CreateInquiryPayload, DeleteInquiryPayload, Inquiry, InquiryComment, UpdateInquiryStatusPayload } from "@/entities/inquiry/model/inquiry.type";
 import { useToastStore } from "@/shared/model/stores/useToastStore";
 
 export const InquiryRoutes = {
@@ -47,6 +47,25 @@ export const useUpdateInquiryStatusMutation = () => {
         mutationFn: (payload: UpdateInquiryStatusPayload) => updateInquiryStatusFetch(payload),
         onSuccess: () => {
             setToast({ msg: "문의 상태를 변경했어요", time: 3, type: "success" });
+            queryClient.invalidateQueries({ queryKey: [MUTATION_KEY] });
+        },
+        onError: (err: Error) => {
+            setToast({ msg: err.message ?? "에러 발생", time: 2, type: "fail" });
+        },
+    });
+
+    return { mutate, mutateAsync, isError, isIdle, isSuccess, isPending, isPaused, data, error, reset };
+};
+
+export const useDeleteInquiryMutation = () => {
+    const { setToast } = useToastStore();
+    const MUTATION_KEY = InquiryRoutes.ADMIN_INQUIRIES;
+    const queryClient = useQueryClient();
+    const { data, mutate, mutateAsync, error, isError, isSuccess, isIdle, isPending, isPaused, reset } = useMutation({
+        mutationKey: [MUTATION_KEY, "useDeleteInquiryMutation"],
+        mutationFn: (payload: DeleteInquiryPayload) => deleteInquiryFetch(payload),
+        onSuccess: () => {
+            setToast({ msg: "문의를 삭제했어요", time: 3, type: "success" });
             queryClient.invalidateQueries({ queryKey: [MUTATION_KEY] });
         },
         onError: (err: Error) => {

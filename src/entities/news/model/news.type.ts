@@ -6,7 +6,9 @@ export type UpsertNewsPayload = {
     title: string;
     summary: string | null;
     body: Json;
+    thumbnail_url: string | null;
     seo_title: string | null;
     seo_description: string | null;
 };
 export type ToggleNewsPayload = Pick<News, "id" | "is_published">;
+export type DeleteNewsPayload = Pick<News, "id">;

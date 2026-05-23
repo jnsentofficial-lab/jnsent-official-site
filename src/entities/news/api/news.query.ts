@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getAdminNewsFetch, getPublishedNewsBySlugFetch, getPublishedNewsFetch, toggleNewsFetch, upsertNewsFetch } from "@/entities/news/api/news.api";
-import type { News, ToggleNewsPayload, UpsertNewsPayload } from "@/entities/news/model/news.type";
+import { deleteNewsFetch, getAdminNewsFetch, getPublishedNewsBySlugFetch, getPublishedNewsFetch, toggleNewsFetch, upsertNewsFetch } from "@/entities/news/api/news.api";
+import type { DeleteNewsPayload, News, ToggleNewsPayload, UpsertNewsPayload } from "@/entities/news/model/news.type";
 import { useToastStore } from "@/shared/model/stores/useToastStore";
 
 export const NewsRoutes = {
@@ -72,6 +72,25 @@ export const useToggleNewsMutation = () => {
         mutationFn: (payload: ToggleNewsPayload) => toggleNewsFetch(payload),
         onSuccess: () => {
             setToast({ msg: "NEWS 상태를 변경했어요", time: 3, type: "success" });
+            queryClient.invalidateQueries({ queryKey: [MUTATION_KEY] });
+        },
+        onError: (err: Error) => {
+            setToast({ msg: err.message ?? "에러 발생", time: 2, type: "fail" });
+        },
+    });
+
+    return { mutate, mutateAsync, isError, isIdle, isSuccess, isPending, isPaused, data, error, reset };
+};
+
+export const useDeleteNewsMutation = () => {
+    const { setToast } = useToastStore();
+    const MUTATION_KEY = NewsRoutes.ADMIN_NEWS;
+    const queryClient = useQueryClient();
+    const { data, mutate, mutateAsync, error, isError, isSuccess, isIdle, isPending, isPaused, reset } = useMutation({
+        mutationKey: [MUTATION_KEY, "useDeleteNewsMutation"],
+        mutationFn: (payload: DeleteNewsPayload) => deleteNewsFetch(payload),
+        onSuccess: () => {
+            setToast({ msg: "NEWS를 삭제했어요", time: 3, type: "success" });
             queryClient.invalidateQueries({ queryKey: [MUTATION_KEY] });
         },
         onError: (err: Error) => {

@@ -11,3 +11,4 @@ export type UpsertManagerAccountPayload = {
     password?: string;
     password_confirm?: string;
 };
+export type DeleteManagerAccountPayload = Pick<ManagerAccount, "id">;

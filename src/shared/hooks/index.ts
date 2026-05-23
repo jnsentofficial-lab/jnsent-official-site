@@ -1,0 +1,1 @@
+export { useSectionTheme } from "./useSectionTheme";
