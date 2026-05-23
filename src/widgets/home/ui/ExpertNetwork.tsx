@@ -1,7 +1,7 @@
 "use client";
 
 import { useSectionTheme } from "@/shared/hooks";
-import Text from "@/shared/ui/reveal";
+import { Text } from "@/shared/ui/kit/Text";
 import { motion } from "framer-motion";
 import { useRef } from "react";
 
@@ -33,7 +33,8 @@ export function ExpertNetwork() {
                     revealColor="rgb(0, 0, 0)"
                     revealWindow={0.5}
                     align="center"
-                    // transition={2}
+                    revealStartPosition={20}
+                    revealEndPosition={60}
                     delay={2}
                 >
                     {`성장을 위한\n모든 분야의 전문가들이 함께합니다.`}

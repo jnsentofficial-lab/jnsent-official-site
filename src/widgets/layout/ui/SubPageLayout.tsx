@@ -59,21 +59,30 @@ function buildMessageBody(payload: Record<string, unknown>): Json {
 export function SubPageHero({ current, title, description }: SubPageHeroProps) {
     return (
         <section className="pt-[15rem] pb-[8rem] max-[86rem]:pt-24 max-[86rem]:pb-16">
-            <div className="mx-auto w-[min(112rem,calc(100%_-_3.2rem))]">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    transition={{ duration: 0.65 }}
-                    viewport={{ once: true }}
-                    whileInView={{ opacity: 1, y: 0 }}
+            {/* <div className="mx-auto w-[min(112rem,calc(100%_-_3.2rem))]"> */}
+            <div className="mx-auto w-[var(--size-pc)]">
+                <div
+                    // initial={{ opacity: 0, y: 20 }}
+                    // transition={{ duration: 0.65 }}
+                    // viewport={{ once: true }}
+                    // whileInView={{ opacity: 1, y: 0 }}
+                    className="flex flex-col gap-[0.8rem]"
                 >
-                    <p className="mb-10 text-3xl font-black text-[var(--adaptiveGrey500)] max-[86rem]:text-2xl">
-                        메인 <span className="mx-4 text-[#f04452]">-&gt;</span> <span className="text-black">{current}</span>
-                    </p>
+                    <section className="flex items-center gap-[0.8rem]">
+                        <p className="text-[2.4rem] text-[var(--adaptive-grey500)]">메인</p>
+                        <img
+                            src={"/images/icon/outlined/ico-outlined-arrow-right.svg"}
+                            alt=""
+                            className="w-[3.6rem]"
+                        />
+                        <p className="text-[2.4rem] font-black">{current}</p>
+                    </section>
+
                     <div className="grid grid-cols-4 gap-10 max-[86rem]:grid-cols-1">
-                        <h1 className="col-span-2 m-0 text-6xl font-black leading-[1.22] text-black max-[86rem]:text-5xl">{title}</h1>
+                        <h1 className="col-span-2 font-black text-[5.2rem]">{title}</h1>
                         <p className="col-span-2 m-0 pt-5 text-3xl font-black leading-[1.5] text-black max-[86rem]:pt-0 max-[86rem]:text-2xl">{description}</p>
                     </div>
-                </motion.div>
+                </div>
             </div>
         </section>
     );
@@ -82,7 +91,7 @@ export function SubPageHero({ current, title, description }: SubPageHeroProps) {
 export function SubPageSplit({ left, right, className = "" }: SubPageSplitProps) {
     return (
         <section className={`pb-[14rem] max-[86rem]:pb-24 ${className}`}>
-            <div className="mx-auto grid w-[min(112rem,calc(100%_-_3.2rem))] grid-cols-4 gap-16 max-[86rem]:grid-cols-1">
+            <div className="mx-auto grid w-[var(--size-pc)] grid-cols-4 gap-16 max-[86rem]:grid-cols-1">
                 <div className="col-span-2">{left}</div>
                 <div className="col-span-2">{right}</div>
             </div>
@@ -184,7 +193,9 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
                             className="grid gap-3"
                             key={group.label}
                         >
-                            <strong className="text-lg font-black text-black">{group.label} {group.required ? <span className="text-[#f04452]">*</span> : null}</strong>
+                            <strong className="text-lg font-black text-black">
+                                {group.label} {group.required ? <span className="text-[#f04452]">*</span> : null}
+                            </strong>
                             <div className="flex flex-wrap gap-2">
                                 {group.options.map((option) => {
                                     const active = selected[group.label] === option;
@@ -209,32 +220,53 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
                 <h2 className="m-0 text-2xl font-black text-black">{title}</h2>
                 <label className="grid gap-3 text-lg font-black text-black">
                     이름
-                    <input className="h-14 rounded-xl border border-[var(--adaptiveGrey300)] px-5 text-base font-semibold" name="name" placeholder="이름을 남겨주세요" />
+                    <input
+                        className="h-14 rounded-xl border border-[var(--adaptiveGrey300)] px-5 text-base font-semibold"
+                        name="name"
+                        placeholder="이름을 남겨주세요"
+                    />
                 </label>
                 <label className="grid gap-3 text-lg font-black text-black">
                     연락처
-                    <input className="h-14 rounded-xl border border-[var(--adaptiveGrey300)] px-5 text-base font-semibold" name="phone" placeholder="연락처를 남겨주세요" type="tel" />
+                    <input
+                        className="h-14 rounded-xl border border-[var(--adaptiveGrey300)] px-5 text-base font-semibold"
+                        name="phone"
+                        placeholder="연락처를 남겨주세요"
+                        type="tel"
+                    />
                 </label>
                 {showEmail ? (
                     <label className="grid gap-3 text-lg font-black text-black">
                         이메일
-                        <input className="h-14 rounded-xl border border-[var(--adaptiveGrey300)] px-5 text-base font-semibold" name="email" placeholder="이메일을 남겨주세요" type="email" />
+                        <input
+                            className="h-14 rounded-xl border border-[var(--adaptiveGrey300)] px-5 text-base font-semibold"
+                            name="email"
+                            placeholder="이메일을 남겨주세요"
+                            type="email"
+                        />
                     </label>
                 ) : null}
                 <label className="grid gap-3 text-lg font-black text-black">
                     연락 가능한 시각
-                    <input className="h-14 rounded-xl border border-[var(--adaptiveGrey300)] px-5 text-base font-semibold" name="availableTime" placeholder="연락 가능한 시간을 남겨주세요" />
+                    <input
+                        className="h-14 rounded-xl border border-[var(--adaptiveGrey300)] px-5 text-base font-semibold"
+                        name="availableTime"
+                        placeholder="연락 가능한 시간을 남겨주세요"
+                    />
                 </label>
                 <label className="grid gap-3 text-lg font-black text-black">
                     {messageLabel}
-                    <textarea className="min-h-[17rem] resize-none rounded-xl border border-[var(--adaptiveGrey300)] p-5 text-base font-semibold" name="message" placeholder="문의를 남겨주세요" />
+                    <textarea
+                        className="min-h-[17rem] resize-none rounded-xl border border-[var(--adaptiveGrey300)] p-5 text-base font-semibold"
+                        name="message"
+                        placeholder="문의를 남겨주세요"
+                    />
                 </label>
             </div>
             <div className="border-t border-[var(--adaptiveGrey200)] pt-8">
                 <h2 className="m-0 text-2xl font-black text-black">개인정보 수집·이용 동의</h2>
                 <p className="mt-6 mb-7 text-base font-semibold leading-[1.75] text-black">
-                    회사는 상담, 서비스 신청 등을 위해 이름, 연락처, 문의 내용을 수집하고 있습니다.
-                    개인정보는 상담 목적 외 다른 용도로 사용하지 않습니다.
+                    회사는 상담, 서비스 신청 등을 위해 이름, 연락처, 문의 내용을 수집하고 있습니다. 개인정보는 상담 목적 외 다른 용도로 사용하지 않습니다.
                 </p>
                 <label className="flex items-center gap-3 text-lg font-black text-black">
                     <input
@@ -264,7 +296,9 @@ export function StudioSlider({ items }: StudioSliderProps) {
     return (
         <section className="overflow-hidden pb-16">
             <div className="mx-auto mb-8 w-[min(112rem,calc(100%_-_3.2rem))]">
-                <h2 className="m-0 text-2xl font-black text-black">대관정보 <span className="text-[#f04452]">*</span></h2>
+                <h2 className="m-0 text-2xl font-black text-black">
+                    대관정보 <span className="text-[#f04452]">*</span>
+                </h2>
             </div>
             <motion.div
                 className="flex w-max gap-3"

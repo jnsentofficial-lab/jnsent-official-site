@@ -40,7 +40,8 @@ export function Analysis() {
                 target={!isLoading}
                 className={{ element: "pb-[14rem]" }}
             >
-                <div className="mx-auto w-[min(112rem,calc(100%_-_3.2rem))]">
+                {/* <div className="mx-auto w-[min(112rem,calc(100%_-_3.2rem))]"> */}
+                <div className="mx-auto w-[var(--size-pc)]">
                     {news.length ? (
                         <>
                             <div className="grid grid-cols-3 gap-x-12 gap-y-20 max-[86rem]:grid-cols-1">
@@ -57,7 +58,9 @@ export function Analysis() {
                                                 src={item.thumbnail_url}
                                             />
                                         ) : (
-                                            <span className="flex aspect-square w-full items-center justify-center rounded-[3rem] bg-[var(--adaptiveGrey100)] text-lg font-black text-[var(--adaptiveGrey500)]">이미지 없음</span>
+                                            <span className="flex aspect-square w-full items-center justify-center rounded-[3rem] bg-[var(--adaptiveGrey100)] text-lg font-black text-[var(--adaptiveGrey500)]">
+                                                이미지 없음
+                                            </span>
                                         )}
                                         <span className="mt-6 block text-lg font-black text-[var(--adaptiveGrey500)]">
                                             {formatDate(item.published_at)}

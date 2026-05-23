@@ -22,17 +22,19 @@ const consultingAreas = [
 const phases = ["진단", "설계", "실행 계획", "운영 점검"];
 
 export function Analysis() {
-    const { data: content, isLoading } = usePublishedPageContentQuery("consulting");
+    // const { data: content, isLoading } = usePublishedPageContentQuery("consulting");
 
     return (
-        <Skeleton.Section target={!isLoading}>
+        <section>
             <SubPageHero
                 current="엔터창업"
-                title={content?.title ?? "엔터창업"}
-                description={content?.description ?? "라이브 콘텐츠 및 BJ 매니지먼트 운영 경험을 바탕으로 엔터테인먼트 및 방송 관련 창업 컨설팅을 진행하고 있습니다."}
+                title={"엔터창업"}
+                description={"라이브 콘텐츠 및 BJ 매니지먼트 운영 경험을 바탕으로 엔터테인먼트 및 방송 관련 창업 컨설팅을 진행하고 있습니다."}
+                // title={content?.title ?? "엔터창업"}
+                // description={content?.description ?? "라이브 콘텐츠 및 BJ 매니지먼트 운영 경험을 바탕으로 엔터테인먼트 및 방송 관련 창업 컨설팅을 진행하고 있습니다."}
             />
             <SubPageSplit
-                left={(
+                left={
                     <div className="grid gap-8">
                         <h2 className="m-0 text-3xl font-black text-black">컨설팅 분야</h2>
                         {consultingAreas.map((area) => (
@@ -53,9 +55,14 @@ export function Analysis() {
                             </ul>
                         </div>
                     </div>
-                )}
-                right={<InquiryRequestForm category="consulting" showEmail />}
+                }
+                right={
+                    <InquiryRequestForm
+                        category="consulting"
+                        showEmail
+                    />
+                }
             />
-        </Skeleton.Section>
+        </section>
     );
 }

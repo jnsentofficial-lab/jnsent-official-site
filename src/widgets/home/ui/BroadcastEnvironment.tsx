@@ -1,7 +1,6 @@
 "use client";
 
-import Text from "@/shared/ui/reveal";
-import Transition from "@/shared/ui/transition";
+import { Text } from "@/shared/ui/kit/Text";
 import { motion } from "framer-motion";
 
 const supportItems = [
@@ -13,13 +12,7 @@ const supportItems = [
 export function BroadcastEnvironment() {
     return (
         <section className="h-[100dvh] flex">
-            <motion.div
-                className="flex flex-col items-end justify-center gap-[5.2rem] text-center w-[calc(50dvw-9.2rem)] h-full mr-auto"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.25 }}
-                transition={{ duration: 0.7 }}
-            >
+            <div className="flex flex-col items-end justify-center gap-[5.2rem] text-center w-[calc(50dvw-9.2rem)] h-full mr-auto">
                 <Text.Reveal
                     as="h2"
                     className="max-w-[92rem] text-[3.8rem] leading-[1.5] max-[64rem]:text-5xl max-[48rem]:text-4xl"
@@ -27,7 +20,8 @@ export function BroadcastEnvironment() {
                     revealColor="#000000"
                     highlightColor="#FF6B75"
                     revealWindow={0.5}
-                    // transition={2}
+                    revealStartPosition={20}
+                    revealEndPosition={60}
                     align="right"
                     delay={2}
                 >
@@ -47,7 +41,7 @@ export function BroadcastEnvironment() {
                 </div>
 
                 <p className="mt-12 text-sm leading-[1.7] text-neutral-400">* 온라인 이미지만 속지 마세요. 실제 방송 환경을 직접 눈으로 확인하실 수 있습니다.</p>
-            </motion.div>
+            </div>
 
             <div className="w-[calc(50dvw)]">
                 <motion.img

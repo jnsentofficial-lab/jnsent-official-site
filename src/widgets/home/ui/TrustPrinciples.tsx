@@ -1,7 +1,7 @@
 "use client";
 
 import { useSectionTheme } from "@/shared/hooks";
-import Text from "@/shared/ui/reveal";
+import { Text } from "@/shared/ui/kit/Text";
 import { motion } from "framer-motion";
 import { useRef } from "react";
 
@@ -42,11 +42,13 @@ export function TrustPrinciples() {
                         revealColor="rgb(0, 0, 0)"
                         revealWindow={0.5}
                         align="left"
-                        // transition={2}
+                        revealStartPosition={20}
+                        revealEndPosition={60}
                         delay={2}
                     >
                         {`투명한 인터넷 방송 생태계를 위한,\n제이엔에스가 지키는 단호한 원칙`}
                     </Text.Reveal>
+
                     <div className="mt-12 grid max-w-[56rem] gap-5">
                         {principleItems.map((item) => (
                             <article

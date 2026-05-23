@@ -15,8 +15,8 @@ const navigationItems = [
 export function SiteHeader() {
     const { isNowDarkMode } = useLayoutStore();
     return (
-        <header className="sticky top-0 z-40">
-            <div className="mx-auto flex min-h-24 w-[min(112rem,calc(100%_-_3.2rem))] items-center justify-between gap-8 max-[86rem]:min-h-0 max-[86rem]:flex-wrap max-[86rem]:py-4">
+        <header className="fixed top-0 left-[50%] transform translate-x-[-50%] z-40 w-full bg-[linear-gradient(0deg,_transparent,var(--adaptive-background))] h-[7.2rem]">
+            <div className="mx-auto h-full w-full max-w-[var(--size-pc)] flex justify-between items-center">
                 <UI.Link
                     className="shrink-0 text-2xl"
                     href="/"
@@ -27,13 +27,14 @@ export function SiteHeader() {
                         className={`${isNowDarkMode ? "invert" : ""}`}
                     />
                 </UI.Link>
+
                 <nav
-                    className="flex items-center justify-center gap-[2.4rem] text-base max-[86rem]:order-3 max-[86rem]:w-full max-[86rem]:flex-wrap max-[86rem]:justify-start max-[86rem]:gap-x-4 max-[86rem]:gap-y-3"
+                    className="flex-1 flex justify-center gap-[2.4rem]"
                     aria-label="주요 메뉴"
                 >
                     {navigationItems.map((item) => (
                         <UI.Link
-                            className="whitespace-nowrap hover:text-[#ff6673]"
+                            className="text-[1.8rem] whitespace-nowrap hover:text-[#ff6673]"
                             href={item.href}
                             key={item.href}
                         >
@@ -41,6 +42,7 @@ export function SiteHeader() {
                         </UI.Link>
                     ))}
                 </nav>
+
                 <UI.Link
                     className="text-[1.6rem] inline-flex shrink-0 items-center justify-center rounded-full bg-black px-6 py-[0.2rem] text-base text-white"
                     href="/bjSupport"

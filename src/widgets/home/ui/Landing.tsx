@@ -1,4 +1,4 @@
-import Text from "@/shared/ui/reveal";
+import { Text } from "@/shared/ui/kit/Text";
 import React from "react";
 
 export const Landing = () => {

@@ -1,6 +1,6 @@
 "use client";
 
-import Text from "@/shared/ui/reveal";
+import { Text } from "@/shared/ui/kit/Text";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 

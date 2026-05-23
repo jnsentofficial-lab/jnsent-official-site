@@ -2,7 +2,7 @@
 
 import { useSectionTheme } from "@/shared/hooks";
 import useScrollProgress from "@/shared/hooks/useScrollProgress";
-import Text from "@/shared/ui/reveal";
+import { Text } from "@/shared/ui/kit/Text";
 import { motion } from "framer-motion";
 import { useRef } from "react";
 
@@ -27,12 +27,13 @@ export function OperationKnowhow() {
         >
             <div
                 className="absolute w-full left-[50%] transform translate-x-[-50%] inset-0 pointer-events-none z-0"
-                // style={{
-                //     width: `${progress}%`,
-                // }}
+                style={{
+                    maskImage: "radial-gradient(ellipse at left 50%, black 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.2) 55%, transparent 100%)",
+                    WebkitMaskImage: "radial-gradient(ellipse at left 50%, black 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.2) 55%, transparent 100%)",
+                }}
             >
                 <motion.img
-                    className="w-full h-full object-cover opacity-55"
+                    className="w-full h-full object-cover"
                     src={"/images/landing/studio.jpg"}
                     alt=""
                     style={{
@@ -41,7 +42,8 @@ export function OperationKnowhow() {
                         objectPosition: `0 ${progress / 1}%`,
                     }}
                     initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 0.2 }}
+                    whileInView={{ opacity: 1 }}
+                    // whileInView={{ opacity: 0.2 }}
                     viewport={{ amount: 0.1 }}
                     transition={{ delay: 0.5, duration: 0.7 }}
                 />
@@ -51,7 +53,7 @@ export function OperationKnowhow() {
                 ref={ref}
                 className="ml-auto h-full w-[calc(50dvw-7.2rem)] flex justify-center items-center"
             >
-                <motion.div
+                <div
                     // className="relative z-[1] ml-auto w-[min(72rem,calc(100%_-_3.2rem))] pr-[max(1.6rem,calc((100vw_-_112rem)/2))]"
                     className="w-full h-full flex flex-col justify-center items-start"
                     // initial={{ opacity: 0, x: 34 }}
@@ -67,7 +69,8 @@ export function OperationKnowhow() {
                         revealColor="rgb(255, 255, 255)"
                         revealWindow={0.5}
                         align="left"
-                        // transition={2}
+                        revealStartPosition={20}
+                        revealEndPosition={60}
                         delay={2}
                     >
                         {`2017년부터 쌓아온 운영 노하우\n당신의 성장에만 집중합니다.`}
@@ -101,7 +104,7 @@ export function OperationKnowhow() {
                             </motion.div>
                         ))}
                     </motion.div>
-                </motion.div>
+                </div>
             </div>
         </section>
     );

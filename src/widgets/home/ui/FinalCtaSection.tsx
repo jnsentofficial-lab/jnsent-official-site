@@ -1,7 +1,7 @@
 "use client";
 
 import { useSectionTheme } from "@/shared/hooks";
-import Text from "@/shared/ui/reveal";
+import { Text } from "@/shared/ui/kit/Text";
 import { motion } from "framer-motion";
 import { useRef } from "react";
 
@@ -22,7 +22,7 @@ export function FinalCtaSection() {
                 // }}
             >
                 <motion.img
-                    className="w-full h-full object-cover opacity-55"
+                    className="w-full h-full object-cover"
                     src={"/images/landing/cta.jpg"}
                     alt=""
                     style={{
@@ -31,7 +31,7 @@ export function FinalCtaSection() {
                         // objectPosition: `0 ${progress / 3}%`,
                     }}
                     initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 0.2 }}
+                    whileInView={{ opacity: 0.5 }}
                     viewport={{ amount: 0.1 }}
                     transition={{ delay: 0.5, duration: 0.7 }}
                 />
@@ -52,7 +52,8 @@ export function FinalCtaSection() {
                     revealColor="rgb(255, 255, 255)"
                     revealWindow={0.5}
                     align="center"
-                    // transition={2}
+                    revealStartPosition={20}
+                    revealEndPosition={60}
                     delay={2}
                 >
                     {`제이엔에스와 함께\n신뢰할 수 있는 미래를 만들어보세요`}
