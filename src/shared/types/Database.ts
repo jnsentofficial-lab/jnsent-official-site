@@ -97,6 +97,7 @@ export type Database = {
                     email: string | null;
                     category: string;
                     message: string;
+                    message_body: Json | null;
                     status: "new" | "in_progress" | "done" | "spam";
                     created_at: string;
                     updated_at: string;
@@ -108,6 +109,7 @@ export type Database = {
                     email?: string | null;
                     category: string;
                     message: string;
+                    message_body?: Json | null;
                     status?: "new" | "in_progress" | "done" | "spam";
                     created_at?: string;
                     updated_at?: string;
@@ -121,6 +123,7 @@ export type Database = {
                     inquiry_id: string;
                     manager_name: string;
                     message: string;
+                    message_body: Json | null;
                     created_at: string;
                 };
                 Insert: {
@@ -128,6 +131,7 @@ export type Database = {
                     inquiry_id: string;
                     manager_name: string;
                     message: string;
+                    message_body?: Json | null;
                     created_at?: string;
                 };
                 Update: Partial<Database["public"]["Tables"]["inquiry_comments"]["Insert"]>;
@@ -139,6 +143,7 @@ export type Database = {
                     name: string;
                     role: "manager" | "admin" | "viewer";
                     login_id: string;
+                    auth_user_id: string | null;
                     password_hash: string;
                     created_at: string;
                     updated_at: string;
@@ -148,6 +153,7 @@ export type Database = {
                     name: string;
                     role?: "manager" | "admin" | "viewer";
                     login_id: string;
+                    auth_user_id?: string | null;
                     password_hash: string;
                     created_at?: string;
                     updated_at?: string;
