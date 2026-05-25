@@ -65,9 +65,9 @@ export function InquiryDetailSidebar({ inquiry, onDeleted }: InquiryDetailSideba
 
     if (!inquiry) {
         return (
-            <aside className="flex justify-center items-center h-full">
+            <div className="flex justify-center items-center h-full">
                 <p className="whitespace-break-spaces leading-[1.5] text-center text-[var(--adaptive-grey500)] font-[500] select-none">{`왼쪽의 항목을 선택하시면\n상세 내용 및 담당자 답변을 작성 할 수 있어요`}</p>
-            </aside>
+            </div>
         );
     }
 
@@ -108,7 +108,7 @@ export function InquiryDetailSidebar({ inquiry, onDeleted }: InquiryDetailSideba
 
             {/* 답변 */}
             <section className="flex-1 block p-[5.2rem]">
-                <h6 className="mb-8 text-2xl font-black text-[var(--adaptiveGrey600)]">관리자 답변</h6>
+                <h6 className="mb-8 text-[1.8rem] text-[var(--adaptive-grey400)]">관리자 답변</h6>
 
                 {/* <div className="mb-8 grid gap-4">
                         {isLoading ? <p className="m-0 text-lg font-semibold text-[var(--adaptiveGrey500)]">답변을 불러오는 중입니다.</p> : null}

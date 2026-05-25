@@ -12,6 +12,7 @@ type ManagerAccountSidebarProps = {
 };
 
 const roles: ManagerAccountRole[] = ["manager", "admin", "viewer"];
+const inputClassName = "h-[5.2rem] border border-[var(--adaptive-grey200)] hover:border-[var(--adaptive-grey700)] px-4 text-lg font-semibold";
 
 export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccountSidebarProps) {
     const [name, setName] = useState("");
@@ -42,9 +43,7 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
             password: String(formData.get("password") ?? ""),
             password_confirm: String(formData.get("passwordConfirm") ?? ""),
         };
-        const response = isCreateMode
-            ? await createAccount.mutateAsync(payload)
-            : await updateAccount.mutateAsync(payload);
+        const response = isCreateMode ? await createAccount.mutateAsync(payload) : await updateAccount.mutateAsync(payload);
 
         form.reset();
         onSaved(response.result);
@@ -64,9 +63,9 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
 
     if (mode === "empty") {
         return (
-            <aside className="p-12 text-2xl font-black text-[var(--adaptiveGrey500)]">
-                계정을 선택하거나 담당자 계정 생성을 눌러 등록을 시작하세요.
-            </aside>
+            <div className="flex justify-center items-center h-full">
+                <p className="whitespace-break-spaces leading-[1.5] text-center text-[var(--adaptive-grey500)] font-[500] select-none">{`계정을 선택하거나 담당자 계정 생성을 눌러\n등록을 시작하세요`}</p>
+            </div>
         );
     }
 
@@ -82,7 +81,7 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                 <label className="grid gap-3 text-xl font-black text-black">
                     이름
                     <input
-                        className="h-14 border border-black px-4 text-lg font-semibold"
+                        className={inputClassName}
                         onChange={(event) => setName(event.target.value)}
                         placeholder="담당자 이름"
                         required
@@ -93,7 +92,7 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                 <label className="grid gap-3 text-xl font-black text-black">
                     권한
                     <select
-                        className="h-14 border border-black px-4 text-lg font-semibold"
+                        className={inputClassName}
                         onChange={(event) => setRole(event.target.value as ManagerAccountRole)}
                         value={role}
                     >
@@ -110,7 +109,7 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                 <label className="grid gap-3 text-xl font-black text-black">
                     아이디
                     <input
-                        className="h-14 border border-black px-4 text-lg font-semibold"
+                        className={inputClassName}
                         onChange={(event) => setLoginId(event.target.value)}
                         placeholder="login-id"
                         required
@@ -121,7 +120,7 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                 <label className="grid gap-3 text-xl font-black text-black">
                     비밀번호
                     <input
-                        className="h-14 border border-black px-4 text-lg font-semibold"
+                        className={inputClassName}
                         name="password"
                         placeholder={isEditMode ? "변경 시에만 입력" : "비밀번호"}
                         required={isCreateMode}
@@ -131,7 +130,7 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                 <label className="grid gap-3 text-xl font-black text-black">
                     비밀번호 재입력
                     <input
-                        className="h-14 border border-black px-4 text-lg font-semibold"
+                        className={inputClassName}
                         name="passwordConfirm"
                         placeholder={isEditMode ? "변경 시에만 입력" : "비밀번호 재입력"}
                         required={isCreateMode}

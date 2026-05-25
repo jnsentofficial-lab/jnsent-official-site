@@ -40,6 +40,7 @@ export function AdminWorkspace({ current, title, action, children }: AdminWorksp
     return (
         <article className="h-[100dvh] bg-[#F9F9F9]">
             <div className="mx-auto min-w-[var(--size-pc)] h-full flex flex-col gap-[5.2rem]">{children}</div>
+            {action}
         </article>
     );
 }
@@ -49,7 +50,7 @@ export function AdminTwoPanel({ current, title, action, left, right }: AdminTwoP
         // <div className="grid grid-cols-[minmax(0,1fr)_minmax(44rem,0.72fr)] gap-0 max-[120rem]:grid-cols-1">
         <div className="grid grid-cols-2 h-full gap-[1.6rem]">
             <section className="flex flex-col gap-[5.2rem] p-[5.2rem] h-[100dvh] overflow-auto">
-                <section className="flex flex-col gap-[1.6rem]">
+                <section className="flex justify-between items-center gap-[1.6rem]">
                     <div className="flex flex-col gap-[1.6rem]">
                         <section className="flex items-center gap-[0.4rem]">
                             <h6 className="text-[1.8rem] font-[700] text-[var(--adaptive-black300)]">메인</h6>

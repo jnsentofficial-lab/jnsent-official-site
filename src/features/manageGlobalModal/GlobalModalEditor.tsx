@@ -15,9 +15,9 @@ const positions = Array.from({ length: 9 }, (_, index) => ({
     col: (index % 3) + 1,
     row: Math.floor(index / 3) + 1,
 }));
-const formClassName = "grid gap-3.5";
-const labelClassName = "grid gap-2 font-bold text-slate-800";
-const inputClassName = "min-h-11 rounded-lg border border-slate-300 px-3.5";
+const formClassName = "flex flex-col gap-[2.4rem]";
+const labelClassName = "flex flex-col gap-[0.8rem] font-[NanumSquare]";
+const inputClassName = "h-[5.2rem] border border-[var(--adaptive-grey200)] hover:border-[var(--adaptive-grey700)] px-4 text-lg font-semibold";
 const textareaClassName = "min-h-[13.2rem] resize-y rounded-lg border border-slate-300 px-3.5 py-3";
 const statusClassName = "m-0 text-sm font-bold text-green-700";
 const buttonClassName = "min-h-11 rounded-lg bg-blue-500 font-bold text-white";
@@ -110,10 +110,10 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
             className={formClassName}
             onSubmit={handleSubmit}
         >
-            <label className="grid gap-3 text-xl font-black text-black">
+            <label className={labelClassName}>
                 제목
                 <input
-                    className="h-14 border border-black px-4 text-lg font-semibold"
+                    className={inputClassName}
                     name="title"
                     placeholder="모달 제목"
                     onChange={(event) => setTitle(event.target.value)}
@@ -122,7 +122,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                     value={title}
                 />
             </label>
-            <label className="grid gap-3 text-xl font-black text-black">
+            {/* <label className="grid gap-3 text-xl font-black text-black">
                 내용
                 <textarea
                     className="min-h-[13.2rem] resize-y border border-black px-4 py-3 text-lg font-semibold"
@@ -132,7 +132,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                     required
                     value={content}
                 />
-            </label>
+            </label> */}
             <label className={labelClassName}>
                 이미지 업로드
                 <input
@@ -142,17 +142,17 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                     type="file"
                 />
             </label>
-            <label className={labelClassName}>
+            {/* <label className={labelClassName}>
                 이미지 URL
                 <input
-                    className="h-14 border border-black px-4 text-lg font-semibold"
+                    className={inputClassName}
                     name="imageUrl"
                     onChange={(event) => setImageUrlValue(event.target.value)}
                     placeholder="이미 업로드된 이미지 URL"
                     type="url"
                     value={imageUrlValue}
                 />
-            </label>
+            </label> */}
             <fieldset className="m-0 grid gap-2.5 border-0 p-0">
                 <legend className="font-bold text-slate-800">노출 위치</legend>
                 <div className="grid aspect-square w-[min(24rem,100%)] grid-cols-3 grid-rows-3 gap-2">
@@ -180,26 +180,28 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                     type="number"
                 />
             </label>
-            <label className={labelClassName}>
-                노출 시작
-                <input
-                    className={inputClassName}
-                    name="startsAt"
-                    onChange={(event) => setStartsAt(event.target.value)}
-                    type="datetime-local"
-                    value={startsAt}
-                />
-            </label>
-            <label className={labelClassName}>
-                노출 종료
-                <input
-                    className={inputClassName}
-                    name="endsAt"
-                    onChange={(event) => setEndsAt(event.target.value)}
-                    type="datetime-local"
-                    value={endsAt}
-                />
-            </label>
+            <section className="flex gap-[0.4rem]">
+                <label className={labelClassName}>
+                    시작 일자
+                    <input
+                        className={inputClassName}
+                        name="startsAt"
+                        onChange={(event) => setStartsAt(event.target.value)}
+                        type="datetime-local"
+                        value={startsAt}
+                    />
+                </label>
+                <label className={labelClassName}>
+                    종료 일자
+                    <input
+                        className={inputClassName}
+                        name="endsAt"
+                        onChange={(event) => setEndsAt(event.target.value)}
+                        type="datetime-local"
+                        value={endsAt}
+                    />
+                </label>
+            </section>
             <label className={labelClassName}>
                 닫기 정책
                 <select
@@ -214,7 +216,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                 </select>
             </label>
             <label className={labelClassName}>
-                n일
+                몇일동안 닫을까요?
                 <input
                     className={inputClassName}
                     onChange={(event) => setDismissDays(Number(event.target.value))}
@@ -224,7 +226,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                     type="number"
                 />
             </label>
-            <label className="flex items-center gap-2.5 font-bold text-slate-800">
+            {/* <label className="flex items-center gap-2.5 font-bold text-slate-800">
                 <input
                     className="min-h-0"
                     checked={isVisible}
@@ -233,7 +235,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                     type="checkbox"
                 />
                 표시
-            </label>
+            </label> */}
             {statusMessage ? (
                 <p
                     className={statusClassName}

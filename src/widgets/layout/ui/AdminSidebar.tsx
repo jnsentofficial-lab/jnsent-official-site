@@ -44,7 +44,7 @@ export function AdminSidebar() {
             </section>
 
             <nav
-                className="flex flex-col gap-[1.6rem]"
+                className="flex flex-col gap-[1.6rem] w-[24rem] flex-1"
                 // className="grid gap-9 text-2xl font-black max-[86rem]:grid-cols-2 max-[86rem]:gap-4"
                 aria-label="관리자 메뉴"
             >
@@ -59,12 +59,21 @@ export function AdminSidebar() {
                 ))}
             </nav>
 
+            <div className="h-[0.1rem] w-full bg-[var(--adaptive-grey100)]" />
+
             <UI.Button
-                className="mt-auto flex min-h-16 items-center justify-start bg-white text-2xl font-black text-black hover:text-[var(--adaptiveRed500)] max-[86rem]:mt-8"
+                className="flex items-center gap-[0.4rem] px-[1.2rem]"
+                // className="mt-auto flex min-h-16 items-center justify-start bg-white text-2xl font-black text-black hover:text-[var(--adaptiveRed500)] max-[86rem]:mt-8"
                 onClick={handleLogout}
                 type="button"
             >
-                로그아웃
+                <Image
+                    src={"/images/icon/outlined/ico-outlined-unlock.svg"}
+                    alt=""
+                    width={24}
+                    height={24}
+                />
+                <p className="text-[2.0rem]">로그아웃</p>
             </UI.Button>
         </aside>
     );
