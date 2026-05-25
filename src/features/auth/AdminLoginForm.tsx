@@ -22,7 +22,7 @@ export function AdminLoginForm() {
 
         try {
             await loginAdmin.mutateAsync({ email, password });
-            router.replace("/admin/dashboard");
+            router.replace("/admin/inquiries");
         } catch {
             setErrorMessage("로그인 정보를 확인해주세요.");
         } finally {

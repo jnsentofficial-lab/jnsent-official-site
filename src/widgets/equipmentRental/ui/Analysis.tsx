@@ -4,6 +4,7 @@ import { Fragment } from "react/jsx-runtime";
 
 import { usePublishedPageContentQuery } from "@/entities/pageContent/api/pageContent.query";
 import { InquiryRequestForm, NoticeBox, SubPageHero, SubPageSplit } from "@/widgets/layout/ui";
+import { SubPageSection } from "@/widgets/layout/ui/SubPageLayout";
 
 const equipmentChips = [
     { label: "PC 본체", options: ["i5 5400", "i7 10700k"], required: true },
@@ -26,18 +27,18 @@ export function Analysis() {
             <SubPageSplit
                 left={
                     <div className="grid gap-8">
-                        <h2 className="m-0 text-3xl font-black text-black">
-                            주의사항 <span className="text-[#f04452]">*</span>
-                        </h2>
-                        <div className="rounded bg-[var(--adaptiveGrey50)] px-5 py-4 text-lg font-black">필요한 장비 선택 → 장비렌탈 신청 및 상담 → 출장 스케줄 예약 및 방문 설치</div>
-                        <ul className="m-0 grid gap-3 p-0 pl-5 text-lg font-semibold leading-[1.7] text-black">
-                            <li>1개월 기준 렌탈료는 선입금 해주셔야합니다.</li>
-                            <li>최초 렌탈기준 기간은 1년입니다.</li>
-                            <li>18개월 계약시 장비 소유 가능합니다.</li>
-                            <li>PC 본체는 필수 선택사항입니다.</li>
-                            <li>렌탈장비 이외 물품은 지원해드리지 않습니다.</li>
-                            <li>모니터, 웹캠, 조명 등 단독 렌탈 불가함을 알려드립니다.</li>
-                        </ul>
+                        <SubPageSection title={"주의사항"}>
+                            <div className="rounded bg-[var(--adaptiveGrey50)] px-5 py-4 text-lg font-black">필요한 장비 선택 → 장비렌탈 신청 및 상담 → 출장 스케줄 예약 및 방문 설치</div>
+                            <ul className="m-0 grid gap-3 p-0 pl-5 text-lg font-semibold leading-[1.7] text-black">
+                                <li>1개월 기준 렌탈료는 선입금 해주셔야합니다.</li>
+                                <li>최초 렌탈기준 기간은 1년입니다.</li>
+                                <li>18개월 계약시 장비 소유 가능합니다.</li>
+                                <li>PC 본체는 필수 선택사항입니다.</li>
+                                <li>렌탈장비 이외 물품은 지원해드리지 않습니다.</li>
+                                <li>모니터, 웹캠, 조명 등 단독 렌탈 불가함을 알려드립니다.</li>
+                            </ul>
+                        </SubPageSection>
+
                         <NoticeBox />
                     </div>
                 }

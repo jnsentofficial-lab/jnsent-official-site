@@ -7,13 +7,13 @@ const navigationItems = [
     { href: "/", label: "메인" },
     { href: "/consulting", label: "엔터창업" },
     { href: "/equipmentRental", label: "장비렌탈" },
-    // { href: "/setupGuide", label: "시스템/지원내용" },
     { href: "/studioRental", label: "스튜디오 대여/대관" },
     { href: "/news", label: "뉴스" },
 ];
 
 export function SiteHeader() {
     const { isNowDarkMode } = useLayoutStore();
+
     return (
         <header className="fixed top-0 left-[50%] transform translate-x-[-50%] z-40 w-full bg-[linear-gradient(0deg,_transparent,var(--adaptive-background))] h-[7.2rem]">
             <div className="mx-auto h-full w-full max-w-[var(--size-pc)] flex justify-between items-center">

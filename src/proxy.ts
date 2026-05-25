@@ -27,7 +27,7 @@ export function proxy(request: NextRequest) {
         }
 
         if (pathname.startsWith("/admin/account/manager") && !canManageAccounts(request)) {
-            return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+            return NextResponse.redirect(new URL("/admin/inquiries", request.url));
         }
 
         return NextResponse.next();

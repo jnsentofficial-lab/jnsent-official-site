@@ -43,7 +43,7 @@ export function PartnerRecruit() {
                     </h2> */}
                     <Text.Reveal
                         as="h2"
-                        className="text-[3.8rem] leading-[1.5]"
+                        className="text-[3.8rem] font-black leading-[1.5]"
                         initialColor="#ffffff00"
                         midColor="rgb(255, 92, 118)"
                         revealColor="rgb(0, 0, 0)"

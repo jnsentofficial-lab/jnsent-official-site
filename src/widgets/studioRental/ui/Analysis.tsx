@@ -3,6 +3,7 @@
 import { usePublishedPageContentQuery } from "@/entities/pageContent/api/pageContent.query";
 
 import { InquiryRequestForm, NoticeBox, StudioSlider, SubPageHero, SubPageSplit } from "@/widgets/layout/ui";
+import { SubPageSection } from "@/widgets/layout/ui/SubPageLayout";
 import { Fragment } from "react/jsx-runtime";
 
 const studioItems = [
@@ -33,10 +34,9 @@ export function Analysis() {
             <SubPageSplit
                 left={
                     <div className="grid gap-8">
-                        <h2 className="m-0 text-3xl font-black text-black">
-                            주의사항 <span className="text-[#f04452]">*</span>
-                        </h2>
-                        <NoticeBox />
+                        <SubPageSection title={"주의사항"}>
+                            <NoticeBox />
+                        </SubPageSection>
                     </div>
                 }
                 right={

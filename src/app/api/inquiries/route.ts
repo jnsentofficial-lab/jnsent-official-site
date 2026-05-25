@@ -21,6 +21,12 @@ export async function POST(request: Request) {
             message,
             message_body: body.message_body ?? null,
             category: String(body.category ?? "bj_support").trim() || "bj_support",
+            gender: body.gender ? String(body.gender).trim() : null,
+            age: body.age ? String(body.age).trim() : null,
+            region: body.region ? String(body.region).trim() : null,
+            available_time: body.available_time ? String(body.available_time).trim() : null,
+            support_label: body.support_label ? String(body.support_label).trim() : null,
+            source: String(body.source ?? "bj_support").trim() || "bj_support",
             status: "new",
         })
         .select("*")

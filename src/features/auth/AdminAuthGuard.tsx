@@ -9,7 +9,7 @@ type AdminAuthGuardProps = {
 };
 
 const adminLoginPath = "/admin/login";
-const adminDashboardPath = "/admin/dashboard";
+const adminDefaultPath = "/admin/inquiries";
 
 export function AdminAuthGuard({ children }: AdminAuthGuardProps) {
     const pathname = usePathname();
@@ -35,7 +35,7 @@ export function AdminAuthGuard({ children }: AdminAuthGuardProps) {
         }
 
         if (isAdmin && isLoginPath) {
-            router.replace(adminDashboardPath);
+            router.replace(adminDefaultPath);
         }
     }, [data?.isAdmin, isAdminPath, isError, isLoading, isLoginPath, router]);
 

@@ -5,7 +5,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
 
 export const dynamic = "force-dynamic";
 
-const routes = ["", "/about", "/setupGuide", "/equipmentRental", "/studioRental", "/bjSupport", "/news", "/consulting"];
+const routes = ["", "/consulting", "/equipmentRental", "/studioRental", "/bjSupport", "/news"];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const supabase = createSupabaseServiceClient();

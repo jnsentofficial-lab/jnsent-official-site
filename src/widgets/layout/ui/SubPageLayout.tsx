@@ -4,7 +4,7 @@ import { FormEvent, ReactNode, useState } from "react";
 import { motion } from "framer-motion";
 import { useCreateInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
 import type { CreateInquiryPayload } from "@/entities/inquiry/model/inquiry.type";
-import type { Json } from "@/shared/types/Database";
+import { buildInquiryMessageBody } from "@/entities/inquiry/lib/buildMessageBody";
 import UI from "@/shared/ui/UIComponent";
 
 type SubPageHeroProps = {
@@ -21,7 +21,7 @@ type SubPageSplitProps = {
 
 type InfoCardProps = {
     title: string;
-    children: ReactNode;
+    children?: ReactNode;
 };
 
 type InquiryRequestFormProps = {
@@ -43,18 +43,6 @@ type StudioSliderProps = {
         image: string;
     }[];
 };
-
-function buildMessageBody(payload: Record<string, unknown>): Json {
-    return {
-        type: "doc",
-        content: Object.entries(payload)
-            .filter(([, value]) => value !== undefined && value !== null && String(value).trim().length > 0)
-            .map(([key, value]) => ({
-                type: "paragraph",
-                content: [{ type: "text", text: `${key}: ${Array.isArray(value) ? value.join(", ") : String(value)}` }],
-            })),
-    };
-}
 
 export function SubPageHero({ current, title, description }: SubPageHeroProps) {
     return (
@@ -99,11 +87,24 @@ export function SubPageSplit({ left, right, className = "" }: SubPageSplitProps)
     );
 }
 
+export function SubPageSection({ title, children }: InfoCardProps) {
+    return (
+        <section className="flex flex-col gap-[1.6rem]">
+            <h2 className="text-[2.4rem] font-black text-black whitespace-break-spaces leading-[1.5]">{title}</h2>
+
+            {children}
+        </section>
+        // <article className="rounded-[2.4rem] bg-[var(--adaptive-black50)] p-[1.2rem_2.4rem] flex flex-col gap-[1.2rem]">
+        //     <div className="text-[1.6rem] leading-[1.5] text-[var(--adaptive-black300)]">{children}</div>
+        // </article>
+    );
+}
+
 export function InfoCard({ title, children }: InfoCardProps) {
     return (
-        <article className="rounded-[2.4rem] bg-[var(--adaptiveGrey100)] px-8 py-7">
-            <h3 className="mt-0 mb-4 text-2xl font-black text-black">{title}</h3>
-            <div className="text-lg font-semibold leading-[1.75] text-[var(--adaptiveGrey700)]">{children}</div>
+        <article className="rounded-[2.4rem] bg-[var(--adaptive-black50)] p-[1.2rem_2.4rem] flex flex-col gap-[1.2rem]">
+            <h3 className="text-[2.0rem] font-black text-black">{title}</h3>
+            <div className="text-[1.6rem] leading-[1.5] text-[var(--adaptive-black300)]">{children}</div>
         </article>
     );
 }
@@ -158,7 +159,7 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
             email: email || null,
             category,
             message: plainMessage,
-            message_body: buildMessageBody({
+            message_body: buildInquiryMessageBody({
                 이름: name,
                 연락처: phone,
                 이메일: email,
@@ -295,19 +296,19 @@ export function StudioSlider({ items }: StudioSliderProps) {
 
     return (
         <section className="overflow-hidden pb-16">
-            <div className="mx-auto mb-8 w-[min(112rem,calc(100%_-_3.2rem))]">
-                <h2 className="m-0 text-2xl font-black text-black">
-                    대관정보 <span className="text-[#f04452]">*</span>
-                </h2>
-            </div>
+            <h2 className="px-[7.8rem] m-0 text-2xl font-black text-black">
+                대관정보 <span className="text-[#f04452]">*</span>
+            </h2>
+
             <motion.div
                 className="flex w-max gap-3"
                 animate={{ x: ["0%", "-50%"] }}
-                transition={{ duration: 24, ease: "linear", repeat: Infinity }}
+                transition={{ duration: 52, ease: "linear", repeat: Infinity }}
             >
                 {sliderItems.map((item, index) => (
                     <article
-                        className="relative h-[38rem] w-[56rem] overflow-hidden rounded-[2.4rem] bg-black max-[86rem]:h-[28rem] max-[86rem]:w-[34rem]"
+                        className="relative h-[50dvh] w-[50dvw] overflow-hidden rounded-[2.4rem] bg-black max-[86rem]:h-[28rem] max-[86rem]:w-[34rem]"
+                        // className="relative h-[38rem] w-[56rem] overflow-hidden rounded-[2.4rem] bg-black max-[86rem]:h-[28rem] max-[86rem]:w-[34rem]"
                         key={`${item.title}-${index}`}
                     >
                         <img
@@ -315,8 +316,8 @@ export function StudioSlider({ items }: StudioSliderProps) {
                             className="h-full w-full object-cover opacity-85"
                             src={item.image}
                         />
-                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-8">
-                            <strong className="text-4xl font-black text-white max-[86rem]:text-2xl">{item.title}</strong>
+                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-8 h-[50%] flex items-end">
+                            <strong className="text-[3.2rem] text-white max-[86rem]:text-2xl">{item.title}</strong>
                         </div>
                     </article>
                 ))}

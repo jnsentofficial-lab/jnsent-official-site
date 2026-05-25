@@ -6,10 +6,10 @@ import useNavigate from "@/shared/hooks/useNavigate";
 import { useLayoutStore } from "@/shared/stores/useLayoutStore";
 
 export function Header() {
-    const { isNeedShowHeader } = useLayoutStore();
+    const { isReadyLanding } = useLayoutStore();
     const { currentPathName } = useNavigate();
 
-    if (currentPathName === "admin" || (currentPathName === "/" && !isNeedShowHeader)) {
+    if (currentPathName === "admin" || (currentPathName === "/" && !isReadyLanding)) {
         return null;
     }
 

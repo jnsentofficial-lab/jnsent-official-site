@@ -2,6 +2,7 @@
 
 import { Text } from "@/shared/ui/kit/Text";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const records = [
     { value: 2500000, label: "개인방송 단일 최고" },
@@ -24,24 +25,28 @@ export function RecordGraph() {
                     className="shrink-0"
                 >
                     <section className="flex items-center">
-                        <img
+                        <Image
                             src={"/images/icon/filled/ico-filled-bay-tree.svg"}
                             alt=""
-                            className="w-[3.2rem]"
+                            width={32}
+                            height={32}
                         />
 
-                        <img
+                        <Image
                             src={"/images/icon/filled/ico-filled-bay-tree.svg"}
                             alt=""
-                            className="w-[3.2rem]"
+                            height={32}
+                            width={32}
                             style={{
                                 transform: "scaleX(-1)",
                             }}
                         />
                     </section>
+
                     <Text.Reveal
                         as="h2"
-                        className="max-w-[92rem] text-[3.8rem] leading-[1.5] max-[64rem]:text-5xl max-[48rem]:text-4xl"
+                        className="text-[3.8rem] font-black leading-[1.5]"
+                        // className="max-w-[92rem] text-[3.8rem] leading-[1.5] max-[64rem]:text-5xl max-[48rem]:text-4xl"
                         initialColor="#ffffff00"
                         revealColor="#000000"
                         subHighlightColor="#A953FF"

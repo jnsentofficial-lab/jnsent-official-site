@@ -62,7 +62,7 @@ export function TransparencyProof() {
                 >
                     <Text.Reveal
                         as="h2"
-                        className="text-[3.8rem] leading-[1.5]"
+                        className="text-[3.8rem] font-black leading-[1.5]"
                         initialColor="#00000000"
                         midColor="rgb(255, 92, 118)"
                         revealColor="rgb(255, 255, 255)"
