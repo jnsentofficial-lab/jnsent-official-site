@@ -15,18 +15,20 @@ export function Analysis() {
             title="문의 관리"
         >
             <AdminTwoPanel
-                left={(
+                current="문의 관리"
+                title="문의 관리"
+                left={
                     <InquiryTable
                         selectedInquiryId={selectedInquiry?.id}
                         onSelectInquiry={setSelectedInquiry}
                     />
-                )}
-                right={(
+                }
+                right={
                     <InquiryDetailSidebar
                         inquiry={selectedInquiry}
                         onDeleted={() => setSelectedInquiry(null)}
                     />
-                )}
+                }
             />
         </AdminWorkspace>
     );

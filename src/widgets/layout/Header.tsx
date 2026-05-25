@@ -9,7 +9,8 @@ export function Header() {
     const { isReadyLanding } = useLayoutStore();
     const { currentPathName } = useNavigate();
 
-    if (currentPathName === "admin" || (currentPathName === "/" && !isReadyLanding)) {
+    if (currentPathName.includes("admin") || (currentPathName === "/" && !isReadyLanding)) {
+        // if (currentPathName === "admin" || (currentPathName === "/" && !isReadyLanding)) {
         return null;
     }
 

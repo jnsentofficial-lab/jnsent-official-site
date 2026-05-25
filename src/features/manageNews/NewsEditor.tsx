@@ -32,7 +32,7 @@ export function NewsEditor({ news }: NewsEditorProps) {
     const uploadImage = useUploadImageMutation();
     const upsertNews = useUpsertNewsMutation();
     const imageUrls = useMemo(() => extractRichTextImages(body), [body]);
-    const effectiveThumbnailUrl = selectedThumbnailUrl && imageUrls.includes(selectedThumbnailUrl) ? selectedThumbnailUrl : imageUrls[0] ?? null;
+    const effectiveThumbnailUrl = selectedThumbnailUrl && imageUrls.includes(selectedThumbnailUrl) ? selectedThumbnailUrl : (imageUrls[0] ?? null);
 
     useEffect(() => {
         setStatusMessage("");
@@ -116,7 +116,9 @@ export function NewsEditor({ news }: NewsEditorProps) {
             <section className="grid gap-4 border border-[var(--adaptiveGrey200)] bg-[var(--adaptiveGrey50)] p-5">
                 <div className="flex items-center justify-between gap-3">
                     <strong className="text-xl font-black text-black">첨부된 이미지</strong>
-                    <span className="text-sm font-black text-[var(--adaptiveGrey600)]">{effectiveThumbnailUrl ? "선택한 이미지가 썸네일로 저장됩니다" : "본문 이미지가 없으면 썸네일 없이 저장됩니다"}</span>
+                    <span className="text-sm font-black text-[var(--adaptiveGrey600)]">
+                        {effectiveThumbnailUrl ? "선택한 이미지가 썸네일로 저장됩니다" : "본문 이미지가 없으면 썸네일 없이 저장됩니다"}
+                    </span>
                 </div>
                 {imageUrls.length ? (
                     <div className="grid grid-cols-2 gap-3 max-[86rem]:grid-cols-1">
@@ -132,7 +134,9 @@ export function NewsEditor({ news }: NewsEditorProps) {
                                     className="h-28 w-full object-cover"
                                     src={imageUrl}
                                 />
-                                <span className="text-base font-black text-black">{index + 1}번째 이미지{effectiveThumbnailUrl === imageUrl ? " / 현재 썸네일" : ""}</span>
+                                <span className="text-base font-black text-black">
+                                    {index + 1}번째 이미지{effectiveThumbnailUrl === imageUrl ? " / 현재 썸네일" : ""}
+                                </span>
                             </UI.Button>
                         ))}
                     </div>
@@ -140,6 +144,7 @@ export function NewsEditor({ news }: NewsEditorProps) {
                     <p className="m-0 text-base font-semibold text-[var(--adaptiveGrey600)]">본문 에디터에서 이미지를 업로드하면 이 영역에 썸네일 후보로 표시됩니다.</p>
                 )}
             </section>
+
             <label className={labelClassName}>
                 본문
                 <RichTextEditor
@@ -149,6 +154,7 @@ export function NewsEditor({ news }: NewsEditorProps) {
                     placeholder="NEWS 본문을 입력하세요."
                 />
             </label>
+
             <label className={labelClassName}>
                 SEO 제목
                 <input
@@ -159,6 +165,7 @@ export function NewsEditor({ news }: NewsEditorProps) {
                     value={seoTitle}
                 />
             </label>
+
             <label className={labelClassName}>
                 SEO 설명
                 <input
@@ -169,6 +176,7 @@ export function NewsEditor({ news }: NewsEditorProps) {
                     value={seoDescription}
                 />
             </label>
+
             {statusMessage ? (
                 <p
                     className={statusClassName}
@@ -177,6 +185,7 @@ export function NewsEditor({ news }: NewsEditorProps) {
                     {statusMessage}
                 </p>
             ) : null}
+
             <UI.Button
                 className={buttonClassName}
                 disabled={upsertNews.isPending}

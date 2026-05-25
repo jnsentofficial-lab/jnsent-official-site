@@ -316,7 +316,7 @@
 }
 
 html {
-    line-height: 1.25 !important; /* 1 */
+    line-height: 1 !important; /* 1 */
     -webkit-text-size-adjust: 100% !important; /* 2 */
     transition: background-color 0.25s cubic-bezier(0.42, 0, 0.58, 1); /* ease-in-out */
 }

@@ -9,7 +9,7 @@ export default async function AdminNewsPage() {
     return (
         <Main
             id="admin-news"
-            className={{ inner: "px-[2.0rem] max-w-[var(--size-pc)]", container: "min-h-[calc(100dvh-10.8rem)]" }}
+            className={{ container: "min-h-[calc(100dvh-10.8rem)]" }}
         >
             <AdminNewsView />
         </Main>

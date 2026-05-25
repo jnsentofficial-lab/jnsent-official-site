@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 import UI from "@/shared/ui/UIComponent";
+import Image from "next/image";
 
 type AdminWorkspaceProps = {
     current: string;
@@ -11,6 +12,9 @@ type AdminWorkspaceProps = {
 };
 
 type AdminTwoPanelProps = {
+    current: string;
+    title: string;
+    action?: ReactNode;
     left: ReactNode;
     right?: ReactNode;
 };
@@ -34,28 +38,43 @@ type ConfirmDialogProps = {
 
 export function AdminWorkspace({ current, title, action, children }: AdminWorkspaceProps) {
     return (
-        <div className="min-h-screen bg-[var(--adaptiveGrey50)]">
-            <div className="mx-auto max-w-[154rem] px-10 py-14 max-[86rem]:px-5 max-[86rem]:py-8">
-                <div className="mb-16 flex items-start justify-between gap-8 max-[86rem]:mb-10 max-[86rem]:flex-col">
-                    <div>
-                        <p className="mb-9 text-3xl font-black text-[var(--adaptiveGrey500)] max-[86rem]:text-2xl">
-                            메인 <span className="mx-4 text-[var(--adaptiveRed400)]">-&gt;</span> <span className="text-black">{current}</span>
-                        </p>
-                        <h1 className="m-0 text-5xl font-black leading-[1.2] text-black max-[86rem]:text-4xl">{title}</h1>
-                    </div>
-                    {action}
-                </div>
-                {children}
-            </div>
-        </div>
+        <article className="h-[100dvh] bg-[#F9F9F9]">
+            <div className="mx-auto min-w-[var(--size-pc)] h-full flex flex-col gap-[5.2rem]">{children}</div>
+        </article>
     );
 }
 
-export function AdminTwoPanel({ left, right }: AdminTwoPanelProps) {
+export function AdminTwoPanel({ current, title, action, left, right }: AdminTwoPanelProps) {
     return (
-        <div className="grid grid-cols-[minmax(0,1fr)_minmax(44rem,0.72fr)] gap-0 max-[120rem]:grid-cols-1">
-            <section className="min-h-[calc(100vh-18rem)] pr-12 max-[120rem]:pr-0">{left}</section>
-            <aside className="min-h-[calc(100vh-18rem)] bg-white pl-12 max-[120rem]:mt-10 max-[120rem]:pl-0">{right}</aside>
+        // <div className="grid grid-cols-[minmax(0,1fr)_minmax(44rem,0.72fr)] gap-0 max-[120rem]:grid-cols-1">
+        <div className="grid grid-cols-2 h-full gap-[1.6rem]">
+            <section className="flex flex-col gap-[5.2rem] p-[5.2rem] h-[100dvh] overflow-auto">
+                <section className="flex flex-col gap-[1.6rem]">
+                    <div className="flex flex-col gap-[1.6rem]">
+                        <section className="flex items-center gap-[0.4rem]">
+                            <h6 className="text-[1.8rem] font-[700] text-[var(--adaptive-black300)]">메인</h6>
+
+                            <Image
+                                src={"/images/icon/outlined/ico-outlined-arrow-right.svg"}
+                                alt=""
+                                width={28}
+                                height={28}
+                            />
+
+                            <h6 className="text-[1.8rem] font-[700]">{current}</h6>
+                        </section>
+
+                        <h1 className="text-[3.2rem]">{title}</h1>
+                    </div>
+
+                    {action}
+                </section>
+
+                {left}
+            </section>
+
+            <aside className="bg-white h-[100dvh] overflow-auto">{right}</aside>
+            {/* <aside className="min-h-[calc(100vh-18rem)] bg-white pl-12 max-[120rem]:mt-10 max-[120rem]:pl-0">{right}</aside> */}
         </div>
     );
 }
@@ -66,27 +85,31 @@ export function AdminPagination({ page, totalPages, onChange }: AdminPaginationP
     }
 
     return (
-        <div className="mt-14 flex items-center justify-center gap-5">
+        <div className="flex items-center justify-center gap-[3.2rem]">
             <button
-                className="grid h-11 w-11 place-items-center border border-[var(--adaptiveGrey200)] bg-white text-2xl font-black text-[var(--adaptiveRed300)] disabled:opacity-40"
+                className="border border-[var(--adaptive-black500)] w-[3.2rem] h-[3.2rem] text-[2.4rem] flex justify-center items-center cursor-pointer"
                 disabled={page === 1}
                 onClick={() => onChange(Math.max(1, page - 1))}
                 type="button"
             >
                 ‹
             </button>
-            {Array.from({ length: totalPages }).map((_, index) => (
-                <button
-                    className={`h-11 w-11 text-2xl font-black ${page === index + 1 ? "border-b-2 border-black text-black" : "text-[var(--adaptiveGrey500)]"}`}
-                    key={index}
-                    onClick={() => onChange(index + 1)}
-                    type="button"
-                >
-                    {index + 1}
-                </button>
-            ))}
+
+            <section className="flex items-center gap-[1.6rem]">
+                {Array.from({ length: totalPages }).map((_, index) => (
+                    <button
+                        className={`${page === index + 1 ? "border-black text-black" : "border-transparent text-[var(--adaptive-grey500)]"} border-b-2 text-[2.0rem] cursor-pointer`}
+                        key={index}
+                        onClick={() => onChange(index + 1)}
+                        type="button"
+                    >
+                        {index + 1}
+                    </button>
+                ))}
+            </section>
+
             <button
-                className="grid h-11 w-11 place-items-center border border-[var(--adaptiveGrey200)] bg-white text-2xl font-black text-[var(--adaptiveRed300)] disabled:opacity-40"
+                className="border border-[var(--adaptive-black500)] w-[3.2rem] h-[3.2rem] text-[2.4rem] flex justify-center items-center cursor-pointer"
                 disabled={page === totalPages}
                 onClick={() => onChange(Math.min(totalPages, page + 1))}
                 type="button"

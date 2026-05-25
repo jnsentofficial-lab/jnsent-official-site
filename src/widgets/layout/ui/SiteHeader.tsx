@@ -2,6 +2,7 @@
 
 import { useLayoutStore } from "@/shared/stores/useLayoutStore";
 import UI from "@/shared/ui/UIComponent";
+import Image from "next/image";
 
 const navigationItems = [
     { href: "/", label: "메인" },
@@ -21,8 +22,10 @@ export function SiteHeader() {
                     className="shrink-0 text-2xl"
                     href="/"
                 >
-                    <img
+                    <Image
                         src={"/images/common/ico-logo.svg"}
+                        width={52}
+                        height={52}
                         alt=""
                         className={`${isNowDarkMode ? "invert" : ""}`}
                     />
