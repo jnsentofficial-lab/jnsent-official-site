@@ -42,21 +42,34 @@ export function Analysis() {
                             <div className="grid gap-0">
                                 {visibleModals.map((modal, mappedIdx) => (
                                     <Fragment key={modal.id}>
-                                        <article className={`flex justify-between items-center py-[2.4rem]`}>
+                                        <article className="grid grid-cols-[8rem_minmax(0,1fr)_8rem] items-center gap-6 py-[2.4rem] max-[86rem]:grid-cols-1">
                                             <UI.Button
-                                                className="flex-1 flex flex-col justify-center gap-[0.8rem] text-left"
+                                                className="contents text-left"
                                                 onClick={() => setSelectedModal(modal)}
                                                 type="button"
                                             >
-                                                <h6 className={`${selectedModal?.id === modal.id ? "text-[var(--adaptive-red500)]" : ""} text-[2.0rem]`}>{modal.title}</h6>
+                                                {modal.image_url ? (
+                                                    <img
+                                                        alt={modal.title}
+                                                        className="h-20 w-20 rounded-2xl object-cover"
+                                                        src={modal.image_url}
+                                                    />
+                                                ) : (
+                                                    <span className="flex h-20 w-20 items-center justify-center rounded-2xl bg-[var(--adaptive-grey200)] text-xs font-bold text-[var(--adaptive-grey500)]">
+                                                        No
+                                                    </span>
+                                                )}
+                                                <span className="grid min-w-0 gap-4">
+                                                    <h6 className={`${selectedModal?.id === modal.id ? "text-[var(--adaptive-red500)]" : ""} truncate text-[2.0rem]`}>{modal.title}</h6>
 
-                                                <section className="text-[1.4rem] text-[var(--adaptive-grey500)]">
-                                                    김주석 주임 <span className="mx-3">|</span>
-                                                    {modal.starts_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.starts_at)) : "시작일 없음"} ~{" "}
-                                                    {modal.ends_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.ends_at)) : "종료일 없음"}
-                                                    <span className="mx-3">|</span>
-                                                    <span className={modal.is_visible ? "text-[var(--adaptiveRed400)]" : ""}>{modal.is_visible ? "진행중" : "종료"}</span>
-                                                </section>
+                                                    <section className="truncate text-[1.4rem] text-[var(--adaptive-grey500)]">
+                                                        김주석 주임 <span className="mx-3">|</span>
+                                                        {modal.starts_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.starts_at)) : "시작일 없음"} ~{" "}
+                                                        {modal.ends_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.ends_at)) : "종료일 없음"}
+                                                        <span className="mx-3">|</span>
+                                                        <span className={modal.is_visible ? "text-[var(--adaptiveRed400)]" : ""}>{modal.is_visible ? "진행중" : "종료"}</span>
+                                                    </section>
+                                                </span>
                                             </UI.Button>
 
                                             <section className="">

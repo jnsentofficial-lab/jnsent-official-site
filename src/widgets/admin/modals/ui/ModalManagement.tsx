@@ -40,21 +40,34 @@ export function ModalManagement() {
                             <div className="grid gap-0">
                                 {visibleModals.map((modal) => (
                                     <article
-                                        className={`grid grid-cols-[minmax(0,1fr)_8rem] items-center gap-6 border-b border-[var(--adaptive-grey200)] py-8 ${selectedModal?.id === modal.id ? "text-[var(--adaptive-red300)]" : "text-black"}`}
+                                        className={`grid grid-cols-[8rem_minmax(0,1fr)_8rem] items-center gap-6 border-b border-[var(--adaptive-grey200)] py-8 max-[86rem]:grid-cols-1 ${selectedModal?.id === modal.id ? "text-[var(--adaptive-red300)]" : "text-black"}`}
                                         key={modal.id}
                                     >
                                         <button
-                                            className="grid gap-5 text-left"
+                                            className="contents text-left"
                                             onClick={() => setSelectedModal(modal)}
                                             type="button"
                                         >
-                                            <strong className="truncate text-2xl font-black">{modal.title}</strong>
-                                            <span className="text-lg font-semibold text-black">
-                                                김주석 주임 <span className="mx-3">|</span>
-                                                {modal.starts_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.starts_at)) : "시작일 없음"} ~{" "}
-                                                {modal.ends_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.ends_at)) : "종료일 없음"}
-                                                <span className="mx-3">|</span>
-                                                <span className={modal.is_visible ? "text-[var(--adaptive-red400)]" : ""}>{modal.is_visible ? "진행중" : "종료"}</span>
+                                            {modal.image_url ? (
+                                                <img
+                                                    alt={modal.title}
+                                                    className="h-20 w-20 rounded-2xl object-cover"
+                                                    src={modal.image_url}
+                                                />
+                                            ) : (
+                                                <span className="flex h-20 w-20 items-center justify-center rounded-2xl bg-[var(--adaptive-grey200)] text-xs font-bold text-[var(--adaptive-grey500)]">
+                                                    No
+                                                </span>
+                                            )}
+                                            <span className="grid min-w-0 gap-4">
+                                                <strong className="truncate text-2xl font-black">{modal.title}</strong>
+                                                <span className="text-lg font-semibold text-black">
+                                                    김주석 주임 <span className="mx-3">|</span>
+                                                    {modal.starts_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.starts_at)) : "시작일 없음"} ~{" "}
+                                                    {modal.ends_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.ends_at)) : "종료일 없음"}
+                                                    <span className="mx-3">|</span>
+                                                    <span className={modal.is_visible ? "text-[var(--adaptive-red400)]" : ""}>{modal.is_visible ? "진행중" : "종료"}</span>
+                                                </span>
                                             </span>
                                         </button>
 

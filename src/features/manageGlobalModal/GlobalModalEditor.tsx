@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { useUploadImageMutation } from "@/entities/asset/api/asset.query";
 import { useCreateGlobalModalMutation, useUpdateGlobalModalMutation } from "@/entities/globalModal/api/globalModal.query";
 import type { GlobalModal } from "@/entities/globalModal/model/globalModal.type";
@@ -21,6 +21,7 @@ const inputClassName = "h-[5.2rem] border border-[var(--adaptive-grey200)] hover
 const textareaClassName = "min-h-[13.2rem] resize-y rounded-lg border border-slate-300 px-3.5 py-3";
 const statusClassName = "m-0 text-sm font-bold text-green-700";
 const buttonClassName = "min-h-11 rounded-lg bg-blue-500 font-bold text-white";
+const previewButtonClassName = "grid gap-3 rounded-lg border border-[var(--adaptive-grey200)] bg-white p-3 text-left";
 
 function toIsoDateTime(value: FormDataEntryValue | null) {
     const text = String(value ?? "").trim();
@@ -34,6 +35,7 @@ type GlobalModalEditorProps = {
 };
 
 export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [position, setPosition] = useState<Position>({ col: 2, row: 2 });
     const [statusMessage, setStatusMessage] = useState("");
     const [title, setTitle] = useState("");
@@ -45,6 +47,8 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
     const [dismissDays, setDismissDays] = useState(1);
     const [stackOrder, setStackOrder] = useState(0);
     const [isVisible, setIsVisible] = useState(true);
+    const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
+    const [selectedImagePreviewUrl, setSelectedImagePreviewUrl] = useState<string | null>(null);
     const createGlobalModal = useCreateGlobalModalMutation();
     const updateGlobalModal = useUpdateGlobalModalMutation();
     const uploadImage = useUploadImageMutation();
@@ -60,20 +64,45 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
         setDismissDays(modal?.dismiss_days ?? 1);
         setStackOrder(modal?.stack_order ?? 0);
         setIsVisible(modal?.is_visible ?? true);
+        setSelectedImageFile(null);
+        setSelectedImagePreviewUrl(null);
         setStatusMessage("");
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
     }, [modal]);
+
+    useEffect(() => {
+        if (!selectedImageFile) {
+            setSelectedImagePreviewUrl(null);
+            return;
+        }
+
+        const nextPreviewUrl = URL.createObjectURL(selectedImageFile);
+        setSelectedImagePreviewUrl(nextPreviewUrl);
+
+        return () => {
+            URL.revokeObjectURL(nextPreviewUrl);
+        };
+    }, [selectedImageFile]);
+
+    const effectiveImageUrl = selectedImagePreviewUrl ?? imageUrlValue;
+
+    function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
+        const nextFile = event.target.files?.[0] ?? null;
+        setSelectedImageFile(nextFile);
+    }
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         setStatusMessage("저장 중입니다.");
+        const form = event.currentTarget;
 
-        const formData = new FormData(event.currentTarget);
-        const file = formData.get("image");
-        let imageUrl = String(formData.get("imageUrl") ?? "").trim() || null;
+        let imageUrl = imageUrlValue.trim() || null;
 
         try {
-            if (file instanceof File && file.size > 0) {
-                imageUrl = (await uploadImage.mutateAsync(file)).result.url;
+            if (selectedImageFile) {
+                imageUrl = (await uploadImage.mutateAsync(selectedImageFile)).result.url;
             }
 
             const payload = {
@@ -85,8 +114,8 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                 stack_order: stackOrder,
                 dismiss_type: dismissType,
                 dismiss_days: dismissType === "days" ? dismissDays : null,
-                starts_at: toIsoDateTime(formData.get("startsAt")),
-                ends_at: toIsoDateTime(formData.get("endsAt")),
+                starts_at: toIsoDateTime(startsAt),
+                ends_at: toIsoDateTime(endsAt),
                 is_visible: isVisible,
             };
 
@@ -96,8 +125,11 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                 await createGlobalModal.mutateAsync(payload);
             }
 
-            event.currentTarget.reset();
+            form.reset();
             setPosition({ col: 2, row: 2 });
+            setImageUrlValue("");
+            setSelectedImageFile(null);
+            setSelectedImagePreviewUrl(null);
             setStatusMessage("모달이 저장되었습니다.");
             onSaved?.();
         } catch {
@@ -138,10 +170,32 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                 <input
                     className={inputClassName}
                     accept="image/jpeg,image/png,image/webp"
+                    onChange={handleImageChange}
                     name="image"
+                    ref={fileInputRef}
                     type="file"
                 />
             </label>
+            <section className="grid gap-3 rounded-lg border border-[var(--adaptive-grey200)] bg-[var(--adaptive-grey50)] p-4">
+                <div className="flex items-center justify-between gap-3">
+                    <strong className="text-lg font-black text-black">현재 설정 이미지</strong>
+                    <span className="text-sm font-bold text-[var(--adaptive-grey600)]">
+                        {selectedImageFile ? "새로 선택한 이미지가 저장됩니다" : effectiveImageUrl ? "저장된 이미지가 유지됩니다" : "설정된 이미지가 없습니다"}
+                    </span>
+                </div>
+                {effectiveImageUrl ? (
+                    <div className={previewButtonClassName}>
+                        <img
+                            alt={title ? `${title} 이미지 미리보기` : "모달 이미지 미리보기"}
+                            className="h-40 w-full rounded-lg object-cover"
+                            src={effectiveImageUrl}
+                        />
+                        <span className="truncate text-sm font-bold text-[var(--adaptive-grey700)]">{selectedImageFile?.name ?? imageUrlValue}</span>
+                    </div>
+                ) : (
+                    <p className="m-0 text-sm font-semibold text-[var(--adaptive-grey600)]">이미지를 업로드하면 여기에서 바로 확인할 수 있습니다.</p>
+                )}
+            </section>
             {/* <label className={labelClassName}>
                 이미지 URL
                 <input
