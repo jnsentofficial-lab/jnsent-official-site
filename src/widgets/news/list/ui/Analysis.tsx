@@ -5,6 +5,7 @@ import { usePublishedNewsQuery } from "@/entities/news/api/news.query";
 import Skeleton from "@/shared/ui/kit/Skeleton";
 import UI from "@/shared/ui/UIComponent";
 import { SubPageHero } from "@/widgets/layout/ui";
+import { motion } from "framer-motion";
 
 function formatDate(value: string | null) {
     if (!value) {
@@ -36,84 +37,91 @@ export function Analysis() {
                 title="뉴스"
                 description={`변화하는 엔터테인먼트 시장 속에서\n제이엔에스가 나아가는 방향을 공유합니다.`}
             />
-            <Skeleton.Section
-                target={!isLoading}
-                className={{ element: "pb-[14rem]" }}
+
+            <motion.section
+                className="mx-auto max-w-[var(--size-pc)] w-full"
+                initial={{ opacity: 0, transform: "translateY(100px)" }}
+                animate={{ opacity: 1, transform: "translateY(0px)" }}
+                exit={{ opacity: 0, transform: "translateY(100px)" }}
+                transition={{
+                    delay: 0.4,
+                    type: "spring",
+                    mass: 0.1,
+                    stiffness: 100,
+                    damping: 10,
+                }}
             >
-                {/* <div className="mx-auto w-[min(112rem,calc(100%_-_3.2rem))]"> */}
-                <div className="mx-auto w-[var(--size-pc)]">
-                    {news.length ? (
-                        <Fragment>
-                            <div className="grid grid-cols-3 gap-x-12 gap-y-20 max-[86rem]:grid-cols-1">
-                                {visibleNews.map((item) => (
-                                    <UI.Linker
-                                        className="flex flex-col justify-start gap-[2.4rem]"
-                                        href={`/news/${item.slug}`}
-                                        key={item.slug}
-                                    >
-                                        {item.thumbnail_url ? (
-                                            <img
-                                                alt={item.title}
-                                                className="aspect-square w-full rounded-[5.2rem] object-cover transition duration-300 group-hover:scale-[1.02] select-none"
-                                                src={item.thumbnail_url}
-                                            />
-                                        ) : (
-                                            <span className="flex aspect-square w-full items-center justify-center rounded-[3rem] bg-[var(--adaptiveGrey100)] text-lg font-black text-[var(--adaptiveGrey500)]">
-                                                이미지 없음
-                                            </span>
-                                        )}
+                {news.length ? (
+                    <Fragment>
+                        <div className="mx-[1.6rem] grid pc:grid-cols-3 mobile:grid-cols-2 mobile:gap-[3.2rem_1.6rem] pc:gap-[5.2rem_1.6rem]">
+                            {visibleNews.map((item) => (
+                                <UI.Linker
+                                    className="flex flex-col justify-start gap-[2.4rem]"
+                                    href={`/news/${item.slug}`}
+                                    key={item.slug}
+                                >
+                                    {item.thumbnail_url ? (
+                                        <img
+                                            alt={item.title}
+                                            className="aspect-square w-full rounded-[5.2rem] object-cover transition duration-300 group-hover:scale-[1.02] select-none border border-[var(--adaptive-grey200)]"
+                                            src={item.thumbnail_url}
+                                        />
+                                    ) : (
+                                        <span className="flex aspect-square w-full items-center justify-center rounded-[3rem] bg-[var(--adaptiveGrey100)] text-lg font-black text-[var(--adaptiveGrey500)]">
+                                            이미지 없음
+                                        </span>
+                                    )}
 
-                                        <div className="flex flex-col gap-[0.8rem]">
-                                            <section className="flex items-center gap-[1.2rem]">
-                                                <p>{formatDate(item.published_at)}</p>
+                                    <div className="flex flex-col gap-[0.8rem]">
+                                        <section className="flex items-center gap-[1.2rem]">
+                                            <p>{formatDate(item.published_at)}</p>
 
-                                                <div className="h-[1.2rem] w-[0.1rem] bg-[var(--adaptive-black300)]" />
+                                            <div className="h-[1.2rem] w-[0.1rem] bg-[var(--adaptive-black300)]" />
 
-                                                <p>조회 {formatViewCount(item.view_count)}</p>
-                                            </section>
+                                            <p>조회 {formatViewCount(item.view_count)}</p>
+                                        </section>
 
-                                            <section>
-                                                <h6 className="text-[2.4rem] leading-[1.5] text-left">{item.title}</h6>
-                                            </section>
-                                        </div>
-                                    </UI.Linker>
-                                ))}
-                            </div>
+                                        <section>
+                                            <h6 className="text-[2.4rem] leading-[1.5] text-left">{item.title}</h6>
+                                        </section>
+                                    </div>
+                                </UI.Linker>
+                            ))}
+                        </div>
 
-                            <div className="mt-24 flex items-center justify-center gap-4">
+                        <div className="mt-24 flex items-center justify-center gap-4">
+                            <button
+                                className="grid h-12 w-12 place-items-center rounded-full bg-[var(--adaptiveGrey100)] text-2xl font-black text-[var(--adaptiveGrey500)] disabled:opacity-40"
+                                disabled={page === 1}
+                                onClick={() => setPage((value) => Math.max(1, value - 1))}
+                                type="button"
+                            >
+                                ‹
+                            </button>
+                            {Array.from({ length: totalPages }).map((_, index) => (
                                 <button
-                                    className="grid h-12 w-12 place-items-center rounded-full bg-[var(--adaptiveGrey100)] text-2xl font-black text-[var(--adaptiveGrey500)] disabled:opacity-40"
-                                    disabled={page === 1}
-                                    onClick={() => setPage((value) => Math.max(1, value - 1))}
+                                    className={`h-12 w-12 text-2xl font-black ${page === index + 1 ? "text-black" : "text-[var(--adaptiveGrey500)]"}`}
+                                    key={index}
+                                    onClick={() => setPage(index + 1)}
                                     type="button"
                                 >
-                                    ‹
+                                    {index + 1}
                                 </button>
-                                {Array.from({ length: totalPages }).map((_, index) => (
-                                    <button
-                                        className={`h-12 w-12 text-2xl font-black ${page === index + 1 ? "text-black" : "text-[var(--adaptiveGrey500)]"}`}
-                                        key={index}
-                                        onClick={() => setPage(index + 1)}
-                                        type="button"
-                                    >
-                                        {index + 1}
-                                    </button>
-                                ))}
-                                <button
-                                    className="grid h-12 w-12 place-items-center rounded-full bg-[var(--adaptiveGrey100)] text-2xl font-black text-[var(--adaptiveGrey500)] disabled:opacity-40"
-                                    disabled={page === totalPages}
-                                    onClick={() => setPage((value) => Math.min(totalPages, value + 1))}
-                                    type="button"
-                                >
-                                    ›
-                                </button>
-                            </div>
-                        </Fragment>
-                    ) : (
-                        <div className="rounded-[2.4rem] bg-[var(--adaptiveGrey100)] px-8 py-16 text-center text-2xl font-black text-[var(--adaptiveGrey600)]">현재 공개된 뉴스가 없습니다.</div>
-                    )}
-                </div>
-            </Skeleton.Section>
+                            ))}
+                            <button
+                                className="grid h-12 w-12 place-items-center rounded-full bg-[var(--adaptiveGrey100)] text-2xl font-black text-[var(--adaptiveGrey500)] disabled:opacity-40"
+                                disabled={page === totalPages}
+                                onClick={() => setPage((value) => Math.min(totalPages, value + 1))}
+                                type="button"
+                            >
+                                ›
+                            </button>
+                        </div>
+                    </Fragment>
+                ) : (
+                    <div className="rounded-[2.4rem] bg-[var(--adaptiveGrey100)] px-8 py-16 text-center text-2xl font-black text-[var(--adaptiveGrey600)]">현재 공개된 뉴스가 없습니다.</div>
+                )}
+            </motion.section>
         </>
     );
 }

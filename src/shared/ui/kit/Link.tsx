@@ -83,7 +83,7 @@ export const Linker = ({
                 className={`
                     ${className}
                     ${isHovered && message ? "" : "overflow-hidden"}
-                    relative transition-colors px-[1.2rem] rounded-[1.2rem] cursor-pointer
+                    relative transition-colors rounded-[1.2rem] cursor-pointer
                     ${defaultHover ? "brightness-100 hover:brightness-50 transition-colors duration-200" : ""}
                 `}
                 style={{ minHeight: height }}
