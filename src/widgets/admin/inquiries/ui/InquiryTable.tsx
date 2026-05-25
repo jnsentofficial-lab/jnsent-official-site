@@ -5,6 +5,7 @@ import { useAdminInquiriesQuery, useUpdateInquiryStatusMutation } from "@/entiti
 import type { Inquiry } from "@/entities/inquiry/model/inquiry.type";
 import { AdminPagination } from "@/widgets/admin/shared/AdminLayout";
 import UI from "@/shared/ui/UIComponent";
+import { Text } from "@/shared/ui/kit/Text";
 
 type InquiryTableProps = {
     selectedInquiryId?: string;
@@ -23,25 +24,42 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
         <div className="flex flex-col gap-[5.2rem]">
             <section className="flex flex-col">
                 {inquiries.length ? (
-                    visibleInquiries.map((inquiry) => (
-                        <UI.Button
-                            className={`grid w-full grid-cols-[minmax(0,1fr)_13rem] items-center gap-6 border-b border-[var(--adaptive-grey200)] py-8 text-left transition hover:bg-white max-[86rem]:grid-cols-1 ${selectedInquiryId === inquiry.id ? "text-[var(--adaptiveRed300)]" : "text-black"}`}
-                            key={`${inquiry.name}-${inquiry.category}`}
-                            onClick={() => onSelectInquiry(inquiry)}
-                            type="button"
-                        >
-                            <div className="flex flex-col gap-[0.8rem]">
-                                <h6 className="text-[2.0rem]">{inquiry.message}</h6>
-                                {/* <strong className="text-2xl font-black leading-[1.35]">{inquiry.message}</strong> */}
-                                <section className="flex flex-wrap items-center gap-4 text-lg font-semibold text-black">
-                                    <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{inquiry.name}</p>
-                                    <p className="text-[var(--adaptive-black300)] text-[1.4rem]">|</p>
-                                    <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.created_at))}</p>
-                                    <p className="text-[var(--adaptive-black300)] text-[1.4rem]">~</p>
-                                    <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.updated_at))}</p>
-                                </section>
+                    visibleInquiries.map((inquiry) => {
+                        const SELECTED = selectedInquiryId === inquiry.id;
 
-                                {/* <select
+                        return (
+                            <UI.Button
+                                className={`grid w-full grid-cols-[minmax(0,1fr)_13rem] items-center gap-6 border-b border-[var(--adaptive-grey200)] py-8 text-left transition hover:bg-white max-[86rem]:grid-cols-1 `}
+                                key={`${inquiry.name}-${inquiry.category}`}
+                                onClick={() => onSelectInquiry(inquiry)}
+                                type="button"
+                            >
+                                <div className="flex flex-col gap-[0.8rem]">
+                                    {SELECTED ? (
+                                        <Text.Shimmer
+                                            color={{
+                                                start: "#780B12",
+                                                end: "#FF6B75",
+                                            }}
+                                            duration={4}
+                                            className="text-[2.0rem]"
+                                        >
+                                            {inquiry.message}
+                                        </Text.Shimmer>
+                                    ) : (
+                                        <h6 className="text-[2.0rem]">{inquiry.message}</h6>
+                                    )}
+
+                                    {/* <strong className="text-2xl font-black leading-[1.35]">{inquiry.message}</strong> */}
+                                    <section className="flex flex-wrap items-center gap-4 text-lg font-semibold text-black">
+                                        <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{inquiry.name}</p>
+                                        <p className="text-[var(--adaptive-black300)] text-[1.4rem]">|</p>
+                                        <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.created_at))}</p>
+                                        <p className="text-[var(--adaptive-black300)] text-[1.4rem]">~</p>
+                                        <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.updated_at))}</p>
+                                    </section>
+
+                                    {/* <select
                                     className="h-10 w-fit bg-black px-4 text-base font-black text-white"
                                     aria-label={`${inquiry.name} 문의 상태`}
                                     onChange={(event) => void updateStatus.mutate({ id: inquiry.id, status: event.target.value as Inquiry["status"] })}
@@ -53,9 +71,10 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
                                     <option value="done">done</option>
                                     <option value="spam">spam</option>
                                 </select> */}
-                            </div>
-                        </UI.Button>
-                    ))
+                                </div>
+                            </UI.Button>
+                        );
+                    })
                 ) : (
                     <p className="py-16 text-2xl font-black text-[var(--adaptiveGrey500)]">등록된 문의가 없습니다.</p>
                 )}

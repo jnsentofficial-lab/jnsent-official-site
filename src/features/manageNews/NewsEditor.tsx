@@ -14,7 +14,7 @@ type NewsEditorProps = {
 };
 
 const formClassName = "grid gap-8";
-const labelClassName = "flex flex-col text-[2.0rem] gap-[0.8rem]";
+const labelClassName = "flex flex-col gap-[0.8rem] font-[NanumSquare]";
 const inputClassName = "h-[5.2rem] border border-[var(--adaptive-grey200)] hover:border-[var(--adaptive-grey700)] px-4 text-lg font-semibold";
 // const inputClassName = "h-14 border border-black px-4 text-lg font-semibold";
 const statusClassName = "m-0 text-base font-bold text-[var(--adaptiveGreen700)]";

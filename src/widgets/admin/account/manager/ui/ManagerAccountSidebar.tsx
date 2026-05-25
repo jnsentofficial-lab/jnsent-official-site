@@ -13,6 +13,7 @@ type ManagerAccountSidebarProps = {
 
 const roles: ManagerAccountRole[] = ["manager", "admin", "viewer"];
 const inputClassName = "h-[5.2rem] border border-[var(--adaptive-grey200)] hover:border-[var(--adaptive-grey700)] px-4 text-lg font-semibold";
+const labelClassName = "flex flex-col gap-[0.8rem] font-[NanumSquare]";
 
 export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccountSidebarProps) {
     const [name, setName] = useState("");
@@ -78,7 +79,7 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                     void handleSubmit(event);
                 }}
             >
-                <label className="grid gap-3 text-xl font-black text-black">
+                <label className={labelClassName}>
                     이름
                     <input
                         className={inputClassName}
@@ -89,7 +90,7 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                         value={name}
                     />
                 </label>
-                <label className="grid gap-3 text-xl font-black text-black">
+                <label className={labelClassName}>
                     권한
                     <select
                         className={inputClassName}
@@ -106,7 +107,7 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                         ))}
                     </select>
                 </label>
-                <label className="grid gap-3 text-xl font-black text-black">
+                <label className={labelClassName}>
                     아이디
                     <input
                         className={inputClassName}
@@ -117,7 +118,7 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                         value={loginId}
                     />
                 </label>
-                <label className="grid gap-3 text-xl font-black text-black">
+                <label className={labelClassName}>
                     비밀번호
                     <input
                         className={inputClassName}
@@ -127,7 +128,7 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                         type="password"
                     />
                 </label>
-                <label className="grid gap-3 text-xl font-black text-black">
+                <label className={labelClassName}>
                     비밀번호 재입력
                     <input
                         className={inputClassName}

@@ -4,6 +4,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { useAdminSessionQuery, useLogoutAdminMutation } from "@/entities/auth/api/auth.query";
 import UI from "@/shared/ui/UIComponent";
 import Image from "next/image";
+import { Shimmer } from "@/shared/ui/kit/Text/ui/Shimmer";
+import { Text } from "@/shared/ui/kit/Text";
 
 const adminNavItems = [
     { href: "/admin/inquiries", label: "문의 관리" },
@@ -48,33 +50,69 @@ export function AdminSidebar() {
                 // className="grid gap-9 text-2xl font-black max-[86rem]:grid-cols-2 max-[86rem]:gap-4"
                 aria-label="관리자 메뉴"
             >
-                {navItems.map((item) => (
-                    <UI.Linker
-                        className={`${pathname === item.href ? "text-[var(--adaptive-red500)]" : "text-black"} hover:text-[var(--adaptiveRed300)] text-[2.0rem] px-[1.6rem]`}
-                        href={item.href}
-                        key={item.href}
-                    >
-                        {item.label}
-                    </UI.Linker>
-                ))}
+                {navItems.map((item) => {
+                    const SELECTED = pathname === item.href;
+
+                    return (
+                        <UI.Linker
+                            className={`${SELECTED ? "text-[var(--adaptive-red500)]" : "text-black"} hover:text-[var(--adaptiveRed300)] text-[2.0rem] px-[1.6rem]`}
+                            href={item.href}
+                            key={item.href}
+                        >
+                            {SELECTED ? (
+                                <Text.Shimmer
+                                    color={{
+                                        start: "#780B12",
+                                        end: "#FF6B75",
+                                    }}
+                                    duration={4}
+                                >
+                                    {item.label}
+                                </Text.Shimmer>
+                            ) : (
+                                item.label
+                            )}
+                        </UI.Linker>
+                    );
+                })}
             </nav>
 
-            <div className="h-[0.1rem] w-full bg-[var(--adaptive-grey100)]" />
+            <section className="w-[24rem]">
+                <div className="h-[0.1rem] w-full bg-[var(--adaptive-grey100)]" />
 
-            <UI.Button
-                className="flex items-center gap-[0.4rem] px-[1.2rem]"
-                // className="mt-auto flex min-h-16 items-center justify-start bg-white text-2xl font-black text-black hover:text-[var(--adaptiveRed500)] max-[86rem]:mt-8"
-                onClick={handleLogout}
-                type="button"
-            >
-                <Image
-                    src={"/images/icon/outlined/ico-outlined-unlock.svg"}
-                    alt=""
-                    width={24}
-                    height={24}
-                />
-                <p className="text-[2.0rem]">로그아웃</p>
-            </UI.Button>
+                <UI.Linker
+                    className="flex items-center gap-[0.4rem] px-[1.2rem] hover:bg-[var(--adaptive-grey200)] w-full"
+                    href="/"
+                >
+                    <Image
+                        src={"/images/icon/outlined/ico-outlined-arrow-single-up.svg"}
+                        alt=""
+                        width={18}
+                        height={18}
+                        className="rotate-270"
+                    />
+
+                    <p className="text-[2.0rem]">메인으로 돌아가기</p>
+                </UI.Linker>
+
+                <div className="h-[0.1rem] w-full bg-[var(--adaptive-grey100)]" />
+
+                <UI.Button
+                    className="flex items-center gap-[0.4rem] px-[1.2rem] hover:bg-[var(--adaptive-grey200)] w-full"
+                    // className="mt-auto flex min-h-16 items-center justify-start bg-white text-2xl font-black text-black hover:text-[var(--adaptiveRed500)] max-[86rem]:mt-8"
+                    onClick={handleLogout}
+                    type="button"
+                >
+                    <Image
+                        src={"/images/icon/outlined/ico-outlined-unlock.svg"}
+                        alt=""
+                        width={24}
+                        height={24}
+                    />
+
+                    <p className="text-[2.0rem]">로그아웃</p>
+                </UI.Button>
+            </section>
         </aside>
     );
 }

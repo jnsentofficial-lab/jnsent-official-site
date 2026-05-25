@@ -42,24 +42,25 @@ export function Analysis() {
                             <div className="grid gap-0">
                                 {visibleModals.map((modal, mappedIdx) => (
                                     <Fragment key={modal.id}>
-                                        <article className="grid grid-cols-[8rem_minmax(0,1fr)_8rem] items-center gap-6 py-[2.4rem] max-[86rem]:grid-cols-1">
+                                        <article className="flex py-[2.4rem]">
                                             <UI.Button
-                                                className="contents text-left"
+                                                className="flex items-center gap-[1.2rem] flex-1"
                                                 onClick={() => setSelectedModal(modal)}
                                                 type="button"
                                             >
                                                 {modal.image_url ? (
                                                     <img
                                                         alt={modal.title}
-                                                        className="h-20 w-20 rounded-2xl object-cover"
+                                                        className="h-[7.2rem] w-[7.2rem] rounded-[1.2rem] object-cover"
                                                         src={modal.image_url}
                                                     />
                                                 ) : (
-                                                    <span className="flex h-20 w-20 items-center justify-center rounded-2xl bg-[var(--adaptive-grey200)] text-xs font-bold text-[var(--adaptive-grey500)]">
+                                                    <span className="flex h-[7.2rem] w-[7.2rem] items-center justify-center rounded-[1.2rem] bg-[var(--adaptive-grey200)] text-xs font-bold text-[var(--adaptive-grey500)]">
                                                         No
                                                     </span>
                                                 )}
-                                                <span className="grid min-w-0 gap-4">
+
+                                                <div className="flex flex-col justify-center items-start gap-[0.8rem]">
                                                     <h6 className={`${selectedModal?.id === modal.id ? "text-[var(--adaptive-red500)]" : ""} truncate text-[2.0rem]`}>{modal.title}</h6>
 
                                                     <section className="truncate text-[1.4rem] text-[var(--adaptive-grey500)]">
@@ -69,10 +70,10 @@ export function Analysis() {
                                                         <span className="mx-3">|</span>
                                                         <span className={modal.is_visible ? "text-[var(--adaptiveRed400)]" : ""}>{modal.is_visible ? "진행중" : "종료"}</span>
                                                     </section>
-                                                </span>
+                                                </div>
                                             </UI.Button>
 
-                                            <section className="">
+                                            <section className="flex">
                                                 <UI.Button
                                                     onClick={() => setDeleteTarget(modal)}
                                                     type="button"
