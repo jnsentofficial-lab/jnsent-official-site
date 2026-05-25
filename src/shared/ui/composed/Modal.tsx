@@ -2,7 +2,7 @@
 
 import ReactDOM from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Fragment, ReactNode, useEffect, useRef, useState } from "react";
+import { Fragment, ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import UI from "../UIComponent";
 
 // import UI from "@/features/shell/ui/UIComponent";
@@ -17,6 +17,10 @@ interface BottomSheetProps {
     children?: ReactNode;
     className?: string;
     closeBtn?: boolean;
+    placement?: {
+        col: number;
+        row: number;
+    };
     actions?: {
         title: string;
         type?: "action" | "close";
@@ -29,13 +33,13 @@ interface BottomSheetProps {
     }[];
 }
 
-const Modal = ({ title, description, open, onClose, children, className, actions: actions = [], onInit }: BottomSheetProps) => {
+const Modal = ({ title, description, open, onClose, children, className, actions: actions = [], onInit, placement }: BottomSheetProps) => {
     const [isClient, setIsClient] = useState(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
 
     // 함수 : 키 별 세팅
-    const preventEnterKey = (event: KeyboardEvent) => {
+    const preventEnterKey = useCallback((event: KeyboardEvent) => {
         switch (event.key) {
             case "Escape":
                 return onClose?.();
@@ -46,7 +50,7 @@ const Modal = ({ title, description, open, onClose, children, className, actions
             default:
                 break;
         }
-    };
+    }, [onClose]);
 
     useEffect(() => {
         if (open) {
@@ -57,7 +61,7 @@ const Modal = ({ title, description, open, onClose, children, className, actions
         return () => {
             window.removeEventListener("keydown", preventEnterKey);
         };
-    }, [open]);
+    }, [onInit, open, preventEnterKey]);
 
     useEffect(() => {
         // 브라우저 환경에서만 document 존재
@@ -65,6 +69,8 @@ const Modal = ({ title, description, open, onClose, children, className, actions
     }, []);
 
     if (!isClient) return null; // SSR 단계에서는 아무것도 렌더링하지 않음
+
+    const modalClassName = `${className ? className : "max-w-[calc(var(--modal-width)-(1.6rem*4))]"} max-h-[calc(100dvh-(1.6rem*2))] z-[100000000] w-full bg-[var(--color-gray-100)] rounded-[3.2rem] flex flex-col shadow-[0_0_20rem_10rem_#00000060] overflow-hidden`;
 
     return (
         <Fragment>
@@ -82,92 +88,148 @@ const Modal = ({ title, description, open, onClose, children, className, actions
                             />
 
                             {/* BottomSheet */}
-                            <motion.section
-                                ref={containerRef}
-                                role="dialog"
-                                className={`${className ? className : "max-w-[calc(var(--modal-width)-(1.6rem*4))]"} max-h-[calc(100dvh-(1.6rem*2))] z-[100000000] fixed top-[50%] left-[50%] transform translate-x-[-50%] translate-y-[-50%] w-full bg-[var(--color-gray-100)] rounded-[3.2rem] flex flex-col shadow-[0_0_20rem_10rem_#00000060] overflow-hidden`}
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.95 }}
-                                transition={{
-                                    delay: 0,
-                                    type: "spring",
-                                    mass: 0.1,
-                                    stiffness: 200,
-                                    damping: 10,
-                                }}
-                            >
-                                {/* Header */}
-                                <section className="flex items-start justify-between p-[1.6rem_2.4rem]">
-                                    <section className="flex flex-col gap-[1.2rem] w-full">
-                                        <section className="grid grid-cols-[1fr_2.4rem] gap-[0.8rem]">
-                                            <div className="flex items-start gap-[0.4rem]">
-                                                {/* <Icon
-                                                    type="filled-info"
-                                                    alt=""
-                                                    className="pt-[0.4rem]"
-                                                    width={20}
-                                                /> */}
-                                                <h2 className="text-[1.8rem] font-bold text-[var(--color-gray-900)] leading-[1.5]">{title}</h2>
-                                            </div>
+                            {placement ? (
+                                <div className="fixed inset-0 z-[100000000] grid grid-cols-3 grid-rows-3 pointer-events-none p-[1.6rem]">
+                                    <motion.section
+                                        ref={containerRef}
+                                        role="dialog"
+                                        className={`${modalClassName} pointer-events-auto self-center`}
+                                        style={{ gridColumn: placement.col, gridRow: placement.row }}
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.95 }}
+                                        transition={{
+                                            delay: 0,
+                                            type: "spring",
+                                            mass: 0.1,
+                                            stiffness: 200,
+                                            damping: 10,
+                                        }}
+                                    >
+                                        {/* Header */}
+                                        <section className="flex items-start justify-between p-[1.6rem_2.4rem]">
+                                            <section className="flex flex-col gap-[1.2rem] w-full">
+                                                <section className="grid grid-cols-[1fr_2.4rem] gap-[0.8rem]">
+                                                    <div className="flex items-start gap-[0.4rem]">
+                                                        <h2 className="text-[1.8rem] font-bold text-[var(--color-gray-900)] leading-[1.5]">{title}</h2>
+                                                    </div>
 
-                                            {onClose ? (
-                                                <UI.Button
-                                                    onClick={onClose}
-                                                    className="text-[2.0rem] w-[2.4rem] h-[2.4rem] bg-[var(--color-gray-300)] flex items-center justify-center rounded-full"
-                                                    ariaLabel="모달 닫기"
-                                                >
-                                                    <p>닫기</p>
-                                                    {/* <Icon
-                                                        type="outlined-cross"
-                                                        alt=""
-                                                        className=""
-                                                        width={18}
-                                                    /> */}
-                                                </UI.Button>
-                                            ) : null}
+                                                    {onClose ? (
+                                                        <UI.Button
+                                                            onClick={onClose}
+                                                            className="text-[2.0rem] w-[2.4rem] h-[2.4rem] bg-[var(--color-gray-300)] flex items-center justify-center rounded-full"
+                                                            ariaLabel="모달 닫기"
+                                                        >
+                                                            <p>닫기</p>
+                                                        </UI.Button>
+                                                    ) : null}
+                                                </section>
+
+                                                <p className="text-[1.6rem] font-bold text-[var(--color-gray-600)] leading-[1.5] whitespace-break-spaces">{description}</p>
+                                            </section>
                                         </section>
 
-                                        <p className="text-[1.6rem] font-bold text-[var(--color-gray-600)] leading-[1.5] whitespace-break-spaces">{description}</p>
-                                    </section>
+                                        {/* Body */}
+                                        {children ? <section className="flex flex-col overflow-y-auto bg-white mx-[0.8rem] rounded-[2.4rem]">{children}</section> : ""}
 
-                                    {/* { onClose ? (
-                                        <UI.Button onClick={ onClose } className="text-[2.0rem] w-[2.4rem] h-[2.4rem] bg-[var(--color-gray-300)] flex items-center justify-center rounded-full" ariaLabel="모달 닫기">
-                                            <Icon type="outlined-cross" alt="" className="" width={18} />
-                                        </UI.Button>
-                                    ) : null } */}
-                                </section>
-
-                                {/* Body */}
-                                {children ? <section className="flex flex-col overflow-y-auto bg-white mx-[0.8rem] rounded-[2.4rem]">{children}</section> : ""}
-
-                                {/* Footer */}
-                                {actions.length > 0 && (
-                                    <section className="flex flex-wrap justify-end gap-[1.0rem] p-[1.6rem_2.4rem]">
-                                        {actions.map((action, i) => (
-                                            <UI.Button
-                                                key={i}
-                                                disabled={action.disabled}
-                                                aria-label={action.ariaLabel ? action.ariaLabel : action.title}
-                                                className={`h-[var(--button-height-sm)] whitespace-nowrap px-[2.0rem] rounded-[var(--button-radius-sm)] transition-colors
+                                        {/* Footer */}
+                                        {actions.length > 0 && (
+                                            <section className="flex flex-wrap justify-end gap-[1.0rem] p-[1.6rem_2.4rem]">
+                                                {actions.map((action, i) => (
+                                                    <UI.Button
+                                                        key={i}
+                                                        disabled={action.disabled}
+                                                        aria-label={action.ariaLabel ? action.ariaLabel : action.title}
+                                                        className={`h-[var(--button-height-sm)] whitespace-nowrap px-[2.0rem] rounded-[var(--button-radius-sm)] transition-colors
                                                     ${action.disabled ? "opacity-50 text-white" : ""}
                                                     ${action.className ? action.className : "bg-[var(--color-gray-700)] hover:bg-[var(--color-gray-700)] text-white"}
                                                 `}
-                                                onClick={async () => {
-                                                    if (action.type === "close") return onClose?.();
+                                                        onClick={async () => {
+                                                            if (action.type === "close") return onClose?.();
 
-                                                    const result = await action?.onClick?.();
-                                                    const IS_PASSED = result === undefined || result;
+                                                            const result = await action?.onClick?.();
+                                                            const IS_PASSED = result === undefined || result;
 
-                                                    if (IS_PASSED) onClose?.();
-                                                }}
-                                            >
-                                                {action.loading ? "처리중..." : action.title}
-                                            </UI.Button>
-                                        ))}
+                                                            if (IS_PASSED) onClose?.();
+                                                        }}
+                                                    >
+                                                        {action.loading ? "처리중..." : action.title}
+                                                    </UI.Button>
+                                                ))}
+                                            </section>
+                                        )}
+                                    </motion.section>
+                                </div>
+                            ) : (
+                                <motion.section
+                                    ref={containerRef}
+                                    role="dialog"
+                                    className={`${modalClassName} fixed top-[50%] left-[50%] transform translate-x-[-50%] translate-y-[-50%]`}
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.95 }}
+                                    transition={{
+                                        delay: 0,
+                                        type: "spring",
+                                        mass: 0.1,
+                                        stiffness: 200,
+                                        damping: 10,
+                                    }}
+                                >
+                                    {/* Header */}
+                                    <section className="flex items-start justify-between p-[1.6rem_2.4rem]">
+                                        <section className="flex flex-col gap-[1.2rem] w-full">
+                                            <section className="grid grid-cols-[1fr_2.4rem] gap-[0.8rem]">
+                                                <div className="flex items-start gap-[0.4rem]">
+                                                    <h2 className="text-[1.8rem] font-bold text-[var(--color-gray-900)] leading-[1.5]">{title}</h2>
+                                                </div>
+
+                                                {onClose ? (
+                                                    <UI.Button
+                                                        onClick={onClose}
+                                                        className="text-[2.0rem] w-[2.4rem] h-[2.4rem] bg-[var(--color-gray-300)] flex items-center justify-center rounded-full"
+                                                        ariaLabel="모달 닫기"
+                                                    >
+                                                        <p>닫기</p>
+                                                    </UI.Button>
+                                                ) : null}
+                                            </section>
+
+                                            <p className="text-[1.6rem] font-bold text-[var(--color-gray-600)] leading-[1.5] whitespace-break-spaces">{description}</p>
+                                        </section>
                                     </section>
-                                )}
-                            </motion.section>
+
+                                    {/* Body */}
+                                    {children ? <section className="flex flex-col overflow-y-auto bg-white mx-[0.8rem] rounded-[2.4rem]">{children}</section> : ""}
+
+                                    {/* Footer */}
+                                    {actions.length > 0 && (
+                                        <section className="flex flex-wrap justify-end gap-[1.0rem] p-[1.6rem_2.4rem]">
+                                            {actions.map((action, i) => (
+                                                <UI.Button
+                                                    key={i}
+                                                    disabled={action.disabled}
+                                                    aria-label={action.ariaLabel ? action.ariaLabel : action.title}
+                                                    className={`h-[var(--button-height-sm)] whitespace-nowrap px-[2.0rem] rounded-[var(--button-radius-sm)] transition-colors
+                                                    ${action.disabled ? "opacity-50 text-white" : ""}
+                                                    ${action.className ? action.className : "bg-[var(--color-gray-700)] hover:bg-[var(--color-gray-700)] text-white"}
+                                                `}
+                                                    onClick={async () => {
+                                                        if (action.type === "close") return onClose?.();
+
+                                                        const result = await action?.onClick?.();
+                                                        const IS_PASSED = result === undefined || result;
+
+                                                        if (IS_PASSED) onClose?.();
+                                                    }}
+                                                >
+                                                    {action.loading ? "처리중..." : action.title}
+                                                </UI.Button>
+                                            ))}
+                                        </section>
+                                    )}
+                                </motion.section>
+                            )}
                         </Fragment>
                     )}
                 </AnimatePresence>,

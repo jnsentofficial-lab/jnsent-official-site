@@ -5,8 +5,8 @@ import UI from "@/shared/ui/UIComponent";
 import Image from "next/image";
 
 type AdminWorkspaceProps = {
-    current: string;
-    title: string;
+    current?: string;
+    title?: string;
     action?: ReactNode;
     children: ReactNode;
 };
@@ -36,11 +36,20 @@ type ConfirmDialogProps = {
     onConfirm: () => void;
 };
 
-export function AdminWorkspace({ current, title, action, children }: AdminWorkspaceProps) {
+type AdminEmptyStateProps = {
+    message: string;
+};
+
+type AdminSidePanelProps = {
+    title: string;
+    description?: string;
+    children: ReactNode;
+};
+
+export function AdminWorkspace({ children }: AdminWorkspaceProps) {
     return (
         <article className="h-[100dvh] bg-[#F9F9F9]">
             <div className="mx-auto min-w-[var(--size-pc)] h-full flex flex-col gap-[5.2rem]">{children}</div>
-            {action}
         </article>
     );
 }
@@ -118,6 +127,22 @@ export function AdminPagination({ page, totalPages, onChange }: AdminPaginationP
                 ›
             </button>
         </div>
+    );
+}
+
+export function AdminEmptyState({ message }: AdminEmptyStateProps) {
+    return <p className="m-0 text-2xl font-black text-[var(--adaptive-grey500)]">{message}</p>;
+}
+
+export function AdminSidePanel({ title, description, children }: AdminSidePanelProps) {
+    return (
+        <section className="flex flex-col gap-[2.4rem] p-[5.2rem]">
+            <div className="flex flex-col gap-[1.2rem]">
+                <h2 className="m-0 text-[3.2rem]">{title}</h2>
+                {description ? <p className="m-0 text-[1.8rem] font-[700] text-[var(--adaptive-grey500)]">{description}</p> : null}
+            </div>
+            {children}
+        </section>
     );
 }
 

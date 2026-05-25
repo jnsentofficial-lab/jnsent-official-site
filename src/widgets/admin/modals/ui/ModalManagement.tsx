@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAdminGlobalModalsQuery, useDeleteGlobalModalMutation, useToggleGlobalModalMutation } from "@/entities/globalModal/api/globalModal.query";
 import type { GlobalModal } from "@/entities/globalModal/model/globalModal.type";
 import { GlobalModalEditor } from "@/features/manageGlobalModal/GlobalModalEditor";
+import Modal from "@/shared/ui/composed/Modal";
 import UI from "@/shared/ui/UIComponent";
 import { AdminEmptyState, AdminPagination, AdminSidePanel, AdminTwoPanel, AdminWorkspace, ConfirmDialog } from "@/widgets/admin/shared/AdminLayout";
 
@@ -107,31 +108,27 @@ export function ModalManagement() {
                 }
             />
             {previewTarget ? (
-                <div className="fixed inset-0 z-[90] bg-black/30 p-10">
-                    <div className="grid h-full grid-cols-3 grid-rows-3 gap-4">
-                        <div
-                            className="rounded-[2.4rem] bg-black p-8 text-white shadow-[0_2rem_6rem_rgba(0,0,0,0.3)]"
-                            style={{ gridColumn: previewTarget.col, gridRow: previewTarget.row }}
-                        >
-                            <button
-                                className="mb-4 text-white/70"
-                                onClick={() => setPreviewTarget(null)}
-                                type="button"
-                            >
-                                닫기
-                            </button>
-                            {previewTarget.image_url ? (
+                <Modal
+                    title={previewTarget.title}
+                    description={previewTarget.content}
+                    open
+                    placement={{ col: previewTarget.col, row: previewTarget.row }}
+                    onClose={() => setPreviewTarget(null)}
+                    className="max-w-[min(42rem,calc(100vw-3.2rem))]"
+                    actions={[{ title: "닫기", type: "close" }]}
+                >
+                    {previewTarget.image_url ? (
+                        <Modal.Container>
+                            <Modal.Item>
                                 <img
+                                    className="block max-h-[22rem] w-full object-cover"
                                     alt=""
-                                    className="mb-5 max-h-48 w-full rounded-xl object-cover"
                                     src={previewTarget.image_url}
                                 />
-                            ) : null}
-                            <h3 className="mt-0 mb-4 text-3xl font-black">{previewTarget.title}</h3>
-                            <p className="m-0 text-lg font-semibold leading-[1.7] text-white/80">{previewTarget.content}</p>
-                        </div>
-                    </div>
-                </div>
+                            </Modal.Item>
+                        </Modal.Container>
+                    ) : null}
+                </Modal>
             ) : null}
             <ConfirmDialog
                 open={Boolean(deleteTarget)}
