@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import localFont from "next/font/local";
 
 import { AuthProvider } from "@/app/providers/AuthProvider";
@@ -14,36 +15,37 @@ import { Progress } from "@/widgets/layout/Progress";
 
 import { createJsonLd } from "@/shared/lib/JsonLd";
 
-import "./globals.css";
 import { Footer } from "@/widgets/layout/Footer";
-import Script from "next/script";
 
-const nanumSquare = localFont({
-    src: [
-        {
-            path: "../../public/fonts/NanumSquare/NanumSquareL.woff2",
-            weight: "300",
-            style: "normal",
-        },
-        {
-            path: "../../public/fonts/NanumSquare/NanumSquareR.woff2",
-            weight: "400",
-            style: "normal",
-        },
-        {
-            path: "../../public/fonts/NanumSquare/NanumSquareB.woff2",
-            weight: "700",
-            style: "normal",
-        },
-        {
-            path: "../../public/fonts/NanumSquare/NanumSquareEB.woff2",
-            weight: "800",
-            style: "normal",
-        },
-    ],
-    display: "swap",
-    variable: "--font-nanum-square",
-});
+import "@/shared/style/scss/index.scss";
+import "./globals.css";
+
+// const nanumSquare = localFont({
+//     src: [
+//         {
+//             path: "../../public/fonts/NanumSquare/NanumSquareL.woff2",
+//             weight: "300",
+//             style: "normal",
+//         },
+//         {
+//             path: "../../public/fonts/NanumSquare/NanumSquareR.woff2",
+//             weight: "400",
+//             style: "normal",
+//         },
+//         {
+//             path: "../../public/fonts/NanumSquare/NanumSquareB.woff2",
+//             weight: "700",
+//             style: "normal",
+//         },
+//         {
+//             path: "../../public/fonts/NanumSquare/NanumSquareEB.woff2",
+//             weight: "800",
+//             style: "normal",
+//         },
+//     ],
+//     display: "swap",
+//     variable: "--font-nanum-square",
+// });
 
 export const metadata: Metadata = {
     title: "New Project 2",
@@ -85,7 +87,8 @@ export default function RootLayout({
                     }}
                 /> */}
             </head>
-            <body className={`${nanumSquare.variable} ${nanumSquare.className}`}>
+            <body>
+                {/* <body className={`${nanumSquare.variable} ${nanumSquare.className}`}> */}
                 <GlobalErrorBoundary>
                     <QueryProvider>
                         <AuthProvider>

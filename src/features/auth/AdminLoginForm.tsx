@@ -70,12 +70,12 @@ export function AdminLoginForm() {
             >
                 {isSubmitting ? "로그인 중" : "로그인"}
             </UI.Button>
-            <UI.Link
+            <UI.Linker
                 className="mt-10 text-center text-lg font-black text-black"
                 href="/"
             >
                 ‹ 메인으로 돌아가기
-            </UI.Link>
+            </UI.Linker>
         </form>
     );
 }

@@ -39,13 +39,13 @@ export function AdminSidebar() {
                 aria-label="관리자 메뉴"
             >
                 {navItems.map((item) => (
-                    <UI.Link
+                    <UI.Linker
                         className={`${pathname === item.href ? "text-[var(--adaptiveRed300)]" : "text-black"} hover:text-[var(--adaptiveRed300)]`}
                         href={item.href}
                         key={item.href}
                     >
                         {item.label}
-                    </UI.Link>
+                    </UI.Linker>
                 ))}
             </nav>
             <UI.Button

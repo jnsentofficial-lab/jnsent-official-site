@@ -50,21 +50,39 @@ export function Analysis({ slug }: AnalysisProps) {
                         <p className="text-lg font-semibold leading-[1.8] text-black">공개 상태의 뉴스가 없거나 주소가 올바르지 않습니다.</p>
                     )}
                     <div className="mt-16 text-center">
-                        <UI.Link
+                        <UI.Linker
                             className="inline-flex min-h-12 items-center justify-center rounded-full bg-[var(--adaptiveGrey100)] px-7 text-lg font-black text-[var(--adaptiveGrey700)]"
                             href="/news"
                         >
                             목록으로
-                        </UI.Link>
+                        </UI.Linker>
                     </div>
                     <div className="mt-16 grid gap-8 border-t border-[var(--adaptiveGrey200)] pt-10">
                         <div>
                             <p className="mb-3 text-lg font-black text-[var(--adaptiveGrey500)]">이전글</p>
-                            {prevNews ? <UI.Link className="text-2xl font-black text-black" href={`/news/${prevNews.slug}`}>{prevNews.title}</UI.Link> : <span className="text-2xl font-black text-[var(--adaptiveGrey400)]">이전글이 없습니다.</span>}
+                            {prevNews ? (
+                                <UI.Linker
+                                    className="text-2xl font-black text-black"
+                                    href={`/news/${prevNews.slug}`}
+                                >
+                                    {prevNews.title}
+                                </UI.Linker>
+                            ) : (
+                                <span className="text-2xl font-black text-[var(--adaptiveGrey400)]">이전글이 없습니다.</span>
+                            )}
                         </div>
                         <div>
                             <p className="mb-3 text-lg font-black text-[var(--adaptiveGrey500)]">다음글</p>
-                            {nextNews ? <UI.Link className="text-2xl font-black text-black" href={`/news/${nextNews.slug}`}>{nextNews.title}</UI.Link> : <span className="text-2xl font-black text-[var(--adaptiveGrey400)]">다음글이 없습니다.</span>}
+                            {nextNews ? (
+                                <UI.Linker
+                                    className="text-2xl font-black text-black"
+                                    href={`/news/${nextNews.slug}`}
+                                >
+                                    {nextNews.title}
+                                </UI.Linker>
+                            ) : (
+                                <span className="text-2xl font-black text-[var(--adaptiveGrey400)]">다음글이 없습니다.</span>
+                            )}
                         </div>
                     </div>
                 </div>

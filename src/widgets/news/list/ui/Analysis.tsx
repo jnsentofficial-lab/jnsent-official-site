@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { usePublishedNewsQuery } from "@/entities/news/api/news.query";
 import Skeleton from "@/shared/ui/kit/Skeleton";
 import UI from "@/shared/ui/UIComponent";
@@ -34,7 +34,7 @@ export function Analysis() {
             <SubPageHero
                 current="뉴스"
                 title="뉴스"
-                description="변화하는 엔터테인먼트 시장 속에서 제이엔에스가 나아가는 방향을 공유합니다."
+                description={`변화하는 엔터테인먼트 시장 속에서\n제이엔에스가 나아가는 방향을 공유합니다.`}
             />
             <Skeleton.Section
                 target={!isLoading}
@@ -43,18 +43,18 @@ export function Analysis() {
                 {/* <div className="mx-auto w-[min(112rem,calc(100%_-_3.2rem))]"> */}
                 <div className="mx-auto w-[var(--size-pc)]">
                     {news.length ? (
-                        <>
+                        <Fragment>
                             <div className="grid grid-cols-3 gap-x-12 gap-y-20 max-[86rem]:grid-cols-1">
                                 {visibleNews.map((item) => (
-                                    <UI.Link
-                                        className="group block"
+                                    <UI.Linker
+                                        className="flex flex-col justify-start gap-[2.4rem]"
                                         href={`/news/${item.slug}`}
                                         key={item.slug}
                                     >
                                         {item.thumbnail_url ? (
                                             <img
                                                 alt={item.title}
-                                                className="aspect-square w-full rounded-[3rem] object-cover transition duration-300 group-hover:scale-[1.02]"
+                                                className="aspect-square w-full rounded-[5.2rem] object-cover transition duration-300 group-hover:scale-[1.02] select-none"
                                                 src={item.thumbnail_url}
                                             />
                                         ) : (
@@ -62,15 +62,24 @@ export function Analysis() {
                                                 이미지 없음
                                             </span>
                                         )}
-                                        <span className="mt-6 block text-lg font-black text-[var(--adaptiveGrey500)]">
-                                            {formatDate(item.published_at)}
-                                            <span className="mx-3">|</span>
-                                            조회 {formatViewCount(item.view_count)}
-                                        </span>
-                                        <strong className="mt-3 block text-3xl font-black leading-[1.35] text-black">{item.title}</strong>
-                                    </UI.Link>
+
+                                        <div className="flex flex-col gap-[0.8rem]">
+                                            <section className="flex items-center gap-[1.2rem]">
+                                                <p>{formatDate(item.published_at)}</p>
+
+                                                <div className="h-[1.2rem] w-[0.1rem] bg-[var(--adaptive-black300)]" />
+
+                                                <p>조회 {formatViewCount(item.view_count)}</p>
+                                            </section>
+
+                                            <section>
+                                                <h6 className="text-[2.4rem] leading-[1.5] text-left">{item.title}</h6>
+                                            </section>
+                                        </div>
+                                    </UI.Linker>
                                 ))}
                             </div>
+
                             <div className="mt-24 flex items-center justify-center gap-4">
                                 <button
                                     className="grid h-12 w-12 place-items-center rounded-full bg-[var(--adaptiveGrey100)] text-2xl font-black text-[var(--adaptiveGrey500)] disabled:opacity-40"
@@ -99,7 +108,7 @@ export function Analysis() {
                                     ›
                                 </button>
                             </div>
-                        </>
+                        </Fragment>
                     ) : (
                         <div className="rounded-[2.4rem] bg-[var(--adaptiveGrey100)] px-8 py-16 text-center text-2xl font-black text-[var(--adaptiveGrey600)]">현재 공개된 뉴스가 없습니다.</div>
                     )}

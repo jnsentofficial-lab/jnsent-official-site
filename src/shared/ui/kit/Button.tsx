@@ -4,6 +4,15 @@ import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { ButtonProps } from "../model/ui-props";
 
+// Size type and sizeHeights from Input.tsx
+type ButtonSize = "sm" | "md" | "lg" | "xlg";
+const sizeHeights: Record<ButtonSize, string> = {
+    sm: "4.2rem",
+    md: "5.2rem",
+    lg: "5.2rem",
+    xlg: "7.2rem",
+};
+
 export const Button = ({
     children,
     className,
@@ -16,12 +25,14 @@ export const Button = ({
     ariaLabel = "button",
     desc_no,
     defaultValue,
+    size = "md",
     onClick,
     onHoverStart,
     onHoverEnd,
     onPointerDown,
     tooltip = [],
 }: ButtonProps & {
+    size?: ButtonSize;
     tooltip?: {
         type: "active" | "disabled";
         msg: string;
@@ -47,6 +58,8 @@ export const Button = ({
         }
     };
 
+    const height = sizeHeights[size];
+
     return (
         <motion.button
             type={type}
@@ -64,7 +77,13 @@ export const Button = ({
             onHoverEnd={onHoverEnd}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className={`${className} ${isHovered && message ? "" : "overflow-hidden"} relative transition-colors ${defaultHover ? "brightness-100 hover:brightness-50 transition-colors duration-200" : ""}`}
+            className={`
+                ${className}
+                ${isHovered && message ? "" : "overflow-hidden"}
+                relative transition-colors px-[1.2rem] rounded-[1.2rem] cursor-pointer
+                ${defaultHover ? "brightness-100 hover:brightness-50 transition-colors duration-200" : ""}
+            `}
+            style={{ minHeight: height }}
             whileTap={{ scale: 0.95 }}
             transition={{
                 type: "spring",
@@ -74,22 +93,6 @@ export const Button = ({
             }}
             aria-label={ariaLabel}
         >
-            {/* {ripples.map((ripple) => (
-        <motion.div
-          key={ripple.id}
-          className="absolute pointer-events-none w-full h-full z-10 rounded-[50%] blur-[1rem]"
-          style={{
-            left: `calc(${ripple.x}px - 50%)`,
-            top: `calc(${ripple.y}px - 50%)`,
-            background: `radial-gradient(circle, ${rippleColor}00 0%, ${rippleColor} 50%, ${rippleColor}00 70%)`,
-            transform: "translate(-50%, -50%)",
-          }}
-          initial={{ scale: 0, opacity: 0.6 }}
-          animate={{ scale: 8, opacity: 0 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-        />
-      ))} */}
-
             {disabled ? <div className="opacity-50 w-[inherit] h-[inherit] flex justify-center items-center">{children}</div> : children}
 
             <AnimatePresence mode="popLayout">
@@ -107,23 +110,6 @@ export const Button = ({
                         }}
                     >
                         <p>{message}</p>
-                        {/* <Icon
-                            type="filled-info"
-                            alt=""
-                            className="invert brightness-0 opacity-60"
-                            width={18}
-                        />
-                        <TextShimmer
-                            as="p"
-                            duration={4}
-                            color={{
-                                start: "#ffffff",
-                                end: "#ffffff70",
-                            }}
-                            className={`${align === "left" ? "text-left" : align === "right" ? "text-right" : "text-center"} text-[1.4rem] font-bold leading-[1.5]`}
-                        >
-                            {message}
-                        </TextShimmer> */}
                     </motion.div>
                 )}
             </AnimatePresence>

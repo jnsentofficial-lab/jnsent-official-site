@@ -17,10 +17,6 @@ type Layer = {
     key: string | number;
 };
 
-type StoredLayer = Layer & {
-    savedAt: number;
-};
-
 type FadeLayerProps = {
     children: ReactNode;
     duration: number;
@@ -29,8 +25,7 @@ type FadeLayerProps = {
     phase: "idle" | "run";
 };
 
-let lastUnmountedLayer: StoredLayer | null = null;
-const remountRestoreMs = 1600;
+let lastUnmountedLayer: Layer | null = null;
 
 function FadeLayer({ children, duration, feather, mode, phase }: FadeLayerProps) {
     const wipeX = useMotionValue(phase === "run" ? 120 : -20);
@@ -66,7 +61,7 @@ function FadeLayer({ children, duration, feather, mode, phase }: FadeLayerProps)
 }
 
 function FadeInOut({ activeKey, children, className = "", duration = 1.4, feather = 12 }: FadeInOutProps) {
-    const restoredPrevious = lastUnmountedLayer && lastUnmountedLayer.key !== activeKey && Date.now() - lastUnmountedLayer.savedAt < remountRestoreMs ? lastUnmountedLayer : null;
+    const restoredPrevious = lastUnmountedLayer && lastUnmountedLayer.key !== activeKey ? lastUnmountedLayer : null;
     const initialCurrent = { children, key: activeKey };
     const currentRef = useRef<Layer>(initialCurrent);
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -116,10 +111,7 @@ function FadeInOut({ activeKey, children, className = "", duration = 1.4, feathe
 
     useEffect(() => {
         return () => {
-            lastUnmountedLayer = {
-                ...currentRef.current,
-                savedAt: Date.now(),
-            };
+            lastUnmountedLayer = currentRef.current;
         };
     }, []);
 

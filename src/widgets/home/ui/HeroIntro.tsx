@@ -31,7 +31,7 @@ export function HeroIntro() {
                 <Text.Reveal
                     as="h2"
                     interaction={false}
-                    className="text-[4.2rem] font-black leading-[1.5]"
+                    className="text-[4.2rem] font-black font-[NanumSquare] leading-[1.5]"
                     // initialColor="#00000000"
                     // midColor="rgb(255, 92, 118)"
                     // revealColor={introStep === 1 ? "rgb(0, 0, 0)" : "#00000050"}

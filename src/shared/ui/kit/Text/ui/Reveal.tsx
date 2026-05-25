@@ -189,7 +189,7 @@ function LineOverlay({ highlightColor, subHighlightColor, index, line, progress,
     return (
         <span
             aria-hidden="true"
-            className="pointer-events-none absolute block whitespace-pre"
+            className="pointer-events-none absolute block whitespace-pre font-[NanumSquare]"
             style={{
                 height: line.height,
                 left: line.left - softness,
