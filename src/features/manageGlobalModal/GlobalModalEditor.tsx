@@ -214,13 +214,13 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                         value={imageUrlValue}
                     />
                 </label> */}
-                <fieldset className="m-0 grid gap-2.5 border-0 p-0">
-                    <legend className="font-bold text-slate-800">노출 위치</legend>
+                <label className={labelClassName}>
+                    노출 위치
                     <div className="grid aspect-square w-[min(24rem,100%)] grid-cols-3 grid-rows-3 gap-2">
                         {positions.map((item) => (
                             <UI.Button
                                 aria-pressed={position.col === item.col && position.row === item.row}
-                                className={`min-h-0 rounded-lg border font-bold ${position.col === item.col && position.row === item.row ? "border-blue-500 bg-blue-50 text-blue-700" : "border-slate-300 bg-slate-50 text-slate-700"}`}
+                                className={`min-h-0 rounded-[1.6rem] font-bold ${position.col === item.col && position.row === item.row ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]" : "bg-[var(--adaptive-grey200)] hover:-[var(--adaptive-grey300)] text-[var(--adaptive-grey500)]"}`}
                                 key={`${item.col}-${item.row}`}
                                 onClick={() => setPosition(item)}
                                 type="button"
@@ -229,7 +229,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                             </UI.Button>
                         ))}
                     </div>
-                </fieldset>
+                </label>
                 <label className={labelClassName}>
                     Stack 순서
                     <input

@@ -45,7 +45,7 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
                             <AdminListRow
                                 actions={
                                     <UI.Button
-                                        className="h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
+                                        className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
                                         onClick={() => setDeleteTarget(inquiry)}
                                         type="button"
                                     >
