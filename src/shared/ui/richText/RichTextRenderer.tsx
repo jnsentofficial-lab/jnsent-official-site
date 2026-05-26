@@ -38,7 +38,9 @@ function renderMarks(children: React.ReactNode, marks: JSONContent["marks"]) {
                 >
                     {current}
                 </a>
-            ) : current;
+            ) : (
+                current
+            );
         }
 
         return current;
@@ -108,7 +110,9 @@ export function RichTextRenderer({ content, fallback, className = "" }: RichText
     }
 
     return (
-        <div className={`text-base leading-[1.8] text-slate-700 [&_a]:font-bold [&_a]:text-blue-700 [&_a]:underline [&_h2]:mb-3 [&_h2]:mt-6 [&_h2]:text-2xl [&_h2]:font-bold [&_h3]:mb-2 [&_h3]:mt-5 [&_h3]:text-xl [&_h3]:font-bold [&_li]:mb-1.5 [&_ol]:mb-5 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-4 [&_p]:mt-0 [&_ul]:mb-5 [&_ul]:list-disc [&_ul]:pl-6 ${className}`}>
+        <div
+            className={`text-base leading-[1.5] text-slate-700 [&_a]:font-bold [&_a]:text-blue-700 [&_a]:underline [&_h2]:mb-3 [&_h2]:mt-6 [&_h2]:text-2xl [&_h2]:font-bold [&_h3]:mb-2 [&_h3]:mt-5 [&_h3]:text-xl [&_h3]:font-bold [&_li]:mb-1.5 [&_ol]:mb-5 [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-4 [&_p]:mt-0 [&_ul]:mb-5 [&_ul]:list-disc [&_ul]:pl-6 ${className}`}
+        >
             {nodes.map(renderNode)}
         </div>
     );

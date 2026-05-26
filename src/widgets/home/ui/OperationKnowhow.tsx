@@ -63,7 +63,7 @@ export function OperationKnowhow() {
                 >
                     <Text.Reveal
                         as="h2"
-                        className="text-[3.8rem] font-black leading-[1.5]"
+                        className="text-[3.8rem] font-[700] leading-[1.5]"
                         initialColor="#00000000"
                         midColor="rgb(255, 92, 118)"
                         revealColor="rgb(255, 255, 255)"

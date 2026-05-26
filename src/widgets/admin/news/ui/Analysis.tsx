@@ -28,7 +28,7 @@ export function Analysis() {
                 title="뉴스 관리"
                 action={
                     <UI.Button
-                        // className="mb-8 min-h-14 bg-black px-6 text-lg font-black text-white"
+                        // className="mb-8 min-h-14 bg-black px-6 text-lg font-[700] text-white"
                         onClick={() => setSelectedNews(null)}
                         type="button"
                     >
@@ -73,15 +73,15 @@ export function Analysis() {
 
                                             <div className="flex">
                                                 <UI.Button
-                                                    className="text-2xl font-black"
+                                                    className="text-2xl font-[700]"
                                                     onClick={() => setDeleteTarget(item)}
                                                     type="button"
                                                 >
-                                                    <span className="text-base font-black">삭제</span>
+                                                    <span className="text-base font-[700]">삭제</span>
                                                 </UI.Button>
 
                                                 <UI.Button
-                                                    className="mt-2 text-sm font-black text-[var(--adaptiveGrey600)]"
+                                                    className="mt-2 text-sm font-[700] text-[var(--adaptiveGrey600)]"
                                                     onClick={() => toggleNews.mutate({ id: item.id, is_published: !item.is_published })}
                                                     type="button"
                                                 >
@@ -95,7 +95,7 @@ export function Analysis() {
                                 ))}
                             </div>
                         ) : (
-                            <p className="py-16 text-2xl font-black text-[var(--adaptiveGrey500)]">등록된 NEWS가 없습니다.</p>
+                            <p className="py-16 text-2xl font-[700] text-[var(--adaptiveGrey500)]">등록된 NEWS가 없습니다.</p>
                         )}
                         <AdminPagination
                             page={page}
@@ -106,7 +106,7 @@ export function Analysis() {
                 }
                 right={
                     <div className="sticky top-0 max-h-screen overflow-auto p-12">
-                        <h2 className="mt-0 mb-12 text-4xl font-black text-black">{selectedNews ? "선택한 뉴스" : "생성하기"}</h2>
+                        <h2 className="mt-0 mb-12 text-4xl font-[700] text-black">{selectedNews ? "선택한 뉴스" : "생성하기"}</h2>
                         <NewsEditor news={selectedNews} />
                     </div>
                 }

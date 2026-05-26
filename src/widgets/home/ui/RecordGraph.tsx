@@ -16,13 +16,13 @@ const GRAPH_VIEWBOX = "14 21 735 385";
 export function RecordGraph() {
     return (
         <section className="relative h-dvh min-h-0 overflow-x-clip">
-            <div className="absolute top-[clamp(1.6rem,4vw,4rem)] left-1/2 z-10 w-full max-w-[var(--size-pc)] -translate-x-1/2 px-[clamp(1.6rem,4vw,4rem)]">
+            <div className="absolute top-[clamp(1.6rem,4vw,4rem)] left-1/2 z-10 w-full -translate-x-1/2 px-[clamp(1.6rem,4vw,4rem)]">
                 <motion.div
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ amount: 0.25 }}
                     transition={{ duration: 0.7 }}
-                    className="shrink-0"
+                    className="flex flex-col gap-[1.6rem] max-w-[var(--size-pc)] mx-auto"
                 >
                     <section className="flex items-center">
                         <Image
@@ -31,6 +31,17 @@ export function RecordGraph() {
                             width={32}
                             height={32}
                         />
+
+                        <Text.Shimmer
+                            className="text-[2.4rem] font-[900] font-[NanumSquare]"
+                            color={{
+                                start: "#000000",
+                                end: "#ffffff",
+                            }}
+                            duration={10}
+                        >
+                            플랫폼 신기록
+                        </Text.Shimmer>
 
                         <Image
                             src={"/images/icon/filled/ico-filled-bay-tree.svg"}
@@ -45,7 +56,7 @@ export function RecordGraph() {
 
                     <Text.Reveal
                         as="h2"
-                        className="text-[3.8rem] font-black leading-[1.5]"
+                        className="text-[3.8rem] font-[700] leading-[1.5]"
                         // className="max-w-[92rem] text-[3.8rem] leading-[1.5] max-[64rem]:text-5xl max-[48rem]:text-4xl"
                         initialColor="#ffffff00"
                         revealColor="#000000"

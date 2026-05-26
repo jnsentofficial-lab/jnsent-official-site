@@ -131,7 +131,7 @@ export function AdminPagination({ page, totalPages, onChange }: AdminPaginationP
 }
 
 export function AdminEmptyState({ message }: AdminEmptyStateProps) {
-    return <p className="m-0 text-2xl font-black text-[var(--adaptive-grey500)]">{message}</p>;
+    return <p className="m-0 text-2xl font-[700] text-[var(--adaptive-grey500)]">{message}</p>;
 }
 
 export function AdminSidePanel({ title, description, children }: AdminSidePanelProps) {
@@ -155,25 +155,25 @@ export function ConfirmDialog({ open, title, description, targetLabel, confirmLa
         <div className="fixed inset-0 z-[100] grid place-items-center bg-black/75 p-6 backdrop-blur-sm">
             <div className="w-[min(42rem,100%)] bg-white shadow-[0_2rem_6rem_rgba(0,0,0,0.2)]">
                 <div className="p-8">
-                    <h2 className="mt-0 mb-5 text-3xl font-black text-black">{title}</h2>
-                    <p className="m-0 text-lg font-semibold leading-[1.8] text-black">{description}</p>
+                    <h2 className="mt-0 mb-5 text-3xl font-[700] text-black">{title}</h2>
+                    <p className="m-0 text-lg font-semibold leading-[1.5] text-black">{description}</p>
                 </div>
                 {targetLabel ? (
                     <div className="bg-[var(--adaptiveGrey100)] px-8 py-5">
-                        <p className="mb-2 text-base font-black text-[var(--adaptiveGrey500)]">대상</p>
-                        <strong className="text-2xl font-black text-black">{targetLabel}</strong>
+                        <p className="mb-2 text-base font-[700] text-[var(--adaptiveGrey500)]">대상</p>
+                        <strong className="text-2xl font-[700] text-black">{targetLabel}</strong>
                     </div>
                 ) : null}
                 <div className="grid grid-cols-2">
                     <UI.Button
-                        className="min-h-16 bg-white text-lg font-black text-black"
+                        className="min-h-16 bg-white text-lg font-[700] text-black"
                         onClick={onCancel}
                         type="button"
                     >
                         취소
                     </UI.Button>
                     <UI.Button
-                        className={`min-h-16 text-lg font-black text-white ${tone === "delete" ? "bg-[var(--adaptiveRed500)]" : "bg-[var(--adaptiveBlue500)]"}`}
+                        className={`min-h-16 text-lg font-[700] text-white ${tone === "delete" ? "bg-[var(--adaptiveRed500)]" : "bg-[var(--adaptiveBlue500)]"}`}
                         onClick={onConfirm}
                         type="button"
                     >

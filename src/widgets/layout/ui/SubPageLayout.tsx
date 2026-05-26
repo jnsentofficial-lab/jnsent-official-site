@@ -86,7 +86,7 @@ export function SubPageHero({ current, title, description }: SubPageHeroProps) {
 
                 <section className="grid grid-cols-4 gap-10 max-[86rem]:grid-cols-1">
                     <motion.h1
-                        className="col-span-2 whitespace-break-spaces font-[900] text-[5.2rem]"
+                        className="col-span-2 whitespace-break-spaces font-[700] text-[5.2rem] leading-[1.5]"
                         initial={{ opacity: 0, transform: "translateY(100px)" }}
                         animate={{ opacity: 1, transform: "translateY(0px)" }}
                         exit={{ opacity: 0, transform: "translateY(100px)" }}
@@ -188,7 +188,7 @@ export const DottedItem = ({ children }: { children: ReactNode }) => {
 export function InfoCard({ title, children }: InfoCardProps) {
     return (
         <article className="rounded-[2.4rem] bg-[var(--adaptive-black50)] p-[1.2rem_2.4rem] flex flex-col gap-[1.2rem]">
-            <h3 className="text-[2.0rem] font-black text-black">{title}</h3>
+            <h3 className="text-[2.0rem] font-[700] text-black">{title}</h3>
             <div className="text-[1.6rem] leading-[1.5] text-[var(--adaptive-black300)]">{children}</div>
         </article>
     );
@@ -200,7 +200,7 @@ export function NoticeBox() {
             <h5>문의가 필요하신가요?</h5>
             <p className="mt-3 mb-5 text-lg font-semibold text-[var(--adaptiveGrey700)]">장비 상담 및 렌탈 관련 문의는 언제든지 연락주세요.</p>
             <UI.Linker
-                className="flex min-h-12 items-center justify-center rounded-xl bg-[var(--adaptiveGrey200)] text-base font-black text-[var(--adaptiveGrey800)]"
+                className="flex min-h-12 items-center justify-center rounded-xl bg-[var(--adaptiveGrey200)] text-base font-[700] text-[var(--adaptiveGrey800)]"
                 href="/bjSupport"
             >
                 1:1 문의하기
@@ -288,8 +288,8 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
 
                                     return (
                                         <UI.Button
-                                            className={`border ${active ? "border-[var(--adaptive-red500)]" : "border-[var(--adaptive-black100)]"}`}
-                                            size="sm"
+                                            className={`border ${active ? "border-[var(--adaptive-red500)] text-[var(--adaptive-red400)]" : "border-[var(--adaptive-black100)] text-[var(--adaptive-black300)]"} font-[500] px-[1.2rem] rounded-[1.4rem]`}
+                                            size="md"
                                             key={option}
                                             onClick={() => setSelected((prev) => ({ ...prev, [group.label]: option }))}
                                             type="button"
@@ -352,7 +352,7 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
 
             <section>
                 <SubPageSection title="개인정보 수집·이용 동의">
-                    {/* <h2 className="m-0 text-2xl font-black text-black">개인정보 수집·이용 동의</h2> */}
+                    {/* <h2 className="m-0 text-2xl font-[700] text-black">개인정보 수집·이용 동의</h2> */}
                     <p className="leading-[1.5] text-[var(--adaptive-black400)]">
                         회사는 상담, 서비스 신청 등을 위해 이름, 연락처, 문의 내용을 수집하고 있습니다. 개인정보는 상담 목적 외 다른 용도로 사용하지 않습니다.
                     </p>
@@ -372,7 +372,7 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
 
             <UI.Button
                 className="bg-black text-white h-[5.4rem] rounded-[1.6rem]"
-                // className="min-h-16 rounded-2xl bg-black text-lg font-black text-white disabled:bg-[var(--adaptiveGrey300)]"
+                // className="min-h-16 rounded-2xl bg-black text-lg font-[700] text-white disabled:bg-[var(--adaptiveGrey300)]"
                 disabled={createInquiry.isPending}
                 type="submit"
             >

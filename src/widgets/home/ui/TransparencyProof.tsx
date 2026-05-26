@@ -52,9 +52,10 @@ export function TransparencyProof() {
                 />
             </div>
 
-            <div className="relative z-[1] mx-auto w-[min(112rem,calc(100%_-_3.2rem))]">
+            {/* <div className="relative z-[1] mx-auto w-[min(112rem,calc(100%_-_3.2rem))]"> */}
+            <div className="relative z-[1] w-full">
                 <div
-                    className="max-w-[70rem] flex flex-col gap-[3.2rem]"
+                    className="max-w-[var(--size-pc)] mx-auto flex flex-col gap-[3.2rem]"
                     // initial={{ opacity: 0, y: 32 }}
                     // whileInView={{ opacity: 1, y: 0 }}
                     // viewport={{ once: true, amount: 0.25 }}
@@ -62,7 +63,7 @@ export function TransparencyProof() {
                 >
                     <Text.Reveal
                         as="h2"
-                        className="text-[3.8rem] font-black leading-[1.5]"
+                        className="text-[3.8rem] font-[700] leading-[1.5]"
                         initialColor="#00000000"
                         midColor="rgb(255, 92, 118)"
                         revealColor="rgb(255, 255, 255)"
@@ -95,7 +96,7 @@ export function TransparencyProof() {
                                     <br />
                                     AREA
                                 </p>
-                                <h3 className="mt-7 mb-5 text-2xl font-black">{item.title}</h3>
+                                <h3 className="mt-7 mb-5 text-2xl font-[700]">{item.title}</h3>
                             </section>
 
                             <section className="bg-[var(--adaptive-blackOpacity300)] p-8 backdrop-blur-xl">

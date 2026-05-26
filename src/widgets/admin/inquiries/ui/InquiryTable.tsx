@@ -50,7 +50,7 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
                                         <h6 className="text-[2.0rem]">{inquiry.message}</h6>
                                     )}
 
-                                    {/* <strong className="text-2xl font-black leading-[1.35]">{inquiry.message}</strong> */}
+                                    {/* <strong className="text-2xl font-[700] leading-[1.35]">{inquiry.message}</strong> */}
                                     <section className="flex flex-wrap items-center gap-4 text-lg font-semibold text-black">
                                         <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{inquiry.name}</p>
                                         <p className="text-[var(--adaptive-black300)] text-[1.4rem]">|</p>
@@ -60,7 +60,7 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
                                     </section>
 
                                     {/* <select
-                                    className="h-10 w-fit bg-black px-4 text-base font-black text-white"
+                                    className="h-10 w-fit bg-black px-4 text-base font-[700] text-white"
                                     aria-label={`${inquiry.name} 문의 상태`}
                                     onChange={(event) => void updateStatus.mutate({ id: inquiry.id, status: event.target.value as Inquiry["status"] })}
                                     onClick={(event) => event.stopPropagation()}
@@ -76,7 +76,7 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
                         );
                     })
                 ) : (
-                    <p className="py-16 text-2xl font-black text-[var(--adaptiveGrey500)]">등록된 문의가 없습니다.</p>
+                    <p className="py-16 text-2xl font-[700] text-[var(--adaptiveGrey500)]">등록된 문의가 없습니다.</p>
                 )}
             </section>
 

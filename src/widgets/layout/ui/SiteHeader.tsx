@@ -47,8 +47,10 @@ export function SiteHeader() {
                 </nav>
 
                 <UI.Linker
-                    className="text-[1.6rem] inline-flex shrink-0 items-center justify-center rounded-full bg-black px-6 py-[0.2rem] text-base text-white"
+                    className="bg-black rounded-full text-white px-[1.2rem]"
+                    // className="text-[1.6rem] inline-flex shrink-0 items-center justify-center rounded-full bg-black px-6 py-[0.2rem] text-base text-white"
                     href="/bjSupport"
+                    size="sm"
                 >
                     BJ 지원하기
                 </UI.Linker>

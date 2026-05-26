@@ -72,7 +72,7 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
 
     return (
         <aside className="sticky top-0 max-h-screen overflow-auto p-12">
-            <h2 className="mt-0 mb-12 text-4xl font-black text-black">{isCreateMode ? "관리자 계정 만들기" : "관리자 계정 편집"}</h2>
+            <h2 className="mt-0 mb-12 text-4xl font-[700] text-black">{isCreateMode ? "관리자 계정 만들기" : "관리자 계정 편집"}</h2>
             <form
                 className="grid gap-10"
                 onSubmit={(event) => {
@@ -139,7 +139,7 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                     />
                 </label>
                 <button
-                    className="fixed right-0 bottom-0 min-h-16 w-[calc((100vw-24rem)*0.42)] bg-black px-4 text-xl font-black text-white disabled:bg-[var(--adaptiveGrey400)] max-[120rem]:static max-[120rem]:w-full"
+                    className="fixed right-0 bottom-0 min-h-16 w-[calc((100vw-24rem)*0.42)] bg-black px-4 text-xl font-[700] text-white disabled:bg-[var(--adaptiveGrey400)] max-[120rem]:static max-[120rem]:w-full"
                     disabled={isPending}
                     type="submit"
                 >
@@ -147,7 +147,7 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                 </button>
                 {isEditMode ? (
                     <button
-                        className="min-h-14 border border-[var(--adaptiveRed500)] text-lg font-black text-[var(--adaptiveRed500)]"
+                        className="min-h-14 border border-[var(--adaptiveRed500)] text-lg font-[700] text-[var(--adaptiveRed500)]"
                         onClick={() => setConfirm("delete")}
                         type="button"
                     >

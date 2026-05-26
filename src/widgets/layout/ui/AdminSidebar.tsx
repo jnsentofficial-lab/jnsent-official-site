@@ -37,7 +37,6 @@ export function AdminSidebar() {
                     width={42}
                     height={42}
                     alt=""
-                    // className={`${isNowDarkMode ? "invert" : ""}`}
                 />
                 <div className="flex flex-col">
                     <h6 className="font-[700]">{session?.name ?? "JNS"} 님</h6>
@@ -47,7 +46,7 @@ export function AdminSidebar() {
 
             <nav
                 className="flex flex-col gap-[1.6rem] w-[24rem] flex-1"
-                // className="grid gap-9 text-2xl font-black max-[86rem]:grid-cols-2 max-[86rem]:gap-4"
+                // className="grid gap-9 text-2xl font-[700] max-[86rem]:grid-cols-2 max-[86rem]:gap-4"
                 aria-label="관리자 메뉴"
             >
                 {navItems.map((item) => {
@@ -99,7 +98,7 @@ export function AdminSidebar() {
 
                 <UI.Button
                     className="flex items-center gap-[0.4rem] px-[1.2rem] hover:bg-[var(--adaptive-grey200)] w-full"
-                    // className="mt-auto flex min-h-16 items-center justify-start bg-white text-2xl font-black text-black hover:text-[var(--adaptiveRed500)] max-[86rem]:mt-8"
+                    // className="mt-auto flex min-h-16 items-center justify-start bg-white text-2xl font-[700] text-black hover:text-[var(--adaptiveRed500)] max-[86rem]:mt-8"
                     onClick={handleLogout}
                     type="button"
                 >

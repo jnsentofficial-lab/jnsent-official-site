@@ -27,7 +27,7 @@ export function ModalManagement() {
                 title="팝업 관리"
                 action={
                     <UI.Button
-                        className="min-h-14 bg-black px-6 text-lg font-black text-white"
+                        className="min-h-14 bg-black px-6 text-lg font-[700] text-white"
                         onClick={() => setSelectedModal(null)}
                         type="button"
                     >
@@ -60,7 +60,7 @@ export function ModalManagement() {
                                                 </span>
                                             )}
                                             <span className="grid min-w-0 gap-4">
-                                                <strong className="truncate text-2xl font-black">{modal.title}</strong>
+                                                <strong className="truncate text-2xl font-[700]">{modal.title}</strong>
                                                 <span className="text-lg font-semibold text-black">
                                                     김주석 주임 <span className="mx-3">|</span>
                                                     {modal.starts_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.starts_at)) : "시작일 없음"} ~{" "}
@@ -73,22 +73,22 @@ export function ModalManagement() {
 
                                         <div className="grid justify-items-center gap-2">
                                             <UI.Button
-                                                className="text-2xl font-black"
+                                                className="text-2xl font-[700]"
                                                 onClick={() => setDeleteTarget(modal)}
                                                 type="button"
                                             >
-                                                ▱<span className="text-base font-black">삭제</span>
+                                                ▱<span className="text-base font-[700]">삭제</span>
                                             </UI.Button>
 
                                             <UI.Button
-                                                className="text-sm font-black text-[var(--adaptive-grey600)]"
+                                                className="text-sm font-[700] text-[var(--adaptive-grey600)]"
                                                 onClick={() => setPreviewTarget(modal)}
                                                 type="button"
                                             >
                                                 미리보기
                                             </UI.Button>
                                             <UI.Button
-                                                className="text-sm font-black text-[var(--adaptive-grey600)]"
+                                                className="text-sm font-[700] text-[var(--adaptive-grey600)]"
                                                 onClick={() => toggleModal.mutate({ id: modal.id, is_visible: !modal.is_visible })}
                                                 type="button"
                                             >

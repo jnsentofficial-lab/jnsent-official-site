@@ -49,7 +49,7 @@ export function NewsManagement() {
                                                 </span>
                                             )}
                                             <span className="grid min-w-0 gap-4">
-                                                <strong className="truncate text-2xl font-black">{item.title}</strong>
+                                                <strong className="truncate text-2xl font-[700]">{item.title}</strong>
                                                 <span className="truncate text-lg font-semibold text-black">
                                                     홍길동 <span className="mx-3">|</span> {item.published_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(item.published_at)) : "날짜 미정"}
                                                 </span>
@@ -57,15 +57,15 @@ export function NewsManagement() {
                                         </button>
                                         <div className="grid justify-items-center gap-2">
                                             <UI.Button
-                                                className="text-2xl font-black"
+                                                className="text-2xl font-[700]"
                                                 onClick={() => setDeleteTarget(item)}
                                                 type="button"
                                             >
                                                 ▱
                                             </UI.Button>
-                                            <span className="text-base font-black">삭제</span>
+                                            <span className="text-base font-[700]">삭제</span>
                                             <UI.Button
-                                                className="mt-2 text-sm font-black text-[var(--adaptive-grey600)]"
+                                                className="mt-2 text-sm font-[700] text-[var(--adaptive-grey600)]"
                                                 onClick={() => toggleNews.mutate({ id: item.id, is_published: !item.is_published })}
                                                 type="button"
                                             >

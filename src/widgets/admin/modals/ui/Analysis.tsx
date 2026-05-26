@@ -121,7 +121,7 @@ export function Analysis() {
                                 ))}
                             </div>
                         ) : (
-                            <p className="py-16 text-2xl font-black text-[var(--adaptiveGrey500)]">등록된 팝업이 없습니다.</p>
+                            <p className="py-16 text-2xl font-[700] text-[var(--adaptiveGrey500)]">등록된 팝업이 없습니다.</p>
                         )}
                         <AdminPagination
                             page={page}
@@ -132,7 +132,7 @@ export function Analysis() {
                 }
                 right={
                     <div className="sticky top-0 max-h-screen overflow-auto p-12">
-                        <h2 className="mt-0 mb-12 text-4xl font-black text-black">{selectedModal ? "수정하기" : "생성하기"}</h2>
+                        <h2 className="mt-0 mb-12 text-4xl font-[700] text-black">{selectedModal ? "수정하기" : "생성하기"}</h2>
                         <GlobalModalEditor
                             modal={selectedModal}
                             onSaved={() => setSelectedModal(null)}
@@ -161,8 +161,8 @@ export function Analysis() {
                                     src={previewTarget.image_url}
                                 />
                             ) : null}
-                            <h3 className="mt-0 mb-4 text-3xl font-black">{previewTarget.title}</h3>
-                            <p className="m-0 text-lg font-semibold leading-[1.7] text-white/80">{previewTarget.content}</p>
+                            <h3 className="mt-0 mb-4 text-3xl font-[700]">{previewTarget.title}</h3>
+                            <p className="m-0 text-lg font-semibold leading-[1.5] text-white/80">{previewTarget.content}</p>
                         </div>
                     </div>
                 </div>

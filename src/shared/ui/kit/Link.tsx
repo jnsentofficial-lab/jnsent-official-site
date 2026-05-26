@@ -8,7 +8,7 @@ import Link from "next/link";
 // Size type and sizeHeights from Input.tsx
 type ButtonSize = "sm" | "md" | "lg" | "xlg";
 const sizeHeights: Record<ButtonSize, string> = {
-    sm: "4.2rem",
+    sm: "3.2rem",
     md: "5.2rem",
     lg: "5.2rem",
     xlg: "7.2rem",

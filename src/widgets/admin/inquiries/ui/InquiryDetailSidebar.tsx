@@ -80,7 +80,7 @@ export function InquiryDetailSidebar({ inquiry, onDeleted }: InquiryDetailSideba
                     <h6 className="text-[var(--adaptive-black300)] text-[1.8rem]">선택한 질문</h6>
 
                     {/* <button
-                            className="mb-8 min-h-12 rounded-xl border border-[var(--adaptiveGrey300)] bg-white px-5 text-base font-black text-black"
+                            className="mb-8 min-h-12 rounded-xl border border-[var(--adaptiveGrey300)] bg-white px-5 text-base font-[700] text-black"
                             disabled={deleteInquiry.isPending}
                             onClick={() => {
                                 void handleDelete();
@@ -113,7 +113,7 @@ export function InquiryDetailSidebar({ inquiry, onDeleted }: InquiryDetailSideba
                 {/* <div className="mb-8 grid gap-4">
                         {isLoading ? <p className="m-0 text-lg font-semibold text-[var(--adaptiveGrey500)]">답변을 불러오는 중입니다.</p> : null}
 
-                        {!isLoading && comments.length === 0 ? <p className="m-0 text-2xl font-black text-black">이곳에 답변을 적어주세요</p> : null}
+                        {!isLoading && comments.length === 0 ? <p className="m-0 text-2xl font-[700] text-black">이곳에 답변을 적어주세요</p> : null}
 
                         {comments.map((comment) => (
                             <article
@@ -121,7 +121,7 @@ export function InquiryDetailSidebar({ inquiry, onDeleted }: InquiryDetailSideba
                                 key={comment.id}
                             >
                                 <div className="mb-2 flex items-center justify-between gap-3">
-                                    <strong className="text-lg font-black text-black">{comment.manager_name}</strong>
+                                    <strong className="text-lg font-[700] text-black">{comment.manager_name}</strong>
                                     <span className="text-sm font-semibold text-[var(--adaptiveGrey500)]">{formatDate(comment.created_at)}</span>
                                 </div>
 
@@ -139,7 +139,7 @@ export function InquiryDetailSidebar({ inquiry, onDeleted }: InquiryDetailSideba
                         void handleSubmit(event);
                     }}
                 >
-                    {/* <label className="grid gap-2 text-lg font-black text-black">
+                    {/* <label className="grid gap-2 text-lg font-[700] text-black">
                             담당자 이름
                             <input
                                 className="h-14 border border-black px-4 text-lg font-semibold"
@@ -149,7 +149,7 @@ export function InquiryDetailSidebar({ inquiry, onDeleted }: InquiryDetailSideba
                                 type="text"
                             />
                         </label> */}
-                    <label className="grid gap-2 text-lg font-black text-black">
+                    <label className="grid gap-2 text-lg font-[700] text-black">
                         {/* 답변 내용 */}
                         <RichTextEditor
                             value={commentBody}
@@ -164,7 +164,7 @@ export function InquiryDetailSidebar({ inquiry, onDeleted }: InquiryDetailSideba
 
             <UI.Button
                 className="sticky bottom-0 text-white bg-black"
-                // className="fixed right-0 bottom-0 min-h-16 w-[calc((100vw-24rem)*0.42)] bg-black px-4 text-xl font-black text-white disabled:bg-[var(--adaptiveGrey400)] max-[120rem]:static max-[120rem]:w-full"
+                // className="fixed right-0 bottom-0 min-h-16 w-[calc((100vw-24rem)*0.42)] bg-black px-4 text-xl font-[700] text-white disabled:bg-[var(--adaptiveGrey400)] max-[120rem]:static max-[120rem]:w-full"
                 disabled={createComment.isPending}
                 type="submit"
             >

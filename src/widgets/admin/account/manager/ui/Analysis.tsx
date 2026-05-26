@@ -21,7 +21,7 @@ export function Analysis() {
             title="관리자 계정 관리"
             action={
                 <UI.Button
-                    className="min-h-14 bg-black px-6 text-lg font-black text-white"
+                    className="min-h-14 bg-black px-6 text-lg font-[700] text-white"
                     onClick={() => {
                         setSelectedAccount(null);
                         setSidebarMode("create");
@@ -49,7 +49,7 @@ export function Analysis() {
                 left={
                     <>
                         {isLoading ? (
-                            <p className="m-0 text-2xl font-black text-[var(--adaptiveGrey500)]">계정을 불러오는 중입니다.</p>
+                            <p className="m-0 text-2xl font-[700] text-[var(--adaptiveGrey500)]">계정을 불러오는 중입니다.</p>
                         ) : (
                             <ManagerAccountList
                                 accounts={accounts}

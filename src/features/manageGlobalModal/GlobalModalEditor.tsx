@@ -154,7 +154,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                     value={title}
                 />
             </label>
-            {/* <label className="grid gap-3 text-xl font-black text-black">
+            {/* <label className="grid gap-3 text-xl font-[700] text-black">
                 내용
                 <textarea
                     className="min-h-[13.2rem] resize-y border border-black px-4 py-3 text-lg font-semibold"
@@ -178,7 +178,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
             </label>
             <section className="grid gap-3 rounded-lg border border-[var(--adaptive-grey200)] bg-[var(--adaptive-grey50)] p-4">
                 <div className="flex items-center justify-between gap-3">
-                    <strong className="text-lg font-black text-black">현재 설정 이미지</strong>
+                    <strong className="text-lg font-[700] text-black">현재 설정 이미지</strong>
                     <span className="text-sm font-bold text-[var(--adaptive-grey600)]">
                         {selectedImageFile ? "새로 선택한 이미지가 저장됩니다" : effectiveImageUrl ? "저장된 이미지가 유지됩니다" : "설정된 이미지가 없습니다"}
                     </span>

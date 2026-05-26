@@ -67,7 +67,7 @@ export function Analysis() {
                                             src={item.thumbnail_url}
                                         />
                                     ) : (
-                                        <span className="flex aspect-square w-full items-center justify-center rounded-[3rem] bg-[var(--adaptiveGrey100)] text-lg font-black text-[var(--adaptiveGrey500)]">
+                                        <span className="flex aspect-square w-full items-center justify-center rounded-[3rem] bg-[var(--adaptiveGrey100)] text-lg font-[700] text-[var(--adaptiveGrey500)]">
                                             이미지 없음
                                         </span>
                                     )}
@@ -91,7 +91,7 @@ export function Analysis() {
 
                         <div className="mt-24 flex items-center justify-center gap-4">
                             <button
-                                className="grid h-12 w-12 place-items-center rounded-full bg-[var(--adaptiveGrey100)] text-2xl font-black text-[var(--adaptiveGrey500)] disabled:opacity-40"
+                                className="grid h-12 w-12 place-items-center rounded-full bg-[var(--adaptiveGrey100)] text-2xl font-[700] text-[var(--adaptiveGrey500)] disabled:opacity-40"
                                 disabled={page === 1}
                                 onClick={() => setPage((value) => Math.max(1, value - 1))}
                                 type="button"
@@ -100,7 +100,7 @@ export function Analysis() {
                             </button>
                             {Array.from({ length: totalPages }).map((_, index) => (
                                 <button
-                                    className={`h-12 w-12 text-2xl font-black ${page === index + 1 ? "text-black" : "text-[var(--adaptiveGrey500)]"}`}
+                                    className={`h-12 w-12 text-2xl font-[700] ${page === index + 1 ? "text-black" : "text-[var(--adaptiveGrey500)]"}`}
                                     key={index}
                                     onClick={() => setPage(index + 1)}
                                     type="button"
@@ -109,7 +109,7 @@ export function Analysis() {
                                 </button>
                             ))}
                             <button
-                                className="grid h-12 w-12 place-items-center rounded-full bg-[var(--adaptiveGrey100)] text-2xl font-black text-[var(--adaptiveGrey500)] disabled:opacity-40"
+                                className="grid h-12 w-12 place-items-center rounded-full bg-[var(--adaptiveGrey100)] text-2xl font-[700] text-[var(--adaptiveGrey500)] disabled:opacity-40"
                                 disabled={page === totalPages}
                                 onClick={() => setPage((value) => Math.min(totalPages, value + 1))}
                                 type="button"
@@ -119,7 +119,7 @@ export function Analysis() {
                         </div>
                     </Fragment>
                 ) : (
-                    <div className="rounded-[2.4rem] bg-[var(--adaptiveGrey100)] px-8 py-16 text-center text-2xl font-black text-[var(--adaptiveGrey600)]">현재 공개된 뉴스가 없습니다.</div>
+                    <div className="rounded-[2.4rem] bg-[var(--adaptiveGrey100)] px-8 py-16 text-center text-2xl font-[700] text-[var(--adaptiveGrey600)]">현재 공개된 뉴스가 없습니다.</div>
                 )}
             </motion.section>
         </>

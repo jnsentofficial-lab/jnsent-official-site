@@ -6,11 +6,8 @@ import { createPortal } from "react-dom";
 
 import { useCreateInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
 import { buildInquiryMessageBody } from "@/entities/inquiry/lib/buildMessageBody";
-import {
-    HOME_INQUIRY_SUPPORT_FIELDS,
-    SUPPORT_FIELD_CATEGORY_MAP,
-    type HomeInquirySupportField,
-} from "@/entities/inquiry/lib/supportFieldCategory";
+import { HOME_INQUIRY_SUPPORT_FIELDS, SUPPORT_FIELD_CATEGORY_MAP, type HomeInquirySupportField } from "@/entities/inquiry/lib/supportFieldCategory";
+import UI from "@/shared/ui/UIComponent";
 
 type Gender = "male" | "female";
 
@@ -28,14 +25,7 @@ interface InquiryModalProps {
     onClose: () => void;
 }
 
-function validateInquiryFields(values: {
-    name: string;
-    age: string;
-    region: string;
-    phone: string;
-    availableTime: string;
-    agreed: boolean;
-}): FieldErrors {
+function validateInquiryFields(values: { name: string; age: string; region: string; phone: string; availableTime: string; agreed: boolean }): FieldErrors {
     const errors: FieldErrors = {};
 
     if (!values.name) errors.name = "이름을 입력해 주세요.";
@@ -48,10 +38,8 @@ function validateInquiryFields(values: {
     return errors;
 }
 
-const selectedOptionClass =
-    "border-[#FF4B8B] text-[#FF4B8B] bg-white";
-const unselectedOptionClass =
-    "border-[#E5E5E5] text-[#999999] bg-white hover:border-[#d0d0d0]";
+const selectedOptionClass = "border-[#FF4B8B] text-[#FF4B8B] bg-white";
+const unselectedOptionClass = "border-[#E5E5E5] text-[#999999] bg-white hover:border-[#d0d0d0]";
 
 export function InquiryModal({ open, onClose }: InquiryModalProps) {
     const createInquiry = useCreateInquiryMutation();
@@ -161,7 +149,7 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="inquiry-modal-title"
-                    className="fixed inset-0 z-[200000] flex min-h-[100dvh] flex-col bg-[#F5F5F5] overflow-y-auto"
+                    className="fixed inset-0 z-[200000] flex min-h-[100dvh] flex-col bg-[#F5F5F590] backdrop-blur-2xl overflow-y-auto"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -176,24 +164,49 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                         ×
                     </button>
 
-                    <main className="mx-auto w-full max-w-[68rem] flex-1 px-[2rem] pb-[6rem] pt-[8rem]">
-                        <header className="mb-[4.8rem] text-center">
+                    <main className="max-w-[var(--size-tablet)] mx-auto flex flex-col justify-center items-center gap-[2.4rem] h-full">
+                        {/* <main className="mx-auto w-full max-w-[68rem] flex-1 px-[2rem] pb-[6rem] pt-[8rem]"> */}
+                        <motion.header
+                            className="flex flex-col gap-[1.6rem]"
+                            initial={{ opacity: 0, transform: "translateY(100px)" }}
+                            animate={{ opacity: 1, transform: "translateY(0px)" }}
+                            exit={{ opacity: 0, transform: "translateY(100px)" }}
+                            transition={{
+                                delay: 0.1,
+                                type: "spring",
+                                mass: 0.1,
+                                stiffness: 100,
+                                damping: 10,
+                            }}
+                        >
                             <h2
                                 id="inquiry-modal-title"
-                                className="text-[3.2rem] font-black leading-[1.4] text-black"
+                                className="text-[3.2rem] font-[700] text-left text-black"
                             >
                                 당신의 가능성을 현실로 만드세요
                             </h2>
-                            <p className="mt-[1.2rem] text-[1.8rem] font-medium text-[#888888]">
-                                성장을 위한 첫 상담을 지금 시작해보세요.
-                            </p>
-                        </header>
+
+                            <p className="text-[1.8rem] text-left font-medium text-[#888888]">성장을 위한 첫 상담을 지금 시작해보세요.</p>
+                        </motion.header>
 
                         <form
-                            className="flex flex-col gap-[3.2rem]"
+                            className="flex flex-col gap-[3.2rem] w-full"
                             onSubmit={handleSubmit}
+                            // initial={{ opacity: 0, transform: "translateY(100px)" }}
+                            // animate={{ opacity: 1, transform: "translateY(0px)" }}
+                            // exit={{ opacity: 0, transform: "translateY(100px)" }}
+                            // transition={{
+                            //     delay: 0.2,
+                            //     type: "spring",
+                            //     mass: 0.1,
+                            //     stiffness: 100,
+                            //     damping: 10,
+                            // }}
                         >
-                            <FormField label="성별">
+                            <FormField
+                                label="성별"
+                                delay={2}
+                            >
                                 <div className="grid grid-cols-2 gap-[1.2rem]">
                                     <OptionButton
                                         selected={gender === "male"}
@@ -210,7 +223,11 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                 </div>
                             </FormField>
 
-                            <FormField label="이름" error={fieldErrors.name}>
+                            <FormField
+                                label="이름"
+                                error={fieldErrors.name}
+                                delay={3}
+                            >
                                 <TextInput
                                     placeholder="이름을 적어주세요"
                                     name="name"
@@ -223,7 +240,11 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                 />
                             </FormField>
 
-                            <FormField label="나이" error={fieldErrors.age}>
+                            <FormField
+                                label="나이"
+                                error={fieldErrors.age}
+                                delay={4}
+                            >
                                 <TextInput
                                     placeholder="나이를 적어주세요"
                                     name="age"
@@ -237,7 +258,11 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                 />
                             </FormField>
 
-                            <FormField label="지역" error={fieldErrors.region}>
+                            <FormField
+                                label="지역"
+                                error={fieldErrors.region}
+                                delay={5}
+                            >
                                 <TextInput
                                     placeholder="지역을 적어주세요"
                                     name="region"
@@ -250,7 +275,11 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                 />
                             </FormField>
 
-                            <FormField label="전화번호" error={fieldErrors.phone}>
+                            <FormField
+                                label="전화번호"
+                                error={fieldErrors.phone}
+                                delay={6}
+                            >
                                 <TextInput
                                     placeholder="전화번호를 적어주세요"
                                     name="phone"
@@ -264,7 +293,11 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                 />
                             </FormField>
 
-                            <FormField label="연락 가능한 시각" error={fieldErrors.availableTime}>
+                            <FormField
+                                label="연락 가능한 시각"
+                                error={fieldErrors.availableTime}
+                                delay={7}
+                            >
                                 <TextInput
                                     placeholder="연락 가능한 시간을 적어주세요"
                                     name="availableTime"
@@ -277,7 +310,10 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                 />
                             </FormField>
 
-                            <FormField label="지원분야">
+                            <FormField
+                                label="지원분야"
+                                delay={8}
+                            >
                                 <div className="grid grid-cols-2 gap-[1.2rem]">
                                     {HOME_INQUIRY_SUPPORT_FIELDS.map((field) => (
                                         <OptionButton
@@ -292,71 +328,88 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                 </div>
                             </FormField>
 
-                            <div className="flex flex-col gap-[0.8rem]">
-                            <label className="flex cursor-pointer items-center gap-[1.2rem]">
-                                <input
-                                    type="checkbox"
-                                    checked={agreed}
-                                    onChange={(event) => {
-                                        setAgreed(event.target.checked);
-                                        if (fieldErrors.agreed) {
-                                            setFieldErrors((prev) => ({ ...prev, agreed: undefined }));
-                                        }
-                                    }}
-                                    className="peer sr-only"
-                                />
-                                <span
-                                    className={`flex h-[2rem] w-[2rem] shrink-0 items-center justify-center rounded-full border transition-colors ${
-                                        agreed ? "border-[#FF4B8B] bg-[#FF4B8B]" : "border-[#CCCCCC] bg-white"
-                                    }`}
-                                >
-                                    {agreed ? (
-                                        <svg
-                                            width="10"
-                                            height="8"
-                                            viewBox="0 0 10 8"
-                                            fill="none"
-                                            aria-hidden
-                                        >
-                                            <path
-                                                d="M1 4L3.5 6.5L9 1"
-                                                stroke="white"
-                                                strokeWidth="1.5"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                            />
-                                        </svg>
-                                    ) : null}
-                                </span>
-                                <span className="text-[1.6rem] font-medium text-[#666666]">개인정보 취급 방침에 동의합니다.</span>
-                            </label>
-                            {fieldErrors.agreed ? (
-                                <p className="m-0 text-[1.4rem] font-medium text-[#FF4B8B]" role="alert">
-                                    {fieldErrors.agreed}
-                                </p>
-                            ) : null}
-                            </div>
-
-                            {statusMessage ? (
-                                <p
-                                    className="m-0 text-center text-[1.4rem] font-semibold text-[#666666]"
-                                    role="status"
-                                >
-                                    {statusMessage}
-                                </p>
-                            ) : null}
-
-                            <button
-                                type="submit"
-                                disabled={createInquiry.isPending}
-                                className="h-[5.6rem] w-full rounded-[1rem] bg-black text-[1.8rem] font-bold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+                            <motion.section
+                                className="flex flex-col gap-[1.2rem]"
+                                initial={{ opacity: 0, transform: "translateY(100px)" }}
+                                animate={{ opacity: 1, transform: "translateY(0px)" }}
+                                exit={{ opacity: 0, transform: "translateY(100px)" }}
+                                transition={{
+                                    delay: 0.05 * 10,
+                                    type: "spring",
+                                    mass: 0.1,
+                                    stiffness: 100,
+                                    damping: 10,
+                                }}
                             >
-                                {createInquiry.isPending ? "저장 중..." : "문의하기"}
-                            </button>
+                                <div className="flex flex-col gap-[0.8rem]">
+                                    <label className="flex cursor-pointer items-center gap-[1.2rem]">
+                                        <input
+                                            type="checkbox"
+                                            checked={agreed}
+                                            onChange={(event) => {
+                                                setAgreed(event.target.checked);
+                                                if (fieldErrors.agreed) {
+                                                    setFieldErrors((prev) => ({ ...prev, agreed: undefined }));
+                                                }
+                                            }}
+                                            className="peer sr-only"
+                                        />
+                                        <span
+                                            className={`flex h-[2rem] w-[2rem] shrink-0 items-center justify-center rounded-full border transition-colors ${
+                                                agreed ? "border-[#FF4B8B] bg-[#FF4B8B]" : "border-[#CCCCCC] bg-white"
+                                            }`}
+                                        >
+                                            {agreed ? (
+                                                <svg
+                                                    width="10"
+                                                    height="8"
+                                                    viewBox="0 0 10 8"
+                                                    fill="none"
+                                                    aria-hidden
+                                                >
+                                                    <path
+                                                        d="M1 4L3.5 6.5L9 1"
+                                                        stroke="white"
+                                                        strokeWidth="1.5"
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                    />
+                                                </svg>
+                                            ) : null}
+                                        </span>
+                                        <span className="text-[1.6rem] font-medium text-[#666666]">개인정보 취급 방침에 동의합니다.</span>
+                                    </label>
+                                    {fieldErrors.agreed ? (
+                                        <p
+                                            className="m-0 text-[1.4rem] font-medium text-[#FF4B8B]"
+                                            role="alert"
+                                        >
+                                            {fieldErrors.agreed}
+                                        </p>
+                                    ) : null}
+                                </div>
+
+                                {statusMessage ? (
+                                    <p
+                                        className="m-0 text-center text-[1.4rem] font-semibold text-[#666666]"
+                                        role="status"
+                                    >
+                                        {statusMessage}
+                                    </p>
+                                ) : null}
+
+                                <UI.Button
+                                    type="submit"
+                                    disabled={createInquiry.isPending}
+                                    className="h-[5.6rem] w-full rounded-[1rem] bg-black text-[1.8rem] font-bold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+                                >
+                                    {createInquiry.isPending ? "저장 중..." : "문의하기"}
+                                </UI.Button>
+                            </motion.section>
                         </form>
                     </main>
 
-                    <InquiryModalFooter />
+                    {/* <InquiryModalFooter /> */}
                 </motion.div>
             ) : null}
         </AnimatePresence>,
@@ -364,33 +417,36 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
     );
 }
 
-function FormField({
-    label,
-    children,
-    error,
-}: {
-    label: string;
-    children: ReactNode;
-    error?: string;
-}) {
+function FormField({ label, children, delay = 1, error }: { label: string; children: ReactNode; delay: number; error?: string }) {
     return (
-        <div className="flex flex-col gap-[1.2rem]">
+        <motion.div
+            className="flex flex-col gap-[1.2rem]"
+            initial={{ opacity: 0, transform: "translateY(100px)" }}
+            animate={{ opacity: 1, transform: "translateY(0px)" }}
+            exit={{ opacity: 0, transform: "translateY(100px)" }}
+            transition={{
+                delay: 0.05 * delay,
+                type: "spring",
+                mass: 0.1,
+                stiffness: 100,
+                damping: 10,
+            }}
+        >
             <label className="text-[1.6rem] font-bold text-black">{label}</label>
             {children}
             {error ? (
-                <p className="m-0 -mt-[0.4rem] text-[1.4rem] font-medium text-[#FF4B8B]" role="alert">
+                <p
+                    className="m-0 -mt-[0.4rem] text-[1.4rem] font-medium text-[#FF4B8B]"
+                    role="alert"
+                >
                     {error}
                 </p>
             ) : null}
-        </div>
+        </motion.div>
     );
 }
 
-function TextInput({
-    className = "",
-    hasError = false,
-    ...props
-}: InputHTMLAttributes<HTMLInputElement> & { className?: string; hasError?: boolean }) {
+function TextInput({ className = "", hasError = false, ...props }: InputHTMLAttributes<HTMLInputElement> & { className?: string; hasError?: boolean }) {
     return (
         <input
             {...props}
@@ -401,17 +457,7 @@ function TextInput({
     );
 }
 
-function OptionButton({
-    children,
-    selected,
-    onClick,
-    className = "",
-}: {
-    children: ReactNode;
-    selected: boolean;
-    onClick: () => void;
-    className?: string;
-}) {
+function OptionButton({ children, selected, onClick, className = "" }: { children: ReactNode; selected: boolean; onClick: () => void; className?: string }) {
     return (
         <button
             type="button"
@@ -434,11 +480,11 @@ function InquiryModalFooter() {
                         className="h-[4.8rem] w-[4.8rem] brightness-0 invert"
                     />
                     <div>
-                        <p className="text-[2rem] font-black leading-[1.3]">JNS ENTERTAINMENT</p>
+                        <p className="text-[2rem] font-[700] leading-[1.5]">JNS ENTERTAINMENT</p>
                         <p className="mt-[0.4rem] text-[1.6rem] font-bold text-white/45">제이엔에스엔터테인먼트</p>
                     </div>
                 </div>
-                <address className="not-italic text-[1.4rem] font-semibold leading-[1.9] text-white/55">
+                <address className="not-italic text-[1.4rem] font-semibold leading-[1.5] text-white/55">
                     <strong className="text-white/35">INFORMATION</strong>
                     <br />
                     제이엔에스 엔터테인먼트 | 대표 우인식 | 사업자등록번호 -

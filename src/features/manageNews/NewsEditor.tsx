@@ -18,7 +18,7 @@ const labelClassName = "flex flex-col gap-[0.8rem] font-[NanumSquare]";
 const inputClassName = "h-[5.2rem] border border-[var(--adaptive-grey200)] hover:border-[var(--adaptive-grey700)] px-4 text-lg font-semibold";
 // const inputClassName = "h-14 border border-black px-4 text-lg font-semibold";
 const statusClassName = "m-0 text-base font-bold text-[var(--adaptiveGreen700)]";
-const buttonClassName = "fixed right-0 bottom-0 min-h-16 w-[calc((100vw-24rem)*0.42)] bg-black text-xl font-black text-white max-[120rem]:static max-[120rem]:w-full";
+const buttonClassName = "fixed right-0 bottom-0 min-h-16 w-[calc((100vw-24rem)*0.42)] bg-black text-xl font-[700] text-white max-[120rem]:static max-[120rem]:w-full";
 const thumbnailButtonClassName = "grid gap-3 border p-3 text-left transition hover:border-black";
 
 export function NewsEditor({ news }: NewsEditorProps) {
@@ -116,8 +116,8 @@ export function NewsEditor({ news }: NewsEditorProps) {
             </label>
             <section className="grid gap-4 border border-[var(--adaptiveGrey200)] bg-[var(--adaptiveGrey50)] p-5">
                 <div className="flex items-center justify-between gap-3">
-                    <strong className="text-xl font-black text-black">첨부된 이미지</strong>
-                    <span className="text-sm font-black text-[var(--adaptiveGrey600)]">
+                    <strong className="text-xl font-[700] text-black">첨부된 이미지</strong>
+                    <span className="text-sm font-[700] text-[var(--adaptiveGrey600)]">
                         {effectiveThumbnailUrl ? "선택한 이미지가 썸네일로 저장됩니다" : "본문 이미지가 없으면 썸네일 없이 저장됩니다"}
                     </span>
                 </div>
@@ -135,7 +135,7 @@ export function NewsEditor({ news }: NewsEditorProps) {
                                     className="h-28 w-full object-cover"
                                     src={imageUrl}
                                 />
-                                <span className="text-base font-black text-black">
+                                <span className="text-base font-[700] text-black">
                                     {index + 1}번째 이미지{effectiveThumbnailUrl === imageUrl ? " / 현재 썸네일" : ""}
                                 </span>
                             </UI.Button>

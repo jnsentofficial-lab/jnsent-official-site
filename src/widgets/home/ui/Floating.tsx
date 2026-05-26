@@ -6,8 +6,9 @@ import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import { Text } from "@/shared/ui/kit/Text";
 import { useLayoutStore } from "@/shared/stores/useLayoutStore";
 import { InquiryModal } from "@/widgets/home/modal";
+import Image from "next/image";
 
-const socialItems = ["bj", "Talk", "Insta", "Blog"];
+const socialItems = ["kakao", "insta", "blog"];
 
 export const Floating = () => {
     const [isInquiryOpen, setIsInquiryOpen] = useState(false);
@@ -95,22 +96,36 @@ const QuickMenu = () => {
     return (
         <AnimatePresence>
             {isReadyLanding ? (
-                <aside className="fixed right-7 bottom-[1.6rem] z-30 grid gap-4 max-[86rem]:hidden">
-                    {socialItems.map((item) => (
-                        <a
-                            className="grid h-14 w-14 place-items-center rounded-full bg-white text-sm font-black text-black shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.14)]"
-                            href="/bjSupport"
-                            key={item}
-                        >
-                            {item}
-                        </a>
-                    ))}
-                    <span className="mx-auto h-px w-8 bg-neutral-500" />
+                // <aside className="fixed right-7 bottom-[1.6rem] z-30 grid gap-4 max-[86rem]:hidden">
+                <aside className="fixed right-7 bottom-[1.6rem] z-30 max-[86rem]:hidden flex flex-col items-center justify-center gap-[2.4rem]">
+                    <section className="flex flex-col gap-[0.8rem]">
+                        {socialItems.map((item) => (
+                            <a
+                                className="grid h-[7.2rem] w-[7.2rem] place-items-center rounded-full bg-white text-sm font-[700] text-black shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.14)]"
+                                href="/bjSupport"
+                                key={item}
+                            >
+                                <Image
+                                    src={`/images/icon/route/home/ico-floating-${item}.svg`}
+                                    alt=""
+                                    height={58}
+                                    width={58}
+                                />
+                            </a>
+                        ))}
+                    </section>
+                    <div className="mx-auto h-[0.1rem] w-8 bg-[var(--adaptive-black400)]" />
                     <a
-                        className="grid h-16 w-16 place-items-center rounded-full bg-black text-3xl font-light text-white shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.16)]"
+                        className="grid h-[7.2rem] w-[7.2rem] place-items-center rounded-full bg-black text-3xl font-light text-white shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.16)]"
                         href="#home"
                     >
-                        ↑
+                        <Image
+                            src={`/images/icon/route/home/ico-floating-up.svg`}
+                            alt=""
+                            height={58}
+                            width={58}
+                            className="invert"
+                        />
                     </a>
                 </aside>
             ) : null}

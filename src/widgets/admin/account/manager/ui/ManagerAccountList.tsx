@@ -53,7 +53,7 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
                     </Fragment>
                 ))
             ) : (
-                <p className="py-16 text-2xl font-black text-[var(--adaptiveGrey500)]">등록된 계정이 없습니다.</p>
+                <p className="py-16 text-2xl font-[700] text-[var(--adaptiveGrey500)]">등록된 계정이 없습니다.</p>
             )}
             <AdminPagination
                 page={page}

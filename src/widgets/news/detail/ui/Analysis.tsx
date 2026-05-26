@@ -69,20 +69,20 @@ export function Analysis({ slug }: AnalysisProps) {
 
                 {news ? (
                     <RichTextRenderer
-                        // className="text-lg font-semibold leading-[1.9] text-black"
+                        // className="text-lg font-semibold leading-[1.5] text-black"
                         className="leading-[1.5]"
                         content={news.body}
                         fallback={news.summary ?? "등록된 본문이 없습니다."}
                     />
                 ) : (
-                    <p className="text-lg font-semibold leading-[1.8] text-black">공개 상태의 뉴스가 없거나 주소가 올바르지 않습니다.</p>
+                    <p className="text-lg font-semibold leading-[1.5] text-black">공개 상태의 뉴스가 없거나 주소가 올바르지 않습니다.</p>
                 )}
             </motion.section>
 
             <section className="flex justify-center">
                 <UI.Linker
                     className="bg-[var(--adaptive-grey100)] rounded-full p-[1.4rem_2.0rem]"
-                    // className="mx-auto  min-h-12 items-center justify-center rounded-full bg-[var(--adaptiveGrey100)] px-7 text-lg font-black text-[var(--adaptiveGrey700)]"
+                    // className="mx-auto  min-h-12 items-center justify-center rounded-full bg-[var(--adaptiveGrey100)] px-7 text-lg font-[700] text-[var(--adaptiveGrey700)]"
                     href="/news"
                 >
                     = 목록으로
