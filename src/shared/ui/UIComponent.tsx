@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "./kit/Button";
+import Checkbox from "./kit/Checkbox";
 import Input from "./kit/Input";
 import { Linker } from "./kit/Link";
 import Skeleton from "./kit/Skeleton";
@@ -16,6 +17,7 @@ const KIT = {
     Skeleton,
     Button,
     Input,
+    Checkbox,
     TextArea,
     Linker,
 };

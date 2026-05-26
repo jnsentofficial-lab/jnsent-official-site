@@ -49,7 +49,8 @@ export function SubPageHero({ current, title, description }: SubPageHeroProps) {
     return (
         // <section className="pt-[calc(50dvh-7.2rem-17.4rem-9.2rem)] pb-[9.2rem] mx-[1.6rem]">
         <section
-            className="pt-[calc(50dvh-1.6rem-17.4rem-3.2rem)] pb-[3.2rem] mx-[1.6rem]"
+            className="pt-[calc(50dvh-1.6rem-17.4rem-5.2rem)] pb-[3.2rem] mx-[1.6rem]"
+            // className="pt-[calc(50dvh-1.6rem-17.4rem-3.2rem)] pb-[3.2rem] mx-[1.6rem]"
             // initial={{ opacity: 0, transform: "translateY(100px)" }}
             // animate={{ opacity: 1, transform: "translateY(0px)" }}
             // exit={{ opacity: 0, transform: "translateY(100px)" }}
@@ -353,15 +354,25 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
             <section>
                 <SubPageSection title="개인정보 수집·이용 동의">
                     {/* <h2 className="m-0 text-2xl font-[700] text-black">개인정보 수집·이용 동의</h2> */}
-                    <p className="leading-[1.5] text-[var(--adaptive-black400)]">
-                        회사는 상담, 서비스 신청 등을 위해 이름, 연락처, 문의 내용을 수집하고 있습니다. 개인정보는 상담 목적 외 다른 용도로 사용하지 않습니다.
-                    </p>
+                    <div className="leading-[1.5] text-[var(--adaptive-black400)] flex flex-col gap-4">
+                        <h4 className="m-0 text-[1.6rem] font-bold">수집하는 개인정보의 항목</h4>
+                        <div>회사는 회원가입, 상담, 서비스 신청 등을 위해 아래와 같은 개인정보를 수집하고 있습니다.</div>
+                        <ul className="list-disc ml-6 flex flex-col gap-1">
+                            <li>
+                                <span className="font-bold">수집항목</span>
+                                <span className="ml-2">: pc본체, pc모니터, DSLR, 웹캠, 조명, 문의사항, 이름, 연락처</span>
+                            </li>
+                            <li>
+                                <span className="font-bold">개인정보 수집방법</span>
+                                <span className="ml-2">: 홈페이지(회원가입)</span>
+                            </li>
+                        </ul>
+                    </div>
+
                     <label className="flex items-center gap-[0.8rem]">
-                        <input
-                            checked={agreed}
-                            className="h-7 w-7 rounded border-[var(--adaptive-grey100)]"
-                            onChange={(event) => setAgreed(event.target.checked)}
-                            type="checkbox"
+                        <UI.Checkbox
+                            defaultState={agreed}
+                            onClick={setAgreed}
                         />
                         개인정보 수집/이용에 동의합니다.
                     </label>
