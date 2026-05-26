@@ -5,8 +5,9 @@ import { useAdminGlobalModalsQuery, useDeleteGlobalModalMutation, useToggleGloba
 import type { GlobalModal } from "@/entities/globalModal/model/globalModal.type";
 import { GlobalModalEditor } from "@/features/manageGlobalModal/GlobalModalEditor";
 import UI from "@/shared/ui/UIComponent";
-import { AdminPagination, AdminTwoPanel, AdminWorkspace, ConfirmDialog } from "@/widgets/admin/shared/AdminLayout";
+import { AdminPagination, AdminSidePanel, AdminTwoPanel, AdminWorkspace, ConfirmDialog } from "@/widgets/admin/shared/AdminLayout";
 import Image from "next/image";
+import { Text } from "@/shared/ui/kit/Text";
 
 export function Analysis() {
     const { data: modals = [] } = useAdminGlobalModalsQuery();
@@ -36,12 +37,15 @@ export function Analysis() {
                 left={
                     <>
                         {modals.length ? (
-                            <div className="grid gap-0">
-                                {visibleModals.map((modal, mappedIdx) => (
+                            visibleModals.map((modal, mappedIdx) => {
+                                const SELECTED = selectedModal?.id === modal.id;
+
+                                return (
                                     <Fragment key={modal.id}>
-                                        <article className="flex py-[2.4rem]">
+                                        <section className="flex items-center justify-between h-[9.2rem]">
                                             <UI.Button
-                                                className="flex items-center gap-[1.2rem] flex-1"
+                                                // className="flex items-center gap-[1.2rem] flex-1"
+                                                className={`${SELECTED ? "text-[var(--adaptive-red500)]" : ""} flex justify-start items-center gap-[1.2rem] transition hover:bg-white h-full flex-1 pl-[5.2rem]`}
                                                 onClick={() => setSelectedModal(modal)}
                                                 type="button"
                                             >
@@ -58,20 +62,34 @@ export function Analysis() {
                                                 )}
 
                                                 <div className="flex flex-col justify-center items-start gap-[0.8rem]">
-                                                    <h6 className={`${selectedModal?.id === modal.id ? "text-[var(--adaptive-red500)]" : ""} truncate text-[2.0rem]`}>{modal.title}</h6>
+                                                    {SELECTED ? (
+                                                        <Text.Shimmer
+                                                            color={{
+                                                                start: "#780B12",
+                                                                end: "#FF6B75",
+                                                            }}
+                                                            duration={4}
+                                                            className="text-[2.0rem]"
+                                                        >
+                                                            {modal.title}
+                                                        </Text.Shimmer>
+                                                    ) : (
+                                                        <h6 className={`${SELECTED ? "text-[var(--adaptive-red500)]" : ""} truncate text-[2.0rem]`}>{modal.title}</h6>
+                                                    )}
 
-                                                    <section className="truncate text-[1.4rem] text-[var(--adaptive-grey500)]">
+                                                    <p className="text-[1.4rem] text-[var(--adaptive-black500)]">
                                                         김주석 주임 <span className="mx-3">|</span>
                                                         {modal.starts_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.starts_at)) : "시작일 없음"} ~{" "}
                                                         {modal.ends_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.ends_at)) : "종료일 없음"}
                                                         <span className="mx-3">|</span>
                                                         <span className={modal.is_visible ? "text-[var(--adaptiveRed400)]" : ""}>{modal.is_visible ? "진행중" : "종료"}</span>
-                                                    </section>
+                                                    </p>
                                                 </div>
                                             </UI.Button>
 
-                                            <section className="flex">
+                                            <section className="flex h-full">
                                                 <UI.Button
+                                                    className="h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
                                                     onClick={() => setDeleteTarget(modal)}
                                                     type="button"
                                                 >
@@ -85,6 +103,7 @@ export function Analysis() {
                                                     <p>삭제</p>
                                                 </UI.Button>
                                                 <UI.Button
+                                                    className="h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
                                                     onClick={() => setPreviewTarget(modal)}
                                                     type="button"
                                                 >
@@ -98,6 +117,7 @@ export function Analysis() {
                                                     <p>미리보기</p>
                                                 </UI.Button>
                                                 <UI.Button
+                                                    className="h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
                                                     onClick={() => toggleModal.mutate({ id: modal.id, is_visible: !modal.is_visible })}
                                                     type="button"
                                                 >
@@ -111,12 +131,12 @@ export function Analysis() {
                                                     {modal.is_visible ? "숨김" : "표시"}
                                                 </UI.Button>
                                             </section>
-                                        </article>
+                                        </section>
 
                                         {mappedIdx + 1 !== modals.length ? <div className="w-full h-[0.1rem] bg-[var(--adaptive-grey200)]" /> : null}
                                     </Fragment>
-                                ))}
-                            </div>
+                                );
+                            })
                         ) : (
                             <p className="py-16 text-2xl font-[700] text-[var(--adaptiveGrey500)]">등록된 팝업이 없습니다.</p>
                         )}
@@ -128,13 +148,12 @@ export function Analysis() {
                     </>
                 }
                 right={
-                    <div className="sticky top-0 max-h-screen overflow-auto p-12">
-                        <h2 className="mt-0 mb-12 text-4xl font-[700] text-black">{selectedModal ? "수정하기" : "생성하기"}</h2>
+                    <AdminSidePanel title={selectedModal ? "수정하기" : "생성하기"}>
                         <GlobalModalEditor
                             modal={selectedModal}
                             onSaved={() => setSelectedModal(null)}
                         />
-                    </div>
+                    </AdminSidePanel>
                 }
             />
             {previewTarget ? (

@@ -1,6 +1,7 @@
 "use client";
 
 import type { ManagerAccount } from "@/entities/managerAccount/model/managerAccount.type";
+import { Text } from "@/shared/ui/kit/Text";
 import UI from "@/shared/ui/UIComponent";
 import { AdminPagination } from "@/widgets/admin/shared/AdminLayout";
 import Image from "next/image";
@@ -21,40 +22,58 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
     return (
         <div className="flex flex-col">
             {accounts.length ? (
-                visibleAccounts.map((account, mappedIdx) => (
-                    <Fragment key={account.id}>
-                        <UI.Button
-                            className={`${selectedAccountId === account.id ? "text-[var(--adaptive-red500)]" : ""} flex justify-between transition hover:bg-white py-[2.4rem]`}
-                            onClick={() => onSelectAccount(account)}
-                            type="button"
-                        >
-                            <section className="flex gap-[1.2rem] flex-col items-start flex-1">
-                                <h6 className="text-[2.0rem]">{account.login_id}</h6>
+                visibleAccounts.map((account, mappedIdx) => {
+                    const SELECTED = selectedAccountId === account.id;
 
-                                <div className="text-[var(--adaptive-black300)] text-[1.4rem]">
-                                    {account.name} <span className="mx-3">|</span> {account.role} <span className="mx-3">|</span>{" "}
-                                    {new Intl.DateTimeFormat("ko-KR").format(new Date(account.created_at))} 생성
-                                </div>
+                    return (
+                        <Fragment key={account.id}>
+                            <section className="flex items-center justify-between h-[9.2rem]">
+                                <UI.Button
+                                    className={`${SELECTED ? "text-[var(--adaptive-red500)]" : ""} flex flex-col justify-center items-start gap-[1.2rem] transition hover:bg-white h-full flex-1 pl-[5.2rem]`}
+                                    onClick={() => onSelectAccount(account)}
+                                    type="button"
+                                >
+                                    {SELECTED ? (
+                                        <Text.Shimmer
+                                            color={{
+                                                start: "#780B12",
+                                                end: "#FF6B75",
+                                            }}
+                                            duration={4}
+                                            className="text-[2.0rem]"
+                                        >
+                                            {account.login_id}
+                                        </Text.Shimmer>
+                                    ) : (
+                                        <h6 className="text-[2.0rem]">{account.login_id}</h6>
+                                    )}
+
+                                    <p className="text-[var(--adaptive-black500)] text-[1.4rem]">
+                                        {account.name} <span className="mx-3">|</span> {account.role} <span className="mx-3">|</span>{" "}
+                                        {new Intl.DateTimeFormat("ko-KR").format(new Date(account.created_at))} 생성
+                                    </p>
+                                </UI.Button>
+
+                                <UI.Button className="h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]">
+                                    <Image
+                                        src={"/images/icon/outlined/ico-outlined-trash.svg"}
+                                        alt=""
+                                        width={32}
+                                        height={32}
+                                    />
+
+                                    <p>삭제</p>
+                                </UI.Button>
                             </section>
 
-                            <section className="">
-                                <Image
-                                    src={"/images/icon/outlined/ico-outlined-trash.svg"}
-                                    alt=""
-                                    width={32}
-                                    height={32}
-                                />
-
-                                <p>삭제</p>
-                            </section>
-                        </UI.Button>
-
-                        {mappedIdx + 1 !== visibleAccounts.length ? <div className="h-[0.1rem] w-full bg-[var(--adaptive-grey300)]" /> : null}
-                    </Fragment>
-                ))
+                            {mappedIdx + 1 !== visibleAccounts.length ? <div className="h-[0.1rem] w-full bg-[var(--adaptive-grey200)]" /> : null}
+                        </Fragment>
+                    );
+                })
             ) : (
                 <p className="py-16 text-2xl font-[700] text-[var(--adaptiveGrey500)]">등록된 계정이 없습니다.</p>
             )}
+
             <AdminPagination
                 page={page}
                 totalPages={totalPages}

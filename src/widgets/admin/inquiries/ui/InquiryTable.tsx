@@ -30,54 +30,49 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
 
                         return (
                             <Fragment key={`${inquiry.name}-${inquiry.category}`}>
-                                <section className="flex items-center justify-between">
+                                <section className="flex items-center justify-between h-[9.2rem]">
                                     <UI.Button
-                                        className={`grid w-full grid-cols-[minmax(0,1fr)_13rem] items-center gap-6 py-8 text-left transition hover:bg-white max-[86rem]:grid-cols-1 `}
-                                        // key={`${inquiry.name}-${inquiry.category}`}
+                                        className={`${SELECTED ? "text-[var(--adaptive-red500)]" : ""} flex flex-col justify-center items-start gap-[1.2rem] transition hover:bg-white h-full flex-1 pl-[5.2rem]`}
                                         onClick={() => onSelectInquiry(inquiry)}
                                         type="button"
                                     >
-                                        <div className="flex flex-col gap-[0.8rem]">
-                                            {SELECTED ? (
-                                                <Text.Shimmer
-                                                    color={{
-                                                        start: "#780B12",
-                                                        end: "#FF6B75",
-                                                    }}
-                                                    duration={4}
-                                                    className="text-[2.0rem]"
-                                                >
-                                                    {inquiry.message}
-                                                </Text.Shimmer>
-                                            ) : (
-                                                <h6 className="text-[2.0rem]">{inquiry.message}</h6>
-                                            )}
+                                        {SELECTED ? (
+                                            <Text.Shimmer
+                                                color={{
+                                                    start: "#780B12",
+                                                    end: "#FF6B75",
+                                                }}
+                                                duration={4}
+                                                className="text-[2.0rem]"
+                                            >
+                                                {inquiry.message}
+                                            </Text.Shimmer>
+                                        ) : (
+                                            <h6 className="text-[2.0rem]">{inquiry.message}</h6>
+                                        )}
 
-                                            {/* <strong className="text-2xl font-[700] leading-[1.35]">{inquiry.message}</strong> */}
-                                            <section className="flex flex-wrap items-center gap-4 text-lg font-semibold text-black">
-                                                <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{inquiry.name}</p>
-                                                <p className="text-[var(--adaptive-black300)] text-[1.4rem]">|</p>
-                                                <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.created_at))}</p>
-                                                <p className="text-[var(--adaptive-black300)] text-[1.4rem]">~</p>
-                                                <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.updated_at))}</p>
-                                            </section>
+                                        <div className="flex flex-wrap items-center gap-4 text-lg font-semibold text-black">
+                                            <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{inquiry.name}</p>
+                                            <p className="text-[var(--adaptive-black300)] text-[1.4rem]">|</p>
+                                            <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.created_at))}</p>
+                                            <p className="text-[var(--adaptive-black300)] text-[1.4rem]">~</p>
+                                            <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.updated_at))}</p>
                                         </div>
                                     </UI.Button>
-                                    <section>
-                                        <UI.Button
-                                            // onClick={() => setDeleteTarget(modal)}
-                                            type="button"
-                                        >
-                                            <Image
-                                                src={"/images/icon/outlined/ico-outlined-trash.svg"}
-                                                alt=""
-                                                width={32}
-                                                height={32}
-                                            />
 
-                                            <p>삭제</p>
-                                        </UI.Button>
-                                    </section>
+                                    <UI.Button
+                                        className="h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
+                                        // onClick={() => setDeleteTarget(modal)}
+                                    >
+                                        <Image
+                                            src={"/images/icon/outlined/ico-outlined-trash.svg"}
+                                            alt=""
+                                            width={32}
+                                            height={32}
+                                        />
+
+                                        <p>삭제</p>
+                                    </UI.Button>
 
                                     {/* <select
                                         className="h-10 w-fit bg-black px-4 text-base font-[700] text-white"

@@ -1,9 +1,10 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, Fragment, useEffect, useState } from "react";
 import { useCreateManagerAccountMutation, useDeleteManagerAccountMutation, useUpdateManagerAccountMutation } from "@/entities/managerAccount/api/managerAccount.query";
 import type { ManagerAccount, ManagerAccountRole } from "@/entities/managerAccount/model/managerAccount.type";
 import { ConfirmDialog } from "@/widgets/admin/shared/AdminLayout";
+import UI from "@/shared/ui/UIComponent";
 
 type ManagerAccountSidebarProps = {
     account: ManagerAccount | null;
@@ -71,81 +72,86 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
     }
 
     return (
-        <aside className="sticky top-0 max-h-screen overflow-auto p-12">
-            <h2 className="mt-0 mb-12 text-4xl font-[700] text-black">{isCreateMode ? "관리자 계정 만들기" : "관리자 계정 편집"}</h2>
-            <form
-                className="grid gap-10"
-                onSubmit={(event) => {
-                    void handleSubmit(event);
-                }}
-            >
-                <label className={labelClassName}>
-                    이름
-                    <input
-                        className={inputClassName}
-                        onChange={(event) => setName(event.target.value)}
-                        placeholder="담당자 이름"
-                        required
-                        type="text"
-                        value={name}
-                    />
-                </label>
-                <label className={labelClassName}>
-                    권한
-                    <select
-                        className={inputClassName}
-                        onChange={(event) => setRole(event.target.value as ManagerAccountRole)}
-                        value={role}
-                    >
-                        {roles.map((item) => (
-                            <option
-                                key={item}
-                                value={item}
-                            >
-                                {item}
-                            </option>
-                        ))}
-                    </select>
-                </label>
-                <label className={labelClassName}>
-                    아이디
-                    <input
-                        className={inputClassName}
-                        onChange={(event) => setLoginId(event.target.value)}
-                        placeholder="login-id"
-                        required
-                        type="text"
-                        value={loginId}
-                    />
-                </label>
-                <label className={labelClassName}>
-                    비밀번호
-                    <input
-                        className={inputClassName}
-                        name="password"
-                        placeholder={isEditMode ? "변경 시에만 입력" : "비밀번호"}
-                        required={isCreateMode}
-                        type="password"
-                    />
-                </label>
-                <label className={labelClassName}>
-                    비밀번호 재입력
-                    <input
-                        className={inputClassName}
-                        name="passwordConfirm"
-                        placeholder={isEditMode ? "변경 시에만 입력" : "비밀번호 재입력"}
-                        required={isCreateMode}
-                        type="password"
-                    />
-                </label>
-                <button
-                    className="fixed right-0 bottom-0 min-h-16 w-[calc((100vw-24rem)*0.42)] bg-black px-4 text-xl font-[700] text-white disabled:bg-[var(--adaptiveGrey400)] max-[120rem]:static max-[120rem]:w-full"
+        <Fragment>
+            <aside>
+                <form
+                    className="grid gap-10"
+                    onSubmit={(event) => {
+                        void handleSubmit(event);
+                    }}
+                >
+                    <label className={labelClassName}>
+                        이름
+                        <input
+                            className={inputClassName}
+                            onChange={(event) => setName(event.target.value)}
+                            placeholder="담당자 이름"
+                            required
+                            type="text"
+                            value={name}
+                        />
+                    </label>
+                    <label className={labelClassName}>
+                        권한
+                        <select
+                            className={inputClassName}
+                            onChange={(event) => setRole(event.target.value as ManagerAccountRole)}
+                            value={role}
+                        >
+                            {roles.map((item) => (
+                                <option
+                                    key={item}
+                                    value={item}
+                                >
+                                    {item}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+                    <label className={labelClassName}>
+                        아이디
+                        <input
+                            className={inputClassName}
+                            onChange={(event) => setLoginId(event.target.value)}
+                            placeholder="login-id"
+                            required
+                            type="text"
+                            value={loginId}
+                        />
+                    </label>
+                    <label className={labelClassName}>
+                        비밀번호
+                        <input
+                            className={inputClassName}
+                            name="password"
+                            placeholder={isEditMode ? "변경 시에만 입력" : "비밀번호"}
+                            required={isCreateMode}
+                            type="password"
+                        />
+                    </label>
+                    <label className={labelClassName}>
+                        비밀번호 재입력
+                        <input
+                            className={inputClassName}
+                            name="passwordConfirm"
+                            placeholder={isEditMode ? "변경 시에만 입력" : "비밀번호 재입력"}
+                            required={isCreateMode}
+                            type="password"
+                        />
+                    </label>
+                </form>
+            </aside>
+
+            <section className="flex absolute bottom-0 left-0 w-full">
+                <UI.Button
+                    className="bg-black hover:bg-[var(--adaptive-blue500)] text-white w-full"
                     disabled={isPending}
                     type="submit"
                 >
                     {isPending ? "저장 중" : "등록하기"}
-                </button>
-                {isEditMode ? (
+                </UI.Button>
+
+                {/* {isEditMode ? (
                     <button
                         className="min-h-14 border border-[var(--adaptiveRed500)] text-lg font-[700] text-[var(--adaptiveRed500)]"
                         onClick={() => setConfirm("delete")}
@@ -153,8 +159,9 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                     >
                         삭제하기
                     </button>
-                ) : null}
-            </form>
+                ) : null} */}
+            </section>
+
             <ConfirmDialog
                 open={confirm === "create"}
                 title="입력하신 계정으로 생성할까요?"
@@ -185,6 +192,6 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                     setConfirm(null);
                 }}
             />
-        </aside>
+        </Fragment>
     );
 }

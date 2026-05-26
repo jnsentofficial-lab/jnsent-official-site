@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, Fragment, useEffect, useMemo, useState } from "react";
 import { useUploadImageMutation } from "@/entities/asset/api/asset.query";
 import { useUpsertNewsMutation } from "@/entities/news/api/news.query";
 import type { News } from "@/entities/news/model/news.type";
@@ -73,127 +73,131 @@ export function NewsEditor({ news }: NewsEditorProps) {
     }
 
     return (
-        <form
-            className={formClassName}
-            onSubmit={handleSubmit}
-        >
-            <label className={labelClassName}>
-                제목 <span className="text-[var(--adaptiveRed500)]">*</span>
-                <input
-                    className={inputClassName}
-                    onChange={(event) => {
-                        setTitle(event.target.value);
-                        if (!news) {
-                            setSlug(event.target.value.trim().toLowerCase().replace(/\s+/g, "-") || `news-${Date.now()}`);
-                        }
-                    }}
-                    placeholder="제목을 입력해주세요"
-                    required
-                    type="text"
-                    value={title}
-                />
-            </label>
-            <label className={labelClassName}>
-                slug
-                <input
-                    className={inputClassName}
-                    onChange={(event) => setSlug(event.target.value)}
-                    placeholder="notice"
-                    required
-                    type="text"
-                    value={slug}
-                />
-            </label>
-            <label className={labelClassName}>
-                요약
-                <input
-                    className={inputClassName}
-                    onChange={(event) => setSummary(event.target.value)}
-                    placeholder="목록에 표시할 요약"
-                    type="text"
-                    value={summary}
-                />
-            </label>
-            <section className="grid gap-4 border border-[var(--adaptiveGrey200)] bg-[var(--adaptiveGrey50)] p-5">
-                <div className="flex items-center justify-between gap-3">
-                    <strong className="text-xl font-[700] text-black">첨부된 이미지</strong>
-                    <span className="text-sm font-[700] text-[var(--adaptiveGrey600)]">
-                        {effectiveThumbnailUrl ? "선택한 이미지가 썸네일로 저장됩니다" : "본문 이미지가 없으면 썸네일 없이 저장됩니다"}
-                    </span>
-                </div>
-                {imageUrls.length ? (
-                    <div className="grid grid-cols-2 gap-3 max-[86rem]:grid-cols-1">
-                        {imageUrls.map((imageUrl, index) => (
-                            <UI.Button
-                                className={`${thumbnailButtonClassName} ${effectiveThumbnailUrl === imageUrl ? "border-black bg-white" : "border-[var(--adaptiveGrey200)] bg-white"}`}
-                                key={imageUrl}
-                                onClick={() => setSelectedThumbnailUrl(imageUrl)}
-                                type="button"
-                            >
-                                <img
-                                    alt={`첨부 이미지 ${index + 1}`}
-                                    className="h-28 w-full object-cover"
-                                    src={imageUrl}
-                                />
-                                <span className="text-base font-[700] text-black">
-                                    {index + 1}번째 이미지{effectiveThumbnailUrl === imageUrl ? " / 현재 썸네일" : ""}
-                                </span>
-                            </UI.Button>
-                        ))}
-                    </div>
-                ) : (
-                    <p className="m-0 text-base font-semibold text-[var(--adaptiveGrey600)]">본문 에디터에서 이미지를 업로드하면 이 영역에 썸네일 후보로 표시됩니다.</p>
-                )}
-            </section>
-
-            <label className={labelClassName}>
-                본문
-                <RichTextEditor
-                    value={body}
-                    onChange={setBody}
-                    onImageUpload={handleImageUpload}
-                    placeholder="NEWS 본문을 입력하세요."
-                />
-            </label>
-
-            <label className={labelClassName}>
-                SEO 제목
-                <input
-                    className={inputClassName}
-                    onChange={(event) => setSeoTitle(event.target.value)}
-                    placeholder="metadata title"
-                    type="text"
-                    value={seoTitle}
-                />
-            </label>
-
-            <label className={labelClassName}>
-                SEO 설명
-                <input
-                    className={inputClassName}
-                    onChange={(event) => setSeoDescription(event.target.value)}
-                    placeholder="metadata description"
-                    type="text"
-                    value={seoDescription}
-                />
-            </label>
-
-            {statusMessage ? (
-                <p
-                    className={statusClassName}
-                    role="status"
-                >
-                    {statusMessage}
-                </p>
-            ) : null}
-
-            <UI.Button
-                className={buttonClassName}
-                disabled={upsertNews.isPending}
-                type="submit"
+        <Fragment>
+            <form
+                className={formClassName}
+                onSubmit={handleSubmit}
             >
-                {upsertNews.isPending ? "저장 중" : news ? "수정하기" : "답변 등록하기"}
-            </UI.Button>
-        </form>
+                <label className={labelClassName}>
+                    제목 <span className="text-[var(--adaptiveRed500)]">*</span>
+                    <input
+                        className={inputClassName}
+                        onChange={(event) => {
+                            setTitle(event.target.value);
+                            if (!news) {
+                                setSlug(event.target.value.trim().toLowerCase().replace(/\s+/g, "-") || `news-${Date.now()}`);
+                            }
+                        }}
+                        placeholder="제목을 입력해주세요"
+                        required
+                        type="text"
+                        value={title}
+                    />
+                </label>
+                <label className={labelClassName}>
+                    slug
+                    <input
+                        className={inputClassName}
+                        onChange={(event) => setSlug(event.target.value)}
+                        placeholder="notice"
+                        required
+                        type="text"
+                        value={slug}
+                    />
+                </label>
+                <label className={labelClassName}>
+                    요약
+                    <input
+                        className={inputClassName}
+                        onChange={(event) => setSummary(event.target.value)}
+                        placeholder="목록에 표시할 요약"
+                        type="text"
+                        value={summary}
+                    />
+                </label>
+                <section className="grid gap-4 border border-[var(--adaptiveGrey200)] bg-[var(--adaptiveGrey50)] p-5">
+                    <div className="flex items-center justify-between gap-3">
+                        <strong className="text-xl font-[700] text-black">첨부된 이미지</strong>
+                        <span className="text-sm font-[700] text-[var(--adaptiveGrey600)]">
+                            {effectiveThumbnailUrl ? "선택한 이미지가 썸네일로 저장됩니다" : "본문 이미지가 없으면 썸네일 없이 저장됩니다"}
+                        </span>
+                    </div>
+                    {imageUrls.length ? (
+                        <div className="grid grid-cols-2 gap-3 max-[86rem]:grid-cols-1">
+                            {imageUrls.map((imageUrl, index) => (
+                                <UI.Button
+                                    className={`${thumbnailButtonClassName} ${effectiveThumbnailUrl === imageUrl ? "border-black bg-white" : "border-[var(--adaptiveGrey200)] bg-white"}`}
+                                    key={imageUrl}
+                                    onClick={() => setSelectedThumbnailUrl(imageUrl)}
+                                    type="button"
+                                >
+                                    <img
+                                        alt={`첨부 이미지 ${index + 1}`}
+                                        className="h-28 w-full object-cover"
+                                        src={imageUrl}
+                                    />
+                                    <span className="text-base font-[700] text-black">
+                                        {index + 1}번째 이미지{effectiveThumbnailUrl === imageUrl ? " / 현재 썸네일" : ""}
+                                    </span>
+                                </UI.Button>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="m-0 text-base font-semibold text-[var(--adaptiveGrey600)]">본문 에디터에서 이미지를 업로드하면 이 영역에 썸네일 후보로 표시됩니다.</p>
+                    )}
+                </section>
+
+                <label className={labelClassName}>
+                    본문
+                    <RichTextEditor
+                        value={body}
+                        onChange={setBody}
+                        onImageUpload={handleImageUpload}
+                        placeholder="NEWS 본문을 입력하세요."
+                    />
+                </label>
+
+                <label className={labelClassName}>
+                    SEO 제목
+                    <input
+                        className={inputClassName}
+                        onChange={(event) => setSeoTitle(event.target.value)}
+                        placeholder="metadata title"
+                        type="text"
+                        value={seoTitle}
+                    />
+                </label>
+
+                <label className={labelClassName}>
+                    SEO 설명
+                    <input
+                        className={inputClassName}
+                        onChange={(event) => setSeoDescription(event.target.value)}
+                        placeholder="metadata description"
+                        type="text"
+                        value={seoDescription}
+                    />
+                </label>
+
+                {statusMessage ? (
+                    <p
+                        className={statusClassName}
+                        role="status"
+                    >
+                        {statusMessage}
+                    </p>
+                ) : null}
+            </form>
+
+            <section className="flex absolute bottom-0 left-0 w-full">
+                <UI.Button
+                    className="bg-black hover:bg-[var(--adaptive-blue500)] text-white w-full"
+                    disabled={upsertNews.isPending}
+                    type="submit"
+                >
+                    {upsertNews.isPending ? "저장 중" : news ? "수정하기" : "답변 등록하기"}
+                </UI.Button>
+            </section>
+        </Fragment>
     );
 }

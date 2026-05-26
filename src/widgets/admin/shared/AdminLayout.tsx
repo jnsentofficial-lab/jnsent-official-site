@@ -56,10 +56,9 @@ export function AdminWorkspace({ children }: AdminWorkspaceProps) {
 
 export function AdminTwoPanel({ current, title, action, left, right }: AdminTwoPanelProps) {
     return (
-        // <div className="grid grid-cols-[minmax(0,1fr)_minmax(44rem,0.72fr)] gap-0 max-[120rem]:grid-cols-1">
-        <div className="grid grid-cols-2 h-full gap-[1.6rem]">
-            <section className="flex flex-col gap-[5.2rem] p-[5.2rem] h-[100dvh] overflow-auto">
-                <section className="flex justify-between items-center gap-[1.6rem]">
+        <div className="grid grid-cols-2 h-full">
+            <section className="flex flex-col h-[100dvh] overflow-auto">
+                <section className="flex justify-between items-center gap-[1.6rem] p-[5.2rem]">
                     <div className="flex flex-col gap-[1.6rem]">
                         <section className="flex items-center gap-[0.4rem]">
                             <h6 className="text-[1.8rem] font-[700] text-[var(--adaptive-black300)]">메인</h6>
@@ -83,8 +82,7 @@ export function AdminTwoPanel({ current, title, action, left, right }: AdminTwoP
                 {left}
             </section>
 
-            <aside className="bg-white h-[100dvh] overflow-auto">{right}</aside>
-            {/* <aside className="min-h-[calc(100vh-18rem)] bg-white pl-12 max-[120rem]:mt-10 max-[120rem]:pl-0">{right}</aside> */}
+            <aside className="bg-white h-[100dvh] overflow-auto relative">{right}</aside>
         </div>
     );
 }
@@ -136,11 +134,9 @@ export function AdminEmptyState({ message }: AdminEmptyStateProps) {
 
 export function AdminSidePanel({ title, description, children }: AdminSidePanelProps) {
     return (
-        <section className="flex flex-col gap-[2.4rem] p-[5.2rem]">
-            <div className="flex flex-col gap-[1.2rem]">
-                <h2 className="m-0 text-[3.2rem]">{title}</h2>
-                {description ? <p className="m-0 text-[1.8rem] font-[700] text-[var(--adaptive-grey500)]">{description}</p> : null}
-            </div>
+        <section className="flex flex-col gap-[5.2rem] p-[5.2rem]">
+            <h2 className="text-[3.2rem]">{title}</h2>
+
             {children}
         </section>
     );

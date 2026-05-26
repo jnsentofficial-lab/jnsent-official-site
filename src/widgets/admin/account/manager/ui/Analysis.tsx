@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useManagerAccountsQuery } from "@/entities/managerAccount/api/managerAccount.query";
 import type { ManagerAccount } from "@/entities/managerAccount/model/managerAccount.type";
 import UI from "@/shared/ui/UIComponent";
-import { AdminTwoPanel, AdminWorkspace } from "@/widgets/admin/shared/AdminLayout";
+import { AdminSidePanel, AdminTwoPanel, AdminWorkspace } from "@/widgets/admin/shared/AdminLayout";
 import { ManagerAccountList } from "@/widgets/admin/account/manager/ui/ManagerAccountList";
 import { ManagerAccountSidebar } from "@/widgets/admin/account/manager/ui/ManagerAccountSidebar";
 
@@ -48,14 +48,16 @@ export function Analysis() {
                     </>
                 }
                 right={
-                    <ManagerAccountSidebar
-                        account={selectedAccount}
-                        mode={sidebarMode}
-                        onSaved={(account) => {
-                            setSelectedAccount(account);
-                            setSidebarMode("edit");
-                        }}
-                    />
+                    <AdminSidePanel title={"생성하기"}>
+                        <ManagerAccountSidebar
+                            account={selectedAccount}
+                            mode={sidebarMode}
+                            onSaved={(account) => {
+                                setSelectedAccount(account);
+                                setSidebarMode("edit");
+                            }}
+                        />
+                    </AdminSidePanel>
                 }
             />
         </AdminWorkspace>
