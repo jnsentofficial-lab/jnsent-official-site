@@ -3,27 +3,38 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { ButtonProps, LinkProps } from "../model/ui-props";
-import LinkComponent from "next/link";
+import Link from "next/link";
 
-export const Link = ({
+// Size type and sizeHeights from Input.tsx
+type ButtonSize = "sm" | "md" | "lg" | "xlg";
+const sizeHeights: Record<ButtonSize, string> = {
+    sm: "3.2rem",
+    md: "5.2rem",
+    lg: "5.2rem",
+    xlg: "7.2rem",
+};
+
+export const Linker = ({
     children,
     className,
     type = "button",
-    href,
     defaultHover = false,
     disabled = false,
+    href,
     disabledMsg,
     rippleColor = "#ffffff",
     ref,
     ariaLabel = "button",
     desc_no,
     defaultValue,
+    size = "md",
     onClick,
     onHoverStart,
     onHoverEnd,
     onPointerDown,
     tooltip = [],
 }: LinkProps & {
+    size?: ButtonSize;
     tooltip?: {
         type: "active" | "disabled";
         msg: string;
@@ -49,79 +60,63 @@ export const Link = ({
         }
     };
 
+    const height = sizeHeights[size];
+
     return (
-        <motion.div
-            // type={type}
-            ref={ref}
-            // value={defaultValue ?? ""}
-            // onClick={(e) => {
-            //     if (disabled) {
-            //         return null;
-            //     }
+        <Link href={href}>
+            <motion.button
+                type={type}
+                ref={ref}
+                value={defaultValue ?? ""}
+                onClick={(e) => {
+                    if (disabled) {
+                        return null;
+                    }
 
-            //     if (onClick) onClick(e);
-            // }}
-            onPointerDown={onPointerDown}
-            onHoverStart={onHoverStart}
-            onHoverEnd={onHoverEnd}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            className={`${isHovered && message ? "" : "overflow-hidden"} w-[fit-content] h-[fit-content] relative transition-colors ${defaultHover ? "brightness-100 hover:brightness-50 transition-colors duration-200" : ""}`}
-            whileTap={{ scale: 0.95 }}
-            transition={{
-                type: "spring",
-                stiffness: 200,
-                damping: 10,
-                mass: 0.5,
-            }}
-            aria-label={ariaLabel}
-        >
-            {disabled ? (
-                <div className="opacity-50 w-full h-full flex justify-center items-center">{children}</div>
-            ) : (
-                <LinkComponent
-                    href={href}
-                    className={`${className} block`}
-                >
-                    {children}
-                </LinkComponent>
-            )}
+                    if (onClick) onClick(e);
+                }}
+                onPointerDown={onPointerDown}
+                onHoverStart={onHoverStart}
+                onHoverEnd={onHoverEnd}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className={`
+                    ${className}
+                    ${isHovered && message ? "" : "overflow-hidden"}
+                    relative transition-colors rounded-[1.2rem] cursor-pointer
+                    ${defaultHover ? "brightness-100 hover:brightness-50 transition-colors duration-200" : ""}
+                `}
+                style={{ minHeight: height }}
+                whileTap={{ scale: 0.95 }}
+                transition={{
+                    type: "spring",
+                    stiffness: 200,
+                    damping: 10,
+                    mass: 0.5,
+                }}
+                aria-label={ariaLabel}
+            >
+                {disabled ? <div className="opacity-50 w-[inherit] h-[inherit] flex justify-center items-center">{children}</div> : children}
 
-            <AnimatePresence mode="popLayout">
-                {isHovered && tooltip.length && message && (
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        className={`${getDirectionStyle(direction ?? "top")} flex items-center gap-[0.4rem] w-max pointer-events-none absolute left-1/2 z-20 mb-2 -translate-x-1/2 p-[0.8rem_1.2rem] rounded-[1.2rem] border border-[var(--color-gray-700)] bg-[var(--color-gray-800)] shadow-[0_1rem_2rem_0_#9da9ae50] whitespace-pre`}
-                        transition={{
-                            type: "spring",
-                            stiffness: 200,
-                            damping: 10,
-                            mass: 0.1,
-                        }}
-                    >
-                        <p>{message}</p>
-                        {/* <Icon
-                            type="filled-info"
-                            alt=""
-                            className="invert brightness-0 opacity-60"
-                            width={18}
-                        />
-                        <TextShimmer
-                            as="p"
-                            duration={4}
-                            color={{
-                                start: "#ffffff",
-                                end: "#ffffff70",
+                <AnimatePresence mode="popLayout">
+                    {isHovered && tooltip.length && message && (
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            className={`${getDirectionStyle(direction ?? "top")} flex items-center gap-[0.4rem] w-max pointer-events-none absolute left-1/2 z-20 mb-2 -translate-x-1/2 p-[0.8rem_1.2rem] rounded-[1.2rem] border border-[var(--color-gray-700)] bg-[var(--color-gray-800)] shadow-[0_1rem_2rem_0_#9da9ae50] whitespace-pre`}
+                            transition={{
+                                type: "spring",
+                                stiffness: 200,
+                                damping: 10,
+                                mass: 0.1,
                             }}
-                            className={`${align === "left" ? "text-left" : align === "right" ? "text-right" : "text-center"} text-[1.4rem] font-bold leading-[1.5]`}
                         >
-                            {message}
-                        </TextShimmer> */}
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </motion.div>
+                            <p>{message}</p>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.button>
+        </Link>
     );
 };

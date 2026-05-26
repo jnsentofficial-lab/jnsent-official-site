@@ -2,7 +2,7 @@
 
 import { useSectionTheme } from "@/shared/hooks";
 import useScrollProgress from "@/shared/hooks/useScrollProgress";
-import Text from "@/shared/ui/reveal";
+import { Text } from "@/shared/ui/kit/Text";
 import { motion } from "framer-motion";
 import { useRef } from "react";
 
@@ -20,7 +20,7 @@ export function TransparencyProof() {
 
     return (
         <section
-            className="relative flex h-[100dvh] items-center justify-center"
+            className="relative flex items-center justify-center mobile:min-h-[100dvh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[100dvh]"
             ref={sectionRef}
         >
             {/* <motion.div
@@ -35,7 +35,7 @@ export function TransparencyProof() {
                 className="absolute inset-0 pointer-events-none z-0"
             >
                 <motion.img
-                    className="w-full h-full object-cover opacity-55"
+                    className="w-full h-full object-cover"
                     src={"/images/landing/meeting.png"}
                     alt=""
                     style={{
@@ -46,15 +46,16 @@ export function TransparencyProof() {
                     //     translateY: progress,
                     // }}
                     initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 0.2 }}
+                    whileInView={{ opacity: 0.5 }}
                     viewport={{ amount: 0.1 }}
                     transition={{ delay: 0.5, duration: 0.7 }}
                 />
             </div>
 
-            <div className="relative z-[1] mx-auto w-[min(112rem,calc(100%_-_3.2rem))]">
-                <motion.div
-                    className="max-w-[70rem] flex flex-col gap-[3.2rem]"
+            {/* <div className="relative z-[1] mx-auto w-[min(112rem,calc(100%_-_3.2rem))]"> */}
+            <div className="relative z-[1] w-full">
+                <div
+                    className="mx-auto flex max-w-[var(--size-pc)] flex-col gap-[3.2rem]"
                     // initial={{ opacity: 0, y: 32 }}
                     // whileInView={{ opacity: 1, y: 0 }}
                     // viewport={{ once: true, amount: 0.25 }}
@@ -62,13 +63,15 @@ export function TransparencyProof() {
                 >
                     <Text.Reveal
                         as="h2"
-                        className="text-[3.8rem] leading-[1.5]"
+                        className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[700] leading-[1.5]"
                         initialColor="#00000000"
                         midColor="rgb(255, 92, 118)"
                         revealColor="rgb(255, 255, 255)"
                         revealWindow={0.5}
-                        // transition={2}
-                        delay={2}
+                        revealStartPosition={20}
+                        revealEndPosition={60}
+                        delay={1}
+                        transition={0}
                         align="left"
                     >
                         {`모든 데이터는 공개될 수 있을 때\n진짜가 됩니다.`}
@@ -79,10 +82,10 @@ export function TransparencyProof() {
                         <br />
                         초보 BJ분들도 안심하고 시작할 수 있는 투명한 환경을 약속드립니다.
                     </p>
-                </motion.div>
+                </div>
 
                 <div className="mt-24 grid gap-6 md:grid-cols-3">
-                    {proofCards.map((item, index) => (
+                    {/* {proofCards.map((item, index) => (
                         <section
                             key={item.title}
                             className="rounded-[3.2rem] overflow-hidden"
@@ -93,14 +96,14 @@ export function TransparencyProof() {
                                     <br />
                                     AREA
                                 </p>
-                                <h3 className="mt-7 mb-5 text-2xl font-black">{item.title}</h3>
+                                <h3 className="mt-7 mb-5 text-2xl font-[700]">{item.title}</h3>
                             </section>
 
                             <section className="bg-[var(--adaptive-blackOpacity300)] p-8 backdrop-blur-xl">
                                 <p className="m-0 text-base leading-[1.75] text-white/70">{item.text}</p>
                             </section>
                         </section>
-                    ))}
+                    ))} */}
                 </div>
             </div>
         </section>

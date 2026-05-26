@@ -1,14 +1,28 @@
 "use client";
 
+import Image from "next/image";
+
 export function SiteFooter() {
     return (
-        <footer className="bg-black py-16 text-white">
-            <div className="mx-auto grid w-[min(112rem,calc(100%_-_3.2rem))] grid-cols-2 gap-20 max-[86rem]:grid-cols-1">
+        <footer className="bg-black py-16 mobile:px-[1.6rem] pc:px-0 text-white">
+            {/* <div className="mx-auto grid w-[min(112rem,calc(100%_-_3.2rem))] grid-cols-2 gap-20 max-[86rem]:grid-cols-1"> */}
+            <div className="mx-auto grid max-w-[var(--size-pc)] grid-cols-2 gap-20 max-[86rem]:grid-cols-1">
                 <div>
-                    <strong className="block text-5xl font-black">JNS</strong>
-                    <p className="mt-5 mb-0 text-xl font-black leading-[1.4] text-white/45">JNS ENTERTAINMENT<br />제이엔에스엔터테인먼트</p>
+                    <Image
+                        src={"/images/common/ico-logo.svg"}
+                        width={72}
+                        height={72}
+                        alt=""
+                        className="invert"
+                        // className={`${isNowDarkMode ? "invert" : ""}`}
+                    />
+                    <p className="mt-5 mb-0 text-xl font-[700] leading-[1.5] text-white/45">
+                        JNS ENTERTAINMENT
+                        <br />
+                        제이엔에스엔터테인먼트
+                    </p>
                 </div>
-                <address className="not-italic text-base font-semibold leading-[1.9] text-white/55">
+                <address className="not-italic text-base font-semibold leading-[1.5] text-white/55">
                     <strong className="text-white/35">INFORMATION</strong>
                     <br />
                     제이엔에스 엔터테인먼트

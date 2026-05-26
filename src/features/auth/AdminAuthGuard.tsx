@@ -9,7 +9,7 @@ type AdminAuthGuardProps = {
 };
 
 const adminLoginPath = "/admin/login";
-const adminDashboardPath = "/admin/dashboard";
+const adminDefaultPath = "/admin/inquiries";
 
 export function AdminAuthGuard({ children }: AdminAuthGuardProps) {
     const pathname = usePathname();
@@ -35,9 +35,13 @@ export function AdminAuthGuard({ children }: AdminAuthGuardProps) {
         }
 
         if (isAdmin && isLoginPath) {
-            router.replace(adminDashboardPath);
+            router.replace(adminDefaultPath);
         }
     }, [data?.isAdmin, isAdminPath, isError, isLoading, isLoginPath, router]);
+
+    if (isAdminPath && !isLoginPath && isLoading) {
+        return <div className="flex min-h-[100dvh] items-center justify-center text-[1.6rem] font-[700] text-[var(--adaptive-grey500)]">관리자 정보를 불러오는 중입니다.</div>;
+    }
 
     return children;
 }

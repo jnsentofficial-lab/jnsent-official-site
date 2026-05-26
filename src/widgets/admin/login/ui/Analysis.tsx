@@ -1,12 +1,23 @@
 import { AdminLoginForm } from "@/features/auth/AdminLoginForm";
+import Image from "next/image";
 
 export function Analysis() {
     return (
         <section className="grid min-h-screen place-items-center bg-white px-6">
-            <div className="w-[min(38rem,100%)]">
-                <strong className="mb-5 block text-center text-6xl font-black leading-none text-black">JNS</strong>
-                <h1 className="m-0 text-center text-3xl font-black text-black">어드민 로그인</h1>
-                <p className="mt-6 mb-16 text-center text-lg font-semibold leading-[1.7] text-[var(--adaptiveGrey600)]">콘텐츠와 문의 관리를 위해 인증된 계정으로 로그인하세요.</p>
+            <div className="w-[min(38rem,100%)] flex flex-col gap-[5.2rem]">
+                <section className="flex flex-col gap-[1.6rem]">
+                    <Image
+                        src={"/images/common/ico-logo.svg"}
+                        width={42}
+                        height={42}
+                        alt=""
+                    />
+                    <section className="flex flex-col gap-[1.2rem]">
+                        <h1 className="text-[2.4rem]">어드민 로그인</h1>
+                        <p className="leading-[1.5] text-[var(--adaptive-black300)]">콘텐츠와 문의 관리를 위해 인증된 계정으로 로그인하세요.</p>
+                    </section>
+                </section>
+
                 <AdminLoginForm />
             </div>
         </section>

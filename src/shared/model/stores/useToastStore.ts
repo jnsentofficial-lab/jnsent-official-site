@@ -77,6 +77,15 @@ export const getToastIdForMessage = (msg: string): string => {
     return "msg_" + (hash >>> 0).toString(16);
 };
 
+const clearToastTimer = (id: string) => {
+    if (!intervalRefMap[id]) {
+        return;
+    }
+
+    clearInterval(intervalRefMap[id]);
+    delete intervalRefMap[id];
+};
+
 export const useToastStore = create<ToastStore>()(
     persist(
         (set, get) => ({
@@ -104,8 +113,7 @@ export const useToastStore = create<ToastStore>()(
                         get().stopTimer();
                         set({ time: 0 });
 
-                        clearInterval(intervalRefMap[id]);
-                        delete intervalRefMap[id];
+                        clearToastTimer(id);
 
                         set((state) => {
                             const newList = state.toastList.filter((e) => e.id !== id);
@@ -184,6 +192,8 @@ export const useToastStore = create<ToastStore>()(
                         qa,
                     };
 
+                    clearToastTimer(ID);
+
                     set((state) => {
                         // 최근 메시지 리스트 관리 (최대 10개, 가장 오래된 것 제거)
                         let updatedRecentMsgList = [...state.recentMsgList, msg];
@@ -191,7 +201,7 @@ export const useToastStore = create<ToastStore>()(
                             updatedRecentMsgList = updatedRecentMsgList.slice(updatedRecentMsgList.length - 10);
                         }
                         return {
-                            toastList: [...state.toastList, newItem],
+                            toastList: [...state.toastList.filter((item) => item.id !== ID), newItem],
                             recentMsgList: updatedRecentMsgList,
                         };
                     });
@@ -207,10 +217,7 @@ export const useToastStore = create<ToastStore>()(
             setStartTime: (args: number | null) => set(() => ({ startTime: args })),
 
             removeToastById: (id) => {
-                if (intervalRefMap[id]) {
-                    clearInterval(intervalRefMap[id]);
-                    delete intervalRefMap[id];
-                }
+                clearToastTimer(id);
                 set((state) => ({
                     toastList: state.toastList.filter((e) => e.id !== id),
                 }));

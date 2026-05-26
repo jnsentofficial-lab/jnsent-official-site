@@ -1,9 +1,8 @@
 "use client";
 
 import Image from "@tiptap/extension-image";
-import Link from "@tiptap/extension-link";
-import Underline from "@tiptap/extension-underline";
-import { EditorContent, useEditor } from "@tiptap/react";
+import { Placeholder } from "@tiptap/extensions/placeholder";
+import { EditorContent, useEditor, useEditorState } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import type { RichTextContent } from "@/shared/lib/richText/richText";
@@ -25,8 +24,15 @@ const toolbarButtons = [
     { label: "1.", action: "orderedList" },
 ] as const;
 
+const toolbarButtonClassName = "flex h-[3.2rem] w-[4.2rem] items-center justify-center rounded-[1.2rem] border text-[1.4rem] font-semibold transition-colors select-none";
+const toolbarButtonIdleClassName = "border-slate-200 bg-white text-slate-700 hover:bg-[var(--adaptive-grey100)]";
+const toolbarButtonActiveClassName = "border-blue-500 bg-blue-50 text-blue-700";
+const editorContentClassName =
+    "min-h-[18rem] bg-white text-base leading-[1.5] outline-none [&_.is-editor-empty:first-child::before]:pointer-events-none [&_.is-editor-empty:first-child::before]:float-left [&_.is-editor-empty:first-child::before]:h-0 [&_.is-editor-empty:first-child::before]:text-slate-400 [&_.is-editor-empty:first-child::before]:content-[attr(data-placeholder)] [&_a]:text-blue-700 [&_a]:underline [&_h2]:mb-3 [&_h2]:mt-5 [&_h2]:text-2xl [&_h2]:font-bold [&_h3]:mb-2 [&_h3]:mt-4 [&_h3]:text-xl [&_h3]:font-bold [&_ol]:list-decimal [&_ol]:pl-6 [&_ul]:list-disc [&_ul]:pl-6";
+
 export function RichTextEditor({ value = emptyRichTextContent, onChange, onImageUpload, placeholder = "본문을 입력하세요." }: RichTextEditorProps) {
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const lastSyncedValueRef = useRef(JSON.stringify(value));
     const [isUploading, setIsUploading] = useState(false);
     const editor = useEditor({
         extensions: [
@@ -34,12 +40,15 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
                 heading: {
                     levels: [2, 3],
                 },
+                link: {
+                    openOnClick: false,
+                    autolink: true,
+                    defaultProtocol: "https",
+                },
+                underline: {},
             }),
-            Underline,
-            Link.configure({
-                openOnClick: false,
-                autolink: true,
-                defaultProtocol: "https",
+            Placeholder.configure({
+                placeholder,
             }),
             Image.configure({
                 allowBase64: false,
@@ -48,15 +57,41 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
         ],
         content: value,
         immediatelyRender: false,
+        shouldRerenderOnTransaction: false,
         editorProps: {
             attributes: {
-                class: "min-h-[18rem] rounded-b-lg border border-t-0 border-slate-300 bg-white px-4 py-3 text-base leading-[1.8] outline-none [&_a]:text-blue-700 [&_a]:underline [&_h2]:mb-3 [&_h2]:mt-5 [&_h2]:text-2xl [&_h2]:font-bold [&_h3]:mb-2 [&_h3]:mt-4 [&_h3]:text-xl [&_h3]:font-bold [&_ol]:list-decimal [&_ol]:pl-6 [&_ul]:list-disc [&_ul]:pl-6",
+                class: editorContentClassName,
                 "data-placeholder": placeholder,
+            },
+            handleDOMEvents: {
+                mousedown: (_view, event) => {
+                    const target = event.target;
+
+                    if (!(target instanceof HTMLElement)) {
+                        return false;
+                    }
+
+                    return Boolean(target.closest("[data-rich-text-toolbar]"));
+                },
             },
         },
         onUpdate: ({ editor: currentEditor }) => {
-            onChange(currentEditor.getJSON());
+            const nextValue = currentEditor.getJSON();
+            lastSyncedValueRef.current = JSON.stringify(nextValue);
+            onChange(nextValue);
         },
+    });
+    const editorState = useEditorState({
+        editor,
+        selector: ({ editor: currentEditor }) => ({
+            isBold: currentEditor?.isActive("bold") ?? false,
+            isItalic: currentEditor?.isActive("italic") ?? false,
+            isUnderline: currentEditor?.isActive("underline") ?? false,
+            isHeading: currentEditor?.isActive("heading", { level: 2 }) ?? false,
+            isBulletList: currentEditor?.isActive("bulletList") ?? false,
+            isOrderedList: currentEditor?.isActive("orderedList") ?? false,
+            isLink: currentEditor?.isActive("link") ?? false,
+        }),
     });
 
     useEffect(() => {
@@ -64,13 +99,26 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
             return;
         }
 
-        const current = JSON.stringify(editor.getJSON());
         const next = JSON.stringify(value);
+        if (next === lastSyncedValueRef.current) {
+            return;
+        }
 
+        const current = JSON.stringify(editor.getJSON());
         if (current !== next) {
-            editor.commands.setContent(value);
+            editor.commands.setContent(value, { emitUpdate: false });
+            lastSyncedValueRef.current = next;
         }
     }, [editor, value]);
+
+    function runToolbarCommand(command: () => void) {
+        if (!editor) {
+            return;
+        }
+
+        command();
+        editor.commands.focus(undefined, { scrollIntoView: false });
+    }
 
     function setLink() {
         if (!editor) {
@@ -85,11 +133,11 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
         }
 
         if (!url.trim()) {
-            editor.chain().focus().unsetLink().run();
+            editor.chain().focus(undefined, { scrollIntoView: false }).unsetLink().run();
             return;
         }
 
-        editor.chain().focus().extendMarkRange("link").setLink({ href: url.trim() }).run();
+        editor.chain().focus(undefined, { scrollIntoView: false }).extendMarkRange("link").setLink({ href: url.trim() }).run();
     }
 
     async function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
@@ -104,7 +152,7 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
 
         try {
             const url = await onImageUpload(file);
-            editor.chain().focus().setImage({ src: url, alt: file.name }).run();
+            editor.chain().focus(undefined, { scrollIntoView: false }).setImage({ src: url, alt: file.name }).run();
         } finally {
             setIsUploading(false);
         }
@@ -112,18 +160,33 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
 
     return (
         <div>
-            <div className="flex flex-wrap gap-1 rounded-t-lg border border-slate-300 bg-slate-50 p-2">
+            <div
+                className="mb-[1.6rem] flex gap-[0.4rem]"
+                data-rich-text-toolbar
+            >
                 {toolbarButtons.map((button) => (
                     <button
-                        className={`min-h-9 rounded-md border px-3 text-sm font-bold ${editor?.isActive(button.action === "heading" ? "heading" : button.action, button.action === "heading" ? { level: 2 } : undefined) ? "border-blue-500 bg-blue-50 text-blue-700" : "border-slate-200 bg-white text-slate-700"}`}
+                        className={`${toolbarButtonClassName} ${
+                            (button.action === "bold" && editorState?.isBold) ||
+                            (button.action === "italic" && editorState?.isItalic) ||
+                            (button.action === "underline" && editorState?.isUnderline) ||
+                            (button.action === "heading" && editorState?.isHeading) ||
+                            (button.action === "bulletList" && editorState?.isBulletList) ||
+                            (button.action === "orderedList" && editorState?.isOrderedList)
+                                ? toolbarButtonActiveClassName
+                                : toolbarButtonIdleClassName
+                        }`}
                         key={button.action}
-                        onClick={() => {
-                            if (button.action === "bold") editor?.chain().focus().toggleBold().run();
-                            if (button.action === "italic") editor?.chain().focus().toggleItalic().run();
-                            if (button.action === "underline") editor?.chain().focus().toggleUnderline().run();
-                            if (button.action === "heading") editor?.chain().focus().toggleHeading({ level: 2 }).run();
-                            if (button.action === "bulletList") editor?.chain().focus().toggleBulletList().run();
-                            if (button.action === "orderedList") editor?.chain().focus().toggleOrderedList().run();
+                        onPointerDown={(event) => {
+                            event.preventDefault();
+                            runToolbarCommand(() => {
+                                if (button.action === "bold") editor?.chain().toggleBold().run();
+                                if (button.action === "italic") editor?.chain().toggleItalic().run();
+                                if (button.action === "underline") editor?.chain().toggleUnderline().run();
+                                if (button.action === "heading") editor?.chain().toggleHeading({ level: 2 }).run();
+                                if (button.action === "bulletList") editor?.chain().toggleBulletList().run();
+                                if (button.action === "orderedList") editor?.chain().toggleOrderedList().run();
+                            });
                         }}
                         type="button"
                     >
@@ -131,16 +194,22 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
                     </button>
                 ))}
                 <button
-                    className={`min-h-9 rounded-md border px-3 text-sm font-bold ${editor?.isActive("link") ? "border-blue-500 bg-blue-50 text-blue-700" : "border-slate-200 bg-white text-slate-700"}`}
-                    onClick={setLink}
+                    className={`${toolbarButtonClassName} ${editorState?.isLink ? toolbarButtonActiveClassName : toolbarButtonIdleClassName}`}
+                    onPointerDown={(event) => {
+                        event.preventDefault();
+                        setLink();
+                    }}
                     type="button"
                 >
                     Link
                 </button>
                 <button
-                    className="min-h-9 rounded-md border border-slate-200 bg-white px-3 text-sm font-bold text-slate-700 disabled:bg-slate-100 disabled:text-slate-400"
+                    className={`${toolbarButtonClassName} ${toolbarButtonIdleClassName} disabled:bg-slate-100 disabled:text-slate-400`}
                     disabled={!onImageUpload || isUploading}
-                    onClick={() => fileInputRef.current?.click()}
+                    onPointerDown={(event) => {
+                        event.preventDefault();
+                        fileInputRef.current?.click();
+                    }}
                     type="button"
                 >
                     {isUploading ? "업로드 중" : "Image"}
@@ -155,13 +224,19 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
                     type="file"
                 />
                 <button
-                    className="min-h-9 rounded-md border border-slate-200 bg-white px-3 text-sm font-bold text-slate-700"
-                    onClick={() => editor?.chain().focus().setParagraph().run()}
+                    className={`${toolbarButtonClassName} ${toolbarButtonIdleClassName}`}
+                    onPointerDown={(event) => {
+                        event.preventDefault();
+                        runToolbarCommand(() => {
+                            editor?.chain().setParagraph().run();
+                        });
+                    }}
                     type="button"
                 >
                     P
                 </button>
             </div>
+
             <EditorContent editor={editor} />
         </div>
     );

@@ -58,8 +58,8 @@ export interface LinkProps {
     defaultValue?: any;
     type?: "button" | "reset" | "submit";
     disabled?: boolean;
-    href: string;
     disabledMsg?: string;
+    href: string;
     ref?: any;
     ariaLabel?: string;
     defaultHover?: boolean;

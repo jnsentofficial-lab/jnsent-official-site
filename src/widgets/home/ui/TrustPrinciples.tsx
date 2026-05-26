@@ -1,7 +1,7 @@
 "use client";
 
 import { useSectionTheme } from "@/shared/hooks";
-import Text from "@/shared/ui/reveal";
+import { Text } from "@/shared/ui/kit/Text";
 import { motion } from "framer-motion";
 import { useRef } from "react";
 
@@ -29,24 +29,22 @@ export function TrustPrinciples() {
                     viewport={{ once: true, amount: 0.25 }}
                     whileInView={{ opacity: 1, y: 0 }}
                 >
-                    {/* <h2 className="m-0 text-5xl font-black leading-[1.3] text-black max-[86rem]:text-4xl">
-                        투명한 인터넷 방송 생태계를 위한,
-                        <br />
-                        제이엔에스가 지키는 단호한 <span className="text-[#ff6673]">원칙</span>
-                    </h2> */}
                     <Text.Reveal
                         as="h2"
-                        className="text-[3.8rem] leading-[1.5]"
+                        className="text-[3.8rem] font-black leading-[1.5]"
                         initialColor="#00000000"
                         midColor="rgb(255, 92, 118)"
                         revealColor="rgb(0, 0, 0)"
                         revealWindow={0.5}
                         align="left"
-                        // transition={2}
+                        revealStartPosition={20}
+                        revealEndPosition={60}
                         delay={2}
+                        transition={0}
                     >
                         {`투명한 인터넷 방송 생태계를 위한,\n제이엔에스가 지키는 단호한 원칙`}
                     </Text.Reveal>
+
                     <div className="mt-12 grid max-w-[56rem] gap-5">
                         {principleItems.map((item) => (
                             <article

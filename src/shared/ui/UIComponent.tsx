@@ -1,8 +1,11 @@
 "use client";
 
 import { Button } from "./kit/Button";
-import { Link } from "./kit/Link";
+import Checkbox from "./kit/Checkbox";
+import Input from "./kit/Input";
+import { Linker } from "./kit/Link";
 import Skeleton from "./kit/Skeleton";
+import TextArea from "./kit/TextArea";
 
 // import { buildAppUi } from "./buildAppUi";
 
@@ -13,7 +16,10 @@ import Skeleton from "./kit/Skeleton";
 const KIT = {
     Skeleton,
     Button,
-    Link,
+    Input,
+    Checkbox,
+    TextArea,
+    Linker,
 };
 
 const COMPOSED = {};

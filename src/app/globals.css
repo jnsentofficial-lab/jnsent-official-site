@@ -166,7 +166,8 @@
 [data-theme="dark"],
 [data-wts-theme="dark"] {
     --adaptive-text: #ffffff;
-    --adaptive-background: #17171c;
+    --adaptive-background: #000000;
+    /* --adaptive-background: #17171c; */
     --adaptive-layeredBackground: #202027;
     --adaptive-floatBackground: #2c2c35;
     --adaptive-tableBackground: #1c1c22;
@@ -301,7 +302,7 @@
 :root {
     --size-pc-full-hd: 192rem;
     --size-pc-wide: 144rem;
-    --size-pc: 102.4rem;
+    --size-pc: 144rem;
     --size-tablet: 76.8rem;
     --size-phablet: 51.2rem;
     --size-mobile: 37.6rem;
@@ -315,7 +316,7 @@
 }
 
 html {
-    line-height: 1.25 !important; /* 1 */
+    line-height: 1 !important; /* 1 */
     -webkit-text-size-adjust: 100% !important; /* 2 */
     transition: background-color 0.25s cubic-bezier(0.42, 0, 0.58, 1); /* ease-in-out */
 }
