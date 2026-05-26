@@ -9,6 +9,12 @@ export async function createInquiryFetch(payload: CreateInquiryPayload) {
         category: payload.category,
         message: payload.message,
         message_body: payload.message_body,
+        gender: payload.gender,
+        age: payload.age,
+        region: payload.region,
+        available_time: payload.available_time,
+        support_label: payload.support_label,
+        source: payload.source,
     });
 }
 

@@ -15,7 +15,7 @@ export function BroadcastEnvironment() {
             <div className="flex flex-col items-end justify-center gap-[5.2rem] text-center w-[calc(50dvw-9.2rem)] h-full mr-auto">
                 <Text.Reveal
                     as="h2"
-                    className="max-w-[92rem] text-[3.8rem] leading-[1.5] max-[64rem]:text-5xl max-[48rem]:text-4xl"
+                    className="text-[3.8rem] font-black leading-[1.5]"
                     initialColor="#ffffff00"
                     revealColor="#000000"
                     highlightColor="#FF6B75"
@@ -24,6 +24,7 @@ export function BroadcastEnvironment() {
                     revealEndPosition={60}
                     align="right"
                     delay={2}
+                    transition={0}
                 >
                     {`최상의 결과는\n최상의 환경에서 시작됩니다`}
                 </Text.Reveal>

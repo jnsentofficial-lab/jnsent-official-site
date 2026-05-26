@@ -50,7 +50,8 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
         immediatelyRender: false,
         editorProps: {
             attributes: {
-                class: "min-h-[18rem] rounded-b-lg border border-t-0 border-slate-300 bg-white px-4 py-3 text-base leading-[1.8] outline-none [&_a]:text-blue-700 [&_a]:underline [&_h2]:mb-3 [&_h2]:mt-5 [&_h2]:text-2xl [&_h2]:font-bold [&_h3]:mb-2 [&_h3]:mt-4 [&_h3]:text-xl [&_h3]:font-bold [&_ol]:list-decimal [&_ol]:pl-6 [&_ul]:list-disc [&_ul]:pl-6",
+                // class: "min-h-[18rem]",
+                class: "min-h-[18rem] bg-white text-base leading-[1.5] outline-none [&_a]:text-blue-700 [&_a]:underline [&_h2]:mb-3 [&_h2]:mt-5 [&_h2]:text-2xl [&_h2]:font-bold [&_h3]:mb-2 [&_h3]:mt-4 [&_h3]:text-xl [&_h3]:font-bold [&_ol]:list-decimal [&_ol]:pl-6 [&_ul]:list-disc [&_ul]:pl-6",
                 "data-placeholder": placeholder,
             },
         },
@@ -112,7 +113,8 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
 
     return (
         <div>
-            <div className="flex flex-wrap gap-1 rounded-t-lg border border-slate-300 bg-slate-50 p-2">
+            {/* <div className="flex flex-wrap gap-1 rounded-t-lg border border-slate-300 bg-slate-50 p-2"> */}
+            <div className="">
                 {toolbarButtons.map((button) => (
                     <button
                         className={`min-h-9 rounded-md border px-3 text-sm font-bold ${editor?.isActive(button.action === "heading" ? "heading" : button.action, button.action === "heading" ? { level: 2 } : undefined) ? "border-blue-500 bg-blue-50 text-blue-700" : "border-slate-200 bg-white text-slate-700"}`}

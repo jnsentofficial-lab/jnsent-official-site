@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useId } from "react";
 
 interface TextShimmerProps {
     children: string;
@@ -23,10 +23,9 @@ export const Shimmer = ({
     },
     duration = 2,
 }: TextShimmerProps) => {
-    const uniqueIdRef = useRef<string>("text-shimmer-" + Math.random().toString(36).substring(2, 10));
+    const shimmerName = `text-shimmer-${useId().replace(/:/g, "")}`;
 
     useEffect(() => {
-        const shimmerName = uniqueIdRef.current;
         const prev = document.getElementById(shimmerName);
         if (prev) prev.remove();
 
@@ -61,7 +60,7 @@ export const Shimmer = ({
                 backgroundSize: "400% 100%",
                 backgroundRepeat: "repeat",
                 backgroundPosition: "0% 0%",
-                animation: `${uniqueIdRef.current} ${duration}s linear infinite`,
+                animation: `${shimmerName} ${duration}s linear infinite`,
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
             }}

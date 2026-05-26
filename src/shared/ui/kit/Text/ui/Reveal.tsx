@@ -1,8 +1,8 @@
-import type { MotionValue } from "motion/react";
 import type { ReactNode } from "react";
-import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { animate, motion, useAnimationFrame, useMotionTemplate, useMotionValue, useScroll, useTransform, useVelocity } from "motion/react";
-import { util } from "@/shared/utils/util";
+import type { MotionValue } from "motion/react";
+
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { animate, motion, useMotionTemplate, useMotionValue, useScroll, useTransform } from "motion/react";
 
 type TextElement = "h1" | "h2" | "h3" | "p" | "span";
 
@@ -189,7 +189,7 @@ function LineOverlay({ highlightColor, subHighlightColor, index, line, progress,
     return (
         <span
             aria-hidden="true"
-            className="pointer-events-none absolute block whitespace-pre"
+            className="pointer-events-none absolute block whitespace-pre font-[NanumSquare]"
             style={{
                 height: line.height,
                 left: line.left - softness,
@@ -250,13 +250,14 @@ export function Reveal({
     revealStartPosition = 0,
     revealEndPosition = 50,
     softness = 22,
-    transition = delay,
+    transition,
     interaction = true,
     onRevealComplete,
 }: RevealTextProps) {
     const targetRef = useRef<HTMLElement | null>(null);
     const baseRef = useRef<HTMLSpanElement | null>(null);
     const [lines, setLines] = useState<Line[]>([]);
+    const resolvedTransition = transition ?? delay;
     const scrollOffset = useMemo(
         () => [`start ${100 - revealStartPosition}%`, `center ${100 - revealEndPosition}%`] as [`start ${number}%`, `center ${number}%`],
         [revealEndPosition, revealStartPosition],
@@ -265,9 +266,9 @@ export function Reveal({
         target: targetRef,
         offset: scrollOffset,
     });
-    const autoProgress = useAutoRevealProgress(interaction, scrollYProgress, transition, delay, children);
+    const autoProgress = useAutoRevealProgress(interaction, scrollYProgress, resolvedTransition, delay, children);
     const rawProgress = interaction ? scrollYProgress : autoProgress;
-    const transitionProgress = useTransitionProgress(rawProgress, interaction ? transition : 0);
+    const transitionProgress = useTransitionProgress(rawProgress, 0);
     const Tag = as;
     const completeRef = useRef(false);
     const resolvedHighlightColor = highlightColor ?? midColor;

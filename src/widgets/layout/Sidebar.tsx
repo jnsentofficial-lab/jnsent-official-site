@@ -11,7 +11,8 @@ export function Sidebar() {
     }
 
     return (
-        <div className="fixed top-0 left-0 z-40 h-screen w-[24rem] max-[86rem]:static max-[86rem]:h-auto max-[86rem]:w-full">
+        <div className="fixed top-0 left-0 h-[100dvh]">
+            {/* <div className="fixed top-0 left-0 z-40 h-screen w-[24rem] max-[86rem]:static max-[86rem]:h-auto max-[86rem]:w-full"> */}
             <AdminSidebar />
         </div>
     );

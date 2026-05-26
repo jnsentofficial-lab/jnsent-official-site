@@ -7,7 +7,6 @@ export default function Panel() {
     return (
         <HomePageProvider>
             <HomeLayer.Floating />
-            {/* <HomeLayer.Landing /> */}
             <HomeLayer.HeroIntro />
             <HomeLayer.TransparencyProof />
             <HomeLayer.RecordGraph />

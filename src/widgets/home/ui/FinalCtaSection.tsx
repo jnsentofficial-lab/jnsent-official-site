@@ -46,7 +46,7 @@ export function FinalCtaSection() {
             >
                 <Text.Reveal
                     as="h2"
-                    className="text-[3.8rem] leading-[1.5]"
+                    className="text-[3.8rem] font-black leading-[1.5]"
                     initialColor="#00000000"
                     midColor="rgb(255, 92, 118)"
                     revealColor="rgb(255, 255, 255)"
@@ -55,6 +55,7 @@ export function FinalCtaSection() {
                     revealStartPosition={20}
                     revealEndPosition={60}
                     delay={2}
+                    transition={0}
                 >
                     {`제이엔에스와 함께\n신뢰할 수 있는 미래를 만들어보세요`}
                 </Text.Reveal>

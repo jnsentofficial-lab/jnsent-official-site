@@ -6,7 +6,7 @@ import * as AdminLoginLayer from "@/widgets/admin/login/ui";
 export default function Panel() {
     return (
         <AdminLoginPageProvider>
-            <AdminLoginLayer.Title />
+            {/* <AdminLoginLayer.Title /> */}
             <AdminLoginLayer.Analysis />
         </AdminLoginPageProvider>
     );

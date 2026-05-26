@@ -62,7 +62,7 @@ export function TransparencyProof() {
                 >
                     <Text.Reveal
                         as="h2"
-                        className="text-[3.8rem] leading-[1.5]"
+                        className="text-[3.8rem] font-black leading-[1.5]"
                         initialColor="#00000000"
                         midColor="rgb(255, 92, 118)"
                         revealColor="rgb(255, 255, 255)"
@@ -70,6 +70,7 @@ export function TransparencyProof() {
                         revealStartPosition={20}
                         revealEndPosition={60}
                         delay={1}
+                        transition={0}
                         align="left"
                     >
                         {`모든 데이터는 공개될 수 있을 때\n진짜가 됩니다.`}
@@ -83,7 +84,7 @@ export function TransparencyProof() {
                 </div>
 
                 <div className="mt-24 grid gap-6 md:grid-cols-3">
-                    {proofCards.map((item, index) => (
+                    {/* {proofCards.map((item, index) => (
                         <section
                             key={item.title}
                             className="rounded-[3.2rem] overflow-hidden"
@@ -101,7 +102,7 @@ export function TransparencyProof() {
                                 <p className="m-0 text-base leading-[1.75] text-white/70">{item.text}</p>
                             </section>
                         </section>
-                    ))}
+                    ))} */}
                 </div>
             </div>
         </section>

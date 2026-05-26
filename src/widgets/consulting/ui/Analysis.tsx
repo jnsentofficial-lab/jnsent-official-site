@@ -1,8 +1,8 @@
 "use client";
 
-import { usePublishedPageContentQuery } from "@/entities/pageContent/api/pageContent.query";
-import Skeleton from "@/shared/ui/kit/Skeleton";
 import { InfoCard, InquiryRequestForm, SubPageHero, SubPageSplit } from "@/widgets/layout/ui";
+import { DottedItem, SubPageSection } from "@/widgets/layout/ui/SubPageLayout";
+import { ReactNode } from "react";
 
 const consultingAreas = [
     {
@@ -19,41 +19,43 @@ const consultingAreas = [
     },
 ];
 
-const phases = ["진단", "설계", "실행 계획", "운영 점검"];
-
 export function Analysis() {
-    // const { data: content, isLoading } = usePublishedPageContentQuery("consulting");
-
     return (
         <section>
             <SubPageHero
                 current="엔터창업"
                 title={"엔터창업"}
-                description={"라이브 콘텐츠 및 BJ 매니지먼트 운영 경험을 바탕으로 엔터테인먼트 및 방송 관련 창업 컨설팅을 진행하고 있습니다."}
-                // title={content?.title ?? "엔터창업"}
-                // description={content?.description ?? "라이브 콘텐츠 및 BJ 매니지먼트 운영 경험을 바탕으로 엔터테인먼트 및 방송 관련 창업 컨설팅을 진행하고 있습니다."}
+                description={"라이브 콘텐츠 및 BJ 매니지먼트 운영 경험을 바탕으로\n엔터테인먼트 및 방송 관련 창업 컨설팅을 진행하고 있습니다."}
             />
+
             <SubPageSplit
                 left={
-                    <div className="grid gap-8">
-                        <h2 className="m-0 text-3xl font-black text-black">컨설팅 분야</h2>
-                        {consultingAreas.map((area) => (
-                            <InfoCard
-                                key={area.title}
-                                title={area.title}
-                            >
-                                {area.description}
-                            </InfoCard>
-                        ))}
-                        <div className="pt-10">
-                            <h2 className="mb-6 text-3xl font-black text-black">이런 분들께 추천드립니다</h2>
-                            <ul className="m-0 grid gap-2 pl-5 text-lg font-semibold leading-[1.8] text-black">
-                                <li>엔터테인먼트 사업을 처음 시작하시는 분</li>
-                                <li>방송 스튜디오 운영을 준비 중이신 분</li>
-                                <li>BJ 매니지먼트 운영 방향이 필요한 분</li>
-                                <li>실제 운영 경험 기반의 현실적인 조언이 필요한 분</li>
-                            </ul>
-                        </div>
+                    <div className="flex flex-col gap-[9.2rem]">
+                        <SubPageSection title={"컨설팅 분야"}>
+                            <div className="flex flex-col gap-[1.6rem]">
+                                {consultingAreas.map((area) => (
+                                    <section
+                                        key={area.title}
+                                        className="rounded-[2.4rem] bg-[var(--adaptive-black50)] p-[1.2rem_2.4rem] flex flex-col gap-[0.4rem]"
+                                    >
+                                        <h3 className="text-[1.8rem] font-[700] text-black">{area.title}</h3>
+                                        <div className="text-[1.6rem] leading-[1.5] text-[var(--adaptive-black300)]">{area.description}</div>
+                                    </section>
+                                ))}
+                            </div>
+                        </SubPageSection>
+
+                        <SubPageSection title={"이런 분들께 추천드립니다"}>
+                            {/* <div className="m-0 grid gap-2 pl-5 text-lg font-semibold leading-[1.8] text-black"> */}
+                            <div className="flex flex-col gap-[0.8rem]">
+                                <DottedItem>엔터테인먼트 사업을 처음 시작하시는 분</DottedItem>
+                                <DottedItem>방송 스튜디오 운영을 준비 중이신 분</DottedItem>
+                                <DottedItem>BJ 매니지먼트 운영 방향이 필요한 분</DottedItem>
+                                <DottedItem>실제 운영 경험 기반의 현실적인 조언이 필요한 분</DottedItem>
+                            </div>
+                        </SubPageSection>
+
+                        <SubPageSection title={`제이엔에스엔터테인먼트는\n실제 라이브 콘텐츠 운영 경험을 기반으로\n\n보다 안정적이고\n효율적인 운영 방향을 함께 고민합니다.`} />
                     </div>
                 }
                 right={

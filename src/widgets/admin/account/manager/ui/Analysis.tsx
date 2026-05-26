@@ -19,7 +19,7 @@ export function Analysis() {
         <AdminWorkspace
             current="관리자 계정 관리"
             title="관리자 계정 관리"
-            action={(
+            action={
                 <UI.Button
                     className="min-h-14 bg-black px-6 text-lg font-black text-white"
                     onClick={() => {
@@ -30,26 +30,39 @@ export function Analysis() {
                 >
                     + 관리자 계정 만들기
                 </UI.Button>
-            )}
+            }
         >
             <AdminTwoPanel
-                left={(
-                    <>
-                {isLoading ? (
-                    <p className="m-0 text-2xl font-black text-[var(--adaptiveGrey500)]">계정을 불러오는 중입니다.</p>
-                ) : (
-                    <ManagerAccountList
-                        accounts={accounts}
-                        selectedAccountId={selectedAccount?.id}
-                        onSelectAccount={(account) => {
-                            setSelectedAccount(account);
-                            setSidebarMode("edit");
+                current="관리자 계정 관리"
+                title="관리자 계정 관리"
+                action={
+                    <UI.Button
+                        onClick={() => {
+                            setSelectedAccount(null);
+                            setSidebarMode("create");
                         }}
-                    />
-                )}
+                        type="button"
+                    >
+                        + 관리자 계정 만들기
+                    </UI.Button>
+                }
+                left={
+                    <>
+                        {isLoading ? (
+                            <p className="m-0 text-2xl font-black text-[var(--adaptiveGrey500)]">계정을 불러오는 중입니다.</p>
+                        ) : (
+                            <ManagerAccountList
+                                accounts={accounts}
+                                selectedAccountId={selectedAccount?.id}
+                                onSelectAccount={(account) => {
+                                    setSelectedAccount(account);
+                                    setSidebarMode("edit");
+                                }}
+                            />
+                        )}
                     </>
-                )}
-                right={(
+                }
+                right={
                     <ManagerAccountSidebar
                         account={selectedAccount}
                         mode={sidebarMode}
@@ -58,7 +71,7 @@ export function Analysis() {
                             setSidebarMode("edit");
                         }}
                     />
-                )}
+                }
             />
         </AdminWorkspace>
     );

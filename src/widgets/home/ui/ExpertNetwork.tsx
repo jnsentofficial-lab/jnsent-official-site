@@ -27,7 +27,7 @@ export function ExpertNetwork() {
             <div className="mx-auto w-[min(112rem,calc(100%_-_3.2rem))] text-center">
                 <Text.Reveal
                     as="h2"
-                    className="text-[3.8rem] leading-[1.5]"
+                    className="text-[3.8rem] font-black leading-[1.5]"
                     initialColor="#00000000"
                     midColor="rgb(255, 92, 118)"
                     revealColor="rgb(0, 0, 0)"
@@ -36,9 +36,11 @@ export function ExpertNetwork() {
                     revealStartPosition={20}
                     revealEndPosition={60}
                     delay={2}
+                    transition={0}
                 >
                     {`성장을 위한\n모든 분야의 전문가들이 함께합니다.`}
                 </Text.Reveal>
+
                 <div className="mt-16 grid gap-5 md:grid-cols-3 xl:grid-cols-6">
                     {experts.map((item, index) => (
                         <motion.article

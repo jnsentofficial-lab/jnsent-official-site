@@ -98,6 +98,12 @@ export type Database = {
                     category: string;
                     message: string;
                     message_body: Json | null;
+                    gender: string | null;
+                    age: string | null;
+                    region: string | null;
+                    available_time: string | null;
+                    support_label: string | null;
+                    source: string;
                     status: "new" | "in_progress" | "done" | "spam";
                     created_at: string;
                     updated_at: string;
@@ -110,6 +116,12 @@ export type Database = {
                     category: string;
                     message: string;
                     message_body?: Json | null;
+                    gender?: string | null;
+                    age?: string | null;
+                    region?: string | null;
+                    available_time?: string | null;
+                    support_label?: string | null;
+                    source?: string;
                     status?: "new" | "in_progress" | "done" | "spam";
                     created_at?: string;
                     updated_at?: string;

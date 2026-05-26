@@ -92,6 +92,7 @@ export function GlobalModalLayer() {
                     title={modal.title}
                     description={modal.content}
                     open
+                    placement={{ col: modal.col, row: modal.row }}
                     onClose={() => closeModal(modal)}
                     className="max-w-[min(42rem,calc(100vw-3.2rem))]"
                     actions={[

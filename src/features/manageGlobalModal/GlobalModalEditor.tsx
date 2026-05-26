@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { useUploadImageMutation } from "@/entities/asset/api/asset.query";
 import { useCreateGlobalModalMutation, useUpdateGlobalModalMutation } from "@/entities/globalModal/api/globalModal.query";
 import type { GlobalModal } from "@/entities/globalModal/model/globalModal.type";
@@ -15,12 +15,13 @@ const positions = Array.from({ length: 9 }, (_, index) => ({
     col: (index % 3) + 1,
     row: Math.floor(index / 3) + 1,
 }));
-const formClassName = "grid gap-3.5";
-const labelClassName = "grid gap-2 font-bold text-slate-800";
-const inputClassName = "min-h-11 rounded-lg border border-slate-300 px-3.5";
+const formClassName = "flex flex-col gap-[2.4rem]";
+const labelClassName = "flex flex-col gap-[0.8rem] font-[NanumSquare]";
+const inputClassName = "h-[5.2rem] border border-[var(--adaptive-grey200)] hover:border-[var(--adaptive-grey700)] px-4 text-lg font-semibold";
 const textareaClassName = "min-h-[13.2rem] resize-y rounded-lg border border-slate-300 px-3.5 py-3";
 const statusClassName = "m-0 text-sm font-bold text-green-700";
 const buttonClassName = "min-h-11 rounded-lg bg-blue-500 font-bold text-white";
+const previewButtonClassName = "grid gap-3 rounded-lg border border-[var(--adaptive-grey200)] bg-white p-3 text-left";
 
 function toIsoDateTime(value: FormDataEntryValue | null) {
     const text = String(value ?? "").trim();
@@ -34,6 +35,7 @@ type GlobalModalEditorProps = {
 };
 
 export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [position, setPosition] = useState<Position>({ col: 2, row: 2 });
     const [statusMessage, setStatusMessage] = useState("");
     const [title, setTitle] = useState("");
@@ -45,6 +47,8 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
     const [dismissDays, setDismissDays] = useState(1);
     const [stackOrder, setStackOrder] = useState(0);
     const [isVisible, setIsVisible] = useState(true);
+    const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
+    const [selectedImagePreviewUrl, setSelectedImagePreviewUrl] = useState<string | null>(null);
     const createGlobalModal = useCreateGlobalModalMutation();
     const updateGlobalModal = useUpdateGlobalModalMutation();
     const uploadImage = useUploadImageMutation();
@@ -60,20 +64,45 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
         setDismissDays(modal?.dismiss_days ?? 1);
         setStackOrder(modal?.stack_order ?? 0);
         setIsVisible(modal?.is_visible ?? true);
+        setSelectedImageFile(null);
+        setSelectedImagePreviewUrl(null);
         setStatusMessage("");
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
     }, [modal]);
+
+    useEffect(() => {
+        if (!selectedImageFile) {
+            setSelectedImagePreviewUrl(null);
+            return;
+        }
+
+        const nextPreviewUrl = URL.createObjectURL(selectedImageFile);
+        setSelectedImagePreviewUrl(nextPreviewUrl);
+
+        return () => {
+            URL.revokeObjectURL(nextPreviewUrl);
+        };
+    }, [selectedImageFile]);
+
+    const effectiveImageUrl = selectedImagePreviewUrl ?? imageUrlValue;
+
+    function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
+        const nextFile = event.target.files?.[0] ?? null;
+        setSelectedImageFile(nextFile);
+    }
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         setStatusMessage("저장 중입니다.");
+        const form = event.currentTarget;
 
-        const formData = new FormData(event.currentTarget);
-        const file = formData.get("image");
-        let imageUrl = String(formData.get("imageUrl") ?? "").trim() || null;
+        let imageUrl = imageUrlValue.trim() || null;
 
         try {
-            if (file instanceof File && file.size > 0) {
-                imageUrl = (await uploadImage.mutateAsync(file)).result.url;
+            if (selectedImageFile) {
+                imageUrl = (await uploadImage.mutateAsync(selectedImageFile)).result.url;
             }
 
             const payload = {
@@ -85,8 +114,8 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                 stack_order: stackOrder,
                 dismiss_type: dismissType,
                 dismiss_days: dismissType === "days" ? dismissDays : null,
-                starts_at: toIsoDateTime(formData.get("startsAt")),
-                ends_at: toIsoDateTime(formData.get("endsAt")),
+                starts_at: toIsoDateTime(startsAt),
+                ends_at: toIsoDateTime(endsAt),
                 is_visible: isVisible,
             };
 
@@ -96,8 +125,11 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                 await createGlobalModal.mutateAsync(payload);
             }
 
-            event.currentTarget.reset();
+            form.reset();
             setPosition({ col: 2, row: 2 });
+            setImageUrlValue("");
+            setSelectedImageFile(null);
+            setSelectedImagePreviewUrl(null);
             setStatusMessage("모달이 저장되었습니다.");
             onSaved?.();
         } catch {
@@ -110,10 +142,10 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
             className={formClassName}
             onSubmit={handleSubmit}
         >
-            <label className="grid gap-3 text-xl font-black text-black">
+            <label className={labelClassName}>
                 제목
                 <input
-                    className="h-14 border border-black px-4 text-lg font-semibold"
+                    className={inputClassName}
                     name="title"
                     placeholder="모달 제목"
                     onChange={(event) => setTitle(event.target.value)}
@@ -122,7 +154,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                     value={title}
                 />
             </label>
-            <label className="grid gap-3 text-xl font-black text-black">
+            {/* <label className="grid gap-3 text-xl font-black text-black">
                 내용
                 <textarea
                     className="min-h-[13.2rem] resize-y border border-black px-4 py-3 text-lg font-semibold"
@@ -132,27 +164,49 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                     required
                     value={content}
                 />
-            </label>
+            </label> */}
             <label className={labelClassName}>
                 이미지 업로드
                 <input
                     className={inputClassName}
                     accept="image/jpeg,image/png,image/webp"
+                    onChange={handleImageChange}
                     name="image"
+                    ref={fileInputRef}
                     type="file"
                 />
             </label>
-            <label className={labelClassName}>
+            <section className="grid gap-3 rounded-lg border border-[var(--adaptive-grey200)] bg-[var(--adaptive-grey50)] p-4">
+                <div className="flex items-center justify-between gap-3">
+                    <strong className="text-lg font-black text-black">현재 설정 이미지</strong>
+                    <span className="text-sm font-bold text-[var(--adaptive-grey600)]">
+                        {selectedImageFile ? "새로 선택한 이미지가 저장됩니다" : effectiveImageUrl ? "저장된 이미지가 유지됩니다" : "설정된 이미지가 없습니다"}
+                    </span>
+                </div>
+                {effectiveImageUrl ? (
+                    <div className={previewButtonClassName}>
+                        <img
+                            alt={title ? `${title} 이미지 미리보기` : "모달 이미지 미리보기"}
+                            className="h-40 w-full rounded-lg object-cover"
+                            src={effectiveImageUrl}
+                        />
+                        <span className="truncate text-sm font-bold text-[var(--adaptive-grey700)]">{selectedImageFile?.name ?? imageUrlValue}</span>
+                    </div>
+                ) : (
+                    <p className="m-0 text-sm font-semibold text-[var(--adaptive-grey600)]">이미지를 업로드하면 여기에서 바로 확인할 수 있습니다.</p>
+                )}
+            </section>
+            {/* <label className={labelClassName}>
                 이미지 URL
                 <input
-                    className="h-14 border border-black px-4 text-lg font-semibold"
+                    className={inputClassName}
                     name="imageUrl"
                     onChange={(event) => setImageUrlValue(event.target.value)}
                     placeholder="이미 업로드된 이미지 URL"
                     type="url"
                     value={imageUrlValue}
                 />
-            </label>
+            </label> */}
             <fieldset className="m-0 grid gap-2.5 border-0 p-0">
                 <legend className="font-bold text-slate-800">노출 위치</legend>
                 <div className="grid aspect-square w-[min(24rem,100%)] grid-cols-3 grid-rows-3 gap-2">
@@ -180,26 +234,28 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                     type="number"
                 />
             </label>
-            <label className={labelClassName}>
-                노출 시작
-                <input
-                    className={inputClassName}
-                    name="startsAt"
-                    onChange={(event) => setStartsAt(event.target.value)}
-                    type="datetime-local"
-                    value={startsAt}
-                />
-            </label>
-            <label className={labelClassName}>
-                노출 종료
-                <input
-                    className={inputClassName}
-                    name="endsAt"
-                    onChange={(event) => setEndsAt(event.target.value)}
-                    type="datetime-local"
-                    value={endsAt}
-                />
-            </label>
+            <section className="flex gap-[0.4rem]">
+                <label className={labelClassName}>
+                    시작 일자
+                    <input
+                        className={inputClassName}
+                        name="startsAt"
+                        onChange={(event) => setStartsAt(event.target.value)}
+                        type="datetime-local"
+                        value={startsAt}
+                    />
+                </label>
+                <label className={labelClassName}>
+                    종료 일자
+                    <input
+                        className={inputClassName}
+                        name="endsAt"
+                        onChange={(event) => setEndsAt(event.target.value)}
+                        type="datetime-local"
+                        value={endsAt}
+                    />
+                </label>
+            </section>
             <label className={labelClassName}>
                 닫기 정책
                 <select
@@ -214,7 +270,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                 </select>
             </label>
             <label className={labelClassName}>
-                n일
+                몇일동안 닫을까요?
                 <input
                     className={inputClassName}
                     onChange={(event) => setDismissDays(Number(event.target.value))}
@@ -224,7 +280,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                     type="number"
                 />
             </label>
-            <label className="flex items-center gap-2.5 font-bold text-slate-800">
+            {/* <label className="flex items-center gap-2.5 font-bold text-slate-800">
                 <input
                     className="min-h-0"
                     checked={isVisible}
@@ -233,7 +289,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                     type="checkbox"
                 />
                 표시
-            </label>
+            </label> */}
             {statusMessage ? (
                 <p
                     className={statusClassName}

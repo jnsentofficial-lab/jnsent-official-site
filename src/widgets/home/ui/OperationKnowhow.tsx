@@ -63,7 +63,7 @@ export function OperationKnowhow() {
                 >
                     <Text.Reveal
                         as="h2"
-                        className="text-[3.8rem] leading-[1.5]"
+                        className="text-[3.8rem] font-black leading-[1.5]"
                         initialColor="#00000000"
                         midColor="rgb(255, 92, 118)"
                         revealColor="rgb(255, 255, 255)"
@@ -72,6 +72,7 @@ export function OperationKnowhow() {
                         revealStartPosition={20}
                         revealEndPosition={60}
                         delay={2}
+                        transition={0}
                     >
                         {`2017년부터 쌓아온 운영 노하우\n당신의 성장에만 집중합니다.`}
                     </Text.Reveal>
