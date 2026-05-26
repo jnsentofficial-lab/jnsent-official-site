@@ -8,6 +8,7 @@ import StarterKit from "@tiptap/starter-kit";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import type { RichTextContent } from "@/shared/lib/richText/richText";
 import { emptyRichTextContent } from "@/shared/lib/richText/richText";
+import UI from "../UIComponent";
 
 type RichTextEditorProps = {
     value?: RichTextContent;
@@ -114,10 +115,11 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
     return (
         <div>
             {/* <div className="flex flex-wrap gap-1 rounded-t-lg border border-slate-300 bg-slate-50 p-2"> */}
-            <div className="">
+            <div className="flex gap-[0.4rem] mb-[1.6rem]">
                 {toolbarButtons.map((button) => (
-                    <button
-                        className={`min-h-9 rounded-md border px-3 text-sm font-bold ${editor?.isActive(button.action === "heading" ? "heading" : button.action, button.action === "heading" ? { level: 2 } : undefined) ? "border-blue-500 bg-blue-50 text-blue-700" : "border-slate-200 bg-white text-slate-700"}`}
+                    <UI.Button
+                        size="sm"
+                        className={`border border-[var(--adaptive-black500)] rounded-[1.2rem] w-[4.2rem] h-[3.2rem] text-[1.4rem] bg-transparent hover:bg-[var(--adaptive-grey100)] ${editor?.isActive(button.action === "heading" ? "heading" : button.action, button.action === "heading" ? { level: 2 } : undefined) ? "border-blue-500 bg-blue-50 text-blue-700" : "border-slate-200 bg-white text-slate-700"}`}
                         key={button.action}
                         onClick={() => {
                             if (button.action === "bold") editor?.chain().focus().toggleBold().run();
@@ -130,23 +132,25 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
                         type="button"
                     >
                         {button.label}
-                    </button>
+                    </UI.Button>
                 ))}
-                <button
-                    className={`min-h-9 rounded-md border px-3 text-sm font-bold ${editor?.isActive("link") ? "border-blue-500 bg-blue-50 text-blue-700" : "border-slate-200 bg-white text-slate-700"}`}
+                <UI.Button
+                    size="sm"
+                    className={`border border-[var(--adaptive-black500)] rounded-[1.2rem] w-[4.2rem] h-[3.2rem] text-[1.4rem] bg-transparent hover:bg-[var(--adaptive-grey100)] ${editor?.isActive("link") ? "border-blue-500 bg-blue-50 text-blue-700" : "border-slate-200 bg-white text-slate-700"}`}
                     onClick={setLink}
                     type="button"
                 >
                     Link
-                </button>
-                <button
-                    className="min-h-9 rounded-md border border-slate-200 bg-white px-3 text-sm font-bold text-slate-700 disabled:bg-slate-100 disabled:text-slate-400"
+                </UI.Button>
+                <UI.Button
+                    size="sm"
+                    className="border border-[var(--adaptive-black500)] rounded-[1.2rem] w-[4.2rem] h-[3.2rem] text-[1.4rem] bg-transparent hover:bg-[var(--adaptive-grey100)] disabled:bg-slate-100 disabled:text-slate-400"
                     disabled={!onImageUpload || isUploading}
                     onClick={() => fileInputRef.current?.click()}
                     type="button"
                 >
                     {isUploading ? "업로드 중" : "Image"}
-                </button>
+                </UI.Button>
                 <input
                     accept="image/jpeg,image/png,image/webp"
                     className="hidden"
@@ -156,14 +160,16 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
                     ref={fileInputRef}
                     type="file"
                 />
-                <button
-                    className="min-h-9 rounded-md border border-slate-200 bg-white px-3 text-sm font-bold text-slate-700"
+                <UI.Button
+                    size="sm"
+                    className="border border-[var(--adaptive-black500)] rounded-[1.2rem] w-[4.2rem] h-[3.2rem] text-[1.4rem] bg-transparent hover:bg-[var(--adaptive-grey100)] "
                     onClick={() => editor?.chain().focus().setParagraph().run()}
                     type="button"
                 >
                     P
-                </button>
+                </UI.Button>
             </div>
+
             <EditorContent editor={editor} />
         </div>
     );

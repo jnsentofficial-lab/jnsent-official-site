@@ -12,6 +12,7 @@ export function Analysis() {
     return (
         <AdminWorkspace>
             <AdminTwoPanel
+                sidePanelOpenState={!!selectedInquiry}
                 current="문의 관리"
                 title="문의 관리"
                 left={

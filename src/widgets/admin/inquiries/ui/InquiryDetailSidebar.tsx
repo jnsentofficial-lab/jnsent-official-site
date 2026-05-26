@@ -79,17 +79,8 @@ export function InquiryDetailSidebar({ inquiry, onDeleted }: InquiryDetailSideba
                 <div className="flex flex-col gap-[1.6rem]">
                     <h6 className="text-[var(--adaptive-black300)] text-[1.8rem]">선택한 질문</h6>
 
-                    {/* <button
-                            className="mb-8 min-h-12 rounded-xl border border-[var(--adaptiveGrey300)] bg-white px-5 text-base font-[700] text-black"
-                            disabled={deleteInquiry.isPending}
-                            onClick={() => {
-                                void handleDelete();
-                            }}
-                            type="button"
-                        >
-                            {deleteInquiry.isPending ? "삭제 중" : "문의 삭제"}
-                        </button> */}
                     <h2 className="text-[3.2rem]">{inquiry.message}</h2>
+
                     <p className="text-[1.4rem] text-[var(--adaptive-black400)]">
                         {new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.created_at))} ~ {new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.updated_at))}
                     </p>
@@ -108,7 +99,7 @@ export function InquiryDetailSidebar({ inquiry, onDeleted }: InquiryDetailSideba
 
             {/* 답변 */}
             <section className="flex-1 block p-[5.2rem]">
-                <h6 className="mb-8 text-[1.8rem] text-[var(--adaptive-grey400)]">관리자 답변</h6>
+                <h6 className="mb-[1.6rem] text-[1.8rem] text-[var(--adaptive-black300)]">관리자 답변</h6>
 
                 {/* <div className="mb-8 grid gap-4">
                         {isLoading ? <p className="m-0 text-lg font-semibold text-[var(--adaptiveGrey500)]">답변을 불러오는 중입니다.</p> : null}

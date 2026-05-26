@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import { ReactNode } from "react";
 import UI from "@/shared/ui/UIComponent";
 import Image from "next/image";
@@ -17,6 +18,7 @@ type AdminTwoPanelProps = {
     action?: ReactNode;
     left: ReactNode;
     right?: ReactNode;
+    sidePanelOpenState?: boolean;
 };
 
 type AdminPaginationProps = {
@@ -54,9 +56,9 @@ export function AdminWorkspace({ children }: AdminWorkspaceProps) {
     );
 }
 
-export function AdminTwoPanel({ current, title, action, left, right }: AdminTwoPanelProps) {
+export function AdminTwoPanel({ current, title, action, left, right, sidePanelOpenState }: AdminTwoPanelProps) {
     return (
-        <div className="grid grid-cols-2 h-full">
+        <div className={`grid mobile:grid-cols-1 ${sidePanelOpenState ? "pc:grid-cols-2" : "pc:grid-cols-1"} h-full`}>
             <section className="flex flex-col h-[100dvh] overflow-auto">
                 <section className="flex justify-between items-center gap-[1.6rem] p-[5.2rem]">
                     <div className="flex flex-col gap-[1.6rem]">
@@ -82,7 +84,7 @@ export function AdminTwoPanel({ current, title, action, left, right }: AdminTwoP
                 {left}
             </section>
 
-            <aside className="bg-white h-[100dvh] overflow-auto relative">{right}</aside>
+            {sidePanelOpenState ? <aside className="bg-white h-[100dvh] overflow-auto mobile:absolute mobile:left-0 mobile:top-0 mobile:w-full pc:w-auto pc:relative">{right}</aside> : null}
         </div>
     );
 }
@@ -143,40 +145,114 @@ export function AdminSidePanel({ title, description, children }: AdminSidePanelP
 }
 
 export function ConfirmDialog({ open, title, description, targetLabel, confirmLabel, tone = "create", onCancel, onConfirm }: ConfirmDialogProps) {
-    if (!open) {
-        return null;
-    }
+    // if (!open) {
+    //     return null;
+    // }
 
     return (
-        <div className="fixed inset-0 z-[100] grid place-items-center bg-black/75 p-6 backdrop-blur-sm">
-            <div className="w-[min(42rem,100%)] bg-white shadow-[0_2rem_6rem_rgba(0,0,0,0.2)]">
-                <div className="p-8">
-                    <h2 className="mt-0 mb-5 text-3xl font-[700] text-black">{title}</h2>
-                    <p className="m-0 text-lg font-semibold leading-[1.5] text-black">{description}</p>
-                </div>
-                {targetLabel ? (
-                    <div className="bg-[var(--adaptiveGrey100)] px-8 py-5">
-                        <p className="mb-2 text-base font-[700] text-[var(--adaptiveGrey500)]">대상</p>
-                        <strong className="text-2xl font-[700] text-black">{targetLabel}</strong>
-                    </div>
-                ) : null}
-                <div className="grid grid-cols-2">
-                    <UI.Button
-                        className="min-h-16 bg-white text-lg font-[700] text-black"
-                        onClick={onCancel}
-                        type="button"
+        <AnimatePresence mode="popLayout">
+            {open ? (
+                <motion.div
+                    className="fixed inset-0 z-[100] grid place-items-center bg-black/75 p-6 backdrop-blur-sm"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{
+                        delay: 0.1,
+                        type: "spring",
+                        mass: 0.1,
+                        stiffness: 100,
+                        damping: 10,
+                    }}
+                >
+                    <motion.div
+                        className="w-[min(42rem,100%)] bg-white shadow-[0_2rem_6rem_rgba(0,0,0,0.2)] overflow-hidden"
+                        initial={{ opacity: 0, transform: "translateY(100px)" }}
+                        animate={{ opacity: 1, transform: "translateY(0px)" }}
+                        // exit={{ opacity: 0, transform: "translateY(100px)" }}
+                        transition={{
+                            delay: 0.1,
+                            type: "spring",
+                            mass: 0.1,
+                            stiffness: 100,
+                            damping: 10,
+                        }}
                     >
-                        취소
-                    </UI.Button>
-                    <UI.Button
-                        className={`min-h-16 text-lg font-[700] text-white ${tone === "delete" ? "bg-[var(--adaptiveRed500)]" : "bg-[var(--adaptiveBlue500)]"}`}
-                        onClick={onConfirm}
-                        type="button"
-                    >
-                        {confirmLabel}
-                    </UI.Button>
-                </div>
-            </div>
-        </div>
+                        {/* 헤더 */}
+                        <motion.section
+                            className="p-[2.4rem] flex flex-col gap-[1.6rem]"
+                            initial={{ opacity: 0, transform: "translateY(100px)" }}
+                            animate={{ opacity: 1, transform: "translateY(0px)" }}
+                            // exit={{ opacity: 0, transform: "translateY(100px)" }}
+                            transition={{
+                                delay: 0.1,
+                                type: "spring",
+                                mass: 0.1,
+                                stiffness: 100,
+                                damping: 10,
+                            }}
+                        >
+                            <h2 className="text-[2.0rem]">{title}</h2>
+
+                            <p className="leading-[1.5] whitespace-break-spaces">{description}</p>
+                        </motion.section>
+                        {/* 헤더 END */}
+
+                        {/* 바디 */}
+                        {targetLabel ? (
+                            <motion.section
+                                className="bg-[var(--adaptive-grey100)] p-[1.6rem_2.4rem] flex flex-col gap-[1.2rem]"
+                                initial={{ opacity: 0, transform: "translateY(100px)" }}
+                                animate={{ opacity: 1, transform: "translateY(0px)" }}
+                                // exit={{ opacity: 0, transform: "translateY(100px)" }}
+                                transition={{
+                                    delay: 0.1 * 2,
+                                    type: "spring",
+                                    mass: 0.1,
+                                    stiffness: 100,
+                                    damping: 10,
+                                }}
+                            >
+                                <p className="text-[var(--adaptive-black300)] text-[1.4rem] font-[NanumSquare]">삭제될 계정</p>
+
+                                <h6 className="text-[2.0rem] leading-[1.5]">{targetLabel}</h6>
+                            </motion.section>
+                        ) : null}
+                        {/* 바디 END */}
+
+                        {/* 푸터 */}
+                        <motion.section
+                            className="grid grid-cols-2"
+                            initial={{ opacity: 0, transform: "translateY(100px)" }}
+                            animate={{ opacity: 1, transform: "translateY(0px)" }}
+                            // exit={{ opacity: 0, transform: "translateY(100px)" }}
+                            transition={{
+                                delay: 0.1 * 3,
+                                type: "spring",
+                                mass: 0.1,
+                                stiffness: 100,
+                                damping: 10,
+                            }}
+                        >
+                            <UI.Button
+                                className=""
+                                onClick={onCancel}
+                                type="button"
+                            >
+                                취소
+                            </UI.Button>
+                            <UI.Button
+                                className={`text-white font-[500] ${tone === "delete" ? "bg-[var(--adaptive-red500)]" : "bg-[var(--adaptive-blue500)]"}`}
+                                onClick={onConfirm}
+                                type="button"
+                            >
+                                {confirmLabel}
+                            </UI.Button>
+                        </motion.section>
+                        {/* 푸터 END */}
+                    </motion.div>
+                </motion.div>
+            ) : null}
+        </AnimatePresence>
     );
 }

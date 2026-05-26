@@ -18,6 +18,7 @@ export function Analysis() {
     return (
         <AdminWorkspace>
             <AdminTwoPanel
+                sidePanelOpenState={!!selectedAccount}
                 current="관리자 계정 관리"
                 title="관리자 계정 관리"
                 action={

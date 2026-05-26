@@ -23,6 +23,7 @@ export function Analysis() {
     return (
         <AdminWorkspace>
             <AdminTwoPanel
+                sidePanelOpenState={!!selectedNews}
                 current="뉴스 관리"
                 title="뉴스 관리"
                 action={

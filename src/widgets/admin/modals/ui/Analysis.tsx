@@ -24,6 +24,7 @@ export function Analysis() {
     return (
         <AdminWorkspace>
             <AdminTwoPanel
+                sidePanelOpenState={!!selectedModal}
                 current="팝업 관리"
                 title="팝업 관리"
                 action={
