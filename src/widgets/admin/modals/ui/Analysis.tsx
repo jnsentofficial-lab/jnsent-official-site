@@ -58,7 +58,7 @@ export function Analysis() {
                                         <section className="flex items-center justify-between h-[9.2rem]">
                                             <UI.Button
                                                 // className="flex items-center gap-[1.2rem] flex-1"
-                                                className={`${SELECTED ? "text-[var(--adaptive-red500)]" : ""} flex justify-start items-center gap-[1.2rem] transition hover:bg-white h-full flex-1 mobile:pl-[1.6rem] pc:pl-[5.2rem]`}
+                                                className={`${SELECTED ? "text-[var(--adaptive-red500)]" : ""} flex justify-start items-center gap-[1.2rem] transition hover:bg-white h-full flex-1`}
                                                 onClick={() => {
                                                     setSelectedModal(modal);
                                                     openPanel(PANEL_KEY);

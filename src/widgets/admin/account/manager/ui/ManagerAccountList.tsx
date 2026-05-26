@@ -32,7 +32,7 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
                         <Fragment key={account.id}>
                             <section className="flex items-center justify-between h-[9.2rem]">
                                 <UI.Button
-                                    className={`${SELECTED ? "text-[var(--adaptive-red500)]" : ""} flex flex-col justify-center items-start gap-[1.2rem] transition hover:bg-white h-full flex-1 mobile:pl-[1.6rem] pc:pl-[5.2rem]`}
+                                    className={`${SELECTED ? "text-[var(--adaptive-red500)]" : ""} flex flex-col justify-center items-start gap-[1.2rem] transition hover:bg-white h-full flex-1`}
                                     onClick={() => onSelectAccount(account)}
                                     type="button"
                                 >

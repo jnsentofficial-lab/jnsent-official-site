@@ -1,11 +1,21 @@
 "use client";
 
+import Image from "next/image";
+
 export function SiteFooter() {
     return (
-        <footer className="bg-black py-16 text-white">
-            <div className="mx-auto grid w-[min(112rem,calc(100%_-_3.2rem))] grid-cols-2 gap-20 max-[86rem]:grid-cols-1">
+        <footer className="bg-black py-16 mobile:px-[1.6rem] pc:px-0 text-white">
+            {/* <div className="mx-auto grid w-[min(112rem,calc(100%_-_3.2rem))] grid-cols-2 gap-20 max-[86rem]:grid-cols-1"> */}
+            <div className="mx-auto grid max-w-[var(--size-pc)] grid-cols-2 gap-20 max-[86rem]:grid-cols-1">
                 <div>
-                    <strong className="block text-5xl font-[700]">JNS</strong>
+                    <Image
+                        src={"/images/common/ico-logo.svg"}
+                        width={72}
+                        height={72}
+                        alt=""
+                        className="invert"
+                        // className={`${isNowDarkMode ? "invert" : ""}`}
+                    />
                     <p className="mt-5 mb-0 text-xl font-[700] leading-[1.5] text-white/45">
                         JNS ENTERTAINMENT
                         <br />

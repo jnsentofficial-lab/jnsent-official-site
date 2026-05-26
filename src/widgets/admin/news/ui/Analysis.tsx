@@ -58,7 +58,7 @@ export function Analysis() {
                                         <Fragment key={item.slug}>
                                             <section className="flex items-center justify-between h-[9.2rem]">
                                                 <UI.Button
-                                                    className={`${SELECTED ? "text-[var(--adaptive-red500)]" : ""} flex justify-start items-center gap-[1.2rem] transition hover:bg-white h-full flex-1 mobile:pl-[1.6rem] pc:pl-[5.2rem]`}
+                                                    className={`${SELECTED ? "text-[var(--adaptive-red500)]" : ""} flex justify-start items-center gap-[1.2rem] transition hover:bg-white h-full flex-1`}
                                                     onClick={() => {
                                                         setSelectedNews(item);
                                                         openPanel(PANEL_KEY);

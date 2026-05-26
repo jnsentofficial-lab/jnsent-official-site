@@ -67,8 +67,8 @@ export function AdminTwoPanel({ panelKey, current, title, action, left, right }:
 
     return (
         <div className={`grid mobile:grid-cols-1 ${sidePanelOpenState ? "pc:grid-cols-2" : "pc:grid-cols-1"} h-full`}>
-            <section className="flex flex-col h-[100dvh] overflow-auto">
-                <section className="flex justify-between items-center gap-[1.6rem] mobile:p-[1.6rem] pc:p-[5.2rem]">
+            <section className="flex flex-col h-[100dvh] mobile:p-[1.6rem] pc:p-[5.2rem] mobile:gap-[1.6rem] pc:gap-[5.2rem] overflow-auto">
+                <section className="flex justify-between items-center gap-[1.6rem]">
                     <div className="flex flex-col gap-[1.6rem]">
                         <section className="flex items-center gap-[0.4rem]">
                             <h6 className="text-[1.8rem] font-[700] text-[var(--adaptive-black300)]">메인</h6>

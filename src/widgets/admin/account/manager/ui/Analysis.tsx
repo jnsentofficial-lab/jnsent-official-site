@@ -31,6 +31,8 @@ export function Analysis() {
                 title="관리자 계정 관리"
                 action={
                     <UI.Button
+                        size="sm"
+                        className="bg-black text-white px-[1.2rem]"
                         onClick={() => {
                             setSelectedAccount(null);
                             setSidebarMode("create");
