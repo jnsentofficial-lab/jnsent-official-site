@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, Fragment, useEffect, useState } from "react";
+import { FormEvent, Fragment, useEffect, useRef, useState } from "react";
 import { useCreateManagerAccountMutation, useDeleteManagerAccountMutation, useUpdateManagerAccountMutation } from "@/entities/managerAccount/api/managerAccount.query";
 import type { ManagerAccount, ManagerAccountRole } from "@/entities/managerAccount/model/managerAccount.type";
 import { ConfirmDialog } from "@/widgets/admin/shared/AdminLayout";
@@ -17,6 +17,7 @@ const inputClassName = "h-[5.2rem] border border-[var(--adaptive-grey200)] hover
 const labelClassName = "flex flex-col gap-[0.8rem] font-[NanumSquare]";
 
 export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccountSidebarProps) {
+    const formRef = useRef<HTMLFormElement | null>(null);
     const [name, setName] = useState("");
     const [role, setRole] = useState<ManagerAccountRole>("manager");
     const [loginId, setLoginId] = useState("");
@@ -79,6 +80,7 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                     onSubmit={(event) => {
                         void handleSubmit(event);
                     }}
+                    ref={formRef}
                 >
                     <label className={labelClassName}>
                         이름
@@ -146,7 +148,8 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                 <UI.Button
                     className="bg-black hover:bg-[var(--adaptive-blue500)] text-white w-full"
                     disabled={isPending}
-                    type="submit"
+                    onClick={() => formRef.current?.requestSubmit()}
+                    type="button"
                 >
                     {isPending ? "저장 중" : "등록하기"}
                 </UI.Button>

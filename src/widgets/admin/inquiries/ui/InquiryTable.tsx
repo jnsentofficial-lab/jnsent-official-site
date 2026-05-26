@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, useState } from "react";
-import { useAdminInquiriesQuery, useUpdateInquiryStatusMutation } from "@/entities/inquiry/api/inquiry.query";
+import { useAdminInquiriesQuery, useDeleteInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
 import type { Inquiry } from "@/entities/inquiry/model/inquiry.type";
 import { AdminPagination } from "@/widgets/admin/shared/AdminLayout";
 import UI from "@/shared/ui/UIComponent";
@@ -15,7 +15,7 @@ type InquiryTableProps = {
 
 export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTableProps) {
     const { data: inquiries = [] } = useAdminInquiriesQuery();
-    const updateStatus = useUpdateInquiryStatusMutation();
+    const deleteInquiry = useDeleteInquiryMutation();
     const pageSize = 5;
     const [page, setPage] = useState(1);
     const totalPages = Math.max(1, Math.ceil(inquiries.length / pageSize));
@@ -62,7 +62,12 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
 
                                     <UI.Button
                                         className="h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
-                                        // onClick={() => setDeleteTarget(modal)}
+                                        onClick={() => {
+                                            if (window.confirm("선택한 문의를 삭제할까요?")) {
+                                                deleteInquiry.mutate({ id: inquiry.id });
+                                            }
+                                        }}
+                                        type="button"
                                     >
                                         <Image
                                             src={"/images/icon/outlined/ico-outlined-trash.svg"}

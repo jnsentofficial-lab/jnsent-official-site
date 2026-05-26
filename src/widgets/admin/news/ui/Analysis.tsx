@@ -1,13 +1,16 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useAdminNewsQuery, useDeleteNewsMutation, useToggleNewsMutation } from "@/entities/news/api/news.query";
 import type { News } from "@/entities/news/model/news.type";
 import { NewsEditor } from "@/features/manageNews/NewsEditor";
 import UI from "@/shared/ui/UIComponent";
 import { AdminPagination, AdminSidePanel, AdminTwoPanel, AdminWorkspace, ConfirmDialog } from "@/widgets/admin/shared/AdminLayout";
+import { useAdminSidePanelStore } from "@/widgets/admin/shared/model/useAdminSidePanelStore";
 import Image from "next/image";
 import { Text } from "@/shared/ui/kit/Text";
+
+const PANEL_KEY = "/admin/news";
 
 export function Analysis() {
     const { data: newsItems = [] } = useAdminNewsQuery();
@@ -19,17 +22,26 @@ export function Analysis() {
     const pageSize = 5;
     const totalPages = Math.max(1, Math.ceil(newsItems.length / pageSize));
     const visibleNewsItems = newsItems.slice((page - 1) * pageSize, page * pageSize);
+    const openPanel = useAdminSidePanelStore((state) => state.openPanel);
+    const closePanel = useAdminSidePanelStore((state) => state.closePanel);
+
+    useEffect(() => {
+        closePanel(PANEL_KEY);
+    }, [closePanel]);
 
     return (
         <AdminWorkspace>
             <AdminTwoPanel
-                sidePanelOpenState={!!selectedNews}
+                panelKey={PANEL_KEY}
                 current="뉴스 관리"
                 title="뉴스 관리"
                 action={
                     <UI.Button
                         // className="mb-8 min-h-14 bg-black px-6 text-lg font-[700] text-white"
-                        onClick={() => setSelectedNews(null)}
+                        onClick={() => {
+                            setSelectedNews(null);
+                            openPanel(PANEL_KEY);
+                        }}
                         type="button"
                     >
                         + 작성하기
@@ -47,7 +59,10 @@ export function Analysis() {
                                             <section className="flex items-center justify-between h-[9.2rem]">
                                                 <UI.Button
                                                     className={`${SELECTED ? "text-[var(--adaptive-red500)]" : ""} flex justify-start items-center gap-[1.2rem] transition hover:bg-white h-full flex-1 pl-[5.2rem]`}
-                                                    onClick={() => setSelectedNews(item)}
+                                                    onClick={() => {
+                                                        setSelectedNews(item);
+                                                        openPanel(PANEL_KEY);
+                                                    }}
                                                     type="button"
                                                 >
                                                     {item.thumbnail_url ? (
@@ -134,7 +149,13 @@ export function Analysis() {
                 }
                 right={
                     <AdminSidePanel title={selectedNews ? "선택한 뉴스" : "생성하기"}>
-                        <NewsEditor news={selectedNews} />
+                        <NewsEditor
+                            news={selectedNews}
+                            onSaved={() => {
+                                setSelectedNews(null);
+                                closePanel(PANEL_KEY);
+                            }}
+                        />
                     </AdminSidePanel>
                 }
             />

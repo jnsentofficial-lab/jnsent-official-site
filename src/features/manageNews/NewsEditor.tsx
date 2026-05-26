@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, Fragment, useEffect, useMemo, useState } from "react";
+import { FormEvent, Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useUploadImageMutation } from "@/entities/asset/api/asset.query";
 import { useUpsertNewsMutation } from "@/entities/news/api/news.query";
 import type { News } from "@/entities/news/model/news.type";
@@ -11,6 +11,7 @@ import UI from "@/shared/ui/UIComponent";
 
 type NewsEditorProps = {
     news?: News | null;
+    onSaved?: () => void;
 };
 
 const formClassName = "grid gap-8";
@@ -21,7 +22,8 @@ const statusClassName = "m-0 text-base font-bold text-[var(--adaptiveGreen700)]"
 const buttonClassName = "fixed right-0 bottom-0 min-h-16 w-[calc((100vw-24rem)*0.42)] bg-black text-xl font-[700] text-white max-[120rem]:static max-[120rem]:w-full";
 const thumbnailButtonClassName = "grid gap-3 border p-3 text-left transition hover:border-black";
 
-export function NewsEditor({ news }: NewsEditorProps) {
+export function NewsEditor({ news, onSaved }: NewsEditorProps) {
+    const formRef = useRef<HTMLFormElement | null>(null);
     const [statusMessage, setStatusMessage] = useState("");
     const [slug, setSlug] = useState("");
     const [title, setTitle] = useState("");
@@ -67,6 +69,7 @@ export function NewsEditor({ news }: NewsEditorProps) {
                 seo_description: seoDescription.trim() || null,
             });
             setStatusMessage("NEWS가 저장되었습니다.");
+            onSaved?.();
         } catch {
             setStatusMessage("NEWS 저장에 실패했습니다.");
         }
@@ -77,6 +80,7 @@ export function NewsEditor({ news }: NewsEditorProps) {
             <form
                 className={formClassName}
                 onSubmit={handleSubmit}
+                ref={formRef}
             >
                 <label className={labelClassName}>
                     제목 <span className="text-[var(--adaptiveRed500)]">*</span>
@@ -193,7 +197,8 @@ export function NewsEditor({ news }: NewsEditorProps) {
                 <UI.Button
                     className="bg-black hover:bg-[var(--adaptive-blue500)] text-white w-full"
                     disabled={upsertNews.isPending}
-                    type="submit"
+                    onClick={() => formRef.current?.requestSubmit()}
+                    type="button"
                 >
                     {upsertNews.isPending ? "저장 중" : news ? "수정하기" : "답변 등록하기"}
                 </UI.Button>

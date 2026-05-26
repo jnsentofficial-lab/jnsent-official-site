@@ -37,6 +37,7 @@ type GlobalModalEditorProps = {
 
 export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const formRef = useRef<HTMLFormElement | null>(null);
     const [position, setPosition] = useState<Position>({ col: 2, row: 2 });
     const [statusMessage, setStatusMessage] = useState("");
     const [title, setTitle] = useState("");
@@ -143,6 +144,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
             <form
                 className={formClassName}
                 onSubmit={handleSubmit}
+                ref={formRef}
             >
                 <label className={labelClassName}>
                     제목
@@ -305,7 +307,8 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
             <section className="flex absolute bottom-0 left-0 w-full">
                 <UI.Button
                     className="bg-black hover:bg-[var(--adaptive-blue500)] text-white w-full"
-                    type="submit"
+                    onClick={() => formRef.current?.requestSubmit()}
+                    type="button"
                 >
                     {modal ? "편집" : "생성"}하기
                 </UI.Button>

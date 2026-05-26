@@ -1,13 +1,16 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useAdminGlobalModalsQuery, useDeleteGlobalModalMutation, useToggleGlobalModalMutation } from "@/entities/globalModal/api/globalModal.query";
 import type { GlobalModal } from "@/entities/globalModal/model/globalModal.type";
 import { GlobalModalEditor } from "@/features/manageGlobalModal/GlobalModalEditor";
 import UI from "@/shared/ui/UIComponent";
 import { AdminPagination, AdminSidePanel, AdminTwoPanel, AdminWorkspace, ConfirmDialog } from "@/widgets/admin/shared/AdminLayout";
+import { useAdminSidePanelStore } from "@/widgets/admin/shared/model/useAdminSidePanelStore";
 import Image from "next/image";
 import { Text } from "@/shared/ui/kit/Text";
+
+const PANEL_KEY = "/admin/modals";
 
 export function Analysis() {
     const { data: modals = [] } = useAdminGlobalModalsQuery();
@@ -20,16 +23,25 @@ export function Analysis() {
     const pageSize = 5;
     const totalPages = Math.max(1, Math.ceil(modals.length / pageSize));
     const visibleModals = modals.slice((page - 1) * pageSize, page * pageSize);
+    const openPanel = useAdminSidePanelStore((state) => state.openPanel);
+    const closePanel = useAdminSidePanelStore((state) => state.closePanel);
+
+    useEffect(() => {
+        closePanel(PANEL_KEY);
+    }, [closePanel]);
 
     return (
         <AdminWorkspace>
             <AdminTwoPanel
-                sidePanelOpenState={!!selectedModal}
+                panelKey={PANEL_KEY}
                 current="팝업 관리"
                 title="팝업 관리"
                 action={
                     <UI.Button
-                        onClick={() => setSelectedModal(null)}
+                        onClick={() => {
+                            setSelectedModal(null);
+                            openPanel(PANEL_KEY);
+                        }}
                         type="button"
                     >
                         + 생성하기
@@ -47,7 +59,10 @@ export function Analysis() {
                                             <UI.Button
                                                 // className="flex items-center gap-[1.2rem] flex-1"
                                                 className={`${SELECTED ? "text-[var(--adaptive-red500)]" : ""} flex justify-start items-center gap-[1.2rem] transition hover:bg-white h-full flex-1 pl-[5.2rem]`}
-                                                onClick={() => setSelectedModal(modal)}
+                                                onClick={() => {
+                                                    setSelectedModal(modal);
+                                                    openPanel(PANEL_KEY);
+                                                }}
                                                 type="button"
                                             >
                                                 {modal.image_url ? (
@@ -152,7 +167,10 @@ export function Analysis() {
                     <AdminSidePanel title={selectedModal ? "수정하기" : "생성하기"}>
                         <GlobalModalEditor
                             modal={selectedModal}
-                            onSaved={() => setSelectedModal(null)}
+                            onSaved={() => {
+                                setSelectedModal(null);
+                                closePanel(PANEL_KEY);
+                            }}
                         />
                     </AdminSidePanel>
                 }

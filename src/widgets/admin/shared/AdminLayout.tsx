@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ReactNode } from "react";
 import UI from "@/shared/ui/UIComponent";
+import { AdminPanelKey, useAdminSidePanelStore } from "@/widgets/admin/shared/model/useAdminSidePanelStore";
 import Image from "next/image";
 
 type AdminWorkspaceProps = {
@@ -13,12 +14,12 @@ type AdminWorkspaceProps = {
 };
 
 type AdminTwoPanelProps = {
+    panelKey: AdminPanelKey;
     current: string;
     title: string;
     action?: ReactNode;
     left: ReactNode;
     right?: ReactNode;
-    sidePanelOpenState?: boolean;
 };
 
 type AdminPaginationProps = {
@@ -56,7 +57,10 @@ export function AdminWorkspace({ children }: AdminWorkspaceProps) {
     );
 }
 
-export function AdminTwoPanel({ current, title, action, left, right, sidePanelOpenState }: AdminTwoPanelProps) {
+export function AdminTwoPanel({ panelKey, current, title, action, left, right }: AdminTwoPanelProps) {
+    const sidePanelOpenState = useAdminSidePanelStore((state) => state.openedPanels[panelKey]);
+    const closePanel = useAdminSidePanelStore((state) => state.closePanel);
+
     return (
         <div className={`grid mobile:grid-cols-1 ${sidePanelOpenState ? "pc:grid-cols-2" : "pc:grid-cols-1"} h-full`}>
             <section className="flex flex-col h-[100dvh] overflow-auto">
@@ -84,7 +88,21 @@ export function AdminTwoPanel({ current, title, action, left, right, sidePanelOp
                 {left}
             </section>
 
-            {sidePanelOpenState ? <aside className="bg-white h-[100dvh] overflow-auto mobile:absolute mobile:left-0 mobile:top-0 mobile:w-full pc:w-auto pc:relative">{right}</aside> : null}
+            {sidePanelOpenState ? (
+                <aside className="bg-white h-[100dvh] overflow-auto mobile:absolute mobile:left-0 mobile:top-0 mobile:w-full pc:w-auto pc:relative">
+                    <div className="sticky top-0 z-10 flex justify-end bg-white p-[2.4rem] pb-0">
+                        <UI.Button
+                            className="bg-transparent px-0 text-[1.6rem] text-[var(--adaptive-black400)] hover:text-[var(--adaptive-red500)]"
+                            onClick={() => closePanel(panelKey)}
+                            type="button"
+                        >
+                            닫기
+                        </UI.Button>
+                    </div>
+
+                    {right}
+                </aside>
+            ) : null}
         </div>
     );
 }

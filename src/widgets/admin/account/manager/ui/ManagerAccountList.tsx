@@ -1,5 +1,6 @@
 "use client";
 
+import { useDeleteManagerAccountMutation } from "@/entities/managerAccount/api/managerAccount.query";
 import type { ManagerAccount } from "@/entities/managerAccount/model/managerAccount.type";
 import { Text } from "@/shared/ui/kit/Text";
 import UI from "@/shared/ui/UIComponent";
@@ -15,6 +16,7 @@ type ManagerAccountListProps = {
 
 export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccount }: ManagerAccountListProps) {
     const [page, setPage] = useState(1);
+    const deleteAccount = useDeleteManagerAccountMutation();
     const pageSize = 5;
     const totalPages = Math.max(1, Math.ceil(accounts.length / pageSize));
     const visibleAccounts = accounts.slice((page - 1) * pageSize, page * pageSize);
@@ -54,7 +56,15 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
                                     </p>
                                 </UI.Button>
 
-                                <UI.Button className="h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]">
+                                <UI.Button
+                                    className="h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
+                                    onClick={() => {
+                                        if (window.confirm("선택한 계정을 삭제할까요?")) {
+                                            deleteAccount.mutate({ id: account.id });
+                                        }
+                                    }}
+                                    type="button"
+                                >
                                     <Image
                                         src={"/images/icon/outlined/ico-outlined-trash.svg"}
                                         alt=""

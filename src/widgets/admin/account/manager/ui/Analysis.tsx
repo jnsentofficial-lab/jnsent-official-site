@@ -1,24 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useManagerAccountsQuery } from "@/entities/managerAccount/api/managerAccount.query";
 import type { ManagerAccount } from "@/entities/managerAccount/model/managerAccount.type";
 import UI from "@/shared/ui/UIComponent";
 import { AdminSidePanel, AdminTwoPanel, AdminWorkspace } from "@/widgets/admin/shared/AdminLayout";
 import { ManagerAccountList } from "@/widgets/admin/account/manager/ui/ManagerAccountList";
 import { ManagerAccountSidebar } from "@/widgets/admin/account/manager/ui/ManagerAccountSidebar";
+import { useAdminSidePanelStore } from "@/widgets/admin/shared/model/useAdminSidePanelStore";
 
 type SidebarMode = "create" | "edit" | "empty";
+const PANEL_KEY = "/admin/account/manager";
 
 export function Analysis() {
     const { data: accounts = [], isLoading } = useManagerAccountsQuery();
     const [selectedAccount, setSelectedAccount] = useState<ManagerAccount | null>(null);
     const [sidebarMode, setSidebarMode] = useState<SidebarMode>("empty");
+    const openPanel = useAdminSidePanelStore((state) => state.openPanel);
+    const closePanel = useAdminSidePanelStore((state) => state.closePanel);
+
+    useEffect(() => {
+        closePanel(PANEL_KEY);
+    }, [closePanel]);
 
     return (
         <AdminWorkspace>
             <AdminTwoPanel
-                sidePanelOpenState={!!selectedAccount}
+                panelKey={PANEL_KEY}
                 current="관리자 계정 관리"
                 title="관리자 계정 관리"
                 action={
@@ -26,6 +34,7 @@ export function Analysis() {
                         onClick={() => {
                             setSelectedAccount(null);
                             setSidebarMode("create");
+                            openPanel(PANEL_KEY);
                         }}
                         type="button"
                     >
@@ -43,6 +52,7 @@ export function Analysis() {
                                 onSelectAccount={(account) => {
                                     setSelectedAccount(account);
                                     setSidebarMode("edit");
+                                    openPanel(PANEL_KEY);
                                 }}
                             />
                         )}
@@ -56,6 +66,7 @@ export function Analysis() {
                             onSaved={(account) => {
                                 setSelectedAccount(account);
                                 setSidebarMode("edit");
+                                closePanel(PANEL_KEY);
                             }}
                         />
                     </AdminSidePanel>

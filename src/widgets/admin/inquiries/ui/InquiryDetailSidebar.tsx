@@ -1,8 +1,8 @@
 "use client";
 
-import { FormEvent, Fragment, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { useUploadImageMutation } from "@/entities/asset/api/asset.query";
-import { useCreateInquiryCommentMutation, useDeleteInquiryMutation, useInquiryCommentsQuery } from "@/entities/inquiry/api/inquiry.query";
+import { useCreateInquiryCommentMutation } from "@/entities/inquiry/api/inquiry.query";
 import type { Inquiry } from "@/entities/inquiry/model/inquiry.type";
 import { emptyRichTextContent, extractRichTextPlainText, toJsonContent } from "@/shared/lib/richText/richText";
 import type { RichTextContent } from "@/shared/lib/richText/richText";
@@ -12,22 +12,13 @@ import UI from "@/shared/ui/UIComponent";
 
 type InquiryDetailSidebarProps = {
     inquiry: Inquiry | null;
-    onDeleted?: () => void;
 };
 
-function formatDate(value: string) {
-    return new Intl.DateTimeFormat("ko-KR", {
-        dateStyle: "medium",
-        timeStyle: "short",
-    }).format(new Date(value));
-}
-
-export function InquiryDetailSidebar({ inquiry, onDeleted }: InquiryDetailSidebarProps) {
-    const { data: comments = [], isLoading } = useInquiryCommentsQuery(inquiry?.id);
+export function InquiryDetailSidebar({ inquiry }: InquiryDetailSidebarProps) {
+    const formRef = useRef<HTMLFormElement | null>(null);
     const [commentBody, setCommentBody] = useState<RichTextContent>(emptyRichTextContent);
     const uploadImage = useUploadImageMutation();
     const createComment = useCreateInquiryCommentMutation();
-    const deleteInquiry = useDeleteInquiryMutation();
 
     async function handleImageUpload(file: File) {
         const response = await uploadImage.mutateAsync(file);
@@ -52,15 +43,6 @@ export function InquiryDetailSidebar({ inquiry, onDeleted }: InquiryDetailSideba
         });
         event.currentTarget.reset();
         setCommentBody(emptyRichTextContent);
-    }
-
-    async function handleDelete() {
-        if (!inquiry || !window.confirm("선택한 문의를 삭제할까요?")) {
-            return;
-        }
-
-        await deleteInquiry.mutateAsync({ id: inquiry.id });
-        onDeleted?.();
     }
 
     if (!inquiry) {
@@ -129,6 +111,7 @@ export function InquiryDetailSidebar({ inquiry, onDeleted }: InquiryDetailSideba
                     onSubmit={(event) => {
                         void handleSubmit(event);
                     }}
+                    ref={formRef}
                 >
                     {/* <label className="grid gap-2 text-lg font-[700] text-black">
                             담당자 이름
@@ -157,7 +140,8 @@ export function InquiryDetailSidebar({ inquiry, onDeleted }: InquiryDetailSideba
                 className="sticky bottom-0 text-white bg-black"
                 // className="fixed right-0 bottom-0 min-h-16 w-[calc((100vw-24rem)*0.42)] bg-black px-4 text-xl font-[700] text-white disabled:bg-[var(--adaptiveGrey400)] max-[120rem]:static max-[120rem]:w-full"
                 disabled={createComment.isPending}
-                type="submit"
+                onClick={() => formRef.current?.requestSubmit()}
+                type="button"
             >
                 {createComment.isPending ? "저장 중" : "답변 등록하기"}
             </UI.Button>
