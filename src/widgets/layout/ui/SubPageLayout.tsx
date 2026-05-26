@@ -51,7 +51,7 @@ export function SubPageHero({ current, title, description }: SubPageHeroProps) {
     return (
         // <section className="pt-[calc(50dvh-7.2rem-17.4rem-9.2rem)] pb-[9.2rem] mx-[1.6rem]">
         <section
-            className="pt-[calc(50dvh-1.6rem-17.4rem-5.2rem)] pb-[3.2rem] mx-[1.6rem]"
+            className="mobile:pt-[calc(7.2rem+1.6rem)] pc:pt-[calc(50dvh-1.6rem-17.4rem-5.2rem)] pb-[3.2rem] mx-[1.6rem]"
             // className="pt-[calc(50dvh-1.6rem-17.4rem-3.2rem)] pb-[3.2rem] mx-[1.6rem]"
             // initial={{ opacity: 0, transform: "translateY(100px)" }}
             // animate={{ opacity: 1, transform: "translateY(0px)" }}
