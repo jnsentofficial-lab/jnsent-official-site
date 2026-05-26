@@ -50,6 +50,24 @@ type AdminSidePanelProps = {
     children: ReactNode;
 };
 
+type AdminListSectionProps = {
+    children: ReactNode;
+    pagination?: ReactNode;
+    empty?: ReactNode;
+    hasItems: boolean;
+    className?: string;
+};
+
+type AdminListRowProps = {
+    selected?: boolean;
+    onClick: () => void;
+    title: ReactNode;
+    description?: ReactNode;
+    thumbnail?: ReactNode;
+    actions?: ReactNode;
+    contentClassName?: string;
+};
+
 export function AdminWorkspace({ children }: AdminWorkspaceProps) {
     return (
         <article className="h-[100dvh] bg-[#F9F9F9]">
@@ -164,6 +182,36 @@ export function AdminPagination({ page, totalPages, onChange }: AdminPaginationP
 
 export function AdminEmptyState({ message }: AdminEmptyStateProps) {
     return <p className="m-0 text-2xl font-[700] text-[var(--adaptive-grey500)]">{message}</p>;
+}
+
+export function AdminListSection({ children, pagination, empty, hasItems, className = "" }: AdminListSectionProps) {
+    return (
+        <div className={`flex flex-col ${className}`}>
+            {hasItems ? children : empty}
+            {pagination}
+        </div>
+    );
+}
+
+export function AdminListRow({ selected = false, onClick, title, description, thumbnail, actions, contentClassName = "" }: AdminListRowProps) {
+    return (
+        <section className="flex items-center justify-between h-[9.2rem]">
+            <UI.Button
+                className={`${selected ? "text-[var(--adaptive-red500)]" : ""} ${thumbnail ? "justify-start" : "justify-center"} flex h-full flex-1 items-center gap-[1.2rem] transition hover:bg-white ${contentClassName}`}
+                onClick={onClick}
+                type="button"
+            >
+                {thumbnail}
+
+                <div className="flex flex-col items-start justify-center gap-[0.8rem]">
+                    {title}
+                    {description}
+                </div>
+            </UI.Button>
+
+            {actions ? <div className="flex h-full">{actions}</div> : null}
+        </section>
+    );
 }
 
 export function AdminSidePanel({ title, description, children }: AdminSidePanelProps) {

@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useUploadImageMutation } from "@/entities/asset/api/asset.query";
 import { useCreateInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
+import { showErrorToast } from "@/shared/lib/toast";
 import { emptyRichTextContent, extractRichTextPlainText, toJsonContent } from "@/shared/lib/richText/richText";
 import type { RichTextContent } from "@/shared/lib/richText/richText";
 import { RichTextEditor } from "@/shared/ui/richText/RichTextEditor";
@@ -36,6 +37,7 @@ export function InquiryForm() {
         if (!name || !phone || !inquiryMessage) {
             setStatus("error");
             setMessage("이름, 연락처, 상담 내용을 입력해주세요.");
+            showErrorToast("이름, 연락처, 상담 내용을 입력해주세요.", 2);
             return;
         }
 

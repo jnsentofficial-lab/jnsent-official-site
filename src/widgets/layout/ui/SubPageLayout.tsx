@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useCreateInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
 import type { CreateInquiryPayload } from "@/entities/inquiry/model/inquiry.type";
 import { buildInquiryMessageBody } from "@/entities/inquiry/lib/buildMessageBody";
+import { showErrorToast } from "@/shared/lib/toast";
 import UI from "@/shared/ui/UIComponent";
 import Image from "next/image";
 
@@ -236,6 +237,7 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
 
         if (!name || !phone || !agreed) {
             setStatus("이름, 연락처, 개인정보 동의를 확인해주세요.");
+            showErrorToast("이름, 연락처, 개인정보 동의를 확인해주세요.", 2);
             return;
         }
 
@@ -243,6 +245,7 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
 
         if (missingRequiredChip) {
             setStatus(`${missingRequiredChip.label}을 선택해주세요.`);
+            showErrorToast(`${missingRequiredChip.label}을 선택해주세요.`, 2);
             return;
         }
 

@@ -3,7 +3,7 @@
 import { Fragment, useState } from "react";
 import { useAdminInquiriesQuery, useDeleteInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
 import type { Inquiry } from "@/entities/inquiry/model/inquiry.type";
-import { AdminPagination, ConfirmDialog } from "@/widgets/admin/shared/AdminLayout";
+import { AdminListRow, AdminListSection, AdminPagination, ConfirmDialog } from "@/widgets/admin/shared/AdminLayout";
 import UI from "@/shared/ui/UIComponent";
 import { Text } from "@/shared/ui/kit/Text";
 import Image from "next/image";
@@ -23,44 +23,26 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
     const visibleInquiries = inquiries.slice((page - 1) * pageSize, page * pageSize);
 
     return (
-        <div className="flex flex-col gap-[5.2rem]">
+        <AdminListSection
+            className="gap-[5.2rem]"
+            empty={<p className="py-16 text-2xl font-[700] text-[var(--adaptiveGrey500)]">등록된 문의가 없습니다.</p>}
+            hasItems={inquiries.length > 0}
+            pagination={
+                <AdminPagination
+                    page={page}
+                    totalPages={totalPages}
+                    onChange={setPage}
+                />
+            }
+        >
             <section className="flex flex-col justify-center">
-                {inquiries.length ? (
-                    visibleInquiries.map((inquiry, mappedIdx) => {
-                        const SELECTED = selectedInquiryId === inquiry.id;
+                {visibleInquiries.map((inquiry, mappedIdx) => {
+                    const SELECTED = selectedInquiryId === inquiry.id;
 
-                        return (
-                            <Fragment key={`${inquiry.name}-${inquiry.category}`}>
-                                <section className="flex items-center justify-between h-[9.2rem]">
-                                    <UI.Button
-                                        className={`${SELECTED ? "text-[var(--adaptive-red500)]" : ""} flex flex-col justify-center items-start gap-[1.2rem] transition hover:bg-white h-full flex-1`}
-                                        onClick={() => onSelectInquiry(inquiry)}
-                                        type="button"
-                                    >
-                                        {SELECTED ? (
-                                            <Text.Shimmer
-                                                color={{
-                                                    start: "#780B12",
-                                                    end: "#FF6B75",
-                                                }}
-                                                duration={4}
-                                                className="text-[2.0rem]"
-                                            >
-                                                {inquiry.message}
-                                            </Text.Shimmer>
-                                        ) : (
-                                            <h6 className="text-[2.0rem]">{inquiry.message}</h6>
-                                        )}
-
-                                        <div className="flex flex-wrap items-center gap-4 text-lg font-semibold text-black">
-                                            <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{inquiry.name}</p>
-                                            <p className="text-[var(--adaptive-black300)] text-[1.4rem]">|</p>
-                                            <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.created_at))}</p>
-                                            <p className="text-[var(--adaptive-black300)] text-[1.4rem]">~</p>
-                                            <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.updated_at))}</p>
-                                        </div>
-                                    </UI.Button>
-
+                    return (
+                        <Fragment key={`${inquiry.name}-${inquiry.category}`}>
+                            <AdminListRow
+                                actions={
                                     <UI.Button
                                         className="h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
                                         onClick={() => setDeleteTarget(inquiry)}
@@ -75,35 +57,42 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
 
                                         <p>삭제</p>
                                     </UI.Button>
+                                }
+                                contentClassName="flex-col items-start"
+                                description={
+                                    <div className="flex flex-wrap items-center gap-4 text-lg font-semibold text-black">
+                                        <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{inquiry.name}</p>
+                                        <p className="text-[var(--adaptive-black300)] text-[1.4rem]">|</p>
+                                        <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.created_at))}</p>
+                                        <p className="text-[var(--adaptive-black300)] text-[1.4rem]">~</p>
+                                        <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.updated_at))}</p>
+                                    </div>
+                                }
+                                onClick={() => onSelectInquiry(inquiry)}
+                                selected={SELECTED}
+                                title={
+                                    SELECTED ? (
+                                        <Text.Shimmer
+                                            color={{
+                                                start: "#780B12",
+                                                end: "#FF6B75",
+                                            }}
+                                            duration={4}
+                                            className="text-[2.0rem]"
+                                        >
+                                            {inquiry.message}
+                                        </Text.Shimmer>
+                                    ) : (
+                                        <h6 className="text-[2.0rem]">{inquiry.message}</h6>
+                                    )
+                                }
+                            />
 
-                                    {/* <select
-                                        className="h-10 w-fit bg-black px-4 text-base font-[700] text-white"
-                                        aria-label={`${inquiry.name} 문의 상태`}
-                                        onChange={(event) => void updateStatus.mutate({ id: inquiry.id, status: event.target.value as Inquiry["status"] })}
-                                        onClick={(event) => event.stopPropagation()}
-                                        value={inquiry.status}
-                                    >
-                                        <option value="new">new</option>
-                                        <option value="in_progress">in_progress</option>
-                                        <option value="done">done</option>
-                                        <option value="spam">spam</option>
-                                    </select> */}
-                                </section>
-
-                                {visibleInquiries.length !== mappedIdx + 1 ? <div className="w-full h-[0.1rem] bg-[var(--adaptive-grey200)]" /> : null}
-                            </Fragment>
-                        );
-                    })
-                ) : (
-                    <p className="py-16 text-2xl font-[700] text-[var(--adaptiveGrey500)]">등록된 문의가 없습니다.</p>
-                )}
+                            {visibleInquiries.length !== mappedIdx + 1 ? <div className="w-full h-[0.1rem] bg-[var(--adaptive-grey200)]" /> : null}
+                        </Fragment>
+                    );
+                })}
             </section>
-
-            <AdminPagination
-                page={page}
-                totalPages={totalPages}
-                onChange={setPage}
-            />
 
             <ConfirmDialog
                 open={Boolean(deleteTarget)}
@@ -120,6 +109,6 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
                     setDeleteTarget(null);
                 }}
             />
-        </div>
+        </AdminListSection>
     );
 }

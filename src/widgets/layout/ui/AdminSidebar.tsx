@@ -1,5 +1,6 @@
 "use client";
 
+import { MouseEvent } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAdminSessionQuery, useLogoutAdminMutation } from "@/entities/auth/api/auth.query";
 import { useLayoutStore } from "@/shared/stores/useLayoutStore";
@@ -15,7 +16,11 @@ const adminNavItems = [
     { href: "/admin/news", label: "뉴스 관리" },
 ] as const;
 
-export function AdminSidebar() {
+type AdminSidebarProps = {
+    onMainNavigationClick: () => void;
+};
+
+export function AdminSidebar({ onMainNavigationClick }: AdminSidebarProps) {
     const router = useRouter();
     const pathname = usePathname();
     const logoutAdmin = useLogoutAdminMutation();
@@ -95,7 +100,11 @@ export function AdminSidebar() {
                 <UI.Linker
                     className="flex items-center gap-[0.4rem] px-[1.6rem] hover:text-[var(--adaptive-red500)] w-full"
                     href="/"
-                    onClick={() => setIsMobileNavOpen(false)}
+                    onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                        event.preventDefault();
+                        setIsMobileNavOpen(false);
+                        onMainNavigationClick();
+                    }}
                 >
                     {/* <Image
                         src={"/images/icon/outlined/ico-outlined-arrow-single-up.svg"}

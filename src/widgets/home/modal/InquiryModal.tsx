@@ -7,6 +7,7 @@ import { createPortal } from "react-dom";
 import { useCreateInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
 import { buildInquiryMessageBody } from "@/entities/inquiry/lib/buildMessageBody";
 import { HOME_INQUIRY_SUPPORT_FIELDS, SUPPORT_FIELD_CATEGORY_MAP, type HomeInquirySupportField } from "@/entities/inquiry/lib/supportFieldCategory";
+import { showErrorToast } from "@/shared/lib/toast";
 import UI from "@/shared/ui/UIComponent";
 
 type Gender = "male" | "female";
@@ -99,6 +100,7 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
         if (Object.keys(errors).length > 0) {
             setFieldErrors(errors);
             setStatusMessage("");
+            showErrorToast(Object.values(errors)[0] ?? "필수 입력값을 확인해주세요.", 2);
             return;
         }
 

@@ -1,5 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createGlobalModalFetch, deleteGlobalModalFetch, getAdminGlobalModalsFetch, getVisibleGlobalModalsFetch, toggleGlobalModalFetch, updateGlobalModalFetch } from "@/entities/globalModal/api/globalModal.api";
+import {
+    createGlobalModalFetch,
+    deleteGlobalModalFetch,
+    getAdminGlobalModalsFetch,
+    getVisibleGlobalModalsFetch,
+    toggleGlobalModalFetch,
+    updateGlobalModalFetch,
+} from "@/entities/globalModal/api/globalModal.api";
 import type { CreateGlobalModalPayload, DeleteGlobalModalPayload, GlobalModal, ToggleGlobalModalPayload, UpdateGlobalModalPayload } from "@/entities/globalModal/model/globalModal.type";
 import { useToastStore } from "@/shared/model/stores/useToastStore";
 
