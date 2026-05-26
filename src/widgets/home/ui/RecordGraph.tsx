@@ -88,7 +88,7 @@ export function RecordGraph() {
             </div>
 
             <motion.div
-                className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center"
+                className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-x-hidden"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ amount: 0.25, once: false }}
@@ -101,7 +101,7 @@ export function RecordGraph() {
                 <svg
                     viewBox={GRAPH_VIEWBOX}
                     preserveAspectRatio="xMidYMid meet"
-                    className="block h-auto w-[100dvw] max-w-none"
+                    className="block h-auto w-full max-w-none"
                     aria-hidden
                 >
                     <motion.polyline

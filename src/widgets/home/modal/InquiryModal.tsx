@@ -151,7 +151,7 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="inquiry-modal-title"
-                    className="fixed inset-0 z-[200000] flex min-h-[100dvh] flex-col bg-[#F5F5F590] backdrop-blur-2xl overflow-y-auto"
+                    className="fixed inset-0 z-[200000] flex h-[100dvh] flex-col bg-[#F5F5F590] backdrop-blur-2xl overflow-y-auto"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -166,7 +166,7 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                         ×
                     </button>
 
-                    <main className="max-w-[var(--size-tablet)] mx-auto flex flex-col justify-center items-center gap-[2.4rem] h-full">
+                    <section className="mx-auto flex min-h-full w-full max-w-[var(--size-tablet)] flex-col items-center justify-start gap-[2.4rem] px-[1.6rem] pb-[3.2rem] pt-[8rem] pc:justify-center pc:px-0">
                         {/* <main className="mx-auto w-full max-w-[68rem] flex-1 px-[2rem] pb-[6rem] pt-[8rem]"> */}
                         <motion.header
                             className="flex flex-col gap-[1.6rem]"
@@ -192,7 +192,7 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                         </motion.header>
 
                         <form
-                            className="flex flex-col gap-[3.2rem] w-full"
+                            className="grid gap-[3.2rem] w-full"
                             onSubmit={handleSubmit}
                             // initial={{ opacity: 0, transform: "translateY(100px)" }}
                             // animate={{ opacity: 1, transform: "translateY(0px)" }}
@@ -409,7 +409,7 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                 </UI.Button>
                             </motion.section>
                         </form>
-                    </main>
+                    </section>
 
                     {/* <InquiryModalFooter /> */}
                 </motion.div>

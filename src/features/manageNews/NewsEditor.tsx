@@ -77,8 +77,10 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
 
     return (
         <Fragment>
+            <h1 className="text-[3.2rem] mobile:px-[1.6rem] pc:px-[5.2rem] pt-[5.2rem]">뉴스 편집</h1>
+
             <form
-                className={formClassName}
+                className="grid gap-10 mobile:px-[1.6rem] pc:px-[5.2rem]"
                 onSubmit={handleSubmit}
                 ref={formRef}
             >
@@ -192,7 +194,7 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
                 ) : null}
             </form>
 
-            <section className="flex absolute bottom-0 left-0 w-full">
+            <section className="flex w-full">
                 <UI.Button
                     className="bg-black hover:bg-[var(--adaptive-blue500)] text-white w-full"
                     disabled={upsertNews.isPending}

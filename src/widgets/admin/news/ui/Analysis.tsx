@@ -36,16 +36,22 @@ export function Analysis() {
                 current="뉴스 관리"
                 title="뉴스 관리"
                 action={
-                    <UI.Button
-                        // className="mb-8 min-h-14 bg-black px-6 text-lg font-[700] text-white"
+                    <button
+                        className="absolute bottom-[1.6rem] right-[1.6rem] bg-black hover:bg-[var(--adaptive-blue500)] cursor-pointer flex flex-col justify-center items-center gap-[1.2rem] h-[5.8rem] w-[5.8rem] rounded-full z-100 shadow-[0_0_50px_0_var(--adaptive-black500)]"
                         onClick={() => {
                             setSelectedNews(null);
                             openPanel(PANEL_KEY);
                         }}
                         type="button"
                     >
-                        + 작성하기
-                    </UI.Button>
+                        <Image
+                            src={"/images/icon/outlined/ico-outlined-edit.svg"}
+                            alt=""
+                            width={32}
+                            height={32}
+                            className="invert"
+                        />
+                    </button>
                 }
                 left={
                     <AdminListSection
@@ -69,29 +75,29 @@ export function Analysis() {
                                         actions={
                                             <>
                                                 <UI.Button
-                                                    className="h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
+                                                    className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
                                                     onClick={() => setDeleteTarget(item)}
                                                     type="button"
                                                 >
                                                     <Image
                                                         src={"/images/icon/outlined/ico-outlined-trash.svg"}
                                                         alt=""
-                                                        width={32}
-                                                        height={32}
+                                                        width={24}
+                                                        height={24}
                                                     />
                                                     <span className="text-base font-[700]">삭제</span>
                                                 </UI.Button>
 
                                                 <UI.Button
-                                                    className="h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
+                                                    className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
                                                     onClick={() => toggleNews.mutate({ id: item.id, is_published: !item.is_published })}
                                                     type="button"
                                                 >
                                                     <Image
                                                         src={"/images/icon/outlined/ico-outlined-trash.svg"}
                                                         alt=""
-                                                        width={32}
-                                                        height={32}
+                                                        width={24}
+                                                        height={24}
                                                     />
                                                     {item.is_published ? "공개" : "비공개"}
                                                 </UI.Button>
@@ -99,8 +105,7 @@ export function Analysis() {
                                         }
                                         description={
                                             <p className="text-[1.4rem] text-[var(--adaptive-grey500)]">
-                                                홍길동 <span className="mx-3">|</span>{" "}
-                                                {item.published_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(item.published_at)) : "날짜 미정"}
+                                                홍길동 <span className="mx-3">|</span> {item.published_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(item.published_at)) : "날짜 미정"}
                                             </p>
                                         }
                                         onClick={() => {

@@ -87,7 +87,7 @@ export function AdminTwoPanel({ panelKey, current, title, action, left, right }:
 
     return (
         <div className={`grid mobile:grid-cols-1 ${sidePanelOpenState ? "pc:grid-cols-2" : "pc:grid-cols-1"} h-full`}>
-            <section className="flex flex-col h-[100dvh] mobile:p-[1.6rem] pc:p-[5.2rem] mobile:gap-[1.6rem] pc:gap-[5.2rem] overflow-auto">
+            <section className="flex flex-col h-[100dvh] mobile:p-[5.2rem_1.6rem] pc:p-[5.2rem] mobile:gap-[5.2rem] pc:gap-[5.2rem] overflow-auto relative">
                 <section className="flex justify-between items-center gap-[1.6rem]">
                     <div className="flex flex-col gap-[1.6rem]">
                         <section className="flex items-center gap-[0.4rem]">
@@ -107,7 +107,6 @@ export function AdminTwoPanel({ panelKey, current, title, action, left, right }:
                     </div>
 
                     <div className="flex items-center gap-[1.2rem]">
-                        {action}
                         <UI.Button
                             className="bg-transparent px-0 text-[2.8rem] leading-none pc:hidden"
                             onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
@@ -118,12 +117,15 @@ export function AdminTwoPanel({ panelKey, current, title, action, left, right }:
                     </div>
                 </section>
 
+                {action}
+
                 {left}
             </section>
 
             {sidePanelOpenState ? (
-                <aside className="bg-white h-[100dvh] overflow-auto mobile:absolute mobile:left-0 mobile:top-0 mobile:w-full pc:w-auto pc:relative">
-                    <div className="absolute top-[5.2rem] right-[5.2rem] z-10 px-[1.4rem] rounded-full bg-[var(--adaptive-black100)]">
+                <aside className="bg-white h-[100dvh] mobile:absolute mobile:left-0 mobile:top-0 mobile:w-full pc:w-auto pc:relative">
+                    {/* <aside className="bg-white h-[100dvh] overflow-auto mobile:absolute mobile:left-0 mobile:top-0 mobile:w-full pc:w-auto pc:relative"> */}
+                    <div className="absolute mobile:top-[1.6rem] mobile:right-[1.6rem] pc:top-[5.2rem] pc:right-[5.2rem] z-10 px-[1.4rem] rounded-full bg-[var(--adaptive-black100)]">
                         <UI.Button
                             // className="bg-transparent px-0 text-[1.6rem] text-[var(--adaptive-black400)] hover:text-[var(--adaptive-red500)]"
                             className="text-[3.2rem] text-[var(--adaptive-black300)] font-[300]"
@@ -237,15 +239,22 @@ export function AdminListRow({ selected = false, onClick, title, description, th
 
             {actions ? (
                 <>
-                    <div className="hidden h-full pc:flex">{actions}</div>
-                    <div className="relative pc:hidden">
+                    {/* <div className="hidden h-full pc:flex">{actions}</div> */}
+                    <div className="relative">
                         <UI.Button
-                            className="min-h-[4.4rem] rounded-[1.2rem] border border-[var(--adaptive-grey200)] bg-white px-[1.2rem] text-[1.4rem] font-[700] touch-manipulation"
+                            // className="min-h-[4.4rem] rounded-[1.2rem] border border-[var(--adaptive-grey200)] bg-white px-[1.2rem] text-[1.4rem] font-[700] touch-manipulation"
+                            className=""
                             onClick={() => setIsActionMenuOpen((prev) => !prev)}
                             type="button"
                         >
-                            more
+                            <Image
+                                src={"/images/icon/outlined/ico-outlined-more.svg"}
+                                alt=""
+                                width={20}
+                                height={20}
+                            />
                         </UI.Button>
+
                         {isActionMenuOpen ? (
                             <div className="absolute right-0 top-[calc(100%+0.8rem)] z-20 min-w-[16rem] overflow-hidden rounded-[1.6rem] border border-[var(--adaptive-grey200)] bg-white shadow-[0_1.6rem_3.2rem_rgba(0,0,0,0.12)]">
                                 <div
@@ -265,8 +274,9 @@ export function AdminListRow({ selected = false, onClick, title, description, th
 
 export function AdminSidePanel({ title, description, children }: AdminSidePanelProps) {
     return (
-        <section className="flex flex-col gap-[5.2rem] mobile:p-[1.6rem] pc:p-[5.2rem]">
-            <h2 className="text-[3.2rem]">{title}</h2>
+        // <section className="overflow-auto flex flex-col gap-[5.2rem] mobile:p-0 pc:p-[5.2rem]">
+        <section className="overflow-auto flex flex-col gap-[5.2rem] h-full">
+            {/* <h2 className="text-[3.2rem] px-[5.2rem] pt-[5.2rem]">{title}</h2> */}
 
             {children}
         </section>

@@ -42,18 +42,18 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
                         <AdminListRow
                             actions={
                                 <UI.Button
-                                    className="h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
+                                    className="flex items-center h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
                                     onClick={() => setDeleteTarget(account)}
                                     type="button"
                                 >
                                     <Image
                                         src={"/images/icon/outlined/ico-outlined-trash.svg"}
                                         alt=""
-                                        width={32}
-                                        height={32}
+                                        width={24}
+                                        height={24}
                                     />
 
-                                    <p>삭제</p>
+                                    <p className="mobile:text-[var(--adaptive-red500)] pc:text-black">삭제</p>
                                 </UI.Button>
                             }
                             contentClassName="flex-col items-start"

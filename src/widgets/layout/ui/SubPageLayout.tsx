@@ -492,7 +492,7 @@ export function StudioSlider({ items, touch = false }: StudioSliderProps) {
             >
                 {sliderItems.map((item, index) => (
                     <article
-                        className="relative h-[50dvh] w-[50dvw] overflow-hidden rounded-[0rem] bg-black max-[86rem]:h-[28rem] max-[86rem]:w-[34rem]"
+                        className="relative h-[50dvh] w-[50dvw] overflow-hidden rounded-[0rem] bg-black max-[86rem]:h-[24rem] max-[86rem]:w-[min(34rem,calc(100vw-3.2rem))]"
                         key={`${item.title}-${index}`}
                     >
                         <img
@@ -501,8 +501,8 @@ export function StudioSlider({ items, touch = false }: StudioSliderProps) {
                             src={item.image}
                         />
 
-                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-[3.2rem] h-[50%] flex items-end">
-                            <h6 className="text-white font-[700] text-[3.2rem]">{item.title}</h6>
+                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent mobile:p-[2rem] pc:p-[3.2rem] h-[50%] flex items-end">
+                            <h6 className="text-white font-[700] mobile:text-[2.4rem] pc:text-[3.2rem]">{item.title}</h6>
                         </div>
                     </article>
                 ))}

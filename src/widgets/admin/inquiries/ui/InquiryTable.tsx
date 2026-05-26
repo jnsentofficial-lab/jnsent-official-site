@@ -84,7 +84,7 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
                                             {inquiry.message}
                                         </Text.Shimmer>
                                     ) : (
-                                        <h6 className="text-[2.0rem]">{inquiry.message}</h6>
+                                        <h6 className="text-[2.0rem] leading-[1.5] text-left">{inquiry.message}</h6>
                                     )
                                 }
                             />

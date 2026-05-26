@@ -3,12 +3,32 @@
 import { useSectionTheme } from "@/shared/hooks";
 import { Text } from "@/shared/ui/kit/Text";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { useRef } from "react";
 
 const principleItems = [
-    { title: "정확한 계약서", text: "계약 전 모든 조건을 문서로 먼저 확인합니다." },
-    { title: "직접 확인하세요", text: "정산과 운영 자료를 투명하게 안내합니다." },
-    { title: "검증된 운영사례", text: "실제 성장 사례 중심으로 방향을 잡습니다." },
+    { title: `"현혹" 되지마세요`, text: `과도한 수익 보장이나 실체 없는 10:0 계약 홍보는\n실제와 다를 수 있습니다.` },
+    { title: `"직접" 확인하세요`, text: `계약서에 숨겨진 독소 조항이나\n장기 계약 강요는 초보 BJ의 성장을 가로막습니다.` },
+    { title: `"증명" 요구하세요`, text: `실제 운영 시설과 데이터가 있는 회사인지\n반드시 확인해야 합니다.` },
+];
+
+const openItems = [
+    {
+        icon: "ico-outlined-building",
+        description: `실제 운영 시설\n투명공개`,
+    },
+    {
+        icon: "ico-outlined-graph-white",
+        description: `정산 데이터\n샘플공개`,
+    },
+    {
+        icon: "ico-outlined-account",
+        description: `계약서 원본\n사전설명`,
+    },
+    {
+        icon: "ico-outlined-checklist-white",
+        description: `1:1 맞춤 미팅\n진행`,
+    },
 ];
 
 export function TrustPrinciples() {
@@ -22,64 +42,94 @@ export function TrustPrinciples() {
             ref={sectionRef}
             className="h-[100dvh] flex justify-center items-center"
         >
-            <div className="mx-auto grid w-[min(112rem,calc(100%_-_3.2rem))] grid-cols-[minmax(0,1fr)_44rem] items-center gap-14 max-[86rem]:grid-cols-1">
-                <motion.div
-                    initial={{ opacity: 0, y: 28 }}
-                    transition={{ duration: 0.7 }}
-                    viewport={{ once: true, amount: 0.25 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+            {/* <div className="mx-auto grid w-[min(112rem,calc(100%_-_3.2rem))] grid-cols-[minmax(0,1fr)_44rem] items-center gap-14 max-[86rem]:grid-cols-1"> */}
+            <div className="mx-auto max-w-[var(--size-pc)] mx-auto w-full flex flex-col justify-center items-center gap-[3.2rem] px-[1.6rem]">
+                <Text.Reveal
+                    as="h2"
+                    className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[700] leading-[1.5] w-full"
+                    initialColor="#00000000"
+                    midColor="rgb(255, 92, 118)"
+                    revealColor="rgb(0, 0, 0)"
+                    revealWindow={0.5}
+                    align="left"
+                    revealStartPosition={20}
+                    revealEndPosition={60}
+                    delay={2}
+                    transition={0}
                 >
-                    <Text.Reveal
-                        as="h2"
-                        className="text-[3.8rem] font-black leading-[1.5]"
-                        initialColor="#00000000"
-                        midColor="rgb(255, 92, 118)"
-                        revealColor="rgb(0, 0, 0)"
-                        revealWindow={0.5}
-                        align="left"
-                        revealStartPosition={20}
-                        revealEndPosition={60}
-                        delay={2}
-                        transition={0}
-                    >
-                        {`투명한 인터넷 방송 생태계를 위한,\n제이엔에스가 지키는 단호한 원칙`}
-                    </Text.Reveal>
+                    {`투명한 인터넷 방송 생태계를 위한,\n제이엔에스가 지키는 단호한 원칙`}
+                </Text.Reveal>
 
-                    <div className="mt-12 grid max-w-[56rem] gap-5">
+                <section className="w-full flex gap-[1.6rem] items-center">
+                    <div className="flex-1 flex flex-col gap-[0.4rem]">
                         {principleItems.map((item) => (
                             <article
-                                className="rounded-2xl bg-white px-8 py-7 shadow-[0_1.2rem_3rem_rgba(20,30,40,0.06)]"
+                                className="rounded-[3.2rem] bg-white p-[3.2rem] flex flex-col gap-[1.2rem]"
+                                // className="rounded-2xl bg-white px-8 py-7 shadow-[0_1.2rem_3rem_rgba(20,30,40,0.06)]"
                                 key={item.title}
                             >
-                                <strong className="block text-2xl font-black text-black">{item.title}</strong>
-                                <p className="mt-2 mb-0 text-base font-semibold leading-[1.7] text-neutral-500">{item.text}</p>
+                                <h6 className="text-[2.4rem]">{item.title}</h6>
+                                <p className="text-[1.8rem] text-[var(--adaptive-black300)] font-[500] whitespace-break-spaces leading-[1.5]">{item.text}</p>
                             </article>
                         ))}
                     </div>
-                </motion.div>
-                <motion.article
-                    className="relative min-h-[43rem] overflow-hidden rounded-[2.4rem] bg-black p-8 text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
-                    initial={{ opacity: 0, x: 28 }}
-                    transition={{ duration: 0.7 }}
-                    viewport={{ once: true, amount: 0.25 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                >
-                    <div className="absolute inset-0 bg-[url('/images/landing/meeting.webp')] bg-cover bg-center opacity-55" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/20" />
-                    <div className="relative z-[1] flex h-full min-h-[38rem] flex-col justify-end">
-                        <p className="mb-5 text-base font-bold text-[#78f39b]">실제 운영 자료 기반 안내</p>
-                        <h3 className="m-0 text-3xl font-black leading-[1.35]">
-                            허위 수익 홍보가 아닌
-                            <br />
-                            확인 가능한 성장 구조
-                        </h3>
-                        <div className="mt-8 grid grid-cols-3 gap-3 text-center text-sm font-black">
-                            <span className="rounded-xl bg-white/12 px-3 py-4 backdrop-blur">계약</span>
-                            <span className="rounded-xl bg-white/12 px-3 py-4 backdrop-blur">정산</span>
-                            <span className="rounded-xl bg-white/12 px-3 py-4 backdrop-blur">지원</span>
-                        </div>
-                    </div>
-                </motion.article>
+
+                    <Image
+                        src={`/images/icon/outlined/ico-outlined-arrow-single-right.svg`}
+                        alt=""
+                        width={48}
+                        height={48}
+                    />
+
+                    <motion.article
+                        // className="relative min-h-[43rem] overflow-hidden rounded-[2.4rem] bg-[url('/images/landing/meeting.webp')] bg-cover bg-center p-8 text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
+                        // className="relative aspect-square overflow-hidden rounded-[2.4rem] bg-[url('/images/landing/meeting.png')] bg-cover bg-center text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
+                        // className="relative aspect overflow-hidden rounded-[2.4rem] bg-[url('/images/landing/meeting.png')] bg-cover bg-center text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
+                        className="relative flex-1 overflow-hidden rounded-[2.4rem] bg-[url('/images/landing/meeting.png')] bg-cover bg-center text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
+                        initial={{ opacity: 0, x: 28 }}
+                        transition={{ duration: 0.7 }}
+                        viewport={{ once: true, amount: 0.25 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                    >
+                        {/* <section className="bg-[linear-gradient(0deg,#000000f7_10%,#00000050)] h-full flex-1 p-[3.2rem] flex flex-col justify-between"> */}
+                        <section className="bg-[linear-gradient(0deg,#000000f7_10%,#00000050)] h-full flex-1 p-[3.2rem] gap-[12.0rem] h-full flex flex-col justify-between">
+                            <section className="flex flex-col gap-[1.6rem]">
+                                <p className="text-[1.8rem] font-[500]">제이엔에스는 모든 항목에 대해</p>
+                                <h6 className="leading-[1.5] text-[2.4rem]">
+                                    미팅 시 실제 자료를
+                                    <br />
+                                    투명하게 공개합니다.
+                                </h6>
+                            </section>
+
+                            <section className="flex flex-col gap-[1.6rem]">
+                                <div className="flex justify-between">
+                                    {openItems.map((mappedItem, mappedIdx) => (
+                                        <div key={mappedIdx}>
+                                            <Image
+                                                src={`/images/icon/outlined/${mappedItem.icon}.svg`}
+                                                alt=""
+                                                width={48}
+                                                height={48}
+                                            />
+                                            <p className="leading-[1.5] font-[500] whitespace-break-spaces">{mappedItem.description}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="w-full bg-[#ffffff50] h-[0.1rem]" />
+                                <div className="flex items-center gap-[0.8rem]">
+                                    <Image
+                                        src={`/images/icon/colored/ico-colored-checked-green.svg`}
+                                        alt=""
+                                        width={20}
+                                        height={20}
+                                    />
+                                    <p className="text-[#89FF49]">말이 아닌, 눈으로 확인 할 수 있는 신뢰를 약속드립니다.</p>
+                                </div>
+                            </section>
+                        </section>
+                    </motion.article>
+                </section>
             </div>
         </section>
     );

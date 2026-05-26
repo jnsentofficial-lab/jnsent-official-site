@@ -38,15 +38,22 @@ export function Analysis() {
                 current="팝업 관리"
                 title="팝업 관리"
                 action={
-                    <UI.Button
+                    <button
+                        className="absolute bottom-[1.6rem] right-[1.6rem] bg-black hover:bg-[var(--adaptive-blue500)] cursor-pointer flex flex-col justify-center items-center gap-[1.2rem] h-[5.8rem] w-[5.8rem] rounded-full z-100 shadow-[0_0_50px_0_var(--adaptive-black500)]"
                         onClick={() => {
                             setSelectedModal(null);
                             openPanel(PANEL_KEY);
                         }}
                         type="button"
                     >
-                        + 생성하기
-                    </UI.Button>
+                        <Image
+                            src={"/images/icon/outlined/ico-outlined-edit.svg"}
+                            alt=""
+                            width={32}
+                            height={32}
+                            className="invert"
+                        />
+                    </button>
                 }
                 left={
                     <AdminListSection
@@ -70,33 +77,33 @@ export function Analysis() {
                                         actions={
                                             <>
                                                 <UI.Button
-                                                    className="h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
+                                                    className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
                                                     onClick={() => setDeleteTarget(modal)}
                                                     type="button"
                                                 >
                                                     <Image
                                                         src={"/images/icon/outlined/ico-outlined-trash.svg"}
                                                         alt=""
-                                                        width={32}
-                                                        height={32}
+                                                        width={24}
+                                                        height={24}
                                                     />
                                                     <p>삭제</p>
                                                 </UI.Button>
                                                 <UI.Button
-                                                    className="h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
+                                                    className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
                                                     onClick={() => setPreviewTarget(modal)}
                                                     type="button"
                                                 >
                                                     <Image
                                                         src={"/images/icon/outlined/ico-outlined-eye.svg"}
                                                         alt=""
-                                                        width={32}
-                                                        height={32}
+                                                        width={24}
+                                                        height={24}
                                                     />
                                                     <p>미리보기</p>
                                                 </UI.Button>
                                                 <UI.Button
-                                                    className="h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
+                                                    className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
                                                     onClick={() => {
                                                         setPendingToggleId(modal.id);
                                                         toggleModal.mutate(
@@ -111,8 +118,8 @@ export function Analysis() {
                                                     <Image
                                                         src={"/images/icon/outlined/ico-outlined-eye.svg"}
                                                         alt=""
-                                                        width={32}
-                                                        height={32}
+                                                        width={24}
+                                                        height={24}
                                                     />
                                                     {pendingToggleId === modal.id ? "변경중입니다.." : modal.is_visible ? "숨김" : "표시"}
                                                 </UI.Button>

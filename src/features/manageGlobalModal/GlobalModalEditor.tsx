@@ -141,8 +141,11 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
 
     return (
         <Fragment>
+            <h1 className="text-[3.2rem] mobile:px-[1.6rem] pc:px-[5.2rem] pt-[5.2rem]">계정 편집</h1>
+
             <form
-                className={formClassName}
+                className="grid gap-10 mobile:px-[1.6rem] pc:px-[5.2rem]"
+                // className={formClassName}
                 onSubmit={handleSubmit}
                 ref={formRef}
             >
@@ -304,7 +307,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                 ) : null}
             </form>
 
-            <section className="flex absolute bottom-0 left-0 w-full">
+            <section className="flex w-full">
                 <UI.Button
                     className="bg-black hover:bg-[var(--adaptive-blue500)] text-white w-full"
                     onClick={() => formRef.current?.requestSubmit()}
