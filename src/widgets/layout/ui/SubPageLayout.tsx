@@ -497,7 +497,7 @@ export function StudioSlider({ items, touch = false }: StudioSliderProps) {
                     >
                         <img
                             alt={item.title}
-                            className="h-full w-full object-cover opacity-85"
+                            className="h-full w-full object-cover opacity-85 select-none pointer-events-none"
                             src={item.image}
                         />
 

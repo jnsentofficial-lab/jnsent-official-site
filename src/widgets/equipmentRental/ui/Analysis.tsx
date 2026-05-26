@@ -9,11 +9,16 @@ import UI from "@/shared/ui/UIComponent";
 import Image from "next/image";
 
 const equipmentChips = [
-    { label: "PC 본체", options: ["i5 5400", "i7 10700k"], required: true },
-    { label: "모니터", options: ["27인치", "32인치"] },
-    { label: "DSLR", options: ["200D", "200D II"] },
-    { label: "웹캠", options: ["biro4k", "C920", "C930"] },
-    { label: "조명", options: ["룩스패드43H", "룩스패드22", "소프트박스", "레일조명"] },
+    // { label: "PC 본체", options: ["i5 5400", "i7 10700k"], required: true },
+    // { label: "모니터", options: ["27인치", "32인치"] },
+    // { label: "DSLR", options: ["200D", "200D II"] },
+    // { label: "웹캠", options: ["biro4k", "C920", "C930"] },
+    // { label: "조명", options: ["룩스패드43H", "룩스패드22", "소프트박스", "레일조명"] },
+    { label: "CPU", options: ["인텔 코어 울트라 시리즈2-270K", "인텔 15세대 울트라 5 225에로우레이크"], required: true },
+    { label: "GPU", options: ["GEFORCE RTX 5060"], required: true },
+    { label: "카메라", options: ["R8 RP"], required: true },
+    { label: "렌즈", options: ["캐논 24mm", "캐논 28mm"], required: true },
+    { label: "조명", options: ["룩스패드43H", "룩스패드22", "소프트박스"], required: true },
 ];
 
 export function Analysis() {

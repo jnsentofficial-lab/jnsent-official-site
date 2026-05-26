@@ -11,11 +11,11 @@ const supportItems = [
 
 export function BroadcastEnvironment() {
     return (
-        <section className="flex mobile:min-h-[100dvh] mobile:flex-col-reverse mobile:gap-[3.2rem] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[100dvh]">
-            <div className="mr-auto flex h-full flex-col items-end justify-center gap-[5.2rem] text-center mobile:w-full pc:w-[calc(50dvw-9.2rem)]">
+        <section className="h-[100dvh] flex">
+            <div className="flex flex-col items-end justify-center gap-[5.2rem] text-center w-[calc(50dvw-9.2rem)] h-full mr-auto">
                 <Text.Reveal
                     as="h2"
-                    className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[700] leading-[1.5]"
+                    className="text-[3.8rem] font-black leading-[1.5]"
                     initialColor="#ffffff00"
                     revealColor="#000000"
                     highlightColor="#FF6B75"
@@ -29,35 +29,24 @@ export function BroadcastEnvironment() {
                     {`최상의 결과는\n최상의 환경에서 시작됩니다`}
                 </Text.Reveal>
 
-                {/* <div className="flex flex-col justify-end items-end gap-[1.6rem]">
+                <div className="flex flex-col justify-end items-end gap-[1.6rem]">
                     {supportItems.map((item) => (
                         <div
                             key={item.title}
                             className="flex flex-col items-end"
                         >
-                            <strong className="block text-2xl font-[700]">{item.title}</strong>
+                            <strong className="block text-2xl font-black">{item.title}</strong>
                             <span className="mt-2 block text-base font-semibold text-neutral-700">{item.text}</span>
-                        </div>
-                    ))}
-                </div> */}
-                <div className="mt-14 grid gap-10">
-                    {supportItems.map((item) => (
-                        <div
-                            key={item.title}
-                            className="flex flex-col gap-[1.6rem]"
-                        >
-                            <h6 className="text-right text-[2.4rem] font-[700]">{item.title}</h6>
-                            <p className="text-right text-[1.8rem] text-[var(--adaptive-black400)] font-[500]">{item.text}</p>
                         </div>
                     ))}
                 </div>
 
-                <p className="mt-12 text-sm leading-[1.5] text-neutral-400">* 온라인 이미지만 속지 마세요. 실제 방송 환경을 직접 눈으로 확인하실 수 있습니다.</p>
+                <p className="mt-12 text-sm leading-[1.7] text-neutral-400">* 온라인 이미지만 속지 마세요. 실제 방송 환경을 직접 눈으로 확인하실 수 있습니다.</p>
             </div>
 
-            <div className="mobile:w-full pc:w-[calc(50dvw)]">
+            <div className="w-[calc(50dvw)]">
                 <motion.img
-                    className="h-full w-full object-cover opacity-55 mobile:max-h-[32rem]"
+                    className="w-full h-full object-cover opacity-55"
                     src={"/images/landing/room.jpg"}
                     alt=""
                     style={{
