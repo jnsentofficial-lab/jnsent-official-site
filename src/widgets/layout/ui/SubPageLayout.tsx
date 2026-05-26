@@ -6,6 +6,7 @@ import { useCreateInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
 import type { CreateInquiryPayload } from "@/entities/inquiry/model/inquiry.type";
 import { buildInquiryMessageBody } from "@/entities/inquiry/lib/buildMessageBody";
 import UI from "@/shared/ui/UIComponent";
+import Image from "next/image";
 
 type SubPageHeroProps = {
     current: string;
@@ -198,6 +199,12 @@ export function InfoCard({ title, children }: InfoCardProps) {
 export function NoticeBox() {
     return (
         <article className="rounded-[2.4rem] border border-[var(--adaptive-grey200)] bg-white p-7">
+            <Image
+                src={"/images/icon/outlined/ico-outlined-headset.svg"}
+                alt=""
+                width={32}
+                height={32}
+            />
             <h5>문의가 필요하신가요?</h5>
             <p className="mt-3 mb-5 text-lg font-semibold text-[var(--adaptiveGrey700)]">장비 상담 및 렌탈 관련 문의는 언제든지 연락주세요.</p>
             <UI.Linker
@@ -273,7 +280,7 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
             onSubmit={handleSubmit}
         >
             {chips.length ? (
-                <SubPageSection title="선택사항">
+                <SubPageSection title="렌탈사양">
                     {chips.map((group) => (
                         <div
                             className="grid gap-3"
@@ -290,7 +297,7 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
                                     return (
                                         <UI.Button
                                             className={`border ${active ? "border-[var(--adaptive-red500)] text-[var(--adaptive-red400)]" : "border-[var(--adaptive-black100)] text-[var(--adaptive-black300)]"} font-[500] px-[1.2rem] rounded-[1.4rem]`}
-                                            size="md"
+                                            size="sm"
                                             key={option}
                                             onClick={() => setSelected((prev) => ({ ...prev, [group.label]: option }))}
                                             type="button"

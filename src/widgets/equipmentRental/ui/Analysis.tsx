@@ -6,6 +6,7 @@ import { usePublishedPageContentQuery } from "@/entities/pageContent/api/pageCon
 import { InquiryRequestForm, NoticeBox, SubPageHero, SubPageSplit } from "@/widgets/layout/ui";
 import { DottedItem, SubPageSection } from "@/widgets/layout/ui/SubPageLayout";
 import UI from "@/shared/ui/UIComponent";
+import Image from "next/image";
 
 const equipmentChips = [
     { label: "PC 본체", options: ["i5 5400", "i7 10700k"], required: true },
@@ -22,8 +23,8 @@ export function Analysis() {
         <Fragment>
             <SubPageHero
                 current="장비렌탈"
-                title={content?.title ?? "장비렌탈"}
-                description={content?.description ?? "최고의 장비를 합리적인 비용으로 렌탈해드립니다."}
+                title={"장비렌탈"}
+                description={"최고의 장비를\n합리적인 비용으로 렌탈해드립니다."}
             />
             <SubPageSplit
                 left={
@@ -44,10 +45,17 @@ export function Analysis() {
                         </SubPageSection>
 
                         <article className="flex flex-col rounded-[2.4rem] border border-[var(--adaptive-grey200)] bg-white p-[1.6rem] gap-[1.6rem]">
-                            {/* <SubPageSection title="문의가 필요하신가요?" /> */}
-                            <section className="flex flex-col gap-[0.8rem]">
-                                <h5 className="text-[1.8rem]">문의가 필요하신가요?</h5>
-                                <p>장비 상담 및 렌탈 관련 문의는 언제든지 연락주세요.</p>
+                            <section className="flex items-center gap-[1.6rem]">
+                                <Image
+                                    src={"/images/icon/outlined/ico-outlined-headset.svg"}
+                                    alt=""
+                                    width={32}
+                                    height={32}
+                                />
+                                <section className="flex flex-col gap-[0.8rem]">
+                                    <h5 className="text-[1.8rem]">문의가 필요하신가요?</h5>
+                                    <p>장비 상담 및 렌탈 관련 문의는 언제든지 연락주세요.</p>
+                                </section>
                             </section>
 
                             <UI.Button
