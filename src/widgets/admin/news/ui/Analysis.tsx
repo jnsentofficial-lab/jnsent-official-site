@@ -21,10 +21,7 @@ export function Analysis() {
     const visibleNewsItems = newsItems.slice((page - 1) * pageSize, page * pageSize);
 
     return (
-        <AdminWorkspace
-            current="뉴스 관리"
-            title="뉴스 관리"
-        >
+        <AdminWorkspace>
             <AdminTwoPanel
                 current="뉴스 관리"
                 title="뉴스 관리"
