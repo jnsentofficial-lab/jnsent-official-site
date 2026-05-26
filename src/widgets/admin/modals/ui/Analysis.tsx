@@ -21,10 +21,7 @@ export function Analysis() {
     const visibleModals = modals.slice((page - 1) * pageSize, page * pageSize);
 
     return (
-        <AdminWorkspace
-            current="팝업 관리"
-            title="팝업 관리"
-        >
+        <AdminWorkspace>
             <AdminTwoPanel
                 current="팝업 관리"
                 title="팝업 관리"
@@ -33,7 +30,7 @@ export function Analysis() {
                         onClick={() => setSelectedModal(null)}
                         type="button"
                     >
-                        + 팝업 만들기
+                        + 생성하기
                     </UI.Button>
                 }
                 left={
@@ -51,11 +48,11 @@ export function Analysis() {
                                                 {modal.image_url ? (
                                                     <img
                                                         alt={modal.title}
-                                                        className="h-[7.2rem] w-[7.2rem] rounded-[1.2rem] object-cover"
+                                                        className="h-[5.2rem] w-[5.2rem] rounded-[1.2rem] object-cover"
                                                         src={modal.image_url}
                                                     />
                                                 ) : (
-                                                    <span className="flex h-[7.2rem] w-[7.2rem] items-center justify-center rounded-[1.2rem] bg-[var(--adaptive-grey200)] text-xs font-bold text-[var(--adaptive-grey500)]">
+                                                    <span className="flex h-[5.2rem] w-[5.2rem] items-center justify-center rounded-[1.2rem] bg-[var(--adaptive-grey200)] text-xs font-bold text-[var(--adaptive-grey500)]">
                                                         No
                                                     </span>
                                                 )}

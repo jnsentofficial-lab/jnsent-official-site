@@ -32,7 +32,7 @@ export function Analysis() {
                         onClick={() => setSelectedNews(null)}
                         type="button"
                     >
-                        + 뉴스 만들기
+                        + 작성하기
                     </UI.Button>
                 }
                 left={
@@ -53,11 +53,11 @@ export function Analysis() {
                                                 {item.thumbnail_url ? (
                                                     <img
                                                         alt={item.title}
-                                                        className="h-[7.2rem] w-[7.2rem] rounded-[2.0rem] object-cover"
+                                                        className="h-[5.2rem] w-[5.2rem] rounded-[1.2rem] object-cover"
                                                         src={item.thumbnail_url}
                                                     />
                                                 ) : (
-                                                    <span className="flex h-[3.2rem] w-20 items-center justify-center rounded-2xl bg-[var(--adaptiveGrey200)] text-xs font-bold text-[var(--adaptiveGrey500)]">
+                                                    <span className="flex h-[5.2rem] w-[5.2rem] items-center justify-center rounded-[1.2rem] bg-[var(--adaptiveGrey200)] text-xs font-bold text-[var(--adaptiveGrey500)]">
                                                         No
                                                     </span>
                                                 )}

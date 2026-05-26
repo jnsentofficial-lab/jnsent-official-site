@@ -16,22 +16,7 @@ export function Analysis() {
     const [sidebarMode, setSidebarMode] = useState<SidebarMode>("empty");
 
     return (
-        <AdminWorkspace
-            current="관리자 계정 관리"
-            title="관리자 계정 관리"
-            action={
-                <UI.Button
-                    className="min-h-14 bg-black px-6 text-lg font-[700] text-white"
-                    onClick={() => {
-                        setSelectedAccount(null);
-                        setSidebarMode("create");
-                    }}
-                    type="button"
-                >
-                    + 관리자 계정 만들기
-                </UI.Button>
-            }
-        >
+        <AdminWorkspace>
             <AdminTwoPanel
                 current="관리자 계정 관리"
                 title="관리자 계정 관리"
@@ -43,7 +28,7 @@ export function Analysis() {
                         }}
                         type="button"
                     >
-                        + 관리자 계정 만들기
+                        + 생성하기
                     </UI.Button>
                 }
                 left={

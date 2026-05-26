@@ -10,10 +10,7 @@ export function Analysis() {
     const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
 
     return (
-        <AdminWorkspace
-            current="문의 관리"
-            title="문의 관리"
-        >
+        <AdminWorkspace>
             <AdminTwoPanel
                 current="문의 관리"
                 title="문의 관리"

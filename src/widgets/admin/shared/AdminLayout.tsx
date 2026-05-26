@@ -5,9 +5,9 @@ import UI from "@/shared/ui/UIComponent";
 import Image from "next/image";
 
 type AdminWorkspaceProps = {
-    current?: string;
-    title?: string;
-    action?: ReactNode;
+    // current?: string;
+    // title?: string;
+    // action?: ReactNode;
     children: ReactNode;
 };
 
