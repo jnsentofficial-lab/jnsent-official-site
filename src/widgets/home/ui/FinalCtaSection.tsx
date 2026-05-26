@@ -13,7 +13,7 @@ export function FinalCtaSection() {
     return (
         <section
             ref={sectionRef}
-            className="relative h-[100dvh]"
+            className="relative mobile:min-h-[100dvh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[100dvh]"
         >
             <div
                 className="absolute w-full left-[50%] transform translate-x-[-50%] inset-0 pointer-events-none z-0"
@@ -38,7 +38,7 @@ export function FinalCtaSection() {
             </div>
 
             <motion.div
-                className="relative z-[100] mx-auto max-w-[78rem] h-full flex flex-col justify-center items-center"
+                className="relative z-[100] mx-auto flex h-full max-w-[78rem] flex-col items-center justify-center"
                 initial={{ opacity: 0, y: 28 }}
                 transition={{ duration: 0.75 }}
                 viewport={{ once: true, amount: 0.3 }}

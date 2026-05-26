@@ -20,7 +20,7 @@ export function TransparencyProof() {
 
     return (
         <section
-            className="relative flex h-[100dvh] items-center justify-center"
+            className="relative flex items-center justify-center mobile:min-h-[100dvh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[100dvh]"
             ref={sectionRef}
         >
             {/* <motion.div
@@ -55,7 +55,7 @@ export function TransparencyProof() {
             {/* <div className="relative z-[1] mx-auto w-[min(112rem,calc(100%_-_3.2rem))]"> */}
             <div className="relative z-[1] w-full">
                 <div
-                    className="max-w-[var(--size-pc)] mx-auto flex flex-col gap-[3.2rem]"
+                    className="mx-auto flex max-w-[var(--size-pc)] flex-col gap-[3.2rem]"
                     // initial={{ opacity: 0, y: 32 }}
                     // whileInView={{ opacity: 1, y: 0 }}
                     // viewport={{ once: true, amount: 0.25 }}

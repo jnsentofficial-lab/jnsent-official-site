@@ -29,7 +29,10 @@ export function Analysis() {
                 description={"엑셀 및 개인 방송, 라이브 커머스 등 콘텐츠 성격에 최적화된 맞춤형 공간을 제공합니다."}
             />
 
-            <StudioSlider items={studioItems} />
+            <StudioSlider
+                items={studioItems}
+                touch
+            />
 
             <SubPageSplit
                 left={

@@ -13,7 +13,7 @@ import { Text } from "@/shared/ui/kit/Text";
 const PANEL_KEY = "/admin/news";
 
 export function Analysis() {
-    const { data: newsItems = [] } = useAdminNewsQuery();
+    const { data: newsItems = [], isLoading } = useAdminNewsQuery();
     const [selectedNews, setSelectedNews] = useState<News | null>(null);
     const [deleteTarget, setDeleteTarget] = useState<News | null>(null);
     const [page, setPage] = useState(1);
@@ -49,8 +49,9 @@ export function Analysis() {
                 }
                 left={
                     <AdminListSection
-                        empty={<p className="py-16 text-2xl font-[700] text-[var(--adaptiveGrey500)]">등록된 NEWS가 없습니다.</p>}
+                        empty={<p className="py-16 text-2xl font-[700] text-[var(--adaptiveGrey500)]">등록된 뉴스가 없습니다.</p>}
                         hasItems={newsItems.length > 0}
+                        isLoading={isLoading}
                         pagination={
                             <AdminPagination
                                 page={page}

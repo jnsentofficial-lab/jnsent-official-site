@@ -1,7 +1,7 @@
 "use client";
 
-import { FormEvent, ReactNode, useState } from "react";
-import { motion } from "framer-motion";
+import { FormEvent, ReactNode, useEffect, useRef, useState } from "react";
+import { motion, PanInfo, useAnimationFrame, useMotionValue } from "framer-motion";
 import { useCreateInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
 import type { CreateInquiryPayload } from "@/entities/inquiry/model/inquiry.type";
 import { buildInquiryMessageBody } from "@/entities/inquiry/lib/buildMessageBody";
@@ -45,6 +45,7 @@ type StudioSliderProps = {
         title: string;
         image: string;
     }[];
+    touch?: boolean;
 };
 
 export function SubPageHero({ current, title, description }: SubPageHeroProps) {
@@ -404,8 +405,50 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
     );
 }
 
-export function StudioSlider({ items }: StudioSliderProps) {
+export function StudioSlider({ items, touch = false }: StudioSliderProps) {
+    const trackRef = useRef<HTMLDivElement | null>(null);
     const sliderItems = [...items, ...items];
+    const x = useMotionValue(0);
+    const isDraggingRef = useRef(false);
+    const loopWidthRef = useRef(0);
+    const velocityRef = useRef(0);
+
+    const normalizeX = (value: number, loopWidth: number) => {
+        if (!loopWidth) return value;
+
+        const normalized = value % loopWidth;
+        return normalized > 0 ? normalized - loopWidth : normalized;
+    };
+
+    useEffect(() => {
+        if (!touch) return;
+
+        const updateLoopWidth = () => {
+            const trackWidth = trackRef.current?.scrollWidth ?? 0;
+            const nextLoopWidth = trackWidth / 2;
+            loopWidthRef.current = nextLoopWidth;
+            x.set(normalizeX(x.get(), nextLoopWidth));
+        };
+
+        updateLoopWidth();
+        window.addEventListener("resize", updateLoopWidth);
+
+        return () => window.removeEventListener("resize", updateLoopWidth);
+    }, [items, touch, x]);
+
+    useAnimationFrame((_, delta) => {
+        if (!touch || isDraggingRef.current) return;
+
+        const loopWidth = loopWidthRef.current;
+
+        if (!loopWidth) return;
+
+        const nextX = x.get() + ((-40 + velocityRef.current) * delta) / 1000;
+        x.set(normalizeX(nextX, loopWidth));
+
+        const dampedVelocity = velocityRef.current * Math.pow(0.92, delta / 16.67);
+        velocityRef.current = Math.abs(dampedVelocity) < 1 ? 0 : dampedVelocity;
+    });
 
     return (
         <motion.section
@@ -422,14 +465,34 @@ export function StudioSlider({ items }: StudioSliderProps) {
             }}
         >
             <motion.div
-                className="flex w-max"
-                animate={{ x: ["0%", "-50%"] }}
-                transition={{ duration: 52, ease: "linear", repeat: Infinity }}
+                ref={trackRef}
+                className={`flex w-max ${touch ? "cursor-grab active:cursor-grabbing" : ""}`}
+                animate={touch ? undefined : { x: ["0%", "-50%"] }}
+                drag={touch ? "x" : false}
+                dragElastic={touch ? 0.02 : undefined}
+                dragMomentum={false}
+                onDragStart={() => {
+                    isDraggingRef.current = true;
+                    velocityRef.current = 0;
+                }}
+                onDrag={() => {
+                    const loopWidth = loopWidthRef.current;
+
+                    if (!loopWidth) return;
+
+                    x.set(normalizeX(x.get(), loopWidth));
+                }}
+                onDragEnd={(_, info: PanInfo) => {
+                    isDraggingRef.current = false;
+                    velocityRef.current = info.velocity.x;
+                    x.set(normalizeX(x.get(), loopWidthRef.current));
+                }}
+                transition={touch ? undefined : { duration: 52, ease: "linear", repeat: Infinity }}
+                style={touch ? { x, touchAction: "pan-y" } : undefined}
             >
                 {sliderItems.map((item, index) => (
                     <article
                         className="relative h-[50dvh] w-[50dvw] overflow-hidden rounded-[0rem] bg-black max-[86rem]:h-[28rem] max-[86rem]:w-[34rem]"
-                        // className="relative h-[38rem] w-[56rem] overflow-hidden rounded-[2.4rem] bg-black max-[86rem]:h-[28rem] max-[86rem]:w-[34rem]"
                         key={`${item.title}-${index}`}
                     >
                         <img

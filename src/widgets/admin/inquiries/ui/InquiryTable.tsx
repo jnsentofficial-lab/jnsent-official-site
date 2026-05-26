@@ -14,7 +14,7 @@ type InquiryTableProps = {
 };
 
 export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTableProps) {
-    const { data: inquiries = [] } = useAdminInquiriesQuery();
+    const { data: inquiries = [], isLoading } = useAdminInquiriesQuery();
     const deleteInquiry = useDeleteInquiryMutation();
     const [deleteTarget, setDeleteTarget] = useState<Inquiry | null>(null);
     const pageSize = 5;
@@ -27,6 +27,7 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
             className="gap-[5.2rem]"
             empty={<p className="py-16 text-2xl font-[700] text-[var(--adaptiveGrey500)]">등록된 문의가 없습니다.</p>}
             hasItems={inquiries.length > 0}
+            isLoading={isLoading}
             pagination={
                 <AdminPagination
                     page={page}

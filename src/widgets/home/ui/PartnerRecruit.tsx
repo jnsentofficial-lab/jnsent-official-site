@@ -11,10 +11,10 @@ const recruitInfo = [
 
 export function PartnerRecruit() {
     return (
-        <section className="h-[100dvh] flex">
-            <div className="w-[calc(50dvw)]">
+        <section className="flex mobile:min-h-[100dvh] mobile:flex-col mobile:gap-[3.2rem] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[100dvh]">
+            <div className="mobile:w-full pc:w-[calc(50dvw)]">
                 <motion.img
-                    className="w-full h-full object-cover opacity-55"
+                    className="h-full w-full object-cover opacity-55 mobile:max-h-[32rem]"
                     src={"/images/landing/bj.jpg"}
                     alt=""
                     style={{
@@ -29,13 +29,13 @@ export function PartnerRecruit() {
             </div>
 
             <div
-                className="flex items-center ml-[9.2rem] w-[calc(50dvw-9.2rem)]"
+                className="flex items-center mobile:ml-0 mobile:w-full pc:ml-[9.2rem] pc:w-[calc(50dvw-9.2rem)]"
                 // initial={{ opacity: 0, x: 32 }}
                 // whileInView={{ opacity: 1, x: 0 }}
                 // viewport={{ once: true, amount: 0.25 }}
                 // transition={{ duration: 0.7 }}
             >
-                <div className="max-w-[56rem]">
+                <div className="max-w-[56rem] mobile:w-full">
                     {/* <h2 className="m-0 text-5xl font-[700] leading-[1.5] max-[86rem]:text-4xl">
                         제이엔에스와 함께
                         <br />

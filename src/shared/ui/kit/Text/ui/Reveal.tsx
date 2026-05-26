@@ -46,6 +46,7 @@ type TextMarqueeProps = {
 type Line = {
     height: number;
     left: number;
+    right: number;
     text: string;
     top: number;
     width: number;
@@ -136,6 +137,8 @@ function groupTextLines(element: HTMLElement) {
     const textNode = [...element.childNodes].find((node) => node.nodeType === Node.TEXT_NODE);
     const text = textNode?.textContent ?? "";
     const containerRect = element.getBoundingClientRect();
+    const computedStyles = window.getComputedStyle(element);
+    const computedLineHeight = Number.parseFloat(computedStyles.lineHeight);
     const range = document.createRange();
     const groups: Array<{ end: number; rects: DOMRect[]; start: number; top: number }> = [];
 
@@ -159,7 +162,8 @@ function groupTextLines(element: HTMLElement) {
 
     range.detach();
 
-    return groups.map((group) => {
+    const measuredLines = groups
+        .map((group) => {
         const left = Math.min(...group.rects.map((rect) => rect.left));
         const right = Math.max(...group.rects.map((rect) => rect.right));
         const top = Math.min(...group.rects.map((rect) => rect.top));
@@ -168,11 +172,21 @@ function groupTextLines(element: HTMLElement) {
         return {
             height: bottom - top,
             left: left - containerRect.left,
+            right: containerRect.right - right,
             text: text.slice(group.start, group.end).trimEnd(),
             top: top - containerRect.top,
             width: right - left,
         };
-    });
+        })
+        .sort((prev, next) => prev.top - next.top);
+
+    const resolvedLineHeight = Number.isFinite(computedLineHeight) ? computedLineHeight : Math.max(...measuredLines.map((line) => line.height), 0);
+
+    return measuredLines.map((line, index) => ({
+        ...line,
+        height: resolvedLineHeight || line.height,
+        top: index * (resolvedLineHeight || line.height),
+    }));
 }
 
 function LineOverlay({ highlightColor, subHighlightColor, index, line, progress, revealColor, softness, total }: LineOverlayProps) {
@@ -189,13 +203,23 @@ function LineOverlay({ highlightColor, subHighlightColor, index, line, progress,
     return (
         <span
             aria-hidden="true"
-            className="pointer-events-none absolute block whitespace-pre font-[NanumSquare]"
+            className="pointer-events-none absolute block whitespace-pre"
             style={{
+                font: "inherit",
+                fontKerning: "inherit",
+                fontSize: "inherit",
+                fontStretch: "inherit",
+                fontStyle: "inherit",
+                fontVariant: "inherit",
+                fontWeight: "inherit",
                 height: line.height,
+                letterSpacing: "inherit",
                 left: line.left - softness,
                 lineHeight: `${line.height}px`,
+                right: line.right - softness,
+                textTransform: "inherit",
                 top: line.top,
-                width: line.width + softness * 2,
+                wordSpacing: "inherit",
             }}
         >
             <motion.span

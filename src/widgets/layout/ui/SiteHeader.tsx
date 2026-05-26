@@ -58,7 +58,7 @@ export function SiteHeader() {
                 </UI.Linker>
 
                 <UI.Button
-                    className="bg-transparent px-0 text-[2.8rem] leading-none pc:hidden"
+                    className="relative z-[60] min-h-[4.8rem] min-w-[4.8rem] bg-transparent px-0 text-[2.8rem] leading-none touch-manipulation pc:hidden"
                     onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
                     type="button"
                 >
@@ -83,7 +83,7 @@ export function SiteHeader() {
                         </UI.Linker>
 
                         <UI.Button
-                            className="bg-transparent px-0 text-[2.8rem] leading-none"
+                            className="min-h-[4.8rem] min-w-[4.8rem] bg-transparent px-0 text-[2.8rem] leading-none touch-manipulation"
                             onClick={() => setIsMobileNavOpen(false)}
                             type="button"
                         >

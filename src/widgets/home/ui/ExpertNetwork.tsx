@@ -23,7 +23,7 @@ export function ExpertNetwork() {
     return (
         <section
             ref={sectionRef}
-            className="h-[100dvh] flex justify-center items-center"
+            className="flex justify-center items-center mobile:min-h-[100dvh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[100dvh]"
         >
             <div className="mx-auto max-w-[var(--size-pc)] w-full text-center">
                 <Text.Reveal
@@ -42,7 +42,7 @@ export function ExpertNetwork() {
                     {`성장을 위한\n모든 분야의 전문가들이 함께합니다.`}
                 </Text.Reveal>
 
-                <div className="h-[4rem] w-[0.1rem] bg-[var(--adaptive-black200)]" />
+                <div className="mx-auto h-[4rem] w-[0.1rem] bg-[var(--adaptive-black200)]" />
                 <div className="bg-[var(--adaptive-black200)] h-[0.1rem] w-[84.1%] mx-auto" />
 
                 <div className="mt-16 grid gap-5 md:grid-cols-3 xl:grid-cols-6">

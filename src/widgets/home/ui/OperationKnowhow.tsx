@@ -23,7 +23,7 @@ export function OperationKnowhow() {
     return (
         <section
             ref={sectionRef}
-            className="relative h-[150dvh]"
+            className="relative mobile:min-h-[100dvh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[150dvh]"
         >
             <div
                 className="absolute w-full left-[50%] transform translate-x-[-50%] inset-0 pointer-events-none z-0"
@@ -51,7 +51,7 @@ export function OperationKnowhow() {
 
             <div
                 ref={ref}
-                className="ml-auto h-full mobile:w-full pc:w-[calc(50dvw-7.2rem)] flex justify-center items-center"
+                className="ml-auto flex h-full items-center justify-center mobile:w-full pc:w-[calc(50dvw-7.2rem)]"
             >
                 <div
                     // className="relative z-[1] ml-auto w-[min(72rem,calc(100%_-_3.2rem))] pr-[max(1.6rem,calc((100vw_-_112rem)/2))]"

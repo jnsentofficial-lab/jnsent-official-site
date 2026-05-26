@@ -11,8 +11,8 @@ const supportItems = [
 
 export function BroadcastEnvironment() {
     return (
-        <section className="h-[100dvh] flex">
-            <div className="flex flex-col items-end justify-center gap-[5.2rem] text-center w-[calc(50dvw-9.2rem)] h-full mr-auto">
+        <section className="flex mobile:min-h-[100dvh] mobile:flex-col-reverse mobile:gap-[3.2rem] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[100dvh]">
+            <div className="mr-auto flex h-full flex-col items-end justify-center gap-[5.2rem] text-center mobile:w-full pc:w-[calc(50dvw-9.2rem)]">
                 <Text.Reveal
                     as="h2"
                     className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[700] leading-[1.5]"
@@ -55,9 +55,9 @@ export function BroadcastEnvironment() {
                 <p className="mt-12 text-sm leading-[1.5] text-neutral-400">* 온라인 이미지만 속지 마세요. 실제 방송 환경을 직접 눈으로 확인하실 수 있습니다.</p>
             </div>
 
-            <div className="w-[calc(50dvw)]">
+            <div className="mobile:w-full pc:w-[calc(50dvw)]">
                 <motion.img
-                    className="w-full h-full object-cover opacity-55"
+                    className="h-full w-full object-cover opacity-55 mobile:max-h-[32rem]"
                     src={"/images/landing/room.jpg"}
                     alt=""
                     style={{

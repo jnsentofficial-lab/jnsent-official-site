@@ -2,7 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useLoginAdminMutation } from "@/entities/auth/api/auth.query";
+import { AuthRoutes } from "@/entities/auth/api/auth.query";
 import UI from "@/shared/ui/UIComponent";
 import Image from "next/image";
 
@@ -11,6 +13,7 @@ const labelClassName = "flex flex-col gap-[0.8rem] font-[NanumSquare]";
 
 export function AdminLoginForm() {
     const router = useRouter();
+    const queryClient = useQueryClient();
     const [errorMessage, setErrorMessage] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const loginAdmin = useLoginAdminMutation();
@@ -25,7 +28,8 @@ export function AdminLoginForm() {
         const password = String(formData.get("password") ?? "");
 
         try {
-            await loginAdmin.mutateAsync({ email, password });
+            const response = await loginAdmin.mutateAsync({ email, password });
+            queryClient.setQueryData([AuthRoutes.ADMIN_SESSION, "useAdminSessionQuery"], response);
             router.replace("/admin/inquiries");
         } catch {
             setErrorMessage("로그인 정보를 확인해주세요.");

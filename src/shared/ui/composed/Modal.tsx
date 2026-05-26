@@ -35,6 +35,7 @@ interface BottomSheetProps {
 
 const Modal = ({ title, description, open, onClose, children, className, actions: actions = [], onInit, placement }: BottomSheetProps) => {
     const [isClient, setIsClient] = useState(false);
+    const [isMobileViewport, setIsMobileViewport] = useState(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -68,6 +69,20 @@ const Modal = ({ title, description, open, onClose, children, className, actions
         setIsClient(true);
     }, []);
 
+    useEffect(() => {
+        if (!isClient) {
+            return;
+        }
+
+        const syncViewport = () => setIsMobileViewport(window.innerWidth < 860);
+        syncViewport();
+        window.addEventListener("resize", syncViewport);
+
+        return () => {
+            window.removeEventListener("resize", syncViewport);
+        };
+    }, [isClient]);
+
     if (!isClient) return null; // SSR 단계에서는 아무것도 렌더링하지 않음
 
     const modalClassName = `${className ? className : "max-w-[calc(var(--modal-width)-(1.6rem*4))]"} max-h-[calc(100dvh-(1.6rem*2))] z-[100000000] w-full bg-[var(--color-gray-100)] rounded-[3.2rem] flex flex-col shadow-[0_0_20rem_10rem_#00000060] overflow-hidden`;
@@ -89,12 +104,12 @@ const Modal = ({ title, description, open, onClose, children, className, actions
 
                             {/* BottomSheet */}
                             {placement ? (
-                                <div className="fixed inset-0 z-[100000000] grid grid-cols-3 grid-rows-3 pointer-events-none p-[1.6rem]">
+                                <div className="fixed inset-0 z-[100000000] grid pointer-events-none mobile:grid-cols-1 mobile:grid-rows-1 pc:grid-cols-3 pc:grid-rows-3 p-[1.6rem]">
                                     <motion.section
                                         ref={containerRef}
                                         role="dialog"
                                         className={`${modalClassName} pointer-events-auto self-center`}
-                                        style={{ gridColumn: placement.col, gridRow: placement.row }}
+                                        style={isMobileViewport ? undefined : { gridColumn: placement.col, gridRow: placement.row }}
                                         initial={{ opacity: 0, scale: 0.95 }}
                                         animate={{ opacity: 1, scale: 1 }}
                                         exit={{ opacity: 0, scale: 0.95 }}

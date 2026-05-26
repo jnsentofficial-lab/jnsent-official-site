@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { useLayoutStore } from "@/shared/stores/useLayoutStore";
 import UI from "@/shared/ui/UIComponent";
 import { AdminPanelKey, useAdminSidePanelStore } from "@/widgets/admin/shared/model/useAdminSidePanelStore";
@@ -56,6 +56,8 @@ type AdminListSectionProps = {
     empty?: ReactNode;
     hasItems: boolean;
     className?: string;
+    isLoading?: boolean;
+    loading?: ReactNode;
 };
 
 type AdminListRowProps = {
@@ -184,32 +186,79 @@ export function AdminEmptyState({ message }: AdminEmptyStateProps) {
     return <p className="m-0 text-2xl font-[700] text-[var(--adaptive-grey500)]">{message}</p>;
 }
 
-export function AdminListSection({ children, pagination, empty, hasItems, className = "" }: AdminListSectionProps) {
+export function AdminListSection({ children, pagination, empty, hasItems, className = "", isLoading = false, loading }: AdminListSectionProps) {
     return (
         <div className={`flex flex-col ${className}`}>
-            {hasItems ? children : empty}
+            {isLoading ? loading ?? <p className="py-16 text-2xl font-[700] text-[var(--adaptiveGrey500)]">목록을 불러오는 중입니다.</p> : hasItems ? children : empty}
             {pagination}
         </div>
     );
 }
 
 export function AdminListRow({ selected = false, onClick, title, description, thumbnail, actions, contentClassName = "" }: AdminListRowProps) {
+    const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
+    const rowRef = useRef<HTMLElement | null>(null);
+
+    useEffect(() => {
+        if (!isActionMenuOpen) {
+            return;
+        }
+
+        function handlePointerDown(event: MouseEvent) {
+            if (!rowRef.current?.contains(event.target as Node)) {
+                setIsActionMenuOpen(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handlePointerDown);
+
+        return () => {
+            document.removeEventListener("mousedown", handlePointerDown);
+        };
+    }, [isActionMenuOpen]);
+
     return (
-        <section className="flex items-center justify-between h-[9.2rem]">
+        <section
+            className="relative flex items-center justify-between gap-[1.2rem] mobile:min-h-[9.2rem]"
+            ref={rowRef}
+        >
             <UI.Button
-                className={`${selected ? "text-[var(--adaptive-red500)]" : ""} ${thumbnail ? "justify-start" : "justify-center"} flex h-full flex-1 items-center gap-[1.2rem] transition hover:bg-white ${contentClassName}`}
+                className={`${selected ? "text-[var(--adaptive-red500)]" : ""} ${thumbnail ? "justify-start" : "justify-center"} flex h-full min-h-[9.2rem] flex-1 items-center gap-[1.2rem] transition hover:bg-white min-w-0 ${contentClassName}`}
                 onClick={onClick}
                 type="button"
             >
                 {thumbnail}
 
-                <div className="flex flex-col items-start justify-center gap-[0.8rem]">
+                <div className="flex min-w-0 flex-col items-start justify-center gap-[0.8rem]">
                     {title}
                     {description}
                 </div>
             </UI.Button>
 
-            {actions ? <div className="flex h-full">{actions}</div> : null}
+            {actions ? (
+                <>
+                    <div className="hidden h-full pc:flex">{actions}</div>
+                    <div className="relative pc:hidden">
+                        <UI.Button
+                            className="min-h-[4.4rem] rounded-[1.2rem] border border-[var(--adaptive-grey200)] bg-white px-[1.2rem] text-[1.4rem] font-[700] touch-manipulation"
+                            onClick={() => setIsActionMenuOpen((prev) => !prev)}
+                            type="button"
+                        >
+                            more
+                        </UI.Button>
+                        {isActionMenuOpen ? (
+                            <div className="absolute right-0 top-[calc(100%+0.8rem)] z-20 min-w-[16rem] overflow-hidden rounded-[1.6rem] border border-[var(--adaptive-grey200)] bg-white shadow-[0_1.6rem_3.2rem_rgba(0,0,0,0.12)]">
+                                <div
+                                    className="flex flex-col mobile:[&_button]:h-auto mobile:[&_button]:min-h-[4.4rem] mobile:[&_button]:w-full mobile:[&_button]:justify-start mobile:[&_button]:gap-[0.8rem] mobile:[&_button]:px-[1.6rem]"
+                                    onClick={() => setIsActionMenuOpen(false)}
+                                >
+                                    {actions}
+                                </div>
+                            </div>
+                        ) : null}
+                    </div>
+                </>
+            ) : null}
         </section>
     );
 }

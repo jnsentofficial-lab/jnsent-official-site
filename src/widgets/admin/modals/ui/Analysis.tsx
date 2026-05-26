@@ -13,10 +13,11 @@ import { Text } from "@/shared/ui/kit/Text";
 const PANEL_KEY = "/admin/modals";
 
 export function Analysis() {
-    const { data: modals = [] } = useAdminGlobalModalsQuery();
+    const { data: modals = [], isLoading } = useAdminGlobalModalsQuery();
     const [selectedModal, setSelectedModal] = useState<GlobalModal | null>(null);
     const [deleteTarget, setDeleteTarget] = useState<GlobalModal | null>(null);
     const [previewTarget, setPreviewTarget] = useState<GlobalModal | null>(null);
+    const [pendingToggleId, setPendingToggleId] = useState<string | null>(null);
     const [page, setPage] = useState(1);
     const toggleModal = useToggleGlobalModalMutation();
     const deleteModal = useDeleteGlobalModalMutation();
@@ -51,6 +52,7 @@ export function Analysis() {
                     <AdminListSection
                         empty={<p className="py-16 text-2xl font-[700] text-[var(--adaptiveGrey500)]">등록된 팝업이 없습니다.</p>}
                         hasItems={modals.length > 0}
+                        isLoading={isLoading}
                         pagination={
                             <AdminPagination
                                 page={page}
@@ -95,7 +97,15 @@ export function Analysis() {
                                                 </UI.Button>
                                                 <UI.Button
                                                     className="h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
-                                                    onClick={() => toggleModal.mutate({ id: modal.id, is_visible: !modal.is_visible })}
+                                                    onClick={() => {
+                                                        setPendingToggleId(modal.id);
+                                                        toggleModal.mutate(
+                                                            { id: modal.id, is_visible: !modal.is_visible },
+                                                            {
+                                                                onSettled: () => setPendingToggleId(null),
+                                                            },
+                                                        );
+                                                    }}
                                                     type="button"
                                                 >
                                                     <Image
@@ -104,7 +114,7 @@ export function Analysis() {
                                                         width={32}
                                                         height={32}
                                                     />
-                                                    {modal.is_visible ? "숨김" : "표시"}
+                                                    {pendingToggleId === modal.id ? "변경중입니다.." : modal.is_visible ? "숨김" : "표시"}
                                                 </UI.Button>
                                             </>
                                         }
