@@ -11,8 +11,8 @@ const recruitInfo = [
 
 export function PartnerRecruit() {
     return (
-        <section className="h-[100dvh] flex">
-            <div className="w-[calc(50dvw)]">
+        <section className="min-h-[100dvh] flex justify-center mobile:flex-col-reverse pc:flex-row">
+            <div className="mobile:w-full pc:w-[50dvw]">
                 <motion.img
                     className="w-full h-full object-cover opacity-55"
                     src={"/images/landing/bj.jpg"}
@@ -29,7 +29,7 @@ export function PartnerRecruit() {
             </div>
 
             <div
-                className="flex items-center ml-[9.2rem] w-[calc(50dvw-9.2rem)]"
+                className="flex items-center pc:ml-[9.2rem] mobile:p-[1.6rem] pc:p-0 mobile:w-full pc:w-[calc(50dvw-9.2rem)]"
                 // initial={{ opacity: 0, x: 32 }}
                 // whileInView={{ opacity: 1, x: 0 }}
                 // viewport={{ once: true, amount: 0.25 }}

@@ -40,7 +40,7 @@ export function TrustPrinciples() {
         // <section className="bg-[#f3f6f7] py-[16rem] max-[86rem]:py-24">
         <section
             ref={sectionRef}
-            className="h-[100dvh] flex justify-center items-center"
+            className="min-h-[100dvh] flex mobile:flex-col pc:flex-row justify-center items-center"
         >
             {/* <div className="mx-auto grid w-[min(112rem,calc(100%_-_3.2rem))] grid-cols-[minmax(0,1fr)_44rem] items-center gap-14 max-[86rem]:grid-cols-1"> */}
             <div className="mx-auto max-w-[var(--size-pc)] mx-auto w-full flex flex-col justify-center items-center gap-[3.2rem] px-[1.6rem]">
@@ -60,7 +60,7 @@ export function TrustPrinciples() {
                     {`투명한 인터넷 방송 생태계를 위한,\n제이엔에스가 지키는 단호한 원칙`}
                 </Text.Reveal>
 
-                <section className="w-full flex gap-[1.6rem] items-center">
+                <section className="w-full flex gap-[1.6rem] items-center mobile:flex-col pc:flex-row">
                     <div className="flex-1 flex flex-col gap-[0.4rem]">
                         {principleItems.map((item) => (
                             <article
@@ -79,6 +79,7 @@ export function TrustPrinciples() {
                         alt=""
                         width={48}
                         height={48}
+                        className="mobile:rotate-90 pc:rotate-0"
                     />
 
                     <motion.article
