@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { ReactNode } from "react";
+import { useLayoutStore } from "@/shared/stores/useLayoutStore";
 import UI from "@/shared/ui/UIComponent";
 import { AdminPanelKey, useAdminSidePanelStore } from "@/widgets/admin/shared/model/useAdminSidePanelStore";
 import Image from "next/image";
@@ -52,7 +53,8 @@ type AdminSidePanelProps = {
 export function AdminWorkspace({ children }: AdminWorkspaceProps) {
     return (
         <article className="h-[100dvh] bg-[#F9F9F9]">
-            <div className="mx-auto min-w-[var(--size-pc)] h-full flex flex-col gap-[5.2rem]">{children}</div>
+            <div className="mx-auto h-full flex flex-col gap-[5.2rem]">{children}</div>
+            {/* <div className="mx-auto min-w-[var(--size-pc)] h-full flex flex-col gap-[5.2rem]">{children}</div> */}
         </article>
     );
 }
@@ -60,11 +62,13 @@ export function AdminWorkspace({ children }: AdminWorkspaceProps) {
 export function AdminTwoPanel({ panelKey, current, title, action, left, right }: AdminTwoPanelProps) {
     const sidePanelOpenState = useAdminSidePanelStore((state) => state.openedPanels[panelKey]);
     const closePanel = useAdminSidePanelStore((state) => state.closePanel);
+    const isMobileNavOpen = useLayoutStore((state) => state.isMobileNavOpen);
+    const setIsMobileNavOpen = useLayoutStore((state) => state.setIsMobileNavOpen);
 
     return (
         <div className={`grid mobile:grid-cols-1 ${sidePanelOpenState ? "pc:grid-cols-2" : "pc:grid-cols-1"} h-full`}>
             <section className="flex flex-col h-[100dvh] overflow-auto">
-                <section className="flex justify-between items-center gap-[1.6rem] p-[5.2rem]">
+                <section className="flex justify-between items-center gap-[1.6rem] mobile:p-[1.6rem] pc:p-[5.2rem]">
                     <div className="flex flex-col gap-[1.6rem]">
                         <section className="flex items-center gap-[0.4rem]">
                             <h6 className="text-[1.8rem] font-[700] text-[var(--adaptive-black300)]">메인</h6>
@@ -82,7 +86,16 @@ export function AdminTwoPanel({ panelKey, current, title, action, left, right }:
                         <h1 className="text-[3.2rem]">{title}</h1>
                     </div>
 
-                    {action}
+                    <div className="flex items-center gap-[1.2rem]">
+                        {action}
+                        <UI.Button
+                            className="bg-transparent px-0 text-[2.8rem] leading-none pc:hidden"
+                            onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
+                            type="button"
+                        >
+                            {isMobileNavOpen ? "×" : "☰"}
+                        </UI.Button>
+                    </div>
                 </section>
 
                 {left}
@@ -90,13 +103,14 @@ export function AdminTwoPanel({ panelKey, current, title, action, left, right }:
 
             {sidePanelOpenState ? (
                 <aside className="bg-white h-[100dvh] overflow-auto mobile:absolute mobile:left-0 mobile:top-0 mobile:w-full pc:w-auto pc:relative">
-                    <div className="sticky top-0 z-10 flex justify-end bg-white p-[2.4rem] pb-0">
+                    <div className="absolute top-[5.2rem] right-[5.2rem] z-10 px-[1.4rem] rounded-full bg-[var(--adaptive-black100)]">
                         <UI.Button
-                            className="bg-transparent px-0 text-[1.6rem] text-[var(--adaptive-black400)] hover:text-[var(--adaptive-red500)]"
+                            // className="bg-transparent px-0 text-[1.6rem] text-[var(--adaptive-black400)] hover:text-[var(--adaptive-red500)]"
+                            className="text-[3.2rem] text-[var(--adaptive-black300)] font-[300]"
                             onClick={() => closePanel(panelKey)}
                             type="button"
                         >
-                            닫기
+                            ×
                         </UI.Button>
                     </div>
 
@@ -154,7 +168,7 @@ export function AdminEmptyState({ message }: AdminEmptyStateProps) {
 
 export function AdminSidePanel({ title, description, children }: AdminSidePanelProps) {
     return (
-        <section className="flex flex-col gap-[5.2rem] p-[5.2rem]">
+        <section className="flex flex-col gap-[5.2rem] mobile:p-[1.6rem] pc:p-[5.2rem]">
             <h2 className="text-[3.2rem]">{title}</h2>
 
             {children}
@@ -231,7 +245,7 @@ export function ConfirmDialog({ open, title, description, targetLabel, confirmLa
                                     damping: 10,
                                 }}
                             >
-                                <p className="text-[var(--adaptive-black300)] text-[1.4rem] font-[NanumSquare]">삭제될 계정</p>
+                                <p className="text-[var(--adaptive-black300)] text-[1.4rem] font-[NanumSquare]">삭제 대상</p>
 
                                 <h6 className="text-[2.0rem] leading-[1.5]">{targetLabel}</h6>
                             </motion.section>

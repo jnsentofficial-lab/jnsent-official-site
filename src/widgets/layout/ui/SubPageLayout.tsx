@@ -77,18 +77,18 @@ export function SubPageHero({ current, title, description }: SubPageHeroProps) {
                         damping: 10,
                     }}
                 >
-                    <p className="text-[2.4rem] text-[var(--adaptive-grey500)]">메인</p>
+                    <p className="mobile:text-[1.8rem] pc:text-[2.4rem] text-[var(--adaptive-grey500)]">메인</p>
                     <img
                         src={"/images/icon/outlined/ico-outlined-arrow-right.svg"}
                         alt=""
-                        className="w-[3.6rem]"
+                        className="mobile:w-[2.8rem] pc:w-[3.6rem]"
                     />
-                    <p className="text-[2.4rem] font-[700]">{current}</p>
+                    <p className="mobile:text-[1.8rem] pc:text-[2.4rem] font-[700]">{current}</p>
                 </motion.section>
 
                 <section className="grid grid-cols-4 gap-10 max-[86rem]:grid-cols-1">
                     <motion.h1
-                        className="col-span-2 whitespace-break-spaces font-[700] text-[5.2rem] leading-[1.5]"
+                        className="col-span-2 whitespace-break-spaces font-[700] mobile:text-[3.2rem] pc:text-[5.2rem] leading-[1.5]"
                         initial={{ opacity: 0, transform: "translateY(100px)" }}
                         animate={{ opacity: 1, transform: "translateY(0px)" }}
                         exit={{ opacity: 0, transform: "translateY(100px)" }}
@@ -104,7 +104,8 @@ export function SubPageHero({ current, title, description }: SubPageHeroProps) {
                     </motion.h1>
 
                     <motion.p
-                        className="col-span-2 m-0 pt-5 text-[2.4rem] font-[NanumSquare] whitespace-break-spaces leading-[1.5] text-black max-[86rem]:pt-0 max-[86rem]:text-2xl"
+                        className="col-span-2 mobile:text-[2.0rem] pc:text-[2.4rem] font-[NanumSquare] whitespace-break-spaces leading-[1.5]"
+                        // className="col-span-2 m-0 pt-5 text-[2.4rem] font-[NanumSquare] whitespace-break-spaces leading-[1.5] text-black max-[86rem]:pt-0 max-[86rem]:text-2xl"
                         initial={{ opacity: 0, transform: "translateY(100px)" }}
                         animate={{ opacity: 1, transform: "translateY(0px)" }}
                         exit={{ opacity: 0, transform: "translateY(100px)" }}
@@ -167,7 +168,7 @@ export function SubPageSplit({ left, right, className = "" }: SubPageSplitProps)
 export function SubPageSection({ title, className, children }: InfoCardProps) {
     return (
         <section className={`flex flex-col gap-[1.6rem]`}>
-            <h2 className={`${className} text-[2.4rem] font-[700] font-[NanumSquare] text-black whitespace-break-spaces leading-[1.5]`}>{title}</h2>
+            <h2 className={`${className} mobile:text-[2.0rem] pc:text-[2.4rem] font-[700] font-[NanumSquare] text-black whitespace-break-spaces leading-[1.5]`}>{title}</h2>
 
             {children}
         </section>

@@ -3,7 +3,7 @@
 import { Fragment, useState } from "react";
 import { useAdminInquiriesQuery, useDeleteInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
 import type { Inquiry } from "@/entities/inquiry/model/inquiry.type";
-import { AdminPagination } from "@/widgets/admin/shared/AdminLayout";
+import { AdminPagination, ConfirmDialog } from "@/widgets/admin/shared/AdminLayout";
 import UI from "@/shared/ui/UIComponent";
 import { Text } from "@/shared/ui/kit/Text";
 import Image from "next/image";
@@ -16,6 +16,7 @@ type InquiryTableProps = {
 export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTableProps) {
     const { data: inquiries = [] } = useAdminInquiriesQuery();
     const deleteInquiry = useDeleteInquiryMutation();
+    const [deleteTarget, setDeleteTarget] = useState<Inquiry | null>(null);
     const pageSize = 5;
     const [page, setPage] = useState(1);
     const totalPages = Math.max(1, Math.ceil(inquiries.length / pageSize));
@@ -32,7 +33,7 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
                             <Fragment key={`${inquiry.name}-${inquiry.category}`}>
                                 <section className="flex items-center justify-between h-[9.2rem]">
                                     <UI.Button
-                                        className={`${SELECTED ? "text-[var(--adaptive-red500)]" : ""} flex flex-col justify-center items-start gap-[1.2rem] transition hover:bg-white h-full flex-1 pl-[5.2rem]`}
+                                        className={`${SELECTED ? "text-[var(--adaptive-red500)]" : ""} flex flex-col justify-center items-start gap-[1.2rem] transition hover:bg-white h-full flex-1 mobile:pl-[1.6rem] pc:pl-[5.2rem]`}
                                         onClick={() => onSelectInquiry(inquiry)}
                                         type="button"
                                     >
@@ -62,11 +63,7 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
 
                                     <UI.Button
                                         className="h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
-                                        onClick={() => {
-                                            if (window.confirm("선택한 문의를 삭제할까요?")) {
-                                                deleteInquiry.mutate({ id: inquiry.id });
-                                            }
-                                        }}
+                                        onClick={() => setDeleteTarget(inquiry)}
                                         type="button"
                                     >
                                         <Image
@@ -106,6 +103,22 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
                 page={page}
                 totalPages={totalPages}
                 onChange={setPage}
+            />
+
+            <ConfirmDialog
+                open={Boolean(deleteTarget)}
+                title="선택한 문의를 삭제 할까요?"
+                description="선택하신 문의를 삭제합니다. 신중하게 선택해주세요."
+                targetLabel={deleteTarget?.message}
+                confirmLabel="삭제하기"
+                tone="delete"
+                onCancel={() => setDeleteTarget(null)}
+                onConfirm={() => {
+                    if (deleteTarget) {
+                        deleteInquiry.mutate({ id: deleteTarget.id });
+                    }
+                    setDeleteTarget(null);
+                }}
             />
         </div>
     );

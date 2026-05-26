@@ -51,7 +51,7 @@ export function OperationKnowhow() {
 
             <div
                 ref={ref}
-                className="ml-auto h-full w-[calc(50dvw-7.2rem)] flex justify-center items-center"
+                className="ml-auto h-full mobile:w-full pc:w-[calc(50dvw-7.2rem)] flex justify-center items-center"
             >
                 <div
                     // className="relative z-[1] ml-auto w-[min(72rem,calc(100%_-_3.2rem))] pr-[max(1.6rem,calc((100vw_-_112rem)/2))]"
@@ -63,7 +63,7 @@ export function OperationKnowhow() {
                 >
                     <Text.Reveal
                         as="h2"
-                        className="text-[3.8rem] font-[700] leading-[1.5]"
+                        className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[700] leading-[1.5]"
                         initialColor="#00000000"
                         midColor="rgb(255, 92, 118)"
                         revealColor="rgb(255, 255, 255)"

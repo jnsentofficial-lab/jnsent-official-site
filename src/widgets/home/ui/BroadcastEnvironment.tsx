@@ -15,7 +15,7 @@ export function BroadcastEnvironment() {
             <div className="flex flex-col items-end justify-center gap-[5.2rem] text-center w-[calc(50dvw-9.2rem)] h-full mr-auto">
                 <Text.Reveal
                     as="h2"
-                    className="text-[3.8rem] font-[700] leading-[1.5]"
+                    className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[700] leading-[1.5]"
                     initialColor="#ffffff00"
                     revealColor="#000000"
                     highlightColor="#FF6B75"

@@ -56,8 +56,8 @@ export function RecordGraph() {
 
                     <Text.Reveal
                         as="h2"
-                        className="text-[3.8rem] font-[700] leading-[1.5]"
-                        // className="max-w-[92rem] text-[3.8rem] leading-[1.5] max-[64rem]:text-5xl max-[48rem]:text-4xl"
+                        className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[700] leading-[1.5]"
+                        // className="max-w-[92rem] mobile:text-[2.4rem] pc:text-[3.8rem] leading-[1.5] max-[64rem]:text-5xl max-[48rem]:text-4xl"
                         initialColor="#ffffff00"
                         revealColor="#000000"
                         subHighlightColor="#A953FF"

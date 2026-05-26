@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { useAdminSessionQuery, useLogoutAdminMutation } from "@/entities/auth/api/auth.query";
+import { useLayoutStore } from "@/shared/stores/useLayoutStore";
 import UI from "@/shared/ui/UIComponent";
 import Image from "next/image";
 import { Shimmer } from "@/shared/ui/kit/Text/ui/Shimmer";
@@ -19,29 +20,42 @@ export function AdminSidebar() {
     const pathname = usePathname();
     const logoutAdmin = useLogoutAdminMutation();
     const { data: session } = useAdminSessionQuery();
+    const setIsMobileNavOpen = useLayoutStore((state) => state.setIsMobileNavOpen);
     const canManageAccounts = session?.role === "admin" || session?.role === "manager";
     const navItems = adminNavItems.filter((item) => !("roles" in item) || canManageAccounts);
 
     async function handleLogout() {
         await logoutAdmin.mutateAsync();
+        setIsMobileNavOpen(false);
         router.replace("/admin/login");
         router.refresh();
     }
 
     return (
         // <aside className="flex h-full flex-col border-r border-[var(--adaptiveGrey200)] bg-white px-6 py-8 max-[86rem]:border-r-0 max-[86rem]:border-b">
-        <aside className="flex h-full flex-col">
-            <section className="mb-10 flex items-center gap-4 p-[1.6rem]">
-                <Image
-                    src={"/images/common/ico-logo.svg"}
-                    width={42}
-                    height={42}
-                    alt=""
-                />
-                <div className="flex flex-col">
-                    <h6 className="font-[700]">{session?.name ?? "JNS"} 님</h6>
-                    <h6 className="text-[1.4rem] text-[var(--adaptive-grey600)]">{session?.role ?? "관리자"}</h6>
+        // <aside className="flex h-full w-[24rem] flex-col bg-white pc:border-r pc:border-[var(--adaptive-grey100)] mobile:w-screen">
+        <aside className="flex h-full flex-col bg-white pc:border-r pc:border-[var(--adaptive-grey100)] mobile:w-screen pc:w-[24rem]">
+            <section className="mb-10 flex items-center justify-between gap-4 p-[1.6rem]">
+                <div className="flex items-center gap-4">
+                    <Image
+                        src={"/images/common/ico-logo.svg"}
+                        width={42}
+                        height={42}
+                        alt=""
+                    />
+                    <div className="flex flex-col">
+                        <h6 className="font-[700]">{session?.name ?? "JNS"} 님</h6>
+                        <h6 className="text-[1.4rem] text-[var(--adaptive-grey600)]">{session?.role ?? "관리자"}</h6>
+                    </div>
                 </div>
+
+                <UI.Button
+                    className="bg-transparent px-0 text-[2.8rem] leading-none pc:hidden"
+                    onClick={() => setIsMobileNavOpen(false)}
+                    type="button"
+                >
+                    ×
+                </UI.Button>
             </section>
 
             <nav
@@ -54,9 +68,10 @@ export function AdminSidebar() {
 
                     return (
                         <UI.Linker
-                            className={`${SELECTED ? "text-[var(--adaptive-red500)]" : "text-black"} hover:text-[var(--adaptiveRed300)] text-[2.0rem] px-[1.6rem]`}
+                            className={`${SELECTED ? "text-[var(--adaptive-red500)]" : "text-black hover:text-[var(--adaptive-red500)]"} text-[2.0rem] px-[1.6rem]`}
                             href={item.href}
                             key={item.href}
+                            onClick={() => setIsMobileNavOpen(false)}
                         >
                             {SELECTED ? (
                                 <Text.Shimmer
@@ -74,26 +89,27 @@ export function AdminSidebar() {
                         </UI.Linker>
                     );
                 })}
-            </nav>
 
-            <section className="w-[24rem]">
                 <div className="h-[0.1rem] w-full bg-[var(--adaptive-grey100)]" />
 
                 <UI.Linker
-                    className="flex items-center gap-[0.4rem] px-[1.2rem] hover:bg-[var(--adaptive-grey200)] w-full"
+                    className="flex items-center gap-[0.4rem] px-[1.6rem] hover:text-[var(--adaptive-red500)] w-full"
                     href="/"
+                    onClick={() => setIsMobileNavOpen(false)}
                 >
-                    <Image
+                    {/* <Image
                         src={"/images/icon/outlined/ico-outlined-arrow-single-up.svg"}
                         alt=""
                         width={18}
                         height={18}
                         className="rotate-270"
-                    />
+                    /> */}
 
                     <p className="text-[2.0rem]">메인으로 돌아가기</p>
                 </UI.Linker>
+            </nav>
 
+            <section className="w-[24rem]">
                 <div className="h-[0.1rem] w-full bg-[var(--adaptive-grey100)]" />
 
                 <UI.Button

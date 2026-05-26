@@ -46,7 +46,7 @@ export function TrustPrinciples() {
             <div className="mx-auto max-w-[var(--size-pc)] mx-auto w-full flex flex-col justify-center items-center gap-[3.2rem] px-[1.6rem]">
                 <Text.Reveal
                     as="h2"
-                    className="text-[3.8rem] font-[700] leading-[1.5] w-full"
+                    className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[700] leading-[1.5] w-full"
                     initialColor="#00000000"
                     midColor="rgb(255, 92, 118)"
                     revealColor="rgb(0, 0, 0)"

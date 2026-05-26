@@ -46,7 +46,7 @@ const FloatingBar = ({ onInquiryClick }: { onInquiryClick: () => void }) => {
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: 100, opacity: 0 }}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    className="fixed bottom-[1.6rem] left-[50%] transform translate-x-[-50%] bg-black h-[6.2rem] flex items-center rounded-full p-[0.4rem] max-w-[var(--size-tablet)] w-full z-10"
+                    className="fixed bottom-[1.6rem] left-[50%] transform translate-x-[-50%] bg-black h-[6.2rem] flex items-center rounded-full p-[0.4rem] mobile:max-w-[100dvw] pc:max-w-[var(--size-tablet)] w-full z-10"
                 >
                     <div className="px-[1.6rem]">
                         <img
