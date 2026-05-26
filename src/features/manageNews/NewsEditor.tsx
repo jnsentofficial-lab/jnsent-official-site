@@ -150,17 +150,6 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
                         <p className="m-0 text-base font-semibold text-[var(--adaptiveGrey600)]">본문 에디터에서 이미지를 업로드하면 이 영역에 썸네일 후보로 표시됩니다.</p>
                     )}
                 </section>
-
-                <label className={labelClassName}>
-                    본문
-                    <RichTextEditor
-                        value={body}
-                        onChange={setBody}
-                        onImageUpload={handleImageUpload}
-                        placeholder="NEWS 본문을 입력하세요."
-                    />
-                </label>
-
                 <label className={labelClassName}>
                     SEO 제목
                     <input
@@ -182,6 +171,16 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
                         value={seoDescription}
                     />
                 </label>
+
+                {/* <label className={labelClassName}>
+                    본문
+                </label> */}
+                <RichTextEditor
+                    value={body}
+                    onChange={setBody}
+                    onImageUpload={handleImageUpload}
+                    placeholder="NEWS 본문을 입력하세요."
+                />
 
                 {statusMessage ? (
                     <p

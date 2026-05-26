@@ -189,7 +189,7 @@ export function AdminEmptyState({ message }: AdminEmptyStateProps) {
 export function AdminListSection({ children, pagination, empty, hasItems, className = "", isLoading = false, loading }: AdminListSectionProps) {
     return (
         <div className={`flex flex-col ${className}`}>
-            {isLoading ? loading ?? <p className="py-16 text-2xl font-[700] text-[var(--adaptiveGrey500)]">목록을 불러오는 중입니다.</p> : hasItems ? children : empty}
+            {isLoading ? (loading ?? <p className="py-16 text-2xl font-[700] text-[var(--adaptiveGrey500)]">목록을 불러오는 중입니다.</p>) : hasItems ? children : empty}
             {pagination}
         </div>
     );
