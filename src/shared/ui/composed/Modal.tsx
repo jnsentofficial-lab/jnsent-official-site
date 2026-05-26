@@ -88,31 +88,46 @@ const Modal = ({ title, description, open, onClose, children, className, actions
 
     if (!isClient) return null; // SSR 단계에서는 아무것도 렌더링하지 않음
 
-    const modalClassName = `${className ? className : "max-w-[calc(var(--modal-width)-(1.6rem*4))]"} max-h-[calc(100dvh-(1.6rem*2))] z-[100000000] w-full bg-[var(--color-gray-100)] rounded-[3.2rem] flex flex-col shadow-[0_0_20rem_10rem_#00000060] overflow-hidden`;
+    // const modalClassName = `${className ? className : "max-w-[calc(var(--modal-width)-(1.6rem*4))]"} max-h-[calc(100dvh-(1.6rem*2))] z-[100000000] w-full bg-[var(--color-gray-100)] rounded-[3.2rem] flex flex-col shadow-[0_0_20rem_10rem_#00000060] overflow-hidden`;
+    const modalClassName = `${className ? className : "max-w-[calc(var(--modal-width)-(1.6rem*4))]"} max-h-[calc(100dvh-(1.6rem*2))] z-[100000000] bg-[var(--color-gray-100)] rounded-[3.2rem] flex flex-col shadow-[0_0_20rem_10rem_#00000060] overflow-hidden`;
+    const placementClassName = placement
+        ? `${placement.row === 1 ? "self-start" : placement.row === 3 ? "self-end" : "self-center"} ${placement.col === 1 ? "justify-self-start" : placement.col === 3 ? "justify-self-end" : "justify-self-center"}`
+        : "";
 
     return (
         <Fragment>
             {ReactDOM.createPortal(
-                <AnimatePresence>
+                <AnimatePresence mode="popLayout">
                     {open && (
                         <Fragment>
                             {/* Dimmed */}
-                            <motion.div
-                                className="fixed inset-0 z-[100000000] bg-[#000000a3] backdrop-blur-[0.5rem]"
+                            {/* <motion.div
+                                className="fixed inset-0 z-[100000000] bg-[#000000a3]"
                                 onClick={onClose}
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                            />
+                            /> */}
 
-                            {/* BottomSheet */}
                             {placement ? (
-                                <div className="fixed inset-0 z-[100000000] grid pointer-events-none mobile:grid-cols-1 mobile:grid-rows-1 pc:grid-cols-[1fr_1fr_1fr] pc:grid-rows-[1fr_1fr_1fr]">
+                                <motion.div
+                                    className="fixed inset-0 z-[100000000] grid pointer-events-none mobile:grid-cols-1 mobile:grid-rows-1 pc:grid-cols-[1fr_1fr_1fr] pc:grid-rows-[1fr_1fr_1fr] p-[3.2rem]"
+                                    initial={{ opacity: 0, transform: "translateY(100px)" }}
+                                    animate={{ opacity: 1, transform: "translateY(0px)" }}
+                                    exit={{ opacity: 0, transform: "translateY(100px)" }}
+                                    transition={{
+                                        delay: 0.1,
+                                        type: "spring",
+                                        mass: 0.1,
+                                        stiffness: 100,
+                                        damping: 10,
+                                    }}
+                                >
                                     {/* <div className="fixed inset-0 z-[100000000] grid pointer-events-none mobile:grid-cols-1 mobile:grid-rows-1 pc:grid-cols-3 pc:grid-rows-3"> */}
                                     <motion.section
                                         ref={containerRef}
                                         role="dialog"
-                                        // className={`${modalClassName} pointer-events-auto self-center`}
+                                        className={`${modalClassName} ${placementClassName} pointer-events-auto`}
                                         style={isMobileViewport ? undefined : { gridColumn: placement.col, gridRow: placement.row }}
                                         initial={{ opacity: 0, scale: 0.95 }}
                                         animate={{ opacity: 1, scale: 1 }}
@@ -161,7 +176,7 @@ const Modal = ({ title, description, open, onClose, children, className, actions
                                                             //     ${action.disabled ? "opacity-50 text-white" : ""}
                                                             //     ${action.className ? action.className : "bg-[var(--color-gray-700)] hover:bg-[var(--color-gray-700)] text-white"}
                                                             // `}
-                                                            className="bg-[var(--adaptive-black500)] text-[var(--adaptive-black200)] w-[2.4rem] h-[2.4rem] rounded-full"
+                                                            className="cursor-pointer bg-[var(--adaptive-black500)] hover:bg-[var(--adaptive-black300)] text-[var(--adaptive-black200)] w-[2.4rem] h-[2.4rem] rounded-full"
                                                             onClick={async () => {
                                                                 if (action.type === "close") return onClose?.();
 
@@ -208,7 +223,7 @@ const Modal = ({ title, description, open, onClose, children, className, actions
                                             </section>
                                         )} */}
                                     </motion.section>
-                                </div>
+                                </motion.div>
                             ) : (
                                 <motion.section
                                     ref={containerRef}

@@ -94,24 +94,28 @@ export function GlobalModalLayer() {
                     open
                     placement={{ col: modal.col, row: modal.row }}
                     onClose={() => closeModal(modal)}
-                    className="max-w-[min(42rem,calc(100vw-3.2rem))]"
+                    className="w-fit max-w-[calc(100vw-3.2rem)] bg-transparent shadow-none"
+                    // className="w-fit max-w-[calc(100vw-3.2rem)] bg-transparent shadow-none"
                     actions={[
                         ...(modal.dismiss_type === "today" ? [{ title: "오늘 하루 닫기", type: "action" as const, onClick: () => closeModal(modal) }] : []),
                         ...(modal.dismiss_type === "days" ? [{ title: `${modal.dismiss_days ?? 1}일 동안 닫기`, type: "action" as const, onClick: () => closeModal(modal) }] : []),
                         { title: "닫기", type: "close" },
                     ]}
                 >
-                    {modal.image_url ? (
-                        <Modal.Container>
-                            <Modal.Item>
-                                <img
-                                    className="block max-h-[22rem] w-full object-cover"
-                                    alt=""
-                                    src={modal.image_url}
-                                />
-                            </Modal.Item>
-                        </Modal.Container>
-                    ) : null}
+                    <section>
+                        {modal.image_url ? (
+                            <img
+                                // className="block h-auto max-h-[calc(100dvh-3.2rem)] w-auto max-w-full object-contain"
+                                className="block h-auto min-h-[51.2rem] max-h-[50dvh] w-auto max-w-full object-contain"
+                                alt=""
+                                src={modal.image_url}
+                            />
+                        ) : null}
+                    </section>
+                    {/* // <Modal.Container>
+                    //     <Modal.Item>
+                    //     </Modal.Item>
+                    // </Modal.Container> */}
                 </Modal>
             ))}
         </>
