@@ -15,6 +15,7 @@ type SelectProps = Omit<SelectHTMLAttributes<HTMLSelectElement>, "size"> & {
     iconClassName?: string;
     options: SelectOption[];
     size?: SelectSize;
+    onClick?: () => void;
     wrapperClassName?: string;
 };
 
@@ -44,7 +45,7 @@ const defaultIcon = (
     </svg>
 );
 
-const Select = ({ className = "", icon = defaultIcon, iconClassName = "", options, size = "sm", wrapperClassName = "", ...props }: SelectProps) => {
+const Select = ({ className = "", icon = defaultIcon, iconClassName = "", options, size = "sm", wrapperClassName = "", onClick, ...props }: SelectProps) => {
     const height = sizeHeights[size];
 
     return (
@@ -52,9 +53,8 @@ const Select = ({ className = "", icon = defaultIcon, iconClassName = "", option
             <select
                 {...props}
                 className={`${className} w-full appearance-none border px-[1.2rem] cursor-pointer hover:bg-[var(--adaptive-grey100)]`}
-                // className={`${className} w-full appearance-none rounded-[1.4rem] border border-[var(--adaptive-black100)] bg-white px-[1.6rem] pr-[4.8rem] transition-colors hover:border-[var(--adaptive-black500)]`}
-                // style={{ minHeight: height }}
                 style={{ minHeight: "3.2rem" }}
+                onClick={onClick}
             >
                 {options.map((option) => (
                     <option

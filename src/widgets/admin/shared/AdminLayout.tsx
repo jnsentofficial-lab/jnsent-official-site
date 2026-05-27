@@ -149,7 +149,7 @@ export function AdminPagination({ page, totalPages, onChange }: AdminPaginationP
     const visibleTotalPages = Math.max(1, totalPages);
 
     return (
-        <div className="grid grid-rows-1 mobile:grid-cols-[auto_1fr] pc:grid-cols-[auto_1fr_auto] gap-[1.6rem]">
+        <div className="grid grid-rows-1 mobile:grid-cols-[auto_1fr] pc:grid-cols-[auto_1fr_auto] gap-[1.6rem] mt-[1.6rem]">
             <UI.Select
                 aria-label="목록 개수 선택"
                 className="min-w-[12rem] text-[1.6rem]"
@@ -274,7 +274,7 @@ export function AdminListRow({ selected = false, onClick, title, description, th
                         </UI.Button>
 
                         {isActionMenuOpen ? (
-                            <div className="absolute right-0 top-[calc(100%+0.8rem)] z-20 min-w-[16rem] overflow-hidden rounded-[1.6rem] border border-[var(--adaptive-grey200)] bg-white shadow-[0_1.6rem_3.2rem_rgba(0,0,0,0.12)]">
+                            <div className="absolute right-0 top-[calc(100%+0.8rem)] z-20 min-w-[16rem] overflow-hidden border border-[var(--adaptive-grey200)] bg-white shadow-[0_1.6rem_3.2rem_rgba(0,0,0,0.12)]">
                                 <div
                                     className="flex flex-col mobile:[&_button]:h-auto mobile:[&_button]:min-h-[4.4rem] mobile:[&_button]:w-full mobile:[&_button]:justify-start mobile:[&_button]:gap-[0.8rem] mobile:[&_button]:px-[1.6rem]"
                                     onClick={() => setIsActionMenuOpen(false)}

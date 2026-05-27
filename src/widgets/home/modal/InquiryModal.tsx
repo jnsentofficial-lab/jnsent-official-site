@@ -6,6 +6,16 @@ import { createPortal } from "react-dom";
 
 import { useCreateInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
 import { buildInquiryMessageBody } from "@/entities/inquiry/lib/buildMessageBody";
+import {
+    buildAvailableTime,
+    buildRegion,
+    CONTACT_HOUR_OPTIONS,
+    CONTACT_PERIOD_OPTIONS,
+    formatPhoneNumber,
+    REGION_OPTIONS,
+    sanitizeAgeInput,
+    sanitizeNameInput,
+} from "@/entities/inquiry/lib/formFields";
 import { HOME_INQUIRY_SUPPORT_FIELDS, SUPPORT_FIELD_CATEGORY_MAP, type HomeInquirySupportField } from "@/entities/inquiry/lib/supportFieldCategory";
 import { showErrorToast } from "@/shared/lib/toast";
 import UI from "@/shared/ui/UIComponent";
@@ -48,8 +58,14 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
     const [gender, setGender] = useState<Gender>("female");
     const [supportField, setSupportField] = useState<HomeInquirySupportField>("BJ지원");
     const [agreed, setAgreed] = useState(false);
+    const [province, setProvince] = useState("");
+    const [city, setCity] = useState("");
+    const [detailAddress, setDetailAddress] = useState("");
+    const [contactPeriod, setContactPeriod] = useState("");
+    const [contactHour, setContactHour] = useState("");
     const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
     const [statusMessage, setStatusMessage] = useState("");
+    const cityOptions = province ? REGION_OPTIONS[province as keyof typeof REGION_OPTIONS] : [];
 
     useEffect(() => {
         setMounted(true);
@@ -59,6 +75,11 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
         if (open) return;
         setFieldErrors({});
         setStatusMessage("");
+        setProvince("");
+        setCity("");
+        setDetailAddress("");
+        setContactPeriod("");
+        setContactHour("");
     }, [open]);
 
     useEffect(() => {
@@ -82,11 +103,11 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
         event.preventDefault();
         const form = event.currentTarget;
         const formData = new FormData(form);
-        const name = String(formData.get("name") ?? "").trim();
-        const age = String(formData.get("age") ?? "").trim();
-        const region = String(formData.get("region") ?? "").trim();
-        const phone = String(formData.get("phone") ?? "").trim();
-        const availableTime = String(formData.get("availableTime") ?? "").trim();
+        const name = sanitizeNameInput(String(formData.get("name") ?? "")).trim();
+        const age = sanitizeAgeInput(String(formData.get("age") ?? "").trim());
+        const region = buildRegion(province, city, detailAddress);
+        const phone = formatPhoneNumber(String(formData.get("phone") ?? "").trim());
+        const availableTime = buildAvailableTime(contactPeriod, contactHour);
 
         const errors = validateInquiryFields({
             name,
@@ -135,6 +156,11 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
             setGender("female");
             setSupportField("BJ지원");
             setAgreed(false);
+            setProvince("");
+            setCity("");
+            setDetailAddress("");
+            setContactPeriod("");
+            setContactHour("");
             setStatusMessage("");
             onClose();
         } catch (error) {
@@ -233,8 +259,10 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                 <TextInput
                                     placeholder="이름을 적어주세요"
                                     name="name"
+                                    maxLength={20}
                                     hasError={Boolean(fieldErrors.name)}
-                                    onChange={() => {
+                                    onChange={(event) => {
+                                        event.currentTarget.value = sanitizeNameInput(event.currentTarget.value);
                                         if (fieldErrors.name) {
                                             setFieldErrors((prev) => ({ ...prev, name: undefined }));
                                         }
@@ -251,8 +279,10 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                     placeholder="나이를 적어주세요"
                                     name="age"
                                     inputMode="numeric"
+                                    maxLength={3}
                                     hasError={Boolean(fieldErrors.age)}
-                                    onChange={() => {
+                                    onChange={(event) => {
+                                        event.currentTarget.value = sanitizeAgeInput(event.currentTarget.value);
                                         if (fieldErrors.age) {
                                             setFieldErrors((prev) => ({ ...prev, age: undefined }));
                                         }
@@ -265,16 +295,48 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                 error={fieldErrors.region}
                                 delay={5}
                             >
-                                <TextInput
-                                    placeholder="지역을 적어주세요"
-                                    name="region"
-                                    hasError={Boolean(fieldErrors.region)}
-                                    onChange={() => {
-                                        if (fieldErrors.region) {
-                                            setFieldErrors((prev) => ({ ...prev, region: undefined }));
-                                        }
-                                    }}
-                                />
+                                <div className="grid gap-[0.8rem]">
+                                    <div className="grid grid-cols-2 gap-[0.8rem]">
+                                        <SelectInput
+                                            className="h-[5.2rem]"
+                                            hasError={Boolean(fieldErrors.region)}
+                                            options={[{ label: "~도 선택", value: "" }, ...Object.keys(REGION_OPTIONS).map((option) => ({ label: option, value: option }))]}
+                                            value={province}
+                                            onChange={(event) => {
+                                                setProvince(event.target.value);
+                                                setCity("");
+                                                if (fieldErrors.region) {
+                                                    setFieldErrors((prev) => ({ ...prev, region: undefined }));
+                                                }
+                                            }}
+                                        />
+                                        <SelectInput
+                                            className="h-[5.2rem]"
+                                            disabled={!province}
+                                            hasError={Boolean(fieldErrors.region)}
+                                            options={[{ label: "~시 선택", value: "" }, ...cityOptions.map((option) => ({ label: option, value: option }))]}
+                                            value={city}
+                                            onChange={(event) => {
+                                                setCity(event.target.value);
+                                                if (fieldErrors.region) {
+                                                    setFieldErrors((prev) => ({ ...prev, region: undefined }));
+                                                }
+                                            }}
+                                        />
+                                    </div>
+                                    <TextInput
+                                        placeholder="상세 주소를 적어주세요"
+                                        name="detailAddress"
+                                        value={detailAddress}
+                                        hasError={Boolean(fieldErrors.region)}
+                                        onChange={(event) => {
+                                            setDetailAddress(event.currentTarget.value);
+                                            if (fieldErrors.region) {
+                                                setFieldErrors((prev) => ({ ...prev, region: undefined }));
+                                            }
+                                        }}
+                                    />
+                                </div>
                             </FormField>
 
                             <FormField
@@ -286,8 +348,11 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                     placeholder="전화번호를 적어주세요"
                                     name="phone"
                                     type="tel"
+                                    inputMode="numeric"
+                                    maxLength={13}
                                     hasError={Boolean(fieldErrors.phone)}
-                                    onChange={() => {
+                                    onChange={(event) => {
+                                        event.currentTarget.value = formatPhoneNumber(event.currentTarget.value);
                                         if (fieldErrors.phone) {
                                             setFieldErrors((prev) => ({ ...prev, phone: undefined }));
                                         }
@@ -300,16 +365,32 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                 error={fieldErrors.availableTime}
                                 delay={7}
                             >
-                                <TextInput
-                                    placeholder="연락 가능한 시간을 적어주세요"
-                                    name="availableTime"
-                                    hasError={Boolean(fieldErrors.availableTime)}
-                                    onChange={() => {
-                                        if (fieldErrors.availableTime) {
-                                            setFieldErrors((prev) => ({ ...prev, availableTime: undefined }));
-                                        }
-                                    }}
-                                />
+                                <div className="grid grid-cols-2 gap-[0.8rem]">
+                                    <SelectInput
+                                        className="h-[5.2rem]"
+                                        hasError={Boolean(fieldErrors.availableTime)}
+                                        options={[{ label: "오전/오후 선택", value: "" }, ...CONTACT_PERIOD_OPTIONS.map((option) => ({ label: option, value: option }))]}
+                                        value={contactPeriod}
+                                        onChange={(event) => {
+                                            setContactPeriod(event.target.value);
+                                            if (fieldErrors.availableTime) {
+                                                setFieldErrors((prev) => ({ ...prev, availableTime: undefined }));
+                                            }
+                                        }}
+                                    />
+                                    <SelectInput
+                                        className="h-[5.2rem]"
+                                        hasError={Boolean(fieldErrors.availableTime)}
+                                        options={[{ label: "시간 선택", value: "" }, ...CONTACT_HOUR_OPTIONS.map((option) => ({ label: option, value: option }))]}
+                                        value={contactHour}
+                                        onChange={(event) => {
+                                            setContactHour(event.target.value);
+                                            if (fieldErrors.availableTime) {
+                                                setFieldErrors((prev) => ({ ...prev, availableTime: undefined }));
+                                            }
+                                        }}
+                                    />
+                                </div>
                             </FormField>
 
                             <FormField
@@ -455,6 +536,19 @@ function TextInput({ className = "", hasError = false, ...props }: InputHTMLAttr
             className={`h-[5.2rem] w-full rounded-[1.6rem] border bg-white px-[1.6rem] text-[1.6rem] font-medium text-black outline-none transition-colors placeholder:text-[#BBBBBB] focus:border-[#FF4B8B] ${
                 hasError ? "border-[#FF4B8B]" : "border-[#E5E5E5]"
             } ${className}`}
+        />
+    );
+}
+
+function SelectInput({ className = "", hasError = false, options, ...props }: React.ComponentProps<typeof UI.Select> & { hasError?: boolean }) {
+    return (
+        <UI.Select
+            {...props}
+            className={`rounded-[1.6rem] border bg-white px-[1.6rem] text-[1.6rem] font-medium text-black outline-none transition-colors disabled:bg-[#f7f7f7] ${
+                hasError ? "border-[#FF4B8B]" : "border-[#E5E5E5]"
+            } ${className}`}
+            options={options}
+            size="md"
         />
     );
 }

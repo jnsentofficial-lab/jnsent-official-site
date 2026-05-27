@@ -13,7 +13,7 @@ export function Header() {
         setIsMobileNavOpen(false);
     }, [currentPathName, setIsMobileNavOpen]);
 
-    if (currentPathName.includes("admin") || (currentPathName === "/" && !isReadyLanding)) {
+    if (currentPathName.includes("/admin") || (currentPathName === "/" && !isReadyLanding)) {
         // if (currentPathName === "admin" || (currentPathName === "/" && !isReadyLanding)) {
         return null;
     }
