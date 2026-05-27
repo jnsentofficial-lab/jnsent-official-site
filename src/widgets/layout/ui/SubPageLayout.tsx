@@ -55,6 +55,8 @@ export function SubPageHero({ current, title, description }: SubPageHeroProps) {
         // <section className="pt-[calc(50dvh-7.2rem-17.4rem-9.2rem)] pb-[9.2rem] mx-[1.6rem]">
         <section
             className="mobile:pt-[calc(7.2rem+1.6rem)] pc:pt-[calc(50dvh-1.6rem-17.4rem-5.2rem)] pb-[3.2rem] mx-[1.6rem]"
+            data-report-id={`${current} 히어로 섹션`}
+            data-report-type="group"
             // className="pt-[calc(50dvh-1.6rem-17.4rem-3.2rem)] pb-[3.2rem] mx-[1.6rem]"
             // initial={{ opacity: 0, transform: "translateY(100px)" }}
             // animate={{ opacity: 1, transform: "translateY(0px)" }}
@@ -70,6 +72,8 @@ export function SubPageHero({ current, title, description }: SubPageHeroProps) {
             <div className="mx-auto max-w-[var(--size-pc)] w-full flex flex-col gap-[0.8rem]">
                 <motion.section
                     className="flex items-center gap-[0.8rem]"
+                    data-report-id={`${current} 히어로 브레드크럼`}
+                    data-report-type="item"
                     initial={{ opacity: 0, transform: "translateY(100px)" }}
                     animate={{ opacity: 1, transform: "translateY(0px)" }}
                     exit={{ opacity: 0, transform: "translateY(100px)" }}
@@ -93,6 +97,8 @@ export function SubPageHero({ current, title, description }: SubPageHeroProps) {
                 <section className="grid grid-cols-4 gap-16 max-[86rem]:grid-cols-1">
                     <motion.h1
                         className="col-span-2 whitespace-break-spaces font-[700] mobile:text-[3.2rem] pc:text-[5.2rem] leading-[1.5]"
+                        data-report-id={`${current} 히어로 제목`}
+                        data-report-type="item"
                         initial={{ opacity: 0, transform: "translateY(100px)" }}
                         animate={{ opacity: 1, transform: "translateY(0px)" }}
                         exit={{ opacity: 0, transform: "translateY(100px)" }}
@@ -109,6 +115,8 @@ export function SubPageHero({ current, title, description }: SubPageHeroProps) {
 
                     <motion.p
                         className="col-span-2 mobile:text-[2.0rem] pc:text-[2.4rem] font-[NanumSquare] whitespace-break-spaces leading-[1.5]"
+                        data-report-id={`${current} 히어로 설명`}
+                        data-report-type="item"
                         // className="col-span-2 m-0 pt-5 text-[2.4rem] font-[NanumSquare] whitespace-break-spaces leading-[1.5] text-black max-[86rem]:pt-0 max-[86rem]:text-2xl"
                         initial={{ opacity: 0, transform: "translateY(100px)" }}
                         animate={{ opacity: 1, transform: "translateY(0px)" }}
@@ -131,10 +139,16 @@ export function SubPageHero({ current, title, description }: SubPageHeroProps) {
 
 export function SubPageSplit({ left, right, className = "" }: SubPageSplitProps) {
     return (
-        <section className={`mx-[1.6rem] pb-[14rem] max-[86rem]:pb-24 ${className}`}>
+        <section
+            className={`mx-[1.6rem] pb-[14rem] max-[86rem]:pb-24 ${className}`}
+            data-report-id="서브페이지 분할 섹션"
+            data-report-type="group"
+        >
             <div className="mx-auto grid max-w-[var(--size-pc)] w-full grid-cols-4 gap-16 max-[86rem]:grid-cols-1">
                 <motion.div
                     className="col-span-2"
+                    data-report-id="서브페이지 좌측 영역"
+                    data-report-type="item"
                     initial={{ opacity: 0, transform: "translateY(100px)" }}
                     animate={{ opacity: 1, transform: "translateY(0px)" }}
                     exit={{ opacity: 0, transform: "translateY(100px)" }}
@@ -151,6 +165,8 @@ export function SubPageSplit({ left, right, className = "" }: SubPageSplitProps)
 
                 <motion.div
                     className="col-span-2"
+                    data-report-id="서브페이지 우측 영역"
+                    data-report-type="item"
                     initial={{ opacity: 0, transform: "translateY(100px)" }}
                     animate={{ opacity: 1, transform: "translateY(0px)" }}
                     exit={{ opacity: 0, transform: "translateY(100px)" }}
@@ -171,8 +187,18 @@ export function SubPageSplit({ left, right, className = "" }: SubPageSplitProps)
 
 export function SubPageSection({ title, className, children }: InfoCardProps) {
     return (
-        <section className={`flex flex-col gap-[3.2rem]`}>
-            <h2 className={`${className} mobile:text-[2.0rem] pc:text-[2.4rem] font-[700] font-[NanumSquare] text-black whitespace-break-spaces leading-[1.5]`}>{title}</h2>
+        <section
+            className={`flex flex-col gap-[3.2rem]`}
+            data-report-id={`서브페이지 섹션 ${title}`}
+            data-report-type="group"
+        >
+            <h2
+                className={`${className} mobile:text-[2.0rem] pc:text-[2.4rem] font-[700] font-[NanumSquare] text-black whitespace-break-spaces leading-[1.5]`}
+                data-report-id={`서브페이지 섹션 제목 ${title}`}
+                data-report-type="item"
+            >
+                {title}
+            </h2>
 
             {children}
         </section>
@@ -194,7 +220,11 @@ export const DottedItem = ({ children }: { children: ReactNode }) => {
 
 export function InfoCard({ title, children }: InfoCardProps) {
     return (
-        <article className="rounded-[2.4rem] bg-[var(--adaptive-black50)] p-[1.2rem_2.4rem] flex flex-col gap-[1.2rem]">
+        <article
+            className="rounded-[2.4rem] bg-[var(--adaptive-black50)] p-[1.2rem_2.4rem] flex flex-col gap-[1.2rem]"
+            data-report-id={`정보 카드 ${title}`}
+            data-report-type="item"
+        >
             <h3 className="text-[2.0rem] font-[700] text-black">{title}</h3>
             <div className="text-[1.6rem] leading-[1.5] text-[var(--adaptive-black300)]">{children}</div>
         </article>
@@ -203,7 +233,11 @@ export function InfoCard({ title, children }: InfoCardProps) {
 
 export function NoticeBox() {
     return (
-        <article className="flex flex-col rounded-[2.4rem] border border-[var(--adaptive-grey200)] bg-white p-[1.6rem] gap-[1.6rem]">
+        <article
+            className="flex flex-col rounded-[2.4rem] border border-[var(--adaptive-grey200)] bg-white p-[1.6rem] gap-[1.6rem]"
+            data-report-id="안내 박스"
+            data-report-type="item"
+        >
             <section className="flex items-center gap-[1.6rem]">
                 <Image
                     src={"/images/icon/outlined/ico-outlined-headset.svg"}
@@ -312,6 +346,8 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
         <form
             className="flex flex-col gap-[5.2rem]"
             onSubmit={handleSubmit}
+            data-report-id={`문의 폼 ${category}`}
+            data-report-type="group"
         >
             {chips.length ? (
                 <SubPageSection title="서비스 선택">

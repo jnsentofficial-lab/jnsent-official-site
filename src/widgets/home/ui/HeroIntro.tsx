@@ -46,16 +46,16 @@ export function HeroIntro() {
 
     return (
         <section className="relative flex flex-col justify-center items-center h-[100dvh]">
-            <motion.div layout="position">
+            <motion.div
+                layout="position"
+                data-report-id="메인 히어로 랜딩 텍스트"
+                data-report-type="item"
+            >
                 <Text.Reveal
                     as="h2"
                     interaction={false}
                     className="mobile:text-[2.4rem] pc:text-[4.2rem] font-[700] font-[NanumSquare] leading-[1.5]"
-                    // initialColor="#00000000"
-                    // midColor="rgb(255, 92, 118)"
-                    // revealColor={introStep === 1 ? "rgb(0, 0, 0)" : "#00000050"}
                     initialColor="#ffffff00"
-                    // revealColor="rgb(0, 0, 0)"
                     revealColor={introStep === 1 ? "rgb(0, 0, 0)" : "#00000050"}
                     subHighlightColor="#A953FF"
                     highlightColor="#FF6B75"
@@ -67,12 +67,16 @@ export function HeroIntro() {
                         setIntroStep(2);
                     }}
                 >
-                    {`수 많은 초보 BJ들이 선택한 이유`}
+                    {`수 많은 크리에이터들이 선택한 이유`}
                 </Text.Reveal>
             </motion.div>
 
             {introStep === 2 ? (
-                <motion.div layout="position">
+                <motion.div
+                    layout="position"
+                    data-report-id="메인 히어로 랜딩 텍스트"
+                    data-report-type="item"
+                >
                     <Text.Reveal
                         as="h2"
                         interaction={false}

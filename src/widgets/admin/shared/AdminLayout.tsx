@@ -70,12 +70,24 @@ type AdminListRowProps = {
     thumbnail?: ReactNode;
     actions?: ReactNode;
     contentClassName?: string;
+    reportId?: string;
+    reportType?: "group" | "item";
 };
 
 export function AdminWorkspace({ children }: AdminWorkspaceProps) {
     return (
-        <article className="h-[100dvh] bg-[#F9F9F9]">
-            <div className="mx-auto h-full flex flex-col gap-[5.2rem]">{children}</div>
+        <article
+            className="h-[100dvh] bg-[#F9F9F9]"
+            data-report-id="관리자 작업 영역"
+            data-report-type="group"
+        >
+            <div
+                className="mx-auto h-full flex flex-col gap-[5.2rem]"
+                data-report-id="관리자 작업 컨테이너"
+                data-report-type="item"
+            >
+                {children}
+            </div>
             {/* <div className="mx-auto min-w-[var(--size-pc)] h-full flex flex-col gap-[5.2rem]">{children}</div> */}
         </article>
     );
@@ -88,11 +100,27 @@ export function AdminTwoPanel({ panelKey, current, title, action, left, right }:
     const setIsMobileNavOpen = useLayoutStore((state) => state.setIsMobileNavOpen);
 
     return (
-        <div className={`grid mobile:grid-cols-1 ${sidePanelOpenState ? "pc:grid-cols-2" : "pc:grid-cols-1"} h-full`}>
-            <section className="flex flex-col h-[100dvh] mobile:p-[5.2rem_1.6rem] pc:p-[5.2rem] mobile:gap-[5.2rem] pc:gap-[5.2rem] overflow-auto relative">
-                <section className="flex justify-between items-center gap-[1.6rem]">
+        <div
+            className={`grid mobile:grid-cols-1 ${sidePanelOpenState ? "pc:grid-cols-2" : "pc:grid-cols-1"} h-full`}
+            data-report-id={`${title} 관리자 분할 영역`}
+            data-report-type="group"
+        >
+            <section
+                className="flex flex-col h-[100dvh] mobile:p-[5.2rem_1.6rem] pc:p-[5.2rem] mobile:gap-[5.2rem] pc:gap-[5.2rem] overflow-auto relative"
+                data-report-id={`${title} 관리자 목록 영역`}
+                data-report-type="item"
+            >
+                <section
+                    className="flex justify-between items-center gap-[1.6rem]"
+                    data-report-id={`${title} 관리자 상단 정보`}
+                    data-report-type="item"
+                >
                     <div className="flex flex-col gap-[1.6rem]">
-                        <section className="flex items-center gap-[0.4rem]">
+                        <section
+                            className="flex items-center gap-[0.4rem]"
+                            data-report-id={`${title} 관리자 브레드크럼`}
+                            data-report-type="item"
+                        >
                             <h6 className="text-[1.8rem] font-[700] text-[var(--adaptive-black300)]">메인</h6>
 
                             <Image
@@ -125,7 +153,11 @@ export function AdminTwoPanel({ panelKey, current, title, action, left, right }:
             </section>
 
             {sidePanelOpenState ? (
-                <aside className="bg-white h-[100dvh] mobile:absolute mobile:left-0 mobile:top-0 mobile:w-full pc:w-auto pc:relative">
+                <aside
+                    className="bg-white h-[100dvh] mobile:absolute mobile:left-0 mobile:top-0 mobile:w-full pc:w-auto pc:relative"
+                    data-report-id={`${title} 관리자 상세 영역`}
+                    data-report-type="item"
+                >
                     {/* <aside className="bg-white h-[100dvh] overflow-auto mobile:absolute mobile:left-0 mobile:top-0 mobile:w-full pc:w-auto pc:relative"> */}
                     <div className="absolute mobile:top-[1.6rem] mobile:right-[1.6rem] pc:top-[4.2rem] pc:right-[4.2rem] z-10 px-[1.4rem] rounded-full bg-[var(--adaptive-black100)]">
                         <UI.Button
@@ -210,14 +242,18 @@ export function AdminEmptyState({ message }: AdminEmptyStateProps) {
 
 export function AdminListSection({ children, pagination, empty, hasItems, className = "", isLoading = false, loading }: AdminListSectionProps) {
     return (
-        <div className={`flex flex-col ${className}`}>
+        <div
+            className={`flex flex-col ${className}`}
+            data-report-id="관리자 목록 섹션"
+            data-report-type="group"
+        >
             {isLoading ? (loading ?? <p className="py-16 text-2xl font-[700] text-[var(--adaptiveGrey500)]">목록을 불러오는 중입니다.</p>) : hasItems ? children : empty}
             {pagination}
         </div>
     );
 }
 
-export function AdminListRow({ selected = false, onClick, title, description, thumbnail, actions, contentClassName = "" }: AdminListRowProps) {
+export function AdminListRow({ selected = false, onClick, title, description, thumbnail, actions, contentClassName = "", reportId, reportType }: AdminListRowProps) {
     const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
     const rowRef = useRef<HTMLElement | null>(null);
 
@@ -243,6 +279,8 @@ export function AdminListRow({ selected = false, onClick, title, description, th
         <section
             className="relative flex items-center justify-between gap-[1.2rem] mobile:min-h-[9.2rem]"
             ref={rowRef}
+            data-report-id={reportId}
+            data-report-type={reportType}
         >
             <UI.Button
                 className={`${selected ? "text-[var(--adaptive-red500)]" : ""} ${thumbnail ? "justify-start" : "justify-center"} flex h-full min-h-[9.2rem] flex-1 items-center gap-[1.2rem] transition hover:bg-white min-w-0 ${contentClassName}`}
@@ -295,7 +333,11 @@ export function AdminListRow({ selected = false, onClick, title, description, th
 export function AdminSidePanel({ title, description, children }: AdminSidePanelProps) {
     return (
         // <section className="overflow-auto flex flex-col gap-[5.2rem] mobile:p-0 pc:p-[5.2rem]">
-        <section className="overflow-auto flex flex-col gap-[5.2rem] h-full">
+        <section
+            className="overflow-auto flex flex-col gap-[5.2rem] h-full"
+            data-report-id={`${title} 관리자 사이드 패널`}
+            data-report-type="group"
+        >
             {/* <h2 className="text-[3.2rem] px-[5.2rem] pt-[5.2rem]">{title}</h2> */}
 
             {children}

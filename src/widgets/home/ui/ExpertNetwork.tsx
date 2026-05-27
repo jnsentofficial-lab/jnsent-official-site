@@ -24,8 +24,14 @@ export function ExpertNetwork() {
         <section
             ref={sectionRef}
             className="flex justify-center items-center mobile:min-h-[100dvh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[100dvh]"
+            data-report-id="전문가 네트워크 섹션"
+            data-report-type="group"
         >
-            <div className="mx-auto max-w-[var(--size-pc)] w-full text-center">
+            <div
+                className="mx-auto max-w-[var(--size-pc)] w-full text-center"
+                data-report-id="전문가 네트워크 카피"
+                data-report-type="item"
+            >
                 <Text.Reveal
                     as="h2"
                     className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[700] leading-[1.5]"
@@ -45,7 +51,11 @@ export function ExpertNetwork() {
                 <div className="mx-auto h-[4rem] w-[0.1rem] bg-[var(--adaptive-black200)]" />
                 <div className="bg-[var(--adaptive-black200)] h-[0.1rem] w-[84.1%] mx-auto" />
 
-                <div className="mt-16 grid gap-5 md:grid-cols-3 xl:grid-cols-6">
+                <div
+                    className="mt-16 grid gap-5 md:grid-cols-3 xl:grid-cols-6"
+                    data-report-id="전문가 네트워크 목록"
+                    data-report-type="item"
+                >
                     {experts.map((item, index) => (
                         <motion.article
                             // className="min-h-[15rem] rounded-2xl border border-black/5 bg-white px-5 py-7 shadow-[0_1rem_2.4rem_rgba(20,30,40,0.06)]"

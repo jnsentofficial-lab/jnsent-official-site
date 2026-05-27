@@ -41,9 +41,15 @@ export function TrustPrinciples() {
         <section
             ref={sectionRef}
             className="min-h-[100dvh] mobile:py-[12.8rem] pc:py-0 flex mobile:flex-col pc:flex-row justify-center items-center"
+            data-report-id="신뢰 원칙 섹션"
+            data-report-type="group"
         >
             {/* <div className="mx-auto grid w-[min(112rem,calc(100%_-_3.2rem))] grid-cols-[minmax(0,1fr)_44rem] items-center gap-14 max-[86rem]:grid-cols-1"> */}
-            <div className="mx-auto max-w-[var(--size-pc)] mx-auto w-full flex flex-col justify-center items-center gap-[3.2rem] px-[1.6rem]">
+            <div
+                className="mx-auto max-w-[var(--size-pc)] mx-auto w-full flex flex-col justify-center items-center gap-[3.2rem] px-[1.6rem]"
+                data-report-id="신뢰 원칙 카피"
+                data-report-type="item"
+            >
                 <Text.Reveal
                     as="h2"
                     className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[700] leading-[1.5] w-full"
@@ -60,8 +66,16 @@ export function TrustPrinciples() {
                     {`투명한 인터넷 방송 생태계를 위한,\n제이엔에스가 지키는 단호한 원칙`}
                 </Text.Reveal>
 
-                <section className="w-full flex gap-[1.6rem] items-center mobile:flex-col pc:flex-row">
-                    <div className="flex-1 flex flex-col gap-[0.4rem] mobile:w-full pc:w-auto">
+                <section
+                    className="w-full flex gap-[1.6rem] items-center mobile:flex-col pc:flex-row"
+                    data-report-id="신뢰 원칙 레이아웃"
+                    data-report-type="item"
+                >
+                    <div
+                        className="flex-1 flex flex-col gap-[0.4rem] mobile:w-full pc:w-auto"
+                        data-report-id="신뢰 원칙 카드 목록"
+                        data-report-type="item"
+                    >
                         {principleItems.map((item) => (
                             <article
                                 className="rounded-[3.2rem] p-[3.2rem] flex flex-col gap-[1.2rem]"
@@ -87,6 +101,8 @@ export function TrustPrinciples() {
                         // className="relative aspect-square overflow-hidden rounded-[2.4rem] bg-[url('/images/landing/meeting.png')] bg-cover bg-center text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
                         // className="relative aspect overflow-hidden rounded-[2.4rem] bg-[url('/images/landing/meeting.png')] bg-cover bg-center text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
                         className="relative flex-1 overflow-hidden rounded-[2.4rem] bg-[url('/images/landing/meeting.png')] bg-cover bg-center text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
+                        data-report-id="신뢰 원칙 증빙 카드"
+                        data-report-type="item"
                         initial={{ opacity: 0, x: 28 }}
                         transition={{ duration: 0.7 }}
                         viewport={{ once: true, amount: 0.25 }}

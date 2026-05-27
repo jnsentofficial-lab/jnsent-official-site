@@ -40,9 +40,21 @@ export function AdminSidebar({ onMainNavigationClick }: AdminSidebarProps) {
     return (
         // <aside className="flex h-full flex-col border-r border-[var(--adaptiveGrey200)] bg-white px-6 py-8 max-[86rem]:border-r-0 max-[86rem]:border-b">
         // <aside className="flex h-full w-[24rem] flex-col bg-white pc:border-r pc:border-[var(--adaptive-grey100)] mobile:w-screen">
-        <aside className="flex h-full flex-col bg-white pc:border-r pc:border-[var(--adaptive-grey100)] mobile:w-screen pc:w-[24rem]">
-            <section className="mb-10 flex items-center justify-between gap-4 p-[1.6rem]">
-                <div className="flex items-center gap-4">
+        <aside
+            className="flex h-full flex-col bg-white pc:border-r pc:border-[var(--adaptive-grey100)] mobile:w-screen pc:w-[24rem]"
+            data-report-id="관리자 사이드바"
+            data-report-type="group"
+        >
+            <section
+                className="mb-10 flex items-center justify-between gap-4 p-[1.6rem]"
+                data-report-id="관리자 사이드바 사용자 정보"
+                data-report-type="item"
+            >
+                <div
+                    className="flex items-center gap-4"
+                    data-report-id="관리자 사이드바 프로필"
+                    data-report-type="item"
+                >
                     <Image
                         src={"/images/common/ico-logo.svg"}
                         width={42}
@@ -68,6 +80,8 @@ export function AdminSidebar({ onMainNavigationClick }: AdminSidebarProps) {
                 className="flex flex-col gap-[1.6rem] w-[24rem] flex-1"
                 // className="grid gap-9 text-2xl font-[700] max-[86rem]:grid-cols-2 max-[86rem]:gap-4"
                 aria-label="관리자 메뉴"
+                data-report-id="관리자 사이드바 메뉴"
+                data-report-type="item"
             >
                 {navItems.map((item) => {
                     const SELECTED = pathname === item.href;
@@ -78,6 +92,8 @@ export function AdminSidebar({ onMainNavigationClick }: AdminSidebarProps) {
                             href={item.href}
                             key={item.href}
                             onClick={() => setIsMobileNavOpen(false)}
+                            data-report-id={`관리자 메뉴 ${item.label}`}
+                            data-report-type="item"
                         >
                             {SELECTED ? (
                                 <Text.Shimmer
@@ -106,6 +122,8 @@ export function AdminSidebar({ onMainNavigationClick }: AdminSidebarProps) {
                         setIsMobileNavOpen(false);
                         onMainNavigationClick();
                     }}
+                    data-report-id="관리자 메인 이동 버튼"
+                    data-report-type="item"
                 >
                     {/* <Image
                         src={"/images/icon/outlined/ico-outlined-arrow-single-up.svg"}
@@ -119,7 +137,11 @@ export function AdminSidebar({ onMainNavigationClick }: AdminSidebarProps) {
                 </UI.Linker>
             </nav>
 
-            <section className="w-[24rem]">
+            <section
+                className="w-[24rem]"
+                data-report-id="관리자 사이드바 하단"
+                data-report-type="item"
+            >
                 <div className="h-[0.1rem] w-full bg-[var(--adaptive-grey100)]" />
 
                 <UI.Button
@@ -127,6 +149,8 @@ export function AdminSidebar({ onMainNavigationClick }: AdminSidebarProps) {
                     // className="mt-auto flex min-h-16 items-center justify-start bg-white text-2xl font-[700] text-black hover:text-[var(--adaptiveRed500)] max-[86rem]:mt-8"
                     onClick={handleLogout}
                     type="button"
+                    data-report-id="관리자 로그아웃 버튼"
+                    data-report-type="item"
                 >
                     <Image
                         src={"/images/icon/outlined/ico-outlined-unlock.svg"}

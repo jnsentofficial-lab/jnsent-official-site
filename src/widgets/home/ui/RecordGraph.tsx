@@ -15,8 +15,16 @@ const GRAPH_VIEWBOX = "14 21 735 385";
 
 export function RecordGraph() {
     return (
-        <section className="relative h-dvh min-h-0 overflow-x-clip">
-            <div className="absolute top-[clamp(1.6rem,4vw,4rem)] left-1/2 z-10 w-full -translate-x-1/2 px-[clamp(1.6rem,4vw,4rem)]">
+        <section
+            className="relative h-dvh min-h-0 overflow-x-clip"
+            data-report-id="플랫폼 기록 섹션"
+            data-report-type="group"
+        >
+            <div
+                className="absolute top-[clamp(1.6rem,4vw,4rem)] left-1/2 z-10 w-full -translate-x-1/2 px-[clamp(1.6rem,4vw,4rem)]"
+                data-report-id="플랫폼 기록 카피"
+                data-report-type="item"
+            >
                 <motion.div
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
@@ -76,7 +84,11 @@ export function RecordGraph() {
                         {`기록은 거짓말하지 않습니다\n결과로 증명된 운영성과`}
                     </Text.Reveal>
 
-                    <div className="mt-8 grid gap-6 max-[48rem]:mt-6 max-[48rem]:gap-4 min-[86rem]:mt-12 min-[86rem]:gap-8">
+                    <div
+                        className="mt-8 grid gap-6 max-[48rem]:mt-6 max-[48rem]:gap-4 min-[86rem]:mt-12 min-[86rem]:gap-8"
+                        data-report-id="플랫폼 기록 수치 목록"
+                        data-report-type="item"
+                    >
                         {records.map((record) => (
                             <div key={record.label}>
                                 <Text.Rolling
@@ -93,6 +105,8 @@ export function RecordGraph() {
 
             <motion.div
                 className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-x-hidden"
+                data-report-id="플랫폼 기록 그래프"
+                data-report-type="item"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ amount: 0.25, once: false }}

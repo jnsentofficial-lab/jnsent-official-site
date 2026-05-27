@@ -14,6 +14,8 @@ export function FinalCtaSection() {
         <section
             ref={sectionRef}
             className="relative mobile:min-h-[100dvh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[100dvh] flex items-center justify-center"
+            data-report-id="최종 문의 유도 섹션"
+            data-report-type="group"
         >
             <div
                 className="absolute w-full left-[50%] transform translate-x-[-50%] inset-0 pointer-events-none z-0"
@@ -39,6 +41,8 @@ export function FinalCtaSection() {
 
             <motion.div
                 className="relative z-[100] mx-auto flex h-full max-w-[78rem] flex-col items-center justify-center"
+                data-report-id="최종 문의 유도 카피"
+                data-report-type="item"
                 initial={{ opacity: 0, y: 28 }}
                 transition={{ duration: 0.75 }}
                 viewport={{ once: true, amount: 0.3 }}
@@ -69,6 +73,8 @@ export function FinalCtaSection() {
                 <motion.a
                     className="mt-10 inline-flex items-center justify-center rounded-full border border-white bg-black px-8 py-4 text-center text-base font-[700] text-white"
                     href="/bjSupport"
+                    data-report-id="최종 문의 유도 버튼"
+                    data-report-type="item"
                     whileHover={{ y: -2 }}
                 >
                     문의하기
