@@ -1,21 +1,27 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useManagerAccountsQuery } from "@/entities/managerAccount/api/managerAccount.query";
+
 import type { ManagerAccount } from "@/entities/managerAccount/model/managerAccount.type";
-import UI from "@/shared/ui/UIComponent";
-import { AdminSidePanel, AdminTwoPanel, AdminWorkspace } from "@/widgets/admin/shared/AdminLayout";
+import { useManagerAccountsQuery } from "@/entities/managerAccount/api/managerAccount.query";
+
 import { ManagerAccountList } from "@/widgets/admin/account/manager/ui/ManagerAccountList";
-import { ManagerAccountSidebar } from "@/widgets/admin/account/manager/ui/ManagerAccountSidebar";
 import { useAdminSidePanelStore } from "@/widgets/admin/shared/model/useAdminSidePanelStore";
+import { ManagerAccountSidebar } from "@/widgets/admin/account/manager/ui/ManagerAccountSidebar";
+import { AdminSidePanel, AdminTwoPanel, AdminWorkspace } from "@/widgets/admin/shared/AdminLayout";
+
+import Portal from "@/shared/ui/kit/Portal";
 
 type SidebarMode = "create" | "edit" | "empty";
 const PANEL_KEY = "/admin/account/manager";
 
 export function Analysis() {
     const { data: accounts = [], isLoading } = useManagerAccountsQuery();
+
     const [selectedAccount, setSelectedAccount] = useState<ManagerAccount | null>(null);
     const [sidebarMode, setSidebarMode] = useState<SidebarMode>("empty");
+
     const openPanel = useAdminSidePanelStore((state) => state.openPanel);
     const closePanel = useAdminSidePanelStore((state) => state.closePanel);
 
@@ -30,9 +36,8 @@ export function Analysis() {
                 current="관리자 계정 관리"
                 title="관리자 계정 관리"
                 action={
-                    <UI.Button
-                        size="sm"
-                        className="bg-black text-white px-[1.2rem]"
+                    <button
+                        className="absolute bottom-[1.6rem] right-[1.6rem] bg-black hover:bg-[var(--adaptive-blue500)] cursor-pointer flex flex-col justify-center items-center gap-[1.2rem] h-[5.8rem] w-[5.8rem] rounded-full z-100 shadow-[0_0_50px_0_var(--adaptive-black500)]"
                         onClick={() => {
                             setSelectedAccount(null);
                             setSidebarMode("create");
@@ -40,8 +45,16 @@ export function Analysis() {
                         }}
                         type="button"
                     >
-                        + 생성하기
-                    </UI.Button>
+                        <Image
+                            src={"/images/icon/outlined/ico-outlined-edit.svg"}
+                            alt=""
+                            width={32}
+                            height={32}
+                            className="invert"
+                        />
+                    </button>
+                    // <Portal portal={["mobile"]}>
+                    // </Portal>
                 }
                 left={
                     <>

@@ -15,11 +15,12 @@ export const GlobalModalRoutes = {
     PUBLIC_GLOBAL_MODALS: "public:globalModals",
 } as const;
 
-export const useVisibleGlobalModalsQuery = () => {
+export const useVisibleGlobalModalsQuery = (enabled = true) => {
     const MUTATION_KEY = GlobalModalRoutes.PUBLIC_GLOBAL_MODALS;
     const { data, isLoading, isError, error, isFetching, isFetched, refetch } = useQuery({
         queryKey: [MUTATION_KEY, "useVisibleGlobalModalsQuery"],
         queryFn: () => getVisibleGlobalModalsFetch(),
+        enabled,
     });
 
     const response: GlobalModal[] = data?.result ?? [];
@@ -65,7 +66,7 @@ export const useToggleGlobalModalMutation = () => {
         mutationKey: [MUTATION_KEY, "useToggleGlobalModalMutation"],
         mutationFn: (payload: ToggleGlobalModalPayload) => toggleGlobalModalFetch(payload),
         onSuccess: () => {
-            setToast({ msg: "모달 상태를 변경했어요", time: 3, type: "success" });
+            setToast({ msg: "팝업 상태를 변경했어요", time: 3, type: "success" });
             queryClient.invalidateQueries({ queryKey: [MUTATION_KEY] });
         },
         onError: (err: Error) => {

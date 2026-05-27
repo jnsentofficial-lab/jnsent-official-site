@@ -82,17 +82,18 @@ export function AdminLoginForm() {
             </section>
 
             <UI.Linker
-                className="flex justify-center items-center w-full"
+                className="flex justify-center items-center w-full gap-[0.4rem]"
                 href="/"
             >
                 <Image
                     src={"/images/icon/outlined/ico-outlined-arrow-single-up.svg"}
                     alt=""
-                    width={16}
-                    height={16}
-                    className="rotate-270 brightness-0"
+                    width={10}
+                    height={10}
+                    className="rotate-270 brightness-0 opacity-50"
                 />
-                <p>메인으로 돌아가기</p>
+
+                <p className="text-[1.4rem] text-[var(--adaptive-black300)] font-[500]">메인으로 돌아가기</p>
             </UI.Linker>
         </form>
     );

@@ -325,6 +325,10 @@ body {
     font-size: 1.6rem;
 }
 
+input[type="password"] {
+    font-family: sans-serif;
+}
+
 @import "tailwindcss";
 
 @theme {

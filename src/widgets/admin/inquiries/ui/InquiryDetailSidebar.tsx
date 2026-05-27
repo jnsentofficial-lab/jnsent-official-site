@@ -56,12 +56,12 @@ export function InquiryDetailSidebar({ inquiry }: InquiryDetailSidebarProps) {
     return (
         <aside className="relative grid grid-rows-[1fr_1fr_auto] flex-col h-full">
             {/* 질문 */}
-            <section className="flex-1 flex flex-col gap-[5.2rem] bg-[#F3F3F3] p-[5.2rem]">
+            <section className="flex-1 flex flex-col mobile:gap-[2.4rem] pc:gap-[5.2rem] bg-[#F3F3F3] mobile:p-[2.4rem_1.6rem] pc:p-[5.2rem]">
                 {/* 게시물 정보 */}
                 <div className="flex flex-col gap-[1.6rem]">
                     <h6 className="text-[var(--adaptive-black300)] text-[1.8rem]">선택한 질문</h6>
 
-                    <h2 className="text-[3.2rem]">{inquiry.message}</h2>
+                    <h2 className="mobile:text-[2.4rem] pc:text-[3.2rem] leading-[1.5]">{inquiry.message}</h2>
 
                     <p className="text-[1.4rem] text-[var(--adaptive-black400)]">
                         {new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.created_at))} ~ {new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.updated_at))}
@@ -71,7 +71,7 @@ export function InquiryDetailSidebar({ inquiry }: InquiryDetailSidebarProps) {
 
                 {/* 게시물 내용 */}
                 <RichTextRenderer
-                    className="text-[2.0rem]"
+                    className="mobile:text-[1.6rem] pc:text-[2.0rem]"
                     content={inquiry.message_body}
                     fallback={inquiry.message}
                 />
@@ -80,58 +80,21 @@ export function InquiryDetailSidebar({ inquiry }: InquiryDetailSidebarProps) {
             {/* 질문 END */}
 
             {/* 답변 */}
-            <section className="flex-1 block p-[5.2rem]">
+            <section className="flex-1 block mobile:p-[2.4rem_1.6rem] pc:p-[5.2rem]">
                 <h6 className="mb-[1.6rem] text-[1.8rem] text-[var(--adaptive-black300)]">관리자 답변</h6>
 
-                {/* <div className="mb-8 grid gap-4">
-                        {isLoading ? <p className="m-0 text-lg font-semibold text-[var(--adaptiveGrey500)]">답변을 불러오는 중입니다.</p> : null}
-
-                        {!isLoading && comments.length === 0 ? <p className="m-0 text-2xl font-[700] text-black">이곳에 답변을 적어주세요</p> : null}
-
-                        {comments.map((comment) => (
-                            <article
-                                className="border-b border-[var(--adaptiveGrey200)] pb-5"
-                                key={comment.id}
-                            >
-                                <div className="mb-2 flex items-center justify-between gap-3">
-                                    <strong className="text-lg font-[700] text-black">{comment.manager_name}</strong>
-                                    <span className="text-sm font-semibold text-[var(--adaptiveGrey500)]">{formatDate(comment.created_at)}</span>
-                                </div>
-
-                                <RichTextRenderer
-                                    className="text-lg"
-                                    content={comment.message_body}
-                                    fallback={comment.message}
-                                />
-                            </article>
-                        ))}
-                    </div> */}
                 <form
-                    className="grid gap-5"
                     onSubmit={(event) => {
                         void handleSubmit(event);
                     }}
                     ref={formRef}
                 >
-                    {/* <label className="grid gap-2 text-lg font-[700] text-black">
-                            담당자 이름
-                            <input
-                                className="h-14 border border-black px-4 text-lg font-semibold"
-                                name="managerName"
-                                placeholder="담당자 이름"
-                                required
-                                type="text"
-                            />
-                        </label> */}
-                    <label className="grid gap-2 text-lg font-[700] text-black">
-                        {/* 답변 내용 */}
-                        <RichTextEditor
-                            value={commentBody}
-                            onChange={setCommentBody}
-                            onImageUpload={handleImageUpload}
-                            placeholder="문의에 대한 코멘트를 작성하세요."
-                        />
-                    </label>
+                    <RichTextEditor
+                        value={commentBody}
+                        onChange={setCommentBody}
+                        onImageUpload={handleImageUpload}
+                        placeholder="이곳을 눌러 답변을 작성해주세요"
+                    />
                 </form>
             </section>
             {/* 답변 END */}

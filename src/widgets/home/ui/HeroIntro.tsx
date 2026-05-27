@@ -31,7 +31,7 @@ export function HeroIntro() {
                 <Text.Reveal
                     as="h2"
                     interaction={false}
-                    className="mobile:text-[2.8rem] pc:text-[4.2rem] font-[700] font-[NanumSquare] leading-[1.5]"
+                    className="mobile:text-[2.4rem] pc:text-[4.2rem] font-[700] font-[NanumSquare] leading-[1.5]"
                     // initialColor="#00000000"
                     // midColor="rgb(255, 92, 118)"
                     // revealColor={introStep === 1 ? "rgb(0, 0, 0)" : "#00000050"}
@@ -53,17 +53,11 @@ export function HeroIntro() {
             </motion.div>
 
             {introStep === 2 ? (
-                <motion.div
-                    layout="position"
-                    className="h-[5.8rem]"
-                >
+                <motion.div layout="position">
                     <Text.Reveal
                         as="h2"
                         interaction={false}
-                        className="mobile:text-[2.8rem] pc:text-[4.2rem] font-[700] leading-[1.5]"
-                        // initialColor="#00000000"
-                        // midColor="rgb(255, 92, 118)"
-                        // revealColor="rgb(0, 0, 0)"
+                        className="mobile:text-[2.4rem] pc:text-[4.2rem] font-[700] leading-[1.5] whitespace-break-spaces"
                         initialColor="#ffffff00"
                         revealColor="#000000"
                         subHighlightColor="#A953FF"

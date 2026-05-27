@@ -49,7 +49,7 @@ export function SiteHeader() {
                 </nav>
 
                 <UI.Linker
-                    className="mobile:hidden rounded-full bg-black px-[1.2rem] text-white pc:inline-flex"
+                    className="mobile:hidden rounded-full bg-black px-[1.2rem] text-white flex items-center justify-center"
                     // className="text-[1.6rem] inline-flex shrink-0 items-center justify-center rounded-full bg-black px-6 py-[0.2rem] text-base text-white"
                     href="/bjSupport"
                     size="sm"
@@ -67,7 +67,7 @@ export function SiteHeader() {
             </div>
 
             {isMobileNavOpen ? (
-                <div className="fixed inset-0 top-0 z-50 flex min-h-[100dvh] flex-col bg-white p-[2.4rem] pc:hidden">
+                <div className="fixed inset-0 top-0 z-100 flex min-h-[100dvh] flex-col bg-white p-[2.4rem] pc:hidden">
                     <div className="mb-[4rem] flex items-center justify-between">
                         <UI.Linker
                             className="shrink-0 text-2xl"
@@ -107,14 +107,23 @@ export function SiteHeader() {
                         ))}
                     </nav>
 
-                    <UI.Linker
-                        className="inline-flex w-full justify-center rounded-full bg-black px-[1.2rem] text-white"
-                        href="/bjSupport"
-                        onClick={() => setIsMobileNavOpen(false)}
-                        size="sm"
-                    >
-                        BJ 지원하기
-                    </UI.Linker>
+                    <section className="w-full flex flex-col gap-[1.6rem]">
+                        <div className="h-[0.1rem] w-full bg-[var(--adaptive-grey200)]" />
+                        <UI.Linker
+                            className="flex items-center w-full"
+                            href="/bjSupport"
+                            onClick={() => setIsMobileNavOpen(false)}
+                            size="sm"
+                        >
+                            <p className="text-[2.4rem]">BJ 지원하기</p>
+                            <Image
+                                src={"/images/icon/outlined/ico-outlined-arrow-single-right.svg"}
+                                alt=""
+                                width={32}
+                                height={32}
+                            />
+                        </UI.Linker>
+                    </section>
                 </div>
             ) : null}
         </header>

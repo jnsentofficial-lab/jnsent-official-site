@@ -6,6 +6,16 @@ import { createPortal } from "react-dom";
 
 import { useCreateInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
 import { buildInquiryMessageBody } from "@/entities/inquiry/lib/buildMessageBody";
+import {
+    buildAvailableTime,
+    buildRegion,
+    CONTACT_HOUR_OPTIONS,
+    CONTACT_PERIOD_OPTIONS,
+    formatPhoneNumber,
+    REGION_OPTIONS,
+    sanitizeAgeInput,
+    sanitizeNameInput,
+} from "@/entities/inquiry/lib/formFields";
 import { HOME_INQUIRY_SUPPORT_FIELDS, SUPPORT_FIELD_CATEGORY_MAP, type HomeInquirySupportField } from "@/entities/inquiry/lib/supportFieldCategory";
 import { showErrorToast } from "@/shared/lib/toast";
 import UI from "@/shared/ui/UIComponent";
@@ -48,8 +58,14 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
     const [gender, setGender] = useState<Gender>("female");
     const [supportField, setSupportField] = useState<HomeInquirySupportField>("BJ지원");
     const [agreed, setAgreed] = useState(false);
+    const [province, setProvince] = useState("");
+    const [city, setCity] = useState("");
+    const [detailAddress, setDetailAddress] = useState("");
+    const [contactPeriod, setContactPeriod] = useState("");
+    const [contactHour, setContactHour] = useState("");
     const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
     const [statusMessage, setStatusMessage] = useState("");
+    const cityOptions = province ? REGION_OPTIONS[province as keyof typeof REGION_OPTIONS] : [];
 
     useEffect(() => {
         setMounted(true);
@@ -59,6 +75,11 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
         if (open) return;
         setFieldErrors({});
         setStatusMessage("");
+        setProvince("");
+        setCity("");
+        setDetailAddress("");
+        setContactPeriod("");
+        setContactHour("");
     }, [open]);
 
     useEffect(() => {
@@ -82,11 +103,11 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
         event.preventDefault();
         const form = event.currentTarget;
         const formData = new FormData(form);
-        const name = String(formData.get("name") ?? "").trim();
-        const age = String(formData.get("age") ?? "").trim();
-        const region = String(formData.get("region") ?? "").trim();
-        const phone = String(formData.get("phone") ?? "").trim();
-        const availableTime = String(formData.get("availableTime") ?? "").trim();
+        const name = sanitizeNameInput(String(formData.get("name") ?? "")).trim();
+        const age = sanitizeAgeInput(String(formData.get("age") ?? "").trim());
+        const region = buildRegion(province, city, detailAddress);
+        const phone = formatPhoneNumber(String(formData.get("phone") ?? "").trim());
+        const availableTime = buildAvailableTime(contactPeriod, contactHour);
 
         const errors = validateInquiryFields({
             name,
@@ -135,6 +156,11 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
             setGender("female");
             setSupportField("BJ지원");
             setAgreed(false);
+            setProvince("");
+            setCity("");
+            setDetailAddress("");
+            setContactPeriod("");
+            setContactHour("");
             setStatusMessage("");
             onClose();
         } catch (error) {
@@ -151,7 +177,7 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="inquiry-modal-title"
-                    className="fixed inset-0 z-[200000] flex min-h-[100dvh] flex-col bg-[#F5F5F590] backdrop-blur-2xl overflow-y-auto"
+                    className="fixed inset-0 z-[200000] flex h-[100dvh] flex-col bg-[#ffffffe2] backdrop-blur-2xl overflow-y-auto"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -166,10 +192,10 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                         ×
                     </button>
 
-                    <main className="max-w-[var(--size-tablet)] mx-auto flex flex-col justify-center items-center gap-[2.4rem] h-full">
+                    <section className="mx-auto flex min-h-full w-full max-w-[var(--size-tablet)] flex-col items-center justify-start gap-[2.4rem] px-[1.6rem] pb-[3.2rem] pt-[8rem] pc:justify-center pc:px-0">
                         {/* <main className="mx-auto w-full max-w-[68rem] flex-1 px-[2rem] pb-[6rem] pt-[8rem]"> */}
                         <motion.header
-                            className="flex flex-col gap-[1.6rem]"
+                            className="flex flex-col mobile:gap-[0.8rem] pc:gap-[1.6rem] w-full"
                             initial={{ opacity: 0, transform: "translateY(100px)" }}
                             animate={{ opacity: 1, transform: "translateY(0px)" }}
                             exit={{ opacity: 0, transform: "translateY(100px)" }}
@@ -183,16 +209,16 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                         >
                             <h2
                                 id="inquiry-modal-title"
-                                className="text-[3.2rem] font-[700] text-left text-black"
+                                className="mobile:text-[2.0rem] pc:text-[3.2rem] font-[700] text-left text-black"
                             >
                                 당신의 가능성을 현실로 만드세요
                             </h2>
 
-                            <p className="text-[1.8rem] text-left font-medium text-[#888888]">성장을 위한 첫 상담을 지금 시작해보세요.</p>
+                            <p className="mobile:text-[1.4rem] pc:text-[1.8rem] text-left font-medium text-[#888888]">성장을 위한 첫 상담을 지금 시작해보세요.</p>
                         </motion.header>
 
                         <form
-                            className="flex flex-col gap-[3.2rem] w-full"
+                            className="grid gap-[3.2rem] w-full pb-[1.6rem]"
                             onSubmit={handleSubmit}
                             // initial={{ opacity: 0, transform: "translateY(100px)" }}
                             // animate={{ opacity: 1, transform: "translateY(0px)" }}
@@ -233,8 +259,10 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                 <TextInput
                                     placeholder="이름을 적어주세요"
                                     name="name"
+                                    maxLength={20}
                                     hasError={Boolean(fieldErrors.name)}
-                                    onChange={() => {
+                                    onChange={(event) => {
+                                        event.currentTarget.value = sanitizeNameInput(event.currentTarget.value);
                                         if (fieldErrors.name) {
                                             setFieldErrors((prev) => ({ ...prev, name: undefined }));
                                         }
@@ -251,8 +279,10 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                     placeholder="나이를 적어주세요"
                                     name="age"
                                     inputMode="numeric"
+                                    maxLength={3}
                                     hasError={Boolean(fieldErrors.age)}
-                                    onChange={() => {
+                                    onChange={(event) => {
+                                        event.currentTarget.value = sanitizeAgeInput(event.currentTarget.value);
                                         if (fieldErrors.age) {
                                             setFieldErrors((prev) => ({ ...prev, age: undefined }));
                                         }
@@ -265,16 +295,48 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                 error={fieldErrors.region}
                                 delay={5}
                             >
-                                <TextInput
-                                    placeholder="지역을 적어주세요"
-                                    name="region"
-                                    hasError={Boolean(fieldErrors.region)}
-                                    onChange={() => {
-                                        if (fieldErrors.region) {
-                                            setFieldErrors((prev) => ({ ...prev, region: undefined }));
-                                        }
-                                    }}
-                                />
+                                <div className="grid gap-[0.8rem]">
+                                    <div className="grid grid-cols-2 gap-[0.8rem]">
+                                        <SelectInput
+                                            className="h-[5.2rem]"
+                                            hasError={Boolean(fieldErrors.region)}
+                                            options={[{ label: "~도 선택", value: "" }, ...Object.keys(REGION_OPTIONS).map((option) => ({ label: option, value: option }))]}
+                                            value={province}
+                                            onChange={(event) => {
+                                                setProvince(event.target.value);
+                                                setCity("");
+                                                if (fieldErrors.region) {
+                                                    setFieldErrors((prev) => ({ ...prev, region: undefined }));
+                                                }
+                                            }}
+                                        />
+                                        <SelectInput
+                                            className="h-[5.2rem]"
+                                            disabled={!province}
+                                            hasError={Boolean(fieldErrors.region)}
+                                            options={[{ label: "~시 선택", value: "" }, ...cityOptions.map((option) => ({ label: option, value: option }))]}
+                                            value={city}
+                                            onChange={(event) => {
+                                                setCity(event.target.value);
+                                                if (fieldErrors.region) {
+                                                    setFieldErrors((prev) => ({ ...prev, region: undefined }));
+                                                }
+                                            }}
+                                        />
+                                    </div>
+                                    <TextInput
+                                        placeholder="상세 주소를 적어주세요"
+                                        name="detailAddress"
+                                        value={detailAddress}
+                                        hasError={Boolean(fieldErrors.region)}
+                                        onChange={(event) => {
+                                            setDetailAddress(event.currentTarget.value);
+                                            if (fieldErrors.region) {
+                                                setFieldErrors((prev) => ({ ...prev, region: undefined }));
+                                            }
+                                        }}
+                                    />
+                                </div>
                             </FormField>
 
                             <FormField
@@ -286,8 +348,11 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                     placeholder="전화번호를 적어주세요"
                                     name="phone"
                                     type="tel"
+                                    inputMode="numeric"
+                                    maxLength={13}
                                     hasError={Boolean(fieldErrors.phone)}
-                                    onChange={() => {
+                                    onChange={(event) => {
+                                        event.currentTarget.value = formatPhoneNumber(event.currentTarget.value);
                                         if (fieldErrors.phone) {
                                             setFieldErrors((prev) => ({ ...prev, phone: undefined }));
                                         }
@@ -300,23 +365,39 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                 error={fieldErrors.availableTime}
                                 delay={7}
                             >
-                                <TextInput
-                                    placeholder="연락 가능한 시간을 적어주세요"
-                                    name="availableTime"
-                                    hasError={Boolean(fieldErrors.availableTime)}
-                                    onChange={() => {
-                                        if (fieldErrors.availableTime) {
-                                            setFieldErrors((prev) => ({ ...prev, availableTime: undefined }));
-                                        }
-                                    }}
-                                />
+                                <div className="grid grid-cols-2 gap-[0.8rem]">
+                                    <SelectInput
+                                        className="h-[5.2rem]"
+                                        hasError={Boolean(fieldErrors.availableTime)}
+                                        options={[{ label: "오전/오후 선택", value: "" }, ...CONTACT_PERIOD_OPTIONS.map((option) => ({ label: option, value: option }))]}
+                                        value={contactPeriod}
+                                        onChange={(event) => {
+                                            setContactPeriod(event.target.value);
+                                            if (fieldErrors.availableTime) {
+                                                setFieldErrors((prev) => ({ ...prev, availableTime: undefined }));
+                                            }
+                                        }}
+                                    />
+                                    <SelectInput
+                                        className="h-[5.2rem]"
+                                        hasError={Boolean(fieldErrors.availableTime)}
+                                        options={[{ label: "시간 선택", value: "" }, ...CONTACT_HOUR_OPTIONS.map((option) => ({ label: option, value: option }))]}
+                                        value={contactHour}
+                                        onChange={(event) => {
+                                            setContactHour(event.target.value);
+                                            if (fieldErrors.availableTime) {
+                                                setFieldErrors((prev) => ({ ...prev, availableTime: undefined }));
+                                            }
+                                        }}
+                                    />
+                                </div>
                             </FormField>
 
                             <FormField
                                 label="지원분야"
                                 delay={8}
                             >
-                                <div className="grid grid-cols-2 gap-[1.2rem]">
+                                <div className="grid grid-cols-2 gap-[0.4rem]">
                                     {HOME_INQUIRY_SUPPORT_FIELDS.map((field) => (
                                         <OptionButton
                                             key={field}
@@ -403,13 +484,13 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                 <UI.Button
                                     type="submit"
                                     disabled={createInquiry.isPending}
-                                    className="h-[5.6rem] w-full rounded-[1rem] bg-black text-[1.8rem] font-bold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+                                    className="h-[5.6rem] w-full rounded-[1.6rem] bg-black text-[1.8rem] font-bold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
                                 >
                                     {createInquiry.isPending ? "저장 중..." : "문의하기"}
                                 </UI.Button>
                             </motion.section>
                         </form>
-                    </main>
+                    </section>
 
                     {/* <InquiryModalFooter /> */}
                 </motion.div>
@@ -422,7 +503,7 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
 function FormField({ label, children, delay = 1, error }: { label: string; children: ReactNode; delay: number; error?: string }) {
     return (
         <motion.div
-            className="flex flex-col gap-[1.2rem]"
+            className="flex flex-col gap-[0.8rem]"
             initial={{ opacity: 0, transform: "translateY(100px)" }}
             animate={{ opacity: 1, transform: "translateY(0px)" }}
             exit={{ opacity: 0, transform: "translateY(100px)" }}
@@ -434,7 +515,7 @@ function FormField({ label, children, delay = 1, error }: { label: string; child
                 damping: 10,
             }}
         >
-            <label className="text-[1.6rem] font-bold text-black">{label}</label>
+            <label className="text-[1.6rem] font-bold text-black font-[NanumSquare]">{label}</label>
             {children}
             {error ? (
                 <p
@@ -452,9 +533,22 @@ function TextInput({ className = "", hasError = false, ...props }: InputHTMLAttr
     return (
         <input
             {...props}
-            className={`h-[5.2rem] w-full rounded-[1rem] border bg-white px-[1.6rem] text-[1.6rem] font-medium text-black outline-none transition-colors placeholder:text-[#BBBBBB] focus:border-[#FF4B8B] ${
+            className={`h-[5.2rem] w-full rounded-[1.6rem] border bg-white px-[1.6rem] text-[1.6rem] font-medium text-black outline-none transition-colors placeholder:text-[#BBBBBB] focus:border-[#FF4B8B] ${
                 hasError ? "border-[#FF4B8B]" : "border-[#E5E5E5]"
             } ${className}`}
+        />
+    );
+}
+
+function SelectInput({ className = "", hasError = false, options, ...props }: React.ComponentProps<typeof UI.Select> & { hasError?: boolean }) {
+    return (
+        <UI.Select
+            {...props}
+            className={`rounded-[1.6rem] border bg-white px-[1.6rem] text-[1.6rem] font-medium text-black outline-none transition-colors disabled:bg-[#f7f7f7] ${
+                hasError ? "border-[#FF4B8B]" : "border-[#E5E5E5]"
+            } ${className}`}
+            options={options}
+            size="md"
         />
     );
 }
@@ -464,7 +558,7 @@ function OptionButton({ children, selected, onClick, className = "" }: { childre
         <button
             type="button"
             onClick={onClick}
-            className={`h-[5.2rem] rounded-[1rem] border text-[1.6rem] font-bold transition-colors ${selected ? selectedOptionClass : unselectedOptionClass} ${className}`}
+            className={`h-[5.2rem] rounded-[1.6rem] border text-[1.6rem] font-bold transition-colors ${selected ? selectedOptionClass : unselectedOptionClass} ${className}`}
         >
             {children}
         </button>

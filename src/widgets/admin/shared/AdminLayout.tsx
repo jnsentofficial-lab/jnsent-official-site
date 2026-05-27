@@ -34,6 +34,7 @@ type ConfirmDialogProps = {
     title: string;
     description: string;
     targetLabel?: string;
+    cancelLabel?: string;
     confirmLabel: string;
     tone?: "create" | "delete";
     onCancel: () => void;
@@ -87,7 +88,7 @@ export function AdminTwoPanel({ panelKey, current, title, action, left, right }:
 
     return (
         <div className={`grid mobile:grid-cols-1 ${sidePanelOpenState ? "pc:grid-cols-2" : "pc:grid-cols-1"} h-full`}>
-            <section className="flex flex-col h-[100dvh] mobile:p-[1.6rem] pc:p-[5.2rem] mobile:gap-[1.6rem] pc:gap-[5.2rem] overflow-auto">
+            <section className="flex flex-col h-[100dvh] mobile:p-[5.2rem_1.6rem] pc:p-[5.2rem] mobile:gap-[5.2rem] pc:gap-[5.2rem] overflow-auto relative">
                 <section className="flex justify-between items-center gap-[1.6rem]">
                     <div className="flex flex-col gap-[1.6rem]">
                         <section className="flex items-center gap-[0.4rem]">
@@ -107,7 +108,6 @@ export function AdminTwoPanel({ panelKey, current, title, action, left, right }:
                     </div>
 
                     <div className="flex items-center gap-[1.2rem]">
-                        {action}
                         <UI.Button
                             className="bg-transparent px-0 text-[2.8rem] leading-none pc:hidden"
                             onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
@@ -118,12 +118,15 @@ export function AdminTwoPanel({ panelKey, current, title, action, left, right }:
                     </div>
                 </section>
 
+                {action}
+
                 {left}
             </section>
 
             {sidePanelOpenState ? (
-                <aside className="bg-white h-[100dvh] overflow-auto mobile:absolute mobile:left-0 mobile:top-0 mobile:w-full pc:w-auto pc:relative">
-                    <div className="absolute top-[5.2rem] right-[5.2rem] z-10 px-[1.4rem] rounded-full bg-[var(--adaptive-black100)]">
+                <aside className="bg-white h-[100dvh] mobile:absolute mobile:left-0 mobile:top-0 mobile:w-full pc:w-auto pc:relative">
+                    {/* <aside className="bg-white h-[100dvh] overflow-auto mobile:absolute mobile:left-0 mobile:top-0 mobile:w-full pc:w-auto pc:relative"> */}
+                    <div className="absolute mobile:top-[1.6rem] mobile:right-[1.6rem] pc:top-[4.2rem] pc:right-[4.2rem] z-10 px-[1.4rem] rounded-full bg-[var(--adaptive-black100)]">
                         <UI.Button
                             // className="bg-transparent px-0 text-[1.6rem] text-[var(--adaptive-black400)] hover:text-[var(--adaptive-red500)]"
                             className="text-[3.2rem] text-[var(--adaptive-black300)] font-[300]"
@@ -142,42 +145,60 @@ export function AdminTwoPanel({ panelKey, current, title, action, left, right }:
 }
 
 export function AdminPagination({ page, totalPages, onChange }: AdminPaginationProps) {
-    if (totalPages <= 1) {
-        return null;
-    }
+    const listPageSize = useAdminSidePanelStore((state) => state.listPageSize);
+    const setListPageSize = useAdminSidePanelStore((state) => state.setListPageSize);
+    const visibleTotalPages = Math.max(1, totalPages);
 
     return (
-        <div className="flex items-center justify-center gap-[3.2rem]">
-            <button
-                className="border border-[var(--adaptive-black500)] w-[3.2rem] h-[3.2rem] text-[2.4rem] flex justify-center items-center cursor-pointer"
-                disabled={page === 1}
-                onClick={() => onChange(Math.max(1, page - 1))}
-                type="button"
-            >
-                ‹
-            </button>
+        <div className="grid grid-rows-1 mobile:grid-cols-[auto_1fr] pc:grid-cols-[auto_1fr_auto] gap-[1.6rem] mt-[1.6rem]">
+            <UI.Select
+                aria-label="목록 개수 선택"
+                className="min-w-[12rem] text-[1.6rem]"
+                name="listPageSize"
+                onChange={(event) => setListPageSize(Number(event.target.value))}
+                options={[
+                    { label: "5개", value: "5" },
+                    { label: "10개", value: "10" },
+                    { label: "15개", value: "15" },
+                    { label: "20개", value: "20" },
+                ]}
+                value={String(listPageSize)}
+            />
 
-            <section className="flex items-center gap-[1.6rem]">
-                {Array.from({ length: totalPages }).map((_, index) => (
-                    <button
-                        className={`${page === index + 1 ? "border-black text-black" : "border-transparent text-[var(--adaptive-grey500)]"} border-b-2 text-[2.0rem] cursor-pointer`}
-                        key={index}
-                        onClick={() => onChange(index + 1)}
-                        type="button"
-                    >
-                        {index + 1}
-                    </button>
-                ))}
-            </section>
+            <div className="flex items-center gap-[3.2rem] mobile:justify-self-end pc:justify-self-center">
+                <button
+                    className="border border-[var(--adaptive-black500)] w-[3.2rem] h-[3.2rem] text-[2.4rem] flex justify-center items-center cursor-pointer"
+                    disabled={page === 1}
+                    onClick={() => onChange(Math.max(1, page - 1))}
+                    type="button"
+                >
+                    ‹
+                </button>
 
-            <button
-                className="border border-[var(--adaptive-black500)] w-[3.2rem] h-[3.2rem] text-[2.4rem] flex justify-center items-center cursor-pointer"
-                disabled={page === totalPages}
-                onClick={() => onChange(Math.min(totalPages, page + 1))}
-                type="button"
-            >
-                ›
-            </button>
+                <section className="flex items-center gap-[1.6rem]">
+                    {Array.from({ length: visibleTotalPages }).map((_, index) => (
+                        <button
+                            className={`${page === index + 1 ? "border-black text-black" : "border-transparent text-[var(--adaptive-grey500)]"} border-b-2 text-[2.0rem] cursor-pointer`}
+                            key={index}
+                            onClick={() => onChange(index + 1)}
+                            type="button"
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                </section>
+
+                <button
+                    className="border border-[var(--adaptive-black500)] w-[3.2rem] h-[3.2rem] text-[2.4rem] flex justify-center items-center cursor-pointer"
+                    disabled={page === visibleTotalPages}
+                    onClick={() => onChange(Math.min(visibleTotalPages, page + 1))}
+                    type="button"
+                >
+                    ›
+                </button>
+            </div>
+
+            <div />
         </div>
     );
 }
@@ -237,17 +258,24 @@ export function AdminListRow({ selected = false, onClick, title, description, th
 
             {actions ? (
                 <>
-                    <div className="hidden h-full pc:flex">{actions}</div>
-                    <div className="relative pc:hidden">
+                    {/* <div className="hidden h-full pc:flex">{actions}</div> */}
+                    <div className="relative">
                         <UI.Button
-                            className="min-h-[4.4rem] rounded-[1.2rem] border border-[var(--adaptive-grey200)] bg-white px-[1.2rem] text-[1.4rem] font-[700] touch-manipulation"
+                            // className="min-h-[4.4rem] rounded-[1.2rem] border border-[var(--adaptive-grey200)] bg-white px-[1.2rem] text-[1.4rem] font-[700] touch-manipulation"
+                            className=""
                             onClick={() => setIsActionMenuOpen((prev) => !prev)}
                             type="button"
                         >
-                            more
+                            <Image
+                                src={"/images/icon/outlined/ico-outlined-more.svg"}
+                                alt=""
+                                width={20}
+                                height={20}
+                            />
                         </UI.Button>
+
                         {isActionMenuOpen ? (
-                            <div className="absolute right-0 top-[calc(100%+0.8rem)] z-20 min-w-[16rem] overflow-hidden rounded-[1.6rem] border border-[var(--adaptive-grey200)] bg-white shadow-[0_1.6rem_3.2rem_rgba(0,0,0,0.12)]">
+                            <div className="absolute right-0 top-[calc(100%+0.8rem)] z-20 min-w-[16rem] overflow-hidden border border-[var(--adaptive-grey200)] bg-white shadow-[0_1.6rem_3.2rem_rgba(0,0,0,0.12)]">
                                 <div
                                     className="flex flex-col mobile:[&_button]:h-auto mobile:[&_button]:min-h-[4.4rem] mobile:[&_button]:w-full mobile:[&_button]:justify-start mobile:[&_button]:gap-[0.8rem] mobile:[&_button]:px-[1.6rem]"
                                     onClick={() => setIsActionMenuOpen(false)}
@@ -265,24 +293,50 @@ export function AdminListRow({ selected = false, onClick, title, description, th
 
 export function AdminSidePanel({ title, description, children }: AdminSidePanelProps) {
     return (
-        <section className="flex flex-col gap-[5.2rem] mobile:p-[1.6rem] pc:p-[5.2rem]">
-            <h2 className="text-[3.2rem]">{title}</h2>
+        // <section className="overflow-auto flex flex-col gap-[5.2rem] mobile:p-0 pc:p-[5.2rem]">
+        <section className="overflow-auto flex flex-col gap-[5.2rem] h-full">
+            {/* <h2 className="text-[3.2rem] px-[5.2rem] pt-[5.2rem]">{title}</h2> */}
 
             {children}
         </section>
     );
 }
 
-export function ConfirmDialog({ open, title, description, targetLabel, confirmLabel, tone = "create", onCancel, onConfirm }: ConfirmDialogProps) {
-    // if (!open) {
-    //     return null;
-    // }
+export function ConfirmDialog({ open, title, description, targetLabel, cancelLabel = "취소", confirmLabel, tone = "create", onCancel, onConfirm }: ConfirmDialogProps) {
+    useEffect(() => {
+        if (!open) {
+            return;
+        }
+
+        function handleKeyDown(event: KeyboardEvent) {
+            if (event.key === "Escape") {
+                onCancel();
+                return;
+            }
+
+            if (event.key === "Enter") {
+                event.preventDefault();
+                onConfirm();
+            }
+        }
+
+        document.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [open, onCancel, onConfirm]);
 
     return (
         <AnimatePresence mode="popLayout">
             {open ? (
                 <motion.div
                     className="fixed inset-0 z-[100] grid place-items-center bg-black/75 p-6 backdrop-blur-sm"
+                    onClick={(event) => {
+                        if (event.target === event.currentTarget) {
+                            onCancel();
+                        }
+                    }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -368,7 +422,7 @@ export function ConfirmDialog({ open, title, description, targetLabel, confirmLa
                                 onClick={onCancel}
                                 type="button"
                             >
-                                취소
+                                {cancelLabel}
                             </UI.Button>
                             <UI.Button
                                 className={`text-white font-[500] ${tone === "delete" ? "bg-[var(--adaptive-red500)]" : "bg-[var(--adaptive-blue500)]"}`}
