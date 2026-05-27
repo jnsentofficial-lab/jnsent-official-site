@@ -40,7 +40,7 @@ export function TrustPrinciples() {
         // <section className="bg-[#f3f6f7] py-[16rem] max-[86rem]:py-24">
         <section
             ref={sectionRef}
-            className="min-h-[100dvh] flex mobile:flex-col pc:flex-row justify-center items-center"
+            className="min-h-[100dvh] mobile:py-[12.8rem] pc:py-0 flex mobile:flex-col pc:flex-row justify-center items-center"
         >
             {/* <div className="mx-auto grid w-[min(112rem,calc(100%_-_3.2rem))] grid-cols-[minmax(0,1fr)_44rem] items-center gap-14 max-[86rem]:grid-cols-1"> */}
             <div className="mx-auto max-w-[var(--size-pc)] mx-auto w-full flex flex-col justify-center items-center gap-[3.2rem] px-[1.6rem]">

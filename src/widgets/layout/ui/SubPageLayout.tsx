@@ -88,7 +88,7 @@ export function SubPageHero({ current, title, description }: SubPageHeroProps) {
                     <p className="mobile:text-[1.8rem] pc:text-[2.4rem] font-[700]">{current}</p>
                 </motion.section>
 
-                <section className="grid grid-cols-4 gap-10 max-[86rem]:grid-cols-1">
+                <section className="grid grid-cols-4 gap-16 max-[86rem]:grid-cols-1">
                     <motion.h1
                         className="col-span-2 whitespace-break-spaces font-[700] mobile:text-[3.2rem] pc:text-[5.2rem] leading-[1.5]"
                         initial={{ opacity: 0, transform: "translateY(100px)" }}

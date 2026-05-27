@@ -26,7 +26,7 @@ export function OperationKnowhow() {
             className="relative mobile:min-h-[100dvh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[150dvh]"
         >
             <div
-                className="absolute w-full left-[50%] transform translate-x-[-50%] inset-0 pointer-events-none z-0"
+                className="absolute w-full left-[50%] transform translate-x-[-50%] inset-0 pointer-events-none z-[-1]"
                 style={{
                     maskImage: "radial-gradient(ellipse at left 50%, black 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.2) 55%, transparent 100%)",
                     WebkitMaskImage: "radial-gradient(ellipse at left 50%, black 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.2) 55%, transparent 100%)",
@@ -53,14 +53,7 @@ export function OperationKnowhow() {
                 ref={ref}
                 className="ml-auto flex h-full items-center justify-center mobile:w-full pc:w-[calc(50dvw-7.2rem)]"
             >
-                <div
-                    // className="relative z-[1] ml-auto w-[min(72rem,calc(100%_-_3.2rem))] pr-[max(1.6rem,calc((100vw_-_112rem)/2))]"
-                    className="w-full h-full flex flex-col justify-center items-start"
-                    // initial={{ opacity: 0, x: 34 }}
-                    // whileInView={{ opacity: 1, x: 0 }}
-                    // viewport={{ once: true, amount: 0.25 }}
-                    // transition={{ duration: 0.75 }}
-                >
+                <div className="w-full h-full flex flex-col justify-center items-start gap-[5.2rem]">
                     <Text.Reveal
                         as="h2"
                         className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[700] leading-[1.5]"
@@ -79,7 +72,7 @@ export function OperationKnowhow() {
                     {/* <p>{progress}</p> */}
 
                     <motion.div
-                        className="mt-14 grid gap-9"
+                        className="flex flex-col gap-[2.4rem] mt-[1.4rem]"
                         // variants={{
                         //     visible: {
                         //         transition: {
@@ -93,15 +86,15 @@ export function OperationKnowhow() {
                         {knowhowItems.map((item, index) => (
                             <motion.div
                                 key={item.title}
-                                className="flex flex-col gap-[0.8rem]"
+                                className="flex flex-col gap-[1.6rem]"
                                 // variants={{
                                 //     hidden: { opacity: 0, y: 132 },
                                 //     visible: { opacity: 1, y: 0 },
                                 // }}
                                 // transition={{ duration: 0, ease: "easeInOut" }}
                             >
-                                <h3 className="text-[2.8rem]">{item.title}</h3>
-                                <p className="text-[1.8rem]">{item.text}</p>
+                                <h3 className="text-[2.4rem]">{item.title}</h3>
+                                <p className="text-[1.8rem] font-[500]">{item.text}</p>
                             </motion.div>
                         ))}
                     </motion.div>

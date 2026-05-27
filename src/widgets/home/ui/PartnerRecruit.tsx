@@ -11,7 +11,7 @@ const recruitInfo = [
 
 export function PartnerRecruit() {
     return (
-        <section className="min-h-[100dvh] flex justify-center mobile:flex-col-reverse pc:flex-row">
+        <section className="min-h-[100dvh] mobile:py-[12.8rem] pc:py-0 flex justify-center mobile:flex-col-reverse pc:flex-row">
             <div className="mobile:w-full pc:w-[50dvw]">
                 <motion.img
                     className="w-full h-full object-cover opacity-55"
@@ -35,7 +35,7 @@ export function PartnerRecruit() {
                 // viewport={{ once: true, amount: 0.25 }}
                 // transition={{ duration: 0.7 }}
             >
-                <div className="max-w-[56rem]">
+                <div className="flex flex-col mobile:gap-[1.6rem] pc:gap-[5.2rem] max-w-[56rem]">
                     {/* <h2 className="m-0 text-5xl font-[700] leading-[1.5] max-[86rem]:text-4xl">
                         제이엔에스와 함께
                         <br />
@@ -54,10 +54,10 @@ export function PartnerRecruit() {
                         delay={10}
                         transition={20}
                     >
-                        {`제이엔에스와 함께\성장할 파트너를 찾습니다`}
+                        {`제이엔에스와 함께 \성장할 파트너를 찾습니다`}
                     </Text.Reveal>
 
-                    <div className="mt-14 grid gap-10">
+                    <div className="mt-[1.6rem] grid gap-10">
                         {recruitInfo.map((item) => (
                             <div
                                 key={item.title}
