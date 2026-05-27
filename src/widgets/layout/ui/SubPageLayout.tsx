@@ -203,21 +203,26 @@ export function InfoCard({ title, children }: InfoCardProps) {
 
 export function NoticeBox() {
     return (
-        <article className="rounded-[2.4rem] border border-[var(--adaptive-grey200)] bg-white p-7">
-            <Image
-                src={"/images/icon/outlined/ico-outlined-headset.svg"}
-                alt=""
-                width={32}
-                height={32}
-            />
-            <h5>문의가 필요하신가요?</h5>
-            <p className="mt-3 mb-5 text-lg font-semibold text-[var(--adaptiveGrey700)]">장비 상담 및 렌탈 관련 문의는 언제든지 연락주세요.</p>
-            <UI.Linker
-                className="flex min-h-12 items-center justify-center rounded-xl bg-[var(--adaptiveGrey200)] text-base font-[700] text-[var(--adaptiveGrey800)]"
-                href="/bjSupport"
+        <article className="flex flex-col rounded-[2.4rem] border border-[var(--adaptive-grey200)] bg-white p-[1.6rem] gap-[1.6rem]">
+            <section className="flex items-center gap-[1.6rem]">
+                <Image
+                    src={"/images/icon/outlined/ico-outlined-headset.svg"}
+                    alt=""
+                    width={32}
+                    height={32}
+                />
+                <section className="flex flex-col gap-[0.8rem]">
+                    <h5 className="text-[1.8rem]">문의가 필요하신가요?</h5>
+                    <p>장비 상담 및 렌탈 관련 문의는 언제든지 연락주세요.</p>
+                </section>
+            </section>
+
+            <UI.Button
+                className="w-full bg-[var(--adaptive-black50)] text-[var(--adaptive-black500)] rounded-[1.6rem] h-[5.4rem]"
+                // href="/bjSupport"
             >
                 1:1 문의하기
-            </UI.Linker>
+            </UI.Button>
         </article>
     );
 }
@@ -309,7 +314,7 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
             onSubmit={handleSubmit}
         >
             {chips.length ? (
-                <SubPageSection title="렌탈사양">
+                <SubPageSection title="서비스 선택">
                     {chips.map((group) => (
                         <div
                             className="grid gap-3"
@@ -340,6 +345,7 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
                     ))}
                 </SubPageSection>
             ) : null}
+
             <section className="w-full bg-[var(--adaptive-black100)] h-[0.1rem]" />
 
             <section className="flex flex-col gap-[3.2rem]">
