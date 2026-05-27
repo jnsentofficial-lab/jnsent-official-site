@@ -1,7 +1,6 @@
 "use client";
 
 import { Fragment, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useAdminNewsQuery, useDeleteNewsMutation, useToggleNewsMutation } from "@/entities/news/api/news.query";
 import type { News } from "@/entities/news/model/news.type";
 import { NewsEditor } from "@/features/manageNews/NewsEditor";
@@ -14,7 +13,6 @@ import { Text } from "@/shared/ui/kit/Text";
 const PANEL_KEY = "/admin/news";
 
 export function Analysis() {
-    const router = useRouter();
     const { data: newsItems = [], isLoading } = useAdminNewsQuery();
     const [selectedNews, setSelectedNews] = useState<News | null>(null);
     const [deleteTarget, setDeleteTarget] = useState<News | null>(null);
@@ -207,7 +205,7 @@ export function Analysis() {
                 onCancel={() => setPublishedTarget(null)}
                 onConfirm={() => {
                     if (publishedTarget) {
-                        router.push(`/news/${publishedTarget.slug}`);
+                        window.open(`/news/${publishedTarget.slug}`, "_blank", "noopener,noreferrer");
                     }
                     setPublishedTarget(null);
                 }}

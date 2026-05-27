@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { canAccessManagerAccountPage } from "@/shared/lib/AdminAccountAuth";
 
 const adminLoginPath = "/admin/login";
 
@@ -7,9 +8,7 @@ function hasAdminSession(request: NextRequest) {
 }
 
 function canManageAccounts(request: NextRequest) {
-    const role = request.cookies.get("admin_role")?.value;
-
-    return role === "manager" || role === "admin";
+    return canAccessManagerAccountPage(request.cookies.get("admin_role")?.value);
 }
 
 export function proxy(request: NextRequest) {

@@ -121,7 +121,7 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
             <h1 className="text-[3.2rem] mobile:px-[1.6rem] pc:px-[5.2rem] pt-[5.2rem]">뉴스 {news ? "편집" : "생성"}</h1>
 
             <form
-                className="grid gap-10 mobile:px-[1.6rem] pc:px-[5.2rem] flex-1"
+                className="flex flex-col mobile:px-[1.6rem] pc:px-[5.2rem] flex-1"
                 onSubmit={handleSubmit}
                 ref={formRef}
             >

@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useAdminSessionQuery } from "@/entities/auth/api/auth.query";
 import { useDeleteManagerAccountMutation } from "@/entities/managerAccount/api/managerAccount.query";
 import type { ManagerAccount } from "@/entities/managerAccount/model/managerAccount.type";
+import { canEditManagerAccount, getManagerAccountRoleLabel, isReservedMasterLoginId } from "@/shared/lib/AdminAccountAuth";
 import { Text } from "@/shared/ui/kit/Text";
 import UI from "@/shared/ui/UIComponent";
 import { AdminListRow, AdminListSection, AdminPagination, ConfirmDialog } from "@/widgets/admin/shared/AdminLayout";
@@ -19,6 +21,7 @@ type ManagerAccountListProps = {
 export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccount }: ManagerAccountListProps) {
     const [page, setPage] = useState(1);
     const [deleteTarget, setDeleteTarget] = useState<ManagerAccount | null>(null);
+    const { data: session } = useAdminSessionQuery();
     const deleteAccount = useDeleteManagerAccountMutation();
     const pageSize = useAdminSidePanelStore((state) => state.listPageSize);
     const totalPages = Math.max(1, Math.ceil(accounts.length / pageSize));
@@ -42,6 +45,7 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
         >
             {visibleAccounts.map((account, mappedIdx) => {
                 const SELECTED = selectedAccountId === account.id;
+                const canDelete = canEditManagerAccount(session?.role, account.role) && !isReservedMasterLoginId(account.login_id);
 
                 return (
                     <Fragment key={account.id}>
@@ -49,8 +53,15 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
                             actions={
                                 <UI.Button
                                     className="flex items-center h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
+                                    disabled={!canDelete}
                                     onClick={() => setDeleteTarget(account)}
                                     type="button"
+                                    tooltip={[
+                                        {
+                                            type: "disabled",
+                                            msg: isReservedMasterLoginId(account.login_id) ? "마스터 계정은 삭제할 수 없습니다." : "삭제 권한이 없는 계정입니다.",
+                                        },
+                                    ]}
                                 >
                                     <Image
                                         src={"/images/icon/outlined/ico-outlined-trash.svg"}
@@ -65,8 +76,8 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
                             contentClassName="flex-col items-start"
                             description={
                                 <p className="text-[var(--adaptive-black500)] text-[1.4rem]">
-                                    {account.name} <span className="mx-3">|</span> {account.role} <span className="mx-3">|</span>{" "}
-                                    {new Intl.DateTimeFormat("ko-KR").format(new Date(account.created_at))} 생성
+                                    {account.name} <span className="mx-3">|</span> {getManagerAccountRoleLabel(account.role)} <span className="mx-3">|</span>{" "}
+                                    {account.is_active ? "활성" : "비활성"} <span className="mx-3">|</span> {new Intl.DateTimeFormat("ko-KR").format(new Date(account.created_at))} 생성
                                 </p>
                             }
                             onClick={() => onSelectAccount(account)}
