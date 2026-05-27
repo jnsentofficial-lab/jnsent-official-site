@@ -41,7 +41,7 @@ export function Marquee({ children, className = "", classNameInner = "", content
             >
                 {Array.from({ length: Math.max(2, repeat) }).map((_, index) => (
                     <div
-                        className={`flex shrink-0 items-center ${contentClassName}`}
+                        className={`flex shrink-0 items-center gap-[1.6rem] ${contentClassName}`}
                         key={index}
                     >
                         {children}

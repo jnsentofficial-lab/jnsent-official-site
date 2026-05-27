@@ -62,11 +62,11 @@ const FloatingBar = ({ onInquiryClick }: { onInquiryClick: () => void }) => {
                         <div className="absolute top-0 left-0 z-2 h-full w-[3.2rem] bg-[linear-gradient(90deg,_black,_transparent)]" />
 
                         <Text.Marquee
-                            speed={0.5}
+                            speed={1}
                             classNameInner="gap-[3.2rem]"
                             // interaction
                         >
-                            <p className="text-[1.8rem] font-normal text-white">단일 방송 최고 250만 개 달성, 다음 주인공은 당신입니다.</p>
+                            <p className="text-[1.8rem] font-normal text-white">단일 방송 최고 250만 개 달성, 다음 주인공은 당신입니다</p>
                             <p className="text-[1.8rem] font-normal text-white">✦</p>
                             <p className="text-[1.8rem] font-normal text-white">지금 지원하고 더 빠르게 성장하세요</p>
                         </Text.Marquee>
@@ -97,12 +97,16 @@ const QuickMenu = () => {
     const { isReadyLanding } = useLayoutStore();
     return (
         <AnimatePresence>
-            {isReadyLanding ? (
-                // <aside className="fixed right-7 bottom-[1.6rem] z-30 grid gap-4 max-[86rem]:hidden">
-                <aside
+            {/* {isReadyLanding ? ( */}
+            {true ? (
+                <motion.aside
                     className="fixed right-7 bottom-[1.6rem] z-30 flex flex-col items-center justify-center gap-[2.4rem]"
                     data-report-id="플로팅 메뉴"
                     data-report-type="item"
+                    // initial={{ y: 100, opacity: 0 }}
+                    // animate={{ y: 0, opacity: 1 }}
+                    // exit={{ y: 100, opacity: 0 }}
+                    // transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 >
                     <section className="flex flex-col gap-[0.8rem]">
                         {socialItems.map((item) => (
@@ -135,7 +139,7 @@ const QuickMenu = () => {
                             className="invert"
                         />
                     </a>
-                </aside>
+                </motion.aside>
             ) : null}
         </AnimatePresence>
     );
