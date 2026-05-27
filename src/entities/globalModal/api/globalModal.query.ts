@@ -15,11 +15,12 @@ export const GlobalModalRoutes = {
     PUBLIC_GLOBAL_MODALS: "public:globalModals",
 } as const;
 
-export const useVisibleGlobalModalsQuery = () => {
+export const useVisibleGlobalModalsQuery = (enabled = true) => {
     const MUTATION_KEY = GlobalModalRoutes.PUBLIC_GLOBAL_MODALS;
     const { data, isLoading, isError, error, isFetching, isFetched, refetch } = useQuery({
         queryKey: [MUTATION_KEY, "useVisibleGlobalModalsQuery"],
         queryFn: () => getVisibleGlobalModalsFetch(),
+        enabled,
     });
 
     const response: GlobalModal[] = data?.result ?? [];

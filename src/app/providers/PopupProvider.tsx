@@ -16,7 +16,7 @@ export function PopupProvider({ children }: PopupProviderProps) {
     return (
         <>
             {children}
-            {isAdminPath ? null : <GlobalModalLayer />}
+            <GlobalModalLayer includePublic={!isAdminPath} />
         </>
     );
 }

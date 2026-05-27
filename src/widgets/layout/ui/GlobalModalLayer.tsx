@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { useVisibleGlobalModalsQuery } from "@/entities/globalModal/api/globalModal.query";
 import type { GlobalModal } from "@/entities/globalModal/model/globalModal.type";
+import { useGlobalModalPreviewStore } from "@/entities/globalModal/model/useGlobalModalPreviewStore";
 import Modal from "@/shared/ui/composed/Modal";
 
 type ActiveByPosition = Record<string, number>;
@@ -39,8 +40,14 @@ function isDismissed(modal: GlobalModal) {
     return value ? Number(value) > Date.now() : false;
 }
 
-export function GlobalModalLayer() {
-    const { data: modals } = useVisibleGlobalModalsQuery();
+type GlobalModalLayerProps = {
+    includePublic?: boolean;
+};
+
+export function GlobalModalLayer({ includePublic = true }: GlobalModalLayerProps) {
+    const { data: modals } = useVisibleGlobalModalsQuery(includePublic);
+    const previewModal = useGlobalModalPreviewStore((state) => state.previewModal);
+    const closePreviewModal = useGlobalModalPreviewStore((state) => state.closePreviewModal);
     const [activeByPosition, setActiveByPosition] = useState<ActiveByPosition>({});
     const [closedIds, setClosedIds] = useState<string[]>([]);
     const grouped = useMemo(() => {
@@ -57,8 +64,14 @@ export function GlobalModalLayer() {
     const visibleModals = Object.entries(grouped)
         .map(([key, items]) => items[activeByPosition[key] ?? 0])
         .filter(Boolean);
+    const layeredModals = previewModal ? [previewModal, ...visibleModals] : visibleModals;
 
     function closeModal(modal: GlobalModal) {
+        if (previewModal?.id === modal.id) {
+            closePreviewModal();
+            return;
+        }
+
         const until = getUntil(modal);
 
         if (until) {
@@ -80,15 +93,15 @@ export function GlobalModalLayer() {
         setClosedIds((previous) => [...previous, modal.id]);
     }
 
-    if (!visibleModals.length) {
+    if (!layeredModals.length) {
         return null;
     }
 
     return (
         <>
-            {visibleModals.map((modal) => (
+            {layeredModals.map((modal) => (
                 <Modal
-                    key={modal.id}
+                    key={previewModal?.id === modal.id ? `preview:${modal.id}` : modal.id}
                     title={modal.title}
                     description={modal.content}
                     open

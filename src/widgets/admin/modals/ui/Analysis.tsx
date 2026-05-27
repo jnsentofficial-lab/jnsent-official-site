@@ -2,6 +2,7 @@
 
 import { Fragment, useEffect, useState } from "react";
 import { useAdminGlobalModalsQuery, useDeleteGlobalModalMutation, useToggleGlobalModalMutation } from "@/entities/globalModal/api/globalModal.query";
+import { useGlobalModalPreviewStore } from "@/entities/globalModal/model/useGlobalModalPreviewStore";
 import type { GlobalModal } from "@/entities/globalModal/model/globalModal.type";
 import { GlobalModalEditor } from "@/features/manageGlobalModal/GlobalModalEditor";
 import UI from "@/shared/ui/UIComponent";
@@ -16,11 +17,12 @@ export function Analysis() {
     const { data: modals = [], isLoading } = useAdminGlobalModalsQuery();
     const [selectedModal, setSelectedModal] = useState<GlobalModal | null>(null);
     const [deleteTarget, setDeleteTarget] = useState<GlobalModal | null>(null);
-    const [previewTarget, setPreviewTarget] = useState<GlobalModal | null>(null);
     const [pendingToggleId, setPendingToggleId] = useState<string | null>(null);
     const [page, setPage] = useState(1);
     const toggleModal = useToggleGlobalModalMutation();
     const deleteModal = useDeleteGlobalModalMutation();
+    const openPreviewModal = useGlobalModalPreviewStore((state) => state.openPreviewModal);
+    const closePreviewModal = useGlobalModalPreviewStore((state) => state.closePreviewModal);
     const pageSize = useAdminSidePanelStore((state) => state.listPageSize);
     const totalPages = Math.max(1, Math.ceil(modals.length / pageSize));
     const visibleModals = modals.slice((page - 1) * pageSize, page * pageSize);
@@ -34,6 +36,8 @@ export function Analysis() {
     useEffect(() => {
         setPage(1);
     }, [pageSize]);
+
+    useEffect(() => closePreviewModal, [closePreviewModal]);
 
     return (
         <AdminWorkspace>
@@ -95,7 +99,7 @@ export function Analysis() {
                                                 </UI.Button>
                                                 <UI.Button
                                                     className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
-                                                    onClick={() => setPreviewTarget(modal)}
+                                                    onClick={() => openPreviewModal(modal)}
                                                     type="button"
                                                 >
                                                     <Image
@@ -196,31 +200,6 @@ export function Analysis() {
                     </AdminSidePanel>
                 }
             />
-            {previewTarget ? (
-                <div className="fixed inset-0 z-[90] bg-black/30 p-10">
-                    <div className="grid h-full grid-cols-3 grid-rows-3 gap-4">
-                        <div
-                            className="rounded-[2.4rem] bg-black p-8 text-white shadow-[0_2rem_6rem_rgba(0,0,0,0.3)]"
-                            style={{ gridColumn: previewTarget.col, gridRow: previewTarget.row }}
-                        >
-                            <button
-                                className="mb-4 text-white/70"
-                                onClick={() => setPreviewTarget(null)}
-                                type="button"
-                            >
-                                닫기
-                            </button>
-                            {previewTarget.image_url ? (
-                                <img
-                                    alt=""
-                                    className="mb-5 max-h-48 w-full rounded-xl object-cover"
-                                    src={previewTarget.image_url}
-                                />
-                            ) : null}
-                        </div>
-                    </div>
-                </div>
-            ) : null}
             <ConfirmDialog
                 open={Boolean(deleteTarget)}
                 title="선택한 팝업을 삭제 할까요?"
