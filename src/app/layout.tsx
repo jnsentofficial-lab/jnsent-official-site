@@ -88,7 +88,7 @@ export default function RootLayout({
 
     return (
         <html lang="ko">
-            <head>
+            {/* <head>
                 <script
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                     type="application/ld+json"
@@ -113,7 +113,7 @@ export default function RootLayout({
     `,
                     }}
                 />
-            </head>
+            </head> */}
             <body>
                 {/* <body className={`${nanumSquare.variable} ${nanumSquare.className}`}> */}
                 <GlobalErrorBoundary>
