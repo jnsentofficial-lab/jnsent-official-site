@@ -6,6 +6,7 @@ import Skeleton from "@/shared/ui/kit/Skeleton";
 import UI from "@/shared/ui/UIComponent";
 import { SubPageHero } from "@/widgets/layout/ui";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 function formatDate(value: string | null) {
     if (!value) {
@@ -89,14 +90,20 @@ export function Analysis() {
                             ))}
                         </div>
 
-                        <div className="mt-24 flex items-center justify-center gap-4">
+                        <div className="my-[5.2rem] flex items-center justify-center gap-4">
                             <button
-                                className="grid h-12 w-12 place-items-center rounded-full bg-[var(--adaptiveGrey100)] text-2xl font-[700] text-[var(--adaptiveGrey500)] disabled:opacity-40"
+                                className="p-[1.6rem] bg-[var(--adaptive-grey100)] rounded-full px-[1.6rem] text-[2.4rem] disabled:opacity-50"
                                 disabled={page === 1}
                                 onClick={() => setPage((value) => Math.max(1, value - 1))}
                                 type="button"
                             >
-                                ‹
+                                <Image
+                                    src={"/images/icon/outlined/ico-outlined-arrow-single-right.svg"}
+                                    alt=""
+                                    className="rotate-180 opacity-70"
+                                    height={24}
+                                    width={24}
+                                />
                             </button>
                             {Array.from({ length: totalPages }).map((_, index) => (
                                 <button
@@ -109,12 +116,18 @@ export function Analysis() {
                                 </button>
                             ))}
                             <button
-                                className="grid h-12 w-12 place-items-center rounded-full bg-[var(--adaptiveGrey100)] text-2xl font-[700] text-[var(--adaptiveGrey500)] disabled:opacity-40"
+                                className="p-[1.6rem] bg-[var(--adaptive-grey100)] rounded-full px-[1.6rem] text-[2.4rem] disabled:opacity-50"
                                 disabled={page === totalPages}
                                 onClick={() => setPage((value) => Math.min(totalPages, value + 1))}
                                 type="button"
                             >
-                                ›
+                                <Image
+                                    src={"/images/icon/outlined/ico-outlined-arrow-single-right.svg"}
+                                    alt=""
+                                    className="opacity-70"
+                                    height={24}
+                                    width={24}
+                                />
                             </button>
                         </div>
                     </Fragment>

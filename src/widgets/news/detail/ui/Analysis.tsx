@@ -1,10 +1,12 @@
 "use client";
 
 import { usePublishedNewsDetailQuery, usePublishedNewsQuery } from "@/entities/news/api/news.query";
+import { showErrorToast, showSuccessToast } from "@/shared/lib/toast";
 import { RichTextRenderer } from "@/shared/ui/richText/RichTextRenderer";
-import Skeleton from "@/shared/ui/kit/Skeleton";
 import UI from "@/shared/ui/UIComponent";
 import { motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
 
 type AnalysisProps = {
     slug: string;
@@ -20,6 +22,15 @@ export function Analysis({ slug }: AnalysisProps) {
     const currentIndex = newsList.findIndex((item) => item.slug === slug);
     const prevNews = currentIndex > 0 ? newsList[currentIndex - 1] : null;
     const nextNews = currentIndex >= 0 && currentIndex < newsList.length - 1 ? newsList[currentIndex + 1] : null;
+
+    const handleCopyLink = async () => {
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            showSuccessToast("링크가 복사되었어요");
+        } catch {
+            showErrorToast("링크 복사에 실패했어요", 2);
+        }
+    };
 
     return (
         // <div className="mx-auto w-[min(68rem,calc(100%_-_3.2rem))] pt-[calc(50dvh-1.6rem-17.4rem-3.2rem)] pb-[3.2rem] mx-[1.6rem]">
@@ -79,14 +90,28 @@ export function Analysis({ slug }: AnalysisProps) {
                 )}
             </motion.section>
 
-            <section className="flex justify-center">
-                <UI.Linker
-                    className="bg-[var(--adaptive-grey100)] rounded-full p-[1.4rem_2.0rem]"
-                    // className="mx-auto  min-h-12 items-center justify-center rounded-full bg-[var(--adaptiveGrey100)] px-7 text-lg font-[700] text-[var(--adaptiveGrey700)]"
+            <section className="flex justify-center gap-[1.2rem]">
+                <button
+                    type="button"
+                    className="flex items-center gap-[0.4rem] bg-[var(--adaptive-grey100)] rounded-full p-[1.4rem_2.0rem] text-[var(--adaptive-black700)] cursor-pointer hover:bg-[var(--adaptive-grey200)]"
+                    onClick={handleCopyLink}
+                >
+                    <Image
+                        src={"/images/icon/outlined/ico-outlined-copy.svg"}
+                        alt=""
+                        width={24}
+                        height={24}
+                        className="opacity-50"
+                    />
+                    <p className="text-[1.8rem] text-[var(--adaptive-black300)]">링크 복사</p>
+                </button>
+
+                <Link
+                    className="flex items-center justify-center bg-[var(--adaptive-grey100)] rounded-full p-[1.4rem_2.0rem] hover:bg-[var(--adaptive-grey200)]"
                     href="/news"
                 >
-                    = 목록으로
-                </UI.Linker>
+                    <p className="text-[1.8rem] text-[var(--adaptive-black300)]">= 목록으로</p>
+                </Link>
             </section>
 
             <div className="w-full h-[0.1rem] bg-[var(--adaptive-black100)]" />
