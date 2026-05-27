@@ -29,7 +29,10 @@ const consultingAreas = [
 
 export function Analysis() {
     return (
-        <section>
+        <section
+            data-report-id="엔터창업 페이지"
+            data-report-type="group"
+        >
             <SubPageHero
                 current="엔터창업"
                 title={"엔터창업"}

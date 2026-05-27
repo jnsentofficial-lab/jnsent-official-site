@@ -86,6 +86,8 @@ export function Analysis() {
                             return (
                                 <Fragment key={item.slug}>
                                     <AdminListRow
+                                        reportId={`뉴스 행 ${item.title}`}
+                                        reportType="item"
                                         actions={
                                             <>
                                                 <UI.Button

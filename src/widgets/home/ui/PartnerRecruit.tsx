@@ -11,8 +11,16 @@ const recruitInfo = [
 
 export function PartnerRecruit() {
     return (
-        <section className="min-h-[100dvh] mobile:py-[12.8rem] pc:py-0 flex justify-center mobile:flex-col-reverse pc:flex-row">
-            <div className="mobile:w-full pc:w-[50dvw]">
+        <section
+            className="min-h-[100dvh] mobile:py-[12.8rem] pc:py-0 flex justify-center mobile:flex-col-reverse pc:flex-row"
+            data-report-id="파트너 모집 섹션"
+            data-report-type="group"
+        >
+            <div
+                className="mobile:w-full pc:w-[50dvw]"
+                data-report-id="파트너 모집 이미지"
+                data-report-type="item"
+            >
                 <motion.img
                     className="w-full h-full object-cover opacity-55"
                     src={"/images/landing/bj.jpg"}
@@ -30,6 +38,8 @@ export function PartnerRecruit() {
 
             <div
                 className="flex items-center pc:ml-[9.2rem] mobile:p-[1.6rem] pc:p-0 mobile:w-full pc:w-[calc(50dvw-9.2rem)]"
+                data-report-id="파트너 모집 카피"
+                data-report-type="item"
                 // initial={{ opacity: 0, x: 32 }}
                 // whileInView={{ opacity: 1, x: 0 }}
                 // viewport={{ once: true, amount: 0.25 }}
@@ -57,7 +67,11 @@ export function PartnerRecruit() {
                         {`제이엔에스와 함께 \성장할 파트너를 찾습니다`}
                     </Text.Reveal>
 
-                    <div className="mt-[1.6rem] grid gap-10">
+                    <div
+                        className="mt-[1.6rem] grid gap-10"
+                        data-report-id="파트너 모집 안내 목록"
+                        data-report-type="item"
+                    >
                         {recruitInfo.map((item) => (
                             <div
                                 key={item.title}

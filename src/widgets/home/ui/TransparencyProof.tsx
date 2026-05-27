@@ -22,6 +22,8 @@ export function TransparencyProof() {
         <section
             className="relative flex items-center justify-center mobile:min-h-[100dvh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[100dvh]"
             ref={sectionRef}
+            data-report-id="데이터 공개 섹션"
+            data-report-type="group"
         >
             {/* <motion.div
                 className="absolute inset-0 bg-[url('/images/landing/meeting.webp')] bg-cover bg-center opacity-55"
@@ -56,6 +58,8 @@ export function TransparencyProof() {
             <div className="relative z-[1] w-full">
                 <div
                     className="mx-auto flex max-w-[var(--size-pc)] flex-col gap-[3.2rem]"
+                    data-report-id="데이터 공개 카피"
+                    data-report-type="item"
                     // initial={{ opacity: 0, y: 32 }}
                     // whileInView={{ opacity: 1, y: 0 }}
                     // viewport={{ once: true, amount: 0.25 }}
@@ -84,7 +88,11 @@ export function TransparencyProof() {
                     </p>
                 </div>
 
-                <div className="mt-24 grid gap-6 md:grid-cols-3">
+                <div
+                    className="mt-24 grid gap-6 md:grid-cols-3"
+                    data-report-id="데이터 공개 카드 목록"
+                    data-report-type="item"
+                >
                     {/* {proofCards.map((item, index) => (
                         <section
                             key={item.title}

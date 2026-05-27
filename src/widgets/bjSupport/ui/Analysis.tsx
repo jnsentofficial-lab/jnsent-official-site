@@ -23,7 +23,11 @@ export function Analysis() {
     const { data: content, isLoading } = usePublishedPageContentQuery("bjSupport");
 
     return (
-        <Skeleton.Section target={!isLoading}>
+        <Skeleton.Section
+            target={!isLoading}
+            data-report-id="BJ 지원 페이지"
+            data-report-type="group"
+        >
             <SubPageHero
                 current="BJ 지원"
                 title={content?.title ?? "BJ 지원"}

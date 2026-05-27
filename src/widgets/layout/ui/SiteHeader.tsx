@@ -16,12 +16,18 @@ export function SiteHeader() {
     const { isNowDarkMode, isMobileNavOpen, setIsMobileNavOpen } = useLayoutStore();
 
     return (
-        <header className="fixed top-0 left-[50%] transform translate-x-[-50%] z-40 w-full bg-[linear-gradient(0deg,_transparent,var(--adaptive-background))] h-[7.2rem]">
+        <header
+            className="fixed top-0 left-[50%] transform translate-x-[-50%] z-40 w-full bg-[linear-gradient(0deg,_transparent,var(--adaptive-background))] h-[7.2rem]"
+            data-report-id="상단 헤더"
+            data-report-type="group"
+        >
             <div className="mx-auto h-full w-full max-w-[var(--size-pc)] flex justify-between items-center mobile:px-[1.6rem] pc:px-0">
                 <UI.Linker
                     className="shrink-0 text-2xl"
                     href="/"
                     onClick={() => setIsMobileNavOpen(false)}
+                    data-report-id="상단 헤더 로고"
+                    data-report-type="item"
                 >
                     <Image
                         src={"/images/common/ico-logo.svg"}
@@ -33,8 +39,10 @@ export function SiteHeader() {
                 </UI.Linker>
 
                 <nav
-                    className="mobile:hidden flex-1 justify-center gap-[2.4rem] pc:flex"
-                    aria-label="주요 메뉴"
+                    className="mobile:hidden flex-1 justify-center gap-[4.2rem] pc:flex"
+                    aria-label="상단 헤더 메뉴"
+                    data-report-id="상단 헤더 메뉴"
+                    data-report-type="item"
                 >
                     {navigationItems.map((item) => (
                         <UI.Linker
@@ -52,6 +60,8 @@ export function SiteHeader() {
                     className="mobile:hidden rounded-full bg-black px-[1.2rem] text-white flex items-center justify-center"
                     // className="text-[1.6rem] inline-flex shrink-0 items-center justify-center rounded-full bg-black px-6 py-[0.2rem] text-base text-white"
                     href="/bjSupport"
+                    data-report-id="상단 헤더 지원 버튼"
+                    data-report-type="item"
                     size="sm"
                 >
                     BJ 지원하기
@@ -94,6 +104,8 @@ export function SiteHeader() {
                     <nav
                         className="flex flex-1 flex-col gap-[2.0rem]"
                         aria-label="모바일 주요 메뉴"
+                        data-report-id="모바일 헤더 메뉴"
+                        data-report-type="item"
                     >
                         {navigationItems.map((item) => (
                             <UI.Linker

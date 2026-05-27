@@ -20,6 +20,7 @@ import { Footer } from "@/widgets/layout/Footer";
 
 import "@/shared/style/scss/index.scss";
 import "./globals.css";
+import { Report } from "@/widgets/layout/Report";
 
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
 
@@ -130,6 +131,7 @@ export default function RootLayout({
                             <Progress />
                             <Toast />
                             <ApiPendingOverlay />
+                            <Report />
                         </AuthProvider>
                     </QueryProvider>
                 </GlobalErrorBoundary>

@@ -41,6 +41,8 @@ export function Analysis() {
 
             <motion.section
                 className="mx-auto max-w-[var(--size-pc)] w-full"
+                data-report-id="뉴스 목록 영역"
+                data-report-type="group"
                 initial={{ opacity: 0, transform: "translateY(100px)" }}
                 animate={{ opacity: 1, transform: "translateY(0px)" }}
                 exit={{ opacity: 0, transform: "translateY(100px)" }}

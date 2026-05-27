@@ -42,6 +42,8 @@ const FloatingBar = ({ onInquiryClick }: { onInquiryClick: () => void }) => {
         <AnimatePresence>
             {isReadyLanding && (
                 <motion.section
+                    data-report-id="플로팅 CTA"
+                    data-report-type="item"
                     initial={{ y: 100, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: 100, opacity: 0 }}
@@ -97,7 +99,11 @@ const QuickMenu = () => {
         <AnimatePresence>
             {isReadyLanding ? (
                 // <aside className="fixed right-7 bottom-[1.6rem] z-30 grid gap-4 max-[86rem]:hidden">
-                <aside className="fixed right-7 bottom-[1.6rem] z-30 flex flex-col items-center justify-center gap-[2.4rem]">
+                <aside
+                    className="fixed right-7 bottom-[1.6rem] z-30 flex flex-col items-center justify-center gap-[2.4rem]"
+                    data-report-id="플로팅 메뉴"
+                    data-report-type="item"
+                >
                     <section className="flex flex-col gap-[0.8rem]">
                         {socialItems.map((item) => (
                             <a

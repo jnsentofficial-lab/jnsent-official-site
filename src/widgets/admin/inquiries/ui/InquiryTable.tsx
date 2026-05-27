@@ -57,6 +57,8 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
                     return (
                         <Fragment key={`${inquiry.name}-${inquiry.category}`}>
                             <AdminListRow
+                                reportId={`문의 행 ${inquiry.name}`}
+                                reportType="item"
                                 actions={
                                     <UI.Button
                                         className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
