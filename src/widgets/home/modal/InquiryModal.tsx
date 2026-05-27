@@ -151,7 +151,7 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="inquiry-modal-title"
-                    className="fixed inset-0 z-[200000] flex h-[100dvh] flex-col bg-[#F5F5F590] backdrop-blur-2xl overflow-y-auto"
+                    className="fixed inset-0 z-[200000] flex h-[100dvh] flex-col bg-[#ffffffe2] backdrop-blur-2xl overflow-y-auto"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -169,7 +169,7 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                     <section className="mx-auto flex min-h-full w-full max-w-[var(--size-tablet)] flex-col items-center justify-start gap-[2.4rem] px-[1.6rem] pb-[3.2rem] pt-[8rem] pc:justify-center pc:px-0">
                         {/* <main className="mx-auto w-full max-w-[68rem] flex-1 px-[2rem] pb-[6rem] pt-[8rem]"> */}
                         <motion.header
-                            className="flex flex-col gap-[1.6rem]"
+                            className="flex flex-col mobile:gap-[0.8rem] pc:gap-[1.6rem] w-full"
                             initial={{ opacity: 0, transform: "translateY(100px)" }}
                             animate={{ opacity: 1, transform: "translateY(0px)" }}
                             exit={{ opacity: 0, transform: "translateY(100px)" }}
@@ -183,16 +183,16 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                         >
                             <h2
                                 id="inquiry-modal-title"
-                                className="text-[3.2rem] font-[700] text-left text-black"
+                                className="mobile:text-[2.0rem] pc:text-[3.2rem] font-[700] text-left text-black"
                             >
                                 당신의 가능성을 현실로 만드세요
                             </h2>
 
-                            <p className="text-[1.8rem] text-left font-medium text-[#888888]">성장을 위한 첫 상담을 지금 시작해보세요.</p>
+                            <p className="mobile:text-[1.4rem] pc:text-[1.8rem] text-left font-medium text-[#888888]">성장을 위한 첫 상담을 지금 시작해보세요.</p>
                         </motion.header>
 
                         <form
-                            className="grid gap-[3.2rem] w-full"
+                            className="grid gap-[3.2rem] w-full pb-[1.6rem]"
                             onSubmit={handleSubmit}
                             // initial={{ opacity: 0, transform: "translateY(100px)" }}
                             // animate={{ opacity: 1, transform: "translateY(0px)" }}
@@ -316,7 +316,7 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                 label="지원분야"
                                 delay={8}
                             >
-                                <div className="grid grid-cols-2 gap-[1.2rem]">
+                                <div className="grid grid-cols-2 gap-[0.4rem]">
                                     {HOME_INQUIRY_SUPPORT_FIELDS.map((field) => (
                                         <OptionButton
                                             key={field}
@@ -403,7 +403,7 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                 <UI.Button
                                     type="submit"
                                     disabled={createInquiry.isPending}
-                                    className="h-[5.6rem] w-full rounded-[1rem] bg-black text-[1.8rem] font-bold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+                                    className="h-[5.6rem] w-full rounded-[1.6rem] bg-black text-[1.8rem] font-bold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
                                 >
                                     {createInquiry.isPending ? "저장 중..." : "문의하기"}
                                 </UI.Button>
@@ -422,7 +422,7 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
 function FormField({ label, children, delay = 1, error }: { label: string; children: ReactNode; delay: number; error?: string }) {
     return (
         <motion.div
-            className="flex flex-col gap-[1.2rem]"
+            className="flex flex-col gap-[0.8rem]"
             initial={{ opacity: 0, transform: "translateY(100px)" }}
             animate={{ opacity: 1, transform: "translateY(0px)" }}
             exit={{ opacity: 0, transform: "translateY(100px)" }}
@@ -434,7 +434,7 @@ function FormField({ label, children, delay = 1, error }: { label: string; child
                 damping: 10,
             }}
         >
-            <label className="text-[1.6rem] font-bold text-black">{label}</label>
+            <label className="text-[1.6rem] font-bold text-black font-[NanumSquare]">{label}</label>
             {children}
             {error ? (
                 <p
@@ -452,7 +452,7 @@ function TextInput({ className = "", hasError = false, ...props }: InputHTMLAttr
     return (
         <input
             {...props}
-            className={`h-[5.2rem] w-full rounded-[1rem] border bg-white px-[1.6rem] text-[1.6rem] font-medium text-black outline-none transition-colors placeholder:text-[#BBBBBB] focus:border-[#FF4B8B] ${
+            className={`h-[5.2rem] w-full rounded-[1.6rem] border bg-white px-[1.6rem] text-[1.6rem] font-medium text-black outline-none transition-colors placeholder:text-[#BBBBBB] focus:border-[#FF4B8B] ${
                 hasError ? "border-[#FF4B8B]" : "border-[#E5E5E5]"
             } ${className}`}
         />
@@ -464,7 +464,7 @@ function OptionButton({ children, selected, onClick, className = "" }: { childre
         <button
             type="button"
             onClick={onClick}
-            className={`h-[5.2rem] rounded-[1rem] border text-[1.6rem] font-bold transition-colors ${selected ? selectedOptionClass : unselectedOptionClass} ${className}`}
+            className={`h-[5.2rem] rounded-[1.6rem] border text-[1.6rem] font-bold transition-colors ${selected ? selectedOptionClass : unselectedOptionClass} ${className}`}
         >
             {children}
         </button>
