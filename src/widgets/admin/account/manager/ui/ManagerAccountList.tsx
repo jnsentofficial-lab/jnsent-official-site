@@ -1,12 +1,14 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useDeleteManagerAccountMutation } from "@/entities/managerAccount/api/managerAccount.query";
 import type { ManagerAccount } from "@/entities/managerAccount/model/managerAccount.type";
 import { Text } from "@/shared/ui/kit/Text";
 import UI from "@/shared/ui/UIComponent";
 import { AdminListRow, AdminListSection, AdminPagination, ConfirmDialog } from "@/widgets/admin/shared/AdminLayout";
+import { useAdminSidePanelStore } from "@/widgets/admin/shared/model/useAdminSidePanelStore";
 import Image from "next/image";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 
 type ManagerAccountListProps = {
     accounts: ManagerAccount[];
@@ -18,9 +20,13 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
     const [page, setPage] = useState(1);
     const [deleteTarget, setDeleteTarget] = useState<ManagerAccount | null>(null);
     const deleteAccount = useDeleteManagerAccountMutation();
-    const pageSize = 5;
+    const pageSize = useAdminSidePanelStore((state) => state.listPageSize);
     const totalPages = Math.max(1, Math.ceil(accounts.length / pageSize));
     const visibleAccounts = accounts.slice((page - 1) * pageSize, page * pageSize);
+
+    useEffect(() => {
+        setPage(1);
+    }, [pageSize]);
 
     return (
         <AdminListSection

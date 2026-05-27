@@ -284,21 +284,19 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                 <section className="flex gap-[0.4rem]">
                     <label className={labelClassName}>
                         시작 일자
-                        <input
+                        <UI.Calendar
                             className={inputClassName}
                             name="startsAt"
                             onChange={(event) => setStartsAt(event.target.value)}
-                            type="datetime-local"
                             value={startsAt}
                         />
                     </label>
                     <label className={labelClassName}>
                         종료 일자
-                        <input
+                        <UI.Calendar
                             className={inputClassName}
                             name="endsAt"
                             onChange={(event) => setEndsAt(event.target.value)}
-                            type="datetime-local"
                             value={endsAt}
                         />
                     </label>
@@ -306,16 +304,17 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
 
                 <label className={labelClassName}>
                     닫기 정책
-                    <select
+                    <UI.Select
                         className={inputClassName}
                         name="dismissType"
                         onChange={(event) => setDismissType(event.target.value as GlobalModal["dismiss_type"])}
+                        options={[
+                            { label: "닫기만", value: "none" },
+                            { label: "오늘 하루 동안 닫기", value: "today" },
+                            { label: "n일 동안 닫기", value: "days" },
+                        ]}
                         value={dismissType}
-                    >
-                        <option value="none">닫기만</option>
-                        <option value="today">오늘 하루 동안 닫기</option>
-                        <option value="days">n일 동안 닫기</option>
-                    </select>
+                    />
                 </label>
 
                 {dismissType === "days" ? (

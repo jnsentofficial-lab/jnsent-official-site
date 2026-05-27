@@ -1,10 +1,12 @@
 "use client";
 
 import { Button } from "./kit/Button";
+import Calendar from "./kit/Calendar";
 import Checkbox from "./kit/Checkbox";
 import Input from "./kit/Input";
 import { Linker } from "./kit/Link";
 import Skeleton from "./kit/Skeleton";
+import Select from "./kit/Select";
 import TextArea from "./kit/TextArea";
 
 // import { buildAppUi } from "./buildAppUi";
@@ -16,8 +18,10 @@ import TextArea from "./kit/TextArea";
 const KIT = {
     Skeleton,
     Button,
+    Calendar,
     Input,
     Checkbox,
+    Select,
     TextArea,
     Linker,
 };

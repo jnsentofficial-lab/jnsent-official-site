@@ -61,7 +61,7 @@ export function InquiryDetailSidebar({ inquiry }: InquiryDetailSidebarProps) {
                 <div className="flex flex-col gap-[1.6rem]">
                     <h6 className="text-[var(--adaptive-black300)] text-[1.8rem]">선택한 질문</h6>
 
-                    <h2 className="mobile:text-[2.4rem] pc:text-[3.2rem]">{inquiry.message}</h2>
+                    <h2 className="mobile:text-[2.4rem] pc:text-[3.2rem] leading-[1.5]">{inquiry.message}</h2>
 
                     <p className="text-[1.4rem] text-[var(--adaptive-black400)]">
                         {new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.created_at))} ~ {new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.updated_at))}

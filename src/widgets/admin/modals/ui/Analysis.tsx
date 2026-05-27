@@ -21,7 +21,7 @@ export function Analysis() {
     const [page, setPage] = useState(1);
     const toggleModal = useToggleGlobalModalMutation();
     const deleteModal = useDeleteGlobalModalMutation();
-    const pageSize = 5;
+    const pageSize = useAdminSidePanelStore((state) => state.listPageSize);
     const totalPages = Math.max(1, Math.ceil(modals.length / pageSize));
     const visibleModals = modals.slice((page - 1) * pageSize, page * pageSize);
     const openPanel = useAdminSidePanelStore((state) => state.openPanel);
@@ -30,6 +30,10 @@ export function Analysis() {
     useEffect(() => {
         closePanel(PANEL_KEY);
     }, [closePanel]);
+
+    useEffect(() => {
+        setPage(1);
+    }, [pageSize]);
 
     return (
         <AdminWorkspace>
@@ -126,13 +130,17 @@ export function Analysis() {
                                             </>
                                         }
                                         description={
-                                            <p className="text-[1.4rem] text-[var(--adaptive-black500)]">
-                                                김주석 주임 <span className="mx-3">|</span>
-                                                {modal.starts_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.starts_at)) : "시작일 없음"} ~{" "}
-                                                {modal.ends_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.ends_at)) : "종료일 없음"}
-                                                <span className="mx-3">|</span>
-                                                <span className={modal.is_visible ? "text-[var(--adaptiveRed400)]" : ""}>{modal.is_visible ? "진행중" : "종료"}</span>
-                                            </p>
+                                            <Fragment>
+                                                <div className="flex items-center gap-[0.8rem] text-[1.4rem]">
+                                                    <p className="text-[var(--adaptive-black500)] text-left">김주석 주임</p>
+                                                    <div className="h-[1.2rem] w-[0.1rem] bg-[var(--adaptive-black200)]" />
+                                                    <p className={modal.is_visible ? "text-[var(--adaptive-red400)]" : ""}>{modal.is_visible ? "진행중" : "종료"}</p>
+                                                </div>
+                                                <p className="text-[1.4rem] text-[var(--adaptive-black500)] text-left">
+                                                    {modal.starts_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.starts_at)) : "시작일 없음"} ~{" "}
+                                                    {modal.ends_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.ends_at)) : "종료일 없음"}
+                                                </p>
+                                            </Fragment>
                                         }
                                         onClick={() => {
                                             setSelectedModal(modal);
@@ -209,8 +217,6 @@ export function Analysis() {
                                     src={previewTarget.image_url}
                                 />
                             ) : null}
-                            <h3 className="mt-0 mb-4 text-3xl font-[700]">{previewTarget.title}</h3>
-                            <p className="m-0 text-lg font-semibold leading-[1.5] text-white/80">{previewTarget.content}</p>
                         </div>
                     </div>
                 </div>

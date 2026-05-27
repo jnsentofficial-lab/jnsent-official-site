@@ -1,11 +1,12 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useAdminInquiriesQuery, useDeleteInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
 import type { Inquiry } from "@/entities/inquiry/model/inquiry.type";
 import { AdminListRow, AdminListSection, AdminPagination, ConfirmDialog } from "@/widgets/admin/shared/AdminLayout";
 import UI from "@/shared/ui/UIComponent";
 import { Text } from "@/shared/ui/kit/Text";
+import { useAdminSidePanelStore } from "@/widgets/admin/shared/model/useAdminSidePanelStore";
 import Image from "next/image";
 
 type InquiryTableProps = {
@@ -17,10 +18,14 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
     const { data: inquiries = [], isLoading } = useAdminInquiriesQuery();
     const deleteInquiry = useDeleteInquiryMutation();
     const [deleteTarget, setDeleteTarget] = useState<Inquiry | null>(null);
-    const pageSize = 5;
+    const pageSize = useAdminSidePanelStore((state) => state.listPageSize);
     const [page, setPage] = useState(1);
     const totalPages = Math.max(1, Math.ceil(inquiries.length / pageSize));
     const visibleInquiries = inquiries.slice((page - 1) * pageSize, page * pageSize);
+
+    useEffect(() => {
+        setPage(1);
+    }, [pageSize]);
 
     return (
         <AdminListSection

@@ -19,7 +19,7 @@ export function Analysis() {
     const [page, setPage] = useState(1);
     const toggleNews = useToggleNewsMutation();
     const deleteNews = useDeleteNewsMutation();
-    const pageSize = 5;
+    const pageSize = useAdminSidePanelStore((state) => state.listPageSize);
     const totalPages = Math.max(1, Math.ceil(newsItems.length / pageSize));
     const visibleNewsItems = newsItems.slice((page - 1) * pageSize, page * pageSize);
     const openPanel = useAdminSidePanelStore((state) => state.openPanel);
@@ -28,6 +28,10 @@ export function Analysis() {
     useEffect(() => {
         closePanel(PANEL_KEY);
     }, [closePanel]);
+
+    useEffect(() => {
+        setPage(1);
+    }, [pageSize]);
 
     return (
         <AdminWorkspace>

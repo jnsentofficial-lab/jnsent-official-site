@@ -85,7 +85,9 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
                 ref={formRef}
             >
                 <label className={labelClassName}>
-                    제목 <span className="text-[var(--adaptiveRed500)]">*</span>
+                    <p>
+                        제목 <span className="text-[var(--adaptive-red400)]">*</span>
+                    </p>
                     <input
                         className={inputClassName}
                         onChange={(event) => {
@@ -100,7 +102,7 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
                         value={title}
                     />
                 </label>
-                <label className={labelClassName}>
+                {/* <label className={labelClassName}>
                     slug
                     <input
                         className={inputClassName}
@@ -110,7 +112,7 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
                         type="text"
                         value={slug}
                     />
-                </label>
+                </label> */}
                 <label className={labelClassName}>
                     요약
                     <input
@@ -121,13 +123,15 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
                         value={summary}
                     />
                 </label>
-                <section className="grid gap-4 border border-[var(--adaptiveGrey200)] bg-[var(--adaptiveGrey50)] p-5">
-                    <div className="flex items-center justify-between gap-3">
-                        <strong className="text-xl font-[700] text-black">첨부된 이미지</strong>
-                        <span className="text-sm font-[700] text-[var(--adaptiveGrey600)]">
-                            {effectiveThumbnailUrl ? "선택한 이미지가 썸네일로 저장됩니다" : "본문 이미지가 없으면 썸네일 없이 저장됩니다"}
-                        </span>
-                    </div>
+                <label className={labelClassName}>
+                    <section className="flex flex-col gap-[1.2rem]">
+                        <h6 className="text-[1.6rem]">첨부된 이미지</h6>
+
+                        <p className="text-[1.4rem] font-[500] text-[var(--adaptive-grey500)]">
+                            * {effectiveThumbnailUrl ? "선택한 이미지가 썸네일로 저장됩니다" : "본문 이미지가 없으면 썸네일 없이 저장됩니다"}
+                        </p>
+                    </section>
+
                     {imageUrls.length ? (
                         <div className="grid grid-cols-2 gap-3 max-[86rem]:grid-cols-1">
                             {imageUrls.map((imageUrl, index) => (
@@ -149,40 +153,51 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
                             ))}
                         </div>
                     ) : (
-                        <p className="m-0 text-base font-semibold text-[var(--adaptiveGrey600)]">본문 에디터에서 이미지를 업로드하면 이 영역에 썸네일 후보로 표시됩니다.</p>
+                        <div className="bg-[var(--adaptive-grey100)] p-[1.6rem]">
+                            <p className="text-[var(--adaptive-grey500)] text-center leading-[1.5] font-[500]">
+                                본문 에디터에서 이미지를 업로드하면
+                                <br />이 영역에 썸네일 후보로 표시됩니다.
+                            </p>
+                        </div>
                     )}
-                </section>
-                <label className={labelClassName}>
-                    SEO 제목
-                    <input
-                        className={inputClassName}
-                        onChange={(event) => setSeoTitle(event.target.value)}
-                        placeholder="metadata title"
-                        type="text"
-                        value={seoTitle}
-                    />
                 </label>
 
-                <label className={labelClassName}>
-                    SEO 설명
-                    <input
-                        className={inputClassName}
-                        onChange={(event) => setSeoDescription(event.target.value)}
-                        placeholder="metadata description"
-                        type="text"
-                        value={seoDescription}
-                    />
-                </label>
+                <div className="flex flex-col gap-[1.2rem]">
+                    <h6>내용</h6>
+                    {/* <label className={labelClassName}>
+                        SEO 제목
+                        <input
+                            className={inputClassName}
+                            onChange={(event) => setSeoTitle(event.target.value)}
+                            placeholder="metadata title"
+                            type="text"
+                            value={seoTitle}
+                        />
+                    </label>
 
-                {/* <label className={labelClassName}>
-                    본문
-                </label> */}
-                <RichTextEditor
-                    value={body}
-                    onChange={setBody}
-                    onImageUpload={handleImageUpload}
-                    placeholder="NEWS 본문을 입력하세요."
-                />
+                    <label className={labelClassName}>
+                        SEO 설명
+                        <input
+                            className={inputClassName}
+                            onChange={(event) => setSeoDescription(event.target.value)}
+                            placeholder="metadata description"
+                            type="text"
+                            value={seoDescription}
+                        />
+                    </label> */}
+
+                    {/* <label className={labelClassName}>
+                        본문
+                    </label> */}
+                    <div className="border border-[var(--adaptive-black100)]">
+                        <RichTextEditor
+                            value={body}
+                            onChange={setBody}
+                            onImageUpload={handleImageUpload}
+                            placeholder="NEWS 본문을 입력하세요."
+                        />
+                    </div>
+                </div>
 
                 {statusMessage ? (
                     <p
