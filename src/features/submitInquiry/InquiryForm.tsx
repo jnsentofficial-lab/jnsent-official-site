@@ -16,7 +16,7 @@ export function InquiryForm() {
     const [status, setStatus] = useState<InquiryStatus>("idle");
     const [message, setMessage] = useState("필요한 지원 내용을 남겨주세요.");
     const [inquiryBody, setInquiryBody] = useState<RichTextContent>(emptyRichTextContent);
-    const uploadImage = useUploadImageMutation();
+    const uploadImage = useUploadImageMutation("public");
     const createInquiry = useCreateInquiryMutation();
 
     async function handleImageUpload(file: File) {

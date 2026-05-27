@@ -9,6 +9,8 @@ export type UpsertNewsPayload = {
     thumbnail_url: string | null;
     seo_title: string | null;
     seo_description: string | null;
+    is_published: boolean;
+    published_at: string | null;
 };
 export type ToggleNewsPayload = Pick<News, "id" | "is_published">;
 export type DeleteNewsPayload = Pick<News, "id">;

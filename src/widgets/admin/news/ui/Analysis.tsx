@@ -103,7 +103,7 @@ export function Analysis() {
                                                         width={24}
                                                         height={24}
                                                     />
-                                                    {item.is_published ? "공개" : "비공개"}
+                                                    {item.is_published ? "비공개" : "공개"}
                                                 </UI.Button>
                                             </>
                                         }

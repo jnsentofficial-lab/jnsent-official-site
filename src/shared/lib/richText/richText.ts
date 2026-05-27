@@ -67,3 +67,24 @@ export function extractRichTextImages(value: RichTextContent): string[] {
 
     return Array.from(new Set(images));
 }
+
+export function replaceRichTextImageUrls(value: RichTextContent, replace: (src: string) => string): RichTextContent {
+    function visit(node: JSONContent): JSONContent {
+        const nextNode: JSONContent = { ...node };
+
+        if (node.type === "image" && typeof node.attrs?.src === "string" && node.attrs.src) {
+            nextNode.attrs = {
+                ...node.attrs,
+                src: replace(node.attrs.src),
+            };
+        }
+
+        if (node.content?.length) {
+            nextNode.content = node.content.map(visit);
+        }
+
+        return nextNode;
+    }
+
+    return visit(value) as RichTextContent;
+}

@@ -1,5 +1,4 @@
 import { NextRequest } from "next/server";
-import { hasAdminApiSession } from "@/shared/lib/adminApi";
 import { uploadOptimizedImage } from "@/shared/lib/asset.server";
 import { apiError, apiOk } from "@/shared/lib/api/server";
 
@@ -10,17 +9,12 @@ const maxSizeBytes = 5 * 1024 * 1024;
 
 const errorMessages: Record<string, string> = {
     ASSET_SAVE_FAILED: "이미지 정보를 저장하지 못했습니다.",
-    FORBIDDEN: "관리자 권한이 필요합니다.",
     INVALID_SIZE: "5MB 이하 이미지만 업로드할 수 있습니다.",
     INVALID_TYPE: "JPG, PNG, WEBP 파일만 업로드할 수 있습니다.",
     UPLOAD_FAILED: "이미지 업로드에 실패했습니다.",
 };
 
 export async function POST(request: NextRequest) {
-    if (!(await hasAdminApiSession())) {
-        return apiError(errorMessages.FORBIDDEN, 403);
-    }
-
     const formData = await request.formData();
     const file = formData.get("file");
 
@@ -42,8 +36,7 @@ export async function POST(request: NextRequest) {
         return apiOk(result);
     } catch (error) {
         const code = error instanceof Error ? error.message : "UPLOAD_FAILED";
-        const status = code === "FORBIDDEN" ? 403 : 400;
 
-        return apiError(errorMessages[code] ?? errorMessages.UPLOAD_FAILED, status);
+        return apiError(errorMessages[code] ?? errorMessages.UPLOAD_FAILED, 400);
     }
 }

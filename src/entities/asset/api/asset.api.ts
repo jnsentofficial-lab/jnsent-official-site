@@ -7,3 +7,10 @@ export async function uploadImageFetch(file: File) {
 
     return clientApi.post<ApiResponse<UploadImageResponse>>("/api/admin/uploads", formData);
 }
+
+export async function uploadPublicImageFetch(file: File) {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    return clientApi.post<ApiResponse<UploadImageResponse>>("/api/uploads", formData);
+}

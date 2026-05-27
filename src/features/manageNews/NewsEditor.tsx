@@ -4,7 +4,7 @@ import { FormEvent, Fragment, useEffect, useMemo, useRef, useState } from "react
 import { useUploadImageMutation } from "@/entities/asset/api/asset.query";
 import { useUpsertNewsMutation } from "@/entities/news/api/news.query";
 import type { News } from "@/entities/news/model/news.type";
-import { emptyRichTextContent, extractRichTextImages, toJsonContent, toRichTextContent } from "@/shared/lib/richText/richText";
+import { emptyRichTextContent, extractRichTextImages, replaceRichTextImageUrls, toJsonContent, toRichTextContent } from "@/shared/lib/richText/richText";
 import type { RichTextContent } from "@/shared/lib/richText/richText";
 import { RichTextEditor } from "@/shared/ui/richText/RichTextEditor";
 import UI from "@/shared/ui/UIComponent";
@@ -30,28 +30,44 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
     const [summary, setSummary] = useState("");
     const [seoTitle, setSeoTitle] = useState("");
     const [seoDescription, setSeoDescription] = useState("");
+    const [isPublished, setIsPublished] = useState(true);
+    const [publishedAt, setPublishedAt] = useState("");
     const [body, setBody] = useState<RichTextContent>(emptyRichTextContent);
     const [selectedThumbnailUrl, setSelectedThumbnailUrl] = useState<string | null>(null);
+    const pendingImageFilesRef = useRef(new Map<string, File>());
     const uploadImage = useUploadImageMutation();
     const upsertNews = useUpsertNewsMutation();
     const imageUrls = useMemo(() => extractRichTextImages(body), [body]);
     const effectiveThumbnailUrl = selectedThumbnailUrl && imageUrls.includes(selectedThumbnailUrl) ? selectedThumbnailUrl : (imageUrls[0] ?? null);
 
+    function resetPendingImages() {
+        pendingImageFilesRef.current.forEach((_file, previewUrl) => {
+            URL.revokeObjectURL(previewUrl);
+        });
+        pendingImageFilesRef.current.clear();
+    }
+
     useEffect(() => {
+        resetPendingImages();
         setStatusMessage("");
         setSlug(news?.slug ?? "");
         setTitle(news?.title ?? "");
         setSummary(news?.summary ?? "");
         setSeoTitle(news?.seo_title ?? "");
         setSeoDescription(news?.seo_description ?? "");
+        setIsPublished(news?.is_published ?? true);
+        setPublishedAt(news?.published_at ? news.published_at.slice(0, 16) : "");
         setBody(news ? toRichTextContent(news.body) : emptyRichTextContent);
         setSelectedThumbnailUrl(news?.thumbnail_url ?? null);
     }, [news]);
 
-    async function handleImageUpload(file: File) {
-        const response = await uploadImage.mutateAsync(file);
+    useEffect(() => () => resetPendingImages(), []);
 
-        return response.result.url;
+    async function handleImageUpload(file: File) {
+        const previewUrl = URL.createObjectURL(file);
+        pendingImageFilesRef.current.set(previewUrl, file);
+
+        return previewUrl;
     }
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -59,15 +75,40 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
         setStatusMessage("저장 중입니다.");
 
         try {
+            const usedPendingImages = Array.from(pendingImageFilesRef.current.entries()).filter(([previewUrl]) => imageUrls.includes(previewUrl));
+            const uploadedImageMap = new Map<string, string>();
+
+            if (usedPendingImages.length) {
+                const uploadedImages = await Promise.all(
+                    usedPendingImages.map(async ([previewUrl, file]) => {
+                        const response = await uploadImage.mutateAsync(file);
+
+                        return [previewUrl, response.result.url] as const;
+                    }),
+                );
+
+                uploadedImages.forEach(([previewUrl, url]) => {
+                    uploadedImageMap.set(previewUrl, url);
+                });
+            }
+
+            const nextBody = replaceRichTextImageUrls(body, (src) => uploadedImageMap.get(src) ?? src);
+            const nextImageUrls = extractRichTextImages(nextBody);
+            const nextSelectedThumbnailUrl = selectedThumbnailUrl ? (uploadedImageMap.get(selectedThumbnailUrl) ?? selectedThumbnailUrl) : null;
+            const nextThumbnailUrl = nextSelectedThumbnailUrl && nextImageUrls.includes(nextSelectedThumbnailUrl) ? nextSelectedThumbnailUrl : (nextImageUrls[0] ?? null);
+
             await upsertNews.mutateAsync({
                 slug: slug.trim(),
                 title: title.trim(),
                 summary: summary.trim() || null,
-                body: toJsonContent(body),
-                thumbnail_url: effectiveThumbnailUrl,
+                body: toJsonContent(nextBody),
+                thumbnail_url: nextThumbnailUrl,
                 seo_title: seoTitle.trim() || null,
                 seo_description: seoDescription.trim() || null,
+                is_published: isPublished,
+                published_at: publishedAt ? new Date(publishedAt).toISOString() : null,
             });
+            resetPendingImages();
             setStatusMessage("NEWS가 저장되었습니다.");
             onSaved?.();
         } catch {
@@ -77,7 +118,7 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
 
     return (
         <Fragment>
-            <h1 className="text-[3.2rem] mobile:px-[1.6rem] pc:px-[5.2rem] pt-[5.2rem]">뉴스 편집</h1>
+            <h1 className="text-[3.2rem] mobile:px-[1.6rem] pc:px-[5.2rem] pt-[5.2rem]">뉴스 {news ? "편집" : "생성"}</h1>
 
             <form
                 className="grid gap-10 mobile:px-[1.6rem] pc:px-[5.2rem]"
@@ -121,6 +162,32 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
                         placeholder="목록에 표시할 요약"
                         type="text"
                         value={summary}
+                    />
+                </label>
+                <label className={labelClassName}>
+                    <span>공개 설정</span>
+                    <div className="flex items-center gap-[1.2rem]">
+                        <input
+                            checked={isPublished}
+                            id="news-is-published"
+                            onChange={(event) => setIsPublished(event.target.checked)}
+                            type="checkbox"
+                        />
+                        <label
+                            className="cursor-pointer"
+                            htmlFor="news-is-published"
+                        >
+                            저장 후 바로 공개
+                        </label>
+                    </div>
+                </label>
+                <label className={labelClassName}>
+                    발행 일시
+                    <input
+                        className={inputClassName}
+                        onChange={(event) => setPublishedAt(event.target.value)}
+                        type="datetime-local"
+                        value={publishedAt}
                     />
                 </label>
                 <label className={labelClassName}>
@@ -221,7 +288,7 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
                     onClick={() => formRef.current?.requestSubmit()}
                     type="button"
                 >
-                    {upsertNews.isPending ? "저장 중" : news ? "수정하기" : "답변 등록하기"}
+                    {upsertNews.isPending ? "저장 중" : news ? "수정하기" : "작성하기"}
                 </UI.Button>
             </section>
         </Fragment>
