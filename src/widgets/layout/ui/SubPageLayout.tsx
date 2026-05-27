@@ -431,6 +431,7 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
                 <label className="grid gap-3 text-[1.6rem] font-[700] text-black font-[NanumSquare]">
                     {messageLabel}
                     <UI.TextArea
+                        className="leading-[1.5]"
                         // className="mi[5.2rem]h-[17rem][1.2rem]esize-none rounded-xl border b-grde3-[var(--adaptiveGrey300)] p-5 text-base font-semibold"
                         name="message"
                         placeholder="문의를 남겨주세요"

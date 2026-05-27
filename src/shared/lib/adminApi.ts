@@ -7,6 +7,13 @@ export async function hasAdminApiSession() {
     return cookieStore.get("admin_session")?.value === "1";
 }
 
+export async function getAdminApiName() {
+    const cookieStore = await cookies();
+    const name = cookieStore.get("admin_name")?.value;
+
+    return name ? decodeURIComponent(name) : null;
+}
+
 export async function getAdminApiRole() {
     const cookieStore = await cookies();
     const role = cookieStore.get("admin_role")?.value;

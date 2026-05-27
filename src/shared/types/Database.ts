@@ -58,6 +58,7 @@ export type Database = {
                     id: string;
                     title: string;
                     content: string;
+                    creator_name: string;
                     image_url: string | null;
                     col: number;
                     row: number;
@@ -74,6 +75,7 @@ export type Database = {
                     id?: string;
                     title: string;
                     content: string;
+                    creator_name?: string;
                     image_url?: string | null;
                     col?: number;
                     row?: number;

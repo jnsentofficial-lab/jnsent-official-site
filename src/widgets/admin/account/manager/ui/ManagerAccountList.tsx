@@ -75,28 +75,41 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
                             }
                             contentClassName="flex-col items-start"
                             description={
-                                <p className="text-[var(--adaptive-black500)] text-[1.4rem]">
-                                    {account.name} <span className="mx-3">|</span> {getManagerAccountRoleLabel(account.role)} <span className="mx-3">|</span>{" "}
-                                    {account.is_active ? "활성" : "비활성"} <span className="mx-3">|</span> {new Intl.DateTimeFormat("ko-KR").format(new Date(account.created_at))} 생성
-                                </p>
+                                <section className="flex justify-start items-start gap-[0.8rem]">
+                                    <p className="text-[var(--adaptive-grey500)]">{account.name}</p>
+                                    <div className="h-[1.2rem] w-[0.1rem] bg-[var(--adaptive-grey300)] my-auto" />
+                                    <p className="text-[var(--adaptive-grey500)]">{new Intl.DateTimeFormat("ko-KR").format(new Date(account.created_at))} 생성</p>
+                                </section>
                             }
                             onClick={() => onSelectAccount(account)}
                             selected={SELECTED}
                             title={
-                                SELECTED ? (
-                                    <Text.Shimmer
-                                        color={{
-                                            start: "#780B12",
-                                            end: "#FF6B75",
-                                        }}
-                                        duration={4}
-                                        className="text-[2.0rem]"
+                                <div className="flex items-center gap-[0.8rem]">
+                                    {SELECTED ? (
+                                        <Text.Shimmer
+                                            color={{
+                                                start: "#780B12",
+                                                end: "#FF6B75",
+                                            }}
+                                            duration={4}
+                                            className="text-[2.0rem]"
+                                        >
+                                            {account.login_id}
+                                        </Text.Shimmer>
+                                    ) : (
+                                        <h6 className="text-[2.0rem]">{account.login_id}</h6>
+                                    )}
+
+                                    <section className="flex gap-[0.4rem] border border-[var(--adaptive-grey500)] p-[0.2rem_0.4rem] rounded-[0.8rem]">
+                                        <p className="text-[var(--adaptive-grey600)]">{getManagerAccountRoleLabel(account.role)}</p>
+                                        {/* <div className="h-[1.2rem] w-[0.1rem] bg-[var(--adaptive-grey300)] my-auto" /> */}
+                                    </section>
+                                    <p
+                                        className={`rounded-full px-[1.0rem] py-[0.4rem] text-[1.4rem] font-[500] leading-none ${account.is_active ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]" : "bg-[var(--adaptive-grey200)] text-[var(--adaptive-grey600)]"}`}
                                     >
-                                        {account.login_id}
-                                    </Text.Shimmer>
-                                ) : (
-                                    <h6 className="text-[2.0rem]">{account.login_id}</h6>
-                                )
+                                        {account.is_active ? "활성" : "비활성"}
+                                    </p>
+                                </div>
                             }
                         />
 

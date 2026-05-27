@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useState } from "react";
 import { useAdminInquiriesQuery, useDeleteInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
-import type { Inquiry } from "@/entities/inquiry/model/inquiry.type";
+import type { AdminInquiry, Inquiry } from "@/entities/inquiry/model/inquiry.type";
 import { AdminListRow, AdminListSection, AdminPagination, ConfirmDialog } from "@/widgets/admin/shared/AdminLayout";
 import UI from "@/shared/ui/UIComponent";
 import { Text } from "@/shared/ui/kit/Text";
@@ -11,7 +11,7 @@ import Image from "next/image";
 
 type InquiryTableProps = {
     selectedInquiryId?: string;
-    onSelectInquiry: (inquiry: Inquiry) => void;
+    onSelectInquiry: (inquiry: AdminInquiry) => void;
 };
 
 export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTableProps) {
@@ -29,8 +29,13 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
 
     return (
         <AdminListSection
-            className="gap-[5.2rem]"
-            empty={<p className="py-16 text-2xl font-[700] text-[var(--adaptiveGrey500)]">등록된 문의가 없습니다.</p>}
+            // className="gap-[5.2rem]"
+            empty={
+                <div className="bg-[var(--adaptive-grey100)] flex flex-col justify-center items-center gap-[1.2rem] p-[5.2rem]">
+                    <h5 className="text-[2.0rem]">현재 등록된 문의가 없습니다</h5>
+                    <p className="text-[var(--adaptive-grey500)] font-[400] text-center leading-[1.5]">이곳에 고객들이 남겨주신 문의 목록이 나타나요</p>
+                </div>
+            }
             hasItems={inquiries.length > 0}
             isLoading={isLoading}
             pagination={
@@ -44,6 +49,10 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
             <section className="flex flex-col justify-center">
                 {visibleInquiries.map((inquiry, mappedIdx) => {
                     const SELECTED = selectedInquiryId === inquiry.id;
+                    const answerStatusLabel = inquiry.hasAnswer ? "답변완료" : "대기중";
+                    const answerStatusClassName = inquiry.hasAnswer
+                        ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]"
+                        : "bg-[var(--adaptive-grey200)] text-[var(--adaptive-grey600)]";
 
                     return (
                         <Fragment key={`${inquiry.name}-${inquiry.category}`}>
@@ -77,20 +86,23 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
                                 onClick={() => onSelectInquiry(inquiry)}
                                 selected={SELECTED}
                                 title={
-                                    SELECTED ? (
-                                        <Text.Shimmer
-                                            color={{
-                                                start: "#780B12",
-                                                end: "#FF6B75",
-                                            }}
-                                            duration={4}
-                                            className="text-[2.0rem]"
-                                        >
-                                            {inquiry.message}
-                                        </Text.Shimmer>
-                                    ) : (
-                                        <h6 className="text-[2.0rem] leading-[1.5] text-left">{inquiry.message}</h6>
-                                    )
+                                    <div className="flex items-center gap-[0.8rem]">
+                                        {SELECTED ? (
+                                            <Text.Shimmer
+                                                color={{
+                                                    start: "#780B12",
+                                                    end: "#FF6B75",
+                                                }}
+                                                duration={4}
+                                                className="text-[2.0rem]"
+                                            >
+                                                {inquiry.message}
+                                            </Text.Shimmer>
+                                        ) : (
+                                            <h6 className="text-[2.0rem] leading-[1.5] text-left">{inquiry.message}</h6>
+                                        )}
+                                        <span className={`rounded-full px-[1.0rem] py-[0.4rem] text-[1.2rem] font-[700] leading-none ${answerStatusClassName}`}>{answerStatusLabel}</span>
+                                    </div>
                                 }
                             />
 

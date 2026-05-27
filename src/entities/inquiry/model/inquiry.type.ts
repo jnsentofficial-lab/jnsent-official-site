@@ -1,6 +1,9 @@
 import type { Database } from "@/shared/types/Database";
 
 export type Inquiry = Database["public"]["Tables"]["inquiries"]["Row"];
+export type AdminInquiry = Inquiry & {
+    hasAnswer: boolean;
+};
 export type InquiryComment = Database["public"]["Tables"]["inquiry_comments"]["Row"];
 export type CreateInquiryPayload = Pick<Inquiry, "name" | "phone" | "message"> &
     Partial<Pick<Inquiry, "email" | "category" | "gender" | "age" | "region" | "available_time" | "support_label" | "source">> &

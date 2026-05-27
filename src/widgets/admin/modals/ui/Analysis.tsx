@@ -68,7 +68,12 @@ export function Analysis() {
                 }
                 left={
                     <AdminListSection
-                        empty={<p className="py-16 text-2xl font-[700] text-[var(--adaptiveGrey500)]">등록된 팝업이 없습니다.</p>}
+                        empty={
+                            <div className="bg-[var(--adaptive-grey100)] flex flex-col justify-center items-center gap-[1.2rem] p-[5.2rem]">
+                                <h5 className="text-[2.0rem]">현재 생성된 팝업이 없습니다</h5>
+                                <p className="text-[var(--adaptive-grey500)] font-[400] text-center leading-[1.5]">오른쪽 하단의 작성하기 버튼을 통해 팝업을 생성 할 수 있어요</p>
+                            </div>
+                        }
                         hasItems={modals.length > 0}
                         isLoading={isLoading}
                         pagination={
@@ -83,9 +88,8 @@ export function Analysis() {
                             const SELECTED = selectedModal?.id === modal.id;
                             const hasEnded = modal.ends_at ? new Date(modal.ends_at).getTime() < currentTime : false;
                             const statusLabel = hasEnded ? "종료" : modal.is_visible ? "진행중" : "숨김";
-                            const statusClassName = statusLabel === "진행중"
-                                ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]"
-                                : "bg-[var(--adaptive-grey200)] text-[var(--adaptive-grey600)]";
+                            const statusClassName =
+                                statusLabel === "진행중" ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]" : "bg-[var(--adaptive-grey200)] text-[var(--adaptive-grey600)]";
 
                             return (
                                 <Fragment key={modal.id}>
@@ -147,7 +151,7 @@ export function Analysis() {
                                         description={
                                             <Fragment>
                                                 <div className="flex items-center gap-[0.8rem] text-[1.4rem]">
-                                                    <p className="text-[var(--adaptive-grey500)] text-left">김주석 주임</p>
+                                                    <p className="text-[var(--adaptive-grey500)] text-left">{modal.creator_name || "관리자"}</p>
                                                 </div>
                                                 <p className="text-[1.4rem] text-[var(--adaptive-grey500)] text-left">
                                                     {modal.starts_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.starts_at)) : "시작일 없음"} ~{" "}
@@ -189,7 +193,7 @@ export function Analysis() {
                                                 ) : (
                                                     <h6 className="truncate text-[2.0rem]">{modal.title}</h6>
                                                 )}
-                                                <span className={`rounded-full px-[1.0rem] py-[0.4rem] text-[1.2rem] font-[700] leading-none ${statusClassName}`}>{statusLabel}</span>
+                                                <span className={`rounded-full px-[1.0rem] py-[0.4rem] text-[1.4rem] font-[500] leading-none ${statusClassName}`}>{statusLabel}</span>
                                             </div>
                                         }
                                     />

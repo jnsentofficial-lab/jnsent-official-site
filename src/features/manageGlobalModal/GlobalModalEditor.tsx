@@ -180,23 +180,6 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                 ref={formRef}
             >
                 <label className={labelClassName}>
-                    현재 설정 이미지
-                    <span className="text-sm font-bold text-[var(--adaptive-grey600)]">
-                        {selectedImageFile ? "새로 선택한 이미지가 저장됩니다" : effectiveImageUrl ? "저장된 이미지가 유지됩니다" : "설정된 이미지가 없습니다"}
-                    </span>
-                    {effectiveImageUrl ? (
-                        <img
-                            alt={title ? `${title} 이미지 미리보기` : "모달 이미지 미리보기"}
-                            className=""
-                            // className="h-40 w-full rounded-lg object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                            src={effectiveImageUrl}
-                        />
-                    ) : (
-                        <p className="m-0 text-sm font-semibold text-[var(--adaptive-grey600)]">이미지를 업로드하면 여기에서 바로 확인할 수 있습니다.</p>
-                    )}
-                </label>
-
-                <label className={labelClassName}>
                     제목
                     <input
                         className={inputClassName}
@@ -219,44 +202,6 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                         value={content}
                     />
                 </label> */}
-                <div className={labelClassName}>
-                    <span>이미지 업로드</span>
-                    <label
-                        className={`${uploadZoneBaseClassName} ${isDragActive ? "border-[var(--adaptive-blue500)] bg-[linear-gradient(180deg,#f7fbff_0%,#edf5ff_100%)] shadow-[0_1.6rem_4rem_rgba(46,126,255,0.12)]" : "border-[var(--adaptive-grey300)] bg-[linear-gradient(180deg,#fcfcfc_0%,#f4f4f4_100%)] hover:border-[var(--adaptive-grey700)] hover:shadow-[0_1.2rem_3rem_rgba(15,23,42,0.08)]"}`}
-                        onDragLeave={handleDragLeave}
-                        onDragOver={handleDragOver}
-                        onDrop={handleDrop}
-                    >
-                        <input
-                            accept="image/jpeg,image/png,image/webp"
-                            className="sr-only"
-                            onChange={handleImageChange}
-                            name="image"
-                            ref={fileInputRef}
-                            type="file"
-                        />
-                        <div
-                            className={`pointer-events-none absolute inset-0 transition-opacity duration-200 ${isDragActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"} bg-[radial-gradient(circle_at_top,rgba(46,126,255,0.14),transparent_58%)]`}
-                        />
-                        <div className="relative z-[1] flex flex-col items-center gap-5">
-                            {/* <span className="flex h-[7.2rem] w-[7.2rem] items-center justify-center rounded-[2rem] border border-[var(--adaptive-grey300)] bg-white shadow-[0_1rem_2.4rem_rgba(15,23,42,0.08)]">
-                            </span> */}
-                            <img
-                                alt=""
-                                className="h-[3.2rem] w-[3.2rem]"
-                                src="/images/icon/outlined/ico-outlined-image.svg"
-                            />
-
-                            <div className="space-y-2">
-                                <p className="font-[NanumSquare] text-[var(--adaptive-black500)]">{isDragActive ? "여기에 이미지를 놓아주세요" : "파일을 끌어 놓거나 클릭해 업로드"}</p>
-                                <p className="text-[1.4rem] text-[var(--adaptive-black400)]">
-                                    PNG, JPG, WEBP 파일을 지원합니다.
-                                    {selectedImageFile ? ` 현재 선택: ${selectedImageFile.name}` : ""}
-                                </p>
-                            </div>
-                        </div>
-                    </label>
-                </div>
 
                 {/* <label className={labelClassName}>
                     이미지 URL
@@ -282,7 +227,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                     />
                 </label> */}
                 <section className="flex gap-[0.4rem]">
-                    <label className={labelClassName}>
+                    <label className={`${labelClassName} w-full`}>
                         시작 일자
                         <UI.Calendar
                             className={inputClassName}
@@ -291,7 +236,8 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                             value={startsAt}
                         />
                     </label>
-                    <label className={labelClassName}>
+
+                    <label className={`${labelClassName} w-full`}>
                         종료 일자
                         <UI.Calendar
                             className={inputClassName}
@@ -357,6 +303,62 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                     />
                     표시
                 </label> */}
+                <div className={labelClassName}>
+                    <span>이미지 업로드</span>
+                    <label
+                        className={`${uploadZoneBaseClassName} ${isDragActive ? "border-[var(--adaptive-blue500)] bg-[linear-gradient(180deg,#f7fbff_0%,#edf5ff_100%)] shadow-[0_1.6rem_4rem_rgba(46,126,255,0.12)]" : "border-[var(--adaptive-grey300)] bg-[linear-gradient(180deg,#fcfcfc_0%,#f4f4f4_100%)] hover:border-[var(--adaptive-grey700)] hover:shadow-[0_1.2rem_3rem_rgba(15,23,42,0.08)]"}`}
+                        onDragLeave={handleDragLeave}
+                        onDragOver={handleDragOver}
+                        onDrop={handleDrop}
+                    >
+                        <input
+                            accept="image/jpeg,image/png,image/webp"
+                            className="sr-only"
+                            onChange={handleImageChange}
+                            name="image"
+                            ref={fileInputRef}
+                            type="file"
+                        />
+                        <div
+                            className={`pointer-events-none absolute inset-0 transition-opacity duration-200 ${isDragActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"} bg-[radial-gradient(circle_at_top,rgba(46,126,255,0.14),transparent_58%)]`}
+                        />
+                        <div className="relative z-[1] flex flex-col items-center gap-5">
+                            {/* <span className="flex h-[7.2rem] w-[7.2rem] items-center justify-center rounded-[2rem] border border-[var(--adaptive-grey300)] bg-white shadow-[0_1rem_2.4rem_rgba(15,23,42,0.08)]">
+                            </span> */}
+                            <img
+                                alt=""
+                                className="h-[3.2rem] w-[3.2rem]"
+                                src="/images/icon/outlined/ico-outlined-image.svg"
+                            />
+
+                            <div className="space-y-2">
+                                <p className="font-[NanumSquare] text-[var(--adaptive-black500)]">{isDragActive ? "여기에 이미지를 놓아주세요" : "파일을 끌어 놓거나 클릭해 업로드"}</p>
+                                <p className="text-[1.4rem] text-[var(--adaptive-black400)]">
+                                    PNG, JPG, WEBP 파일을 지원합니다.
+                                    {selectedImageFile ? ` 현재 선택: ${selectedImageFile.name}` : ""}
+                                </p>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+
+                <label className={labelClassName}>
+                    현재 설정 이미지
+                    <span className="text-sm font-bold text-[var(--adaptive-grey600)]">
+                        {selectedImageFile ? "새로 선택한 이미지가 저장됩니다" : effectiveImageUrl ? "저장된 이미지가 유지됩니다" : "설정된 이미지가 없습니다"}
+                    </span>
+                    {effectiveImageUrl ? (
+                        <img
+                            alt={title ? `${title} 이미지 미리보기` : "모달 이미지 미리보기"}
+                            className=""
+                            // className="h-40 w-full rounded-lg object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                            src={effectiveImageUrl}
+                        />
+                    ) : (
+                        <p className="m-0 text-sm font-semibold text-[var(--adaptive-grey600)]">이미지를 업로드하면 여기에서 바로 확인할 수 있습니다.</p>
+                    )}
+                </label>
+
                 {statusMessage ? (
                     <p
                         className={statusClassName}

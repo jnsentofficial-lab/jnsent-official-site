@@ -22,7 +22,7 @@ const Calendar = ({ className = "", size = "md", type = "datetime-local", ...pro
     return (
         <input
             {...props}
-            className={`${className} rounded-[1.4rem] border border-[var(--adaptive-black100)] bg-white px-[1.6rem] transition-colors hover:border-[var(--adaptive-black500)]`}
+            className={`${className} border border-[var(--adaptive-black100)] bg-white px-[1.6rem] transition-colors hover:border-[var(--adaptive-black500)]`}
             style={{ minHeight: height }}
             type={type}
         />
