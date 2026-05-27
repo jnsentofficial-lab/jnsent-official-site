@@ -53,7 +53,7 @@ export function OperationKnowhow() {
                 ref={ref}
                 className="ml-auto flex h-full items-center justify-center mobile:w-full pc:w-[calc(50dvw-7.2rem)]"
             >
-                <div className="w-full h-full flex flex-col justify-center items-start gap-[5.2rem]">
+                <div className="w-full h-full flex flex-col justify-center items-start mobile:gap-[1.6rem] pc:gap-[5.2rem]">
                     <Text.Reveal
                         as="h2"
                         className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[700] leading-[1.5]"
@@ -93,8 +93,8 @@ export function OperationKnowhow() {
                                 // }}
                                 // transition={{ duration: 0, ease: "easeInOut" }}
                             >
-                                <h3 className="text-[2.4rem]">{item.title}</h3>
-                                <p className="text-[1.8rem] font-[500]">{item.text}</p>
+                                <h3 className="text-[2.0rem]">{item.title}</h3>
+                                <p className="text-[1.6rem] font-[500]">{item.text}</p>
                             </motion.div>
                         ))}
                     </motion.div>

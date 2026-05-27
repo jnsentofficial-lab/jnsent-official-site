@@ -135,28 +135,84 @@ function useAutoRevealProgress(interaction: boolean, scrollYProgress: MotionValu
 
 function groupTextLines(element: HTMLElement) {
     const textNode = [...element.childNodes].find((node) => node.nodeType === Node.TEXT_NODE);
+    if (!(textNode instanceof Text)) return [];
+
     const text = textNode?.textContent ?? "";
     const containerRect = element.getBoundingClientRect();
     const computedStyles = window.getComputedStyle(element);
     const computedLineHeight = Number.parseFloat(computedStyles.lineHeight);
     const range = document.createRange();
+
+    if (text.includes("\n")) {
+        const explicitLines = text.split("\n");
+        const measuredLines: Line[] = [];
+        let cursor = 0;
+
+        explicitLines.forEach((lineText, index) => {
+            const start = cursor;
+            const end = start + lineText.length;
+            cursor = end + 1;
+
+            if (!lineText) return;
+
+            range.setStart(textNode, start);
+            range.setEnd(textNode, end);
+
+            const rects = Array.from(range.getClientRects()).filter((rect) => rect.width > 0 || rect.height > 0);
+            if (rects.length === 0) return;
+
+            const left = Math.min(...rects.map((rect) => rect.left));
+            const right = Math.max(...rects.map((rect) => rect.right));
+            const top = Math.min(...rects.map((rect) => rect.top));
+            const bottom = Math.max(...rects.map((rect) => rect.bottom));
+
+            measuredLines.push({
+                height: bottom - top,
+                left: left - containerRect.left,
+                right: containerRect.right - right,
+                text: lineText,
+                top: top - containerRect.top,
+                width: right - left,
+            });
+        });
+
+        range.detach();
+
+        const resolvedLineHeight = Number.isFinite(computedLineHeight) ? computedLineHeight : Math.max(...measuredLines.map((line) => line.height), 0);
+
+        return measuredLines.map((line, index) => ({
+            ...line,
+            height: resolvedLineHeight || line.height,
+            top: index * (resolvedLineHeight || line.height),
+        }));
+    }
+
     const groups: Array<{ end: number; rects: DOMRect[]; start: number; top: number }> = [];
+    let pendingStart: number | null = null;
 
     for (let index = 0; index < text.length; index += 1) {
-        range.setStart(textNode as Text, index);
-        range.setEnd(textNode as Text, index + 1);
+        range.setStart(textNode, index);
+        range.setEnd(textNode, index + 1);
 
         const rect = range.getBoundingClientRect();
-        if (rect.width === 0 && text[index] !== " ") continue;
+        if (rect.width === 0) {
+            if (text[index].trim()) {
+                pendingStart ??= index;
+            }
+            continue;
+        }
 
         const top = Math.round(rect.top);
         const group = groups.find((item) => Math.abs(item.top - top) < 4);
+        const start = pendingStart ?? index;
+        pendingStart = null;
 
         if (group) {
+            group.start = Math.min(group.start, start);
             group.end = index + 1;
             group.rects.push(rect);
         } else {
-            groups.push({ end: index + 1, rects: [rect], start: index, top });
+            groups.push({ end: index + 1, rects: [rect], start, top });
         }
     }
 
@@ -164,10 +220,15 @@ function groupTextLines(element: HTMLElement) {
 
     const measuredLines = groups
         .map((group) => {
-        const left = Math.min(...group.rects.map((rect) => rect.left));
-        const right = Math.max(...group.rects.map((rect) => rect.right));
-        const top = Math.min(...group.rects.map((rect) => rect.top));
-        const bottom = Math.max(...group.rects.map((rect) => rect.bottom));
+        range.setStart(textNode, group.start);
+        range.setEnd(textNode, group.end);
+
+        const lineRects = Array.from(range.getClientRects());
+        const resolvedRects = lineRects.length > 0 ? lineRects : group.rects;
+        const left = Math.min(...resolvedRects.map((rect) => rect.left));
+        const right = Math.max(...resolvedRects.map((rect) => rect.right));
+        const top = Math.min(...resolvedRects.map((rect) => rect.top));
+        const bottom = Math.max(...resolvedRects.map((rect) => rect.bottom));
 
         return {
             height: bottom - top,
@@ -193,6 +254,7 @@ function LineOverlay({ highlightColor, subHighlightColor, index, line, progress,
     const segment = 1 / Math.max(total, 1);
     const start = index * segment;
     const end = (index + 1) * segment;
+    const horizontalInset = softness + line.height;
     const lineProgress = useTransform(progress, [start, end], [0, 1], { clamp: true });
     const revealPercent = useTransform(lineProgress, [0, 1], [0, 100]);
     const revealMask = useMotionTemplate`linear-gradient(90deg, #000 0%, #000 ${revealPercent}%, transparent ${revealPercent}%, transparent 100%)`;
@@ -214,9 +276,9 @@ function LineOverlay({ highlightColor, subHighlightColor, index, line, progress,
                 fontWeight: "inherit",
                 height: line.height,
                 letterSpacing: "inherit",
-                left: line.left - softness,
+                left: line.left - horizontalInset,
                 lineHeight: `${line.height}px`,
-                right: line.right - softness,
+                right: line.right - horizontalInset,
                 textTransform: "inherit",
                 top: line.top,
                 wordSpacing: "inherit",
@@ -230,7 +292,7 @@ function LineOverlay({ highlightColor, subHighlightColor, index, line, progress,
                     maskImage: revealMask,
                 }}
             >
-                <span style={{ display: "inline-block", paddingInline: softness }}>{line.text}</span>
+                <span style={{ display: "inline-block", paddingInline: horizontalInset }}>{line.text}</span>
             </motion.span>
             {subHighlightColor ? (
                 <motion.span
@@ -241,7 +303,7 @@ function LineOverlay({ highlightColor, subHighlightColor, index, line, progress,
                         maskImage: subHighlightMask,
                     }}
                 >
-                    <span style={{ display: "inline-block", paddingInline: softness }}>{line.text}</span>
+                    <span style={{ display: "inline-block", paddingInline: horizontalInset }}>{line.text}</span>
                 </motion.span>
             ) : null}
             <motion.span
@@ -252,7 +314,7 @@ function LineOverlay({ highlightColor, subHighlightColor, index, line, progress,
                     maskImage: highlightMask,
                 }}
             >
-                <span style={{ display: "inline-block", paddingInline: softness }}>{line.text}</span>
+                <span style={{ display: "inline-block", paddingInline: horizontalInset }}>{line.text}</span>
             </motion.span>
         </span>
     );
