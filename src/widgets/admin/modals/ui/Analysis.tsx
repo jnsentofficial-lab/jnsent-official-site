@@ -83,7 +83,9 @@ export function Analysis() {
                             const SELECTED = selectedModal?.id === modal.id;
                             const hasEnded = modal.ends_at ? new Date(modal.ends_at).getTime() < currentTime : false;
                             const statusLabel = hasEnded ? "종료" : modal.is_visible ? "진행중" : "숨김";
-                            const statusClassName = statusLabel === "진행중" ? "text-[var(--adaptive-red400)]" : "";
+                            const statusClassName = statusLabel === "진행중"
+                                ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]"
+                                : "bg-[var(--adaptive-grey200)] text-[var(--adaptive-grey600)]";
 
                             return (
                                 <Fragment key={modal.id}>
@@ -146,8 +148,6 @@ export function Analysis() {
                                             <Fragment>
                                                 <div className="flex items-center gap-[0.8rem] text-[1.4rem]">
                                                     <p className="text-[var(--adaptive-grey500)] text-left">김주석 주임</p>
-                                                    <div className="h-[1.2rem] w-[0.1rem] bg-[var(--adaptive-black200)]" />
-                                                    <p className={statusClassName}>{statusLabel}</p>
                                                 </div>
                                                 <p className="text-[1.4rem] text-[var(--adaptive-grey500)] text-left">
                                                     {modal.starts_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.starts_at)) : "시작일 없음"} ~{" "}
@@ -174,20 +174,23 @@ export function Analysis() {
                                             )
                                         }
                                         title={
-                                            SELECTED ? (
-                                                <Text.Shimmer
-                                                    color={{
-                                                        start: "#780B12",
-                                                        end: "#FF6B75",
-                                                    }}
-                                                    duration={4}
-                                                    className="text-[2.0rem]"
-                                                >
-                                                    {modal.title}
-                                                </Text.Shimmer>
-                                            ) : (
-                                                <h6 className="truncate text-[2.0rem]">{modal.title}</h6>
-                                            )
+                                            <div className="flex items-center gap-[0.8rem]">
+                                                {SELECTED ? (
+                                                    <Text.Shimmer
+                                                        color={{
+                                                            start: "#780B12",
+                                                            end: "#FF6B75",
+                                                        }}
+                                                        duration={4}
+                                                        className="text-[2.0rem]"
+                                                    >
+                                                        {modal.title}
+                                                    </Text.Shimmer>
+                                                ) : (
+                                                    <h6 className="truncate text-[2.0rem]">{modal.title}</h6>
+                                                )}
+                                                <span className={`rounded-full px-[1.0rem] py-[0.4rem] text-[1.2rem] font-[700] leading-none ${statusClassName}`}>{statusLabel}</span>
+                                            </div>
                                         }
                                     />
 
