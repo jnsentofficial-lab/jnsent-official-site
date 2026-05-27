@@ -14,8 +14,8 @@ type NewsDetailPageProps = {
 };
 
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
-const defaultTitle = "NEWS 상세 | New Project 2";
-const defaultDescription = "New Project 2의 NEWS 상세 페이지입니다.";
+const defaultTitle = "NEWS 상세 | 제이엔에스 엔터테인먼트";
+const defaultDescription = "제이엔에스 엔터테인먼트의 NEWS 상세 페이지입니다.";
 const defaultImage = `${siteUrl}/images/seo/og-default.jpg`;
 
 async function getPublishedNewsBySlug(slug: string): Promise<News | null> {

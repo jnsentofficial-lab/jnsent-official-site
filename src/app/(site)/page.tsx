@@ -6,7 +6,7 @@ import Main from "@/widgets/layout/Main";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-    title: "New Project 2",
+    title: "제이엔에스 엔터테인먼트",
     description: "콘텐츠 비즈니스를 위한 운영 파트너입니다.",
 };
 
