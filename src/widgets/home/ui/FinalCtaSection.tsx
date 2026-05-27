@@ -61,11 +61,13 @@ export function FinalCtaSection() {
                         {`제이엔에스와 함께\n신뢰할 수 있는 미래를 만들어보세요`}
                     </Text.Reveal>
 
-                    <p className="text-[2.0rem] text-[var(--adaptive-greyOpacity700)] font-[500]">성장에 필요한 장비, 공간, 매니징, 정산 구조까지 처음부터 투명하게 안내합니다.</p>
+                    <p className="text-center text-[2.0rem] text-[var(--adaptive-greyOpacity700)] font-[500] leading-[1.5]">
+                        성장에 필요한 장비, 공간, 매니징, 정산 구조까지 처음부터 투명하게 안내합니다.
+                    </p>
                 </section>
 
                 <motion.a
-                    className="mt-10 inline-flex items-center justify-center rounded-full border border-white bg-black px-8 py-4 text-base font-[700] text-white"
+                    className="mt-10 inline-flex items-center justify-center rounded-full border border-white bg-black px-8 py-4 text-center text-base font-[700] text-white"
                     href="/bjSupport"
                     whileHover={{ y: -2 }}
                 >

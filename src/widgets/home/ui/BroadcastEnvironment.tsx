@@ -44,15 +44,15 @@ export function BroadcastEnvironment() {
                     {supportItems.map((item) => (
                         <div
                             key={item.title}
-                            className="flex flex-col gap-[1.6rem]"
+                            className="flex flex-col mobile:gap-[0.8rem] pc:gap-[1.6rem]"
                         >
-                            <h6 className="text-right text-[2.4rem] font-[700]">{item.title}</h6>
-                            <p className="text-right text-[1.8rem] text-[var(--adaptive-black400)] font-[500]">{item.text}</p>
+                            <h6 className="text-right mobile:text-[1.8rem] pc:text-[2.4rem] font-[700]">{item.title}</h6>
+                            <p className="text-right mobile:text-[1.4rem] pc:text-[1.8rem] text-[var(--adaptive-black400)] font-[500]">{item.text}</p>
                         </div>
                     ))}
                 </div>
 
-                <p className="mt-12 text-sm leading-[1.5] text-neutral-400">* 온라인 이미지만 속지 마세요. 실제 방송 환경을 직접 눈으로 확인하실 수 있습니다.</p>
+                <p className="mt-12 text-sm leading-[1.5] text-right text-neutral-400">* 온라인 이미지만 속지 마세요. 실제 방송 환경을 직접 눈으로 확인하실 수 있습니다.</p>
             </div>
 
             <div className="mobile:w-full pc:w-[50dvw]">

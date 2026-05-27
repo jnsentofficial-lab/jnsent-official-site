@@ -30,13 +30,14 @@ export function RecordGraph() {
                             alt=""
                             width={32}
                             height={32}
+                            className="mobile:w-[2.4rem] mobile:h-[2.4rem] pc:w-[3.2rem] pc:h-[3.2rem]"
                         />
 
                         <Text.Shimmer
-                            className="text-[2.4rem] font-[900] font-[NanumSquare]"
+                            className="mobile:text-[1.8rem] pc:text-[2.4rem] font-[700] font-[NanumSquare]"
                             color={{
                                 start: "#000000",
-                                end: "#ffffff",
+                                end: "#e0e0e0",
                             }}
                             duration={10}
                         >
@@ -50,7 +51,10 @@ export function RecordGraph() {
                             width={32}
                             style={{
                                 transform: "scaleX(-1)",
+                                // width: "2.4rem",
+                                // height: "2.4rem",
                             }}
+                            className="mobile:w-[2.4rem] mobile:h-[2.4rem] pc:w-[3.2rem] pc:h-[3.2rem]"
                         />
                     </section>
 

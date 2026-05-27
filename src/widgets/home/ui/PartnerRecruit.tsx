@@ -61,10 +61,10 @@ export function PartnerRecruit() {
                         {recruitInfo.map((item) => (
                             <div
                                 key={item.title}
-                                className="flex flex-col gap-[1.6rem]"
+                                className="flex flex-col mobile:gap-[0.4rem] pc:gap-[1.6rem]"
                             >
-                                <h6 className="text-[2.4rem] font-[700]">{item.title}</h6>
-                                <p className="text-[1.8rem] text-[var(--adaptive-black400)] font-[500]">{item.text}</p>
+                                <h6 className="mobile:text-[1.8rem] pc:text-[2.4rem] font-[700]">{item.title}</h6>
+                                <p className="mobile:text-[1.4rem] pc:text-[1.8rem] text-[var(--adaptive-black400)] font-[500] leading-[1.5]">{item.text}</p>
                             </div>
                         ))}
                     </div>

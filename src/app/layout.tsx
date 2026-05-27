@@ -66,7 +66,7 @@ export default function RootLayout({
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                     type="application/ld+json"
                 />
-                {/* <Script
+                <Script
                     id="smartlog-script"
                     strategy="afterInteractive" // 주석 풀고 사용하시는 걸 추천합니다
                     dangerouslySetInnerHTML={{
@@ -85,7 +85,7 @@ export default function RootLayout({
       })();
     `,
                     }}
-                /> */}
+                />
             </head>
             <body>
                 {/* <body className={`${nanumSquare.variable} ${nanumSquare.className}`}> */}

@@ -86,15 +86,15 @@ export function OperationKnowhow() {
                         {knowhowItems.map((item, index) => (
                             <motion.div
                                 key={item.title}
-                                className="flex flex-col gap-[1.6rem]"
+                                className="flex flex-col mobile:gap-[0.8rem] pc:gap-[1.6rem]"
                                 // variants={{
                                 //     hidden: { opacity: 0, y: 132 },
                                 //     visible: { opacity: 1, y: 0 },
                                 // }}
                                 // transition={{ duration: 0, ease: "easeInOut" }}
                             >
-                                <h3 className="text-[2.0rem]">{item.title}</h3>
-                                <p className="text-[1.6rem] font-[500]">{item.text}</p>
+                                <h3 className="mobile:text-[1.8rem] pc:text-[2.4rem]">{item.title}</h3>
+                                <p className="mobile:text-[1.4rem] pc:text-[1.8rem] font-[500] leading-[1.5]">{item.text}</p>
                             </motion.div>
                         ))}
                     </motion.div>

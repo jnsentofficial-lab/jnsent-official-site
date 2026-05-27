@@ -61,15 +61,15 @@ export function TrustPrinciples() {
                 </Text.Reveal>
 
                 <section className="w-full flex gap-[1.6rem] items-center mobile:flex-col pc:flex-row">
-                    <div className="flex-1 flex flex-col gap-[0.4rem]">
+                    <div className="flex-1 flex flex-col gap-[0.4rem] mobile:w-full pc:w-auto">
                         {principleItems.map((item) => (
                             <article
-                                className="rounded-[3.2rem] bg-white p-[3.2rem] flex flex-col gap-[1.2rem]"
+                                className="rounded-[3.2rem] p-[3.2rem] flex flex-col gap-[1.2rem]"
                                 // className="rounded-2xl bg-white px-8 py-7 shadow-[0_1.2rem_3rem_rgba(20,30,40,0.06)]"
                                 key={item.title}
                             >
-                                <h6 className="text-[2.4rem]">{item.title}</h6>
-                                <p className="text-[1.8rem] text-[var(--adaptive-black300)] font-[500] whitespace-break-spaces leading-[1.5]">{item.text}</p>
+                                <h6 className="mobile:text-[1.8rem] pc:text-[2.4rem]">{item.title}</h6>
+                                <p className="mobile:text-[1.4rem] pc:text-[1.8rem] text-[var(--adaptive-black300)] font-[500] whitespace-break-spaces leading-[1.5]">{item.text}</p>
                             </article>
                         ))}
                     </div>
@@ -104,7 +104,7 @@ export function TrustPrinciples() {
                             </section>
 
                             <section className="flex flex-col gap-[1.6rem]">
-                                <div className="flex justify-between">
+                                <div className="grid mobile:grid-cols-[1fr_1fr] pc:grid-cols-[1fr_1fr_1fr_1fr] mobile:gap-[3.2rem] pc:gap-0">
                                     {openItems.map((mappedItem, mappedIdx) => (
                                         <div key={mappedIdx}>
                                             <Image
@@ -113,7 +113,7 @@ export function TrustPrinciples() {
                                                 width={48}
                                                 height={48}
                                             />
-                                            <p className="leading-[1.5] font-[500] whitespace-break-spaces">{mappedItem.description}</p>
+                                            <p className="leading-[1.5] font-[400] whitespace-break-spaces">{mappedItem.description}</p>
                                         </div>
                                     ))}
                                 </div>
@@ -125,7 +125,7 @@ export function TrustPrinciples() {
                                         width={20}
                                         height={20}
                                     />
-                                    <p className="text-[#89FF49]">말이 아닌, 눈으로 확인 할 수 있는 신뢰를 약속드립니다.</p>
+                                    <p className="text-[#89FF49] font-[400] leading-[1.5]">말이 아닌, 눈으로 확인 할 수 있는 신뢰를 약속드립니다.</p>
                                 </div>
                             </section>
                         </section>

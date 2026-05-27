@@ -8,7 +8,7 @@ import { useLayoutStore } from "@/shared/stores/useLayoutStore";
 import { InquiryModal } from "@/widgets/home/modal";
 import Image from "next/image";
 
-const socialItems = ["kakao", "insta", "blog"];
+const socialItems = ["kakao", "insta", "blog", ""];
 
 export const Floating = () => {
     const [isInquiryOpen, setIsInquiryOpen] = useState(false);
@@ -97,7 +97,7 @@ const QuickMenu = () => {
         <AnimatePresence>
             {isReadyLanding ? (
                 // <aside className="fixed right-7 bottom-[1.6rem] z-30 grid gap-4 max-[86rem]:hidden">
-                <aside className="fixed right-7 bottom-[1.6rem] z-30 max-[86rem]:hidden flex flex-col items-center justify-center gap-[2.4rem]">
+                <aside className="fixed right-7 bottom-[1.6rem] z-30 flex flex-col items-center justify-center gap-[2.4rem]">
                     <section className="flex flex-col gap-[0.8rem]">
                         {socialItems.map((item) => (
                             <a
@@ -105,12 +105,14 @@ const QuickMenu = () => {
                                 href="/bjSupport"
                                 key={item}
                             >
-                                <Image
-                                    src={`/images/icon/route/home/ico-floating-${item}.svg`}
-                                    alt=""
-                                    height={58}
-                                    width={58}
-                                />
+                                {item ? (
+                                    <Image
+                                        src={`/images/icon/route/home/ico-floating-${item}.svg`}
+                                        alt=""
+                                        height={58}
+                                        width={58}
+                                    />
+                                ) : null}
                             </a>
                         ))}
                     </section>
