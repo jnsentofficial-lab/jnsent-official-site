@@ -113,7 +113,7 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                 <h1 className="text-[3.2rem] mobile:px-[1.6rem] pc:px-[5.2rem] pt-[5.2rem]">계정 편집</h1>
 
                 <form
-                    className="flex flex-col mobile:px-[1.6rem] pc:px-[5.2rem] flex-1"
+                    className="flex flex-col gap-[3.8rem] mobile:px-[1.6rem] pc:px-[5.2rem] flex-1"
                     onSubmit={(event) => {
                         void handleSubmit(event);
                     }}

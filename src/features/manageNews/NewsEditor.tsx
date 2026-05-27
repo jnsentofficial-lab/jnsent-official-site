@@ -121,7 +121,7 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
             <h1 className="text-[3.2rem] mobile:px-[1.6rem] pc:px-[5.2rem] pt-[5.2rem]">뉴스 {news ? "편집" : "생성"}</h1>
 
             <form
-                className="flex flex-col mobile:px-[1.6rem] pc:px-[5.2rem] flex-1"
+                className="flex flex-col gap-[3.8rem] mobile:px-[1.6rem] pc:px-[5.2rem] flex-1"
                 onSubmit={handleSubmit}
                 ref={formRef}
             >
@@ -190,6 +190,44 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
                         value={publishedAt}
                     />
                 </label>
+
+                <div className="flex flex-col gap-[1.2rem]">
+                    <h6>내용</h6>
+                    {/* <label className={labelClassName}>
+                        SEO 제목
+                        <input
+                            className={inputClassName}
+                            onChange={(event) => setSeoTitle(event.target.value)}
+                            placeholder="metadata title"
+                            type="text"
+                            value={seoTitle}
+                        />
+                    </label>
+
+                    <label className={labelClassName}>
+                        SEO 설명
+                        <input
+                            className={inputClassName}
+                            onChange={(event) => setSeoDescription(event.target.value)}
+                            placeholder="metadata description"
+                            type="text"
+                            value={seoDescription}
+                        />
+                    </label> */}
+
+                    {/* <label className={labelClassName}>
+                        본문
+                    </label> */}
+                    <div className="border border-[var(--adaptive-black100)]">
+                        <RichTextEditor
+                            value={body}
+                            onChange={setBody}
+                            onImageUpload={handleImageUpload}
+                            placeholder="NEWS 본문을 입력하세요."
+                        />
+                    </div>
+                </div>
+
                 <label className={labelClassName}>
                     <section className="flex flex-col gap-[1.2rem]">
                         <h6 className="text-[1.6rem]">첨부된 이미지</h6>
@@ -233,43 +271,6 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
                         </div>
                     )}
                 </label>
-
-                <div className="flex flex-col gap-[1.2rem]">
-                    <h6>내용</h6>
-                    {/* <label className={labelClassName}>
-                        SEO 제목
-                        <input
-                            className={inputClassName}
-                            onChange={(event) => setSeoTitle(event.target.value)}
-                            placeholder="metadata title"
-                            type="text"
-                            value={seoTitle}
-                        />
-                    </label>
-
-                    <label className={labelClassName}>
-                        SEO 설명
-                        <input
-                            className={inputClassName}
-                            onChange={(event) => setSeoDescription(event.target.value)}
-                            placeholder="metadata description"
-                            type="text"
-                            value={seoDescription}
-                        />
-                    </label> */}
-
-                    {/* <label className={labelClassName}>
-                        본문
-                    </label> */}
-                    <div className="border border-[var(--adaptive-black100)]">
-                        <RichTextEditor
-                            value={body}
-                            onChange={setBody}
-                            onImageUpload={handleImageUpload}
-                            placeholder="NEWS 본문을 입력하세요."
-                        />
-                    </div>
-                </div>
 
                 {statusMessage ? (
                     <p
