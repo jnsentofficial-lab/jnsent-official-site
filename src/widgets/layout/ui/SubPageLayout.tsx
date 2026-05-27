@@ -3,11 +3,13 @@
 import { FormEvent, ReactNode, useEffect, useRef, useState } from "react";
 import { motion, PanInfo, useAnimationFrame, useMotionValue } from "framer-motion";
 import { useCreateInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
+import { buildAvailableTime, buildRegion, CONTACT_HOUR_OPTIONS, CONTACT_PERIOD_OPTIONS, formatPhoneNumber, REGION_OPTIONS, sanitizeNameInput } from "@/entities/inquiry/lib/formFields";
 import type { CreateInquiryPayload } from "@/entities/inquiry/model/inquiry.type";
 import { buildInquiryMessageBody } from "@/entities/inquiry/lib/buildMessageBody";
 import { showErrorToast } from "@/shared/lib/toast";
 import UI from "@/shared/ui/UIComponent";
 import Image from "next/image";
+import { useToastStore } from "@/shared/model/stores/useToastStore";
 
 type SubPageHeroProps = {
     current: string;
@@ -88,7 +90,7 @@ export function SubPageHero({ current, title, description }: SubPageHeroProps) {
                     <p className="mobile:text-[1.8rem] pc:text-[2.4rem] font-[700]">{current}</p>
                 </motion.section>
 
-                <section className="grid grid-cols-4 gap-10 max-[86rem]:grid-cols-1">
+                <section className="grid grid-cols-4 gap-16 max-[86rem]:grid-cols-1">
                     <motion.h1
                         className="col-span-2 whitespace-break-spaces font-[700] mobile:text-[3.2rem] pc:text-[5.2rem] leading-[1.5]"
                         initial={{ opacity: 0, transform: "translateY(100px)" }}
@@ -169,7 +171,7 @@ export function SubPageSplit({ left, right, className = "" }: SubPageSplitProps)
 
 export function SubPageSection({ title, className, children }: InfoCardProps) {
     return (
-        <section className={`flex flex-col gap-[1.6rem]`}>
+        <section className={`flex flex-col gap-[3.2rem]`}>
             <h2 className={`${className} mobile:text-[2.0rem] pc:text-[2.4rem] font-[700] font-[NanumSquare] text-black whitespace-break-spaces leading-[1.5]`}>{title}</h2>
 
             {children}
@@ -221,24 +223,38 @@ export function NoticeBox() {
 }
 
 export function InquiryRequestForm({ category, title = "기본정보", messageLabel = "문의사항", buttonLabel = "요청하기", showEmail = false, chips = [] }: InquiryRequestFormProps) {
+    const { setToast } = useToastStore();
     const createInquiry = useCreateInquiryMutation();
     const [selected, setSelected] = useState<Record<string, string>>({});
+    const [province, setProvince] = useState("");
+    const [city, setCity] = useState("");
+    const [detailAddress, setDetailAddress] = useState("");
+    const [contactPeriod, setContactPeriod] = useState("");
+    const [contactHour, setContactHour] = useState("");
     const [agreed, setAgreed] = useState(false);
     const [status, setStatus] = useState("");
+    const cityOptions = province ? REGION_OPTIONS[province as keyof typeof REGION_OPTIONS] : [];
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const form = event.currentTarget;
         const formData = new FormData(form);
-        const name = String(formData.get("name") ?? "").trim();
-        const phone = String(formData.get("phone") ?? "").trim();
+        const name = sanitizeNameInput(String(formData.get("name") ?? "")).trim();
+        const phone = formatPhoneNumber(String(formData.get("phone") ?? "").trim());
         const email = String(formData.get("email") ?? "").trim();
-        const availableTime = String(formData.get("availableTime") ?? "").trim();
+        const availableTime = buildAvailableTime(contactPeriod, contactHour);
+        const region = buildRegion(province, city, detailAddress);
         const message = String(formData.get("message") ?? "").trim();
 
         if (!name || !phone || !agreed) {
             setStatus("이름, 연락처, 개인정보 동의를 확인해주세요.");
             showErrorToast("이름, 연락처, 개인정보 동의를 확인해주세요.", 2);
+            return;
+        }
+
+        if (!availableTime || !region) {
+            setStatus("지역과 연락 가능한 시각을 선택해주세요.");
+            showErrorToast("지역과 연락 가능한 시각을 선택해주세요.", 2);
             return;
         }
 
@@ -256,11 +272,14 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
             phone,
             email: email || null,
             category,
+            region,
             message: plainMessage,
+            available_time: availableTime,
             message_body: buildInquiryMessageBody({
                 이름: name,
                 연락처: phone,
                 이메일: email,
+                지역: region,
                 "연락 가능한 시각": availableTime,
                 ...selected,
                 문의사항: plainMessage,
@@ -272,6 +291,11 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
             await createInquiry.mutateAsync(payload);
             form.reset();
             setSelected({});
+            setProvince("");
+            setCity("");
+            setDetailAddress("");
+            setContactPeriod("");
+            setContactHour("");
             setAgreed(false);
             setStatus("요청이 접수되었습니다.");
         } catch (error) {
@@ -316,6 +340,7 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
                     ))}
                 </SubPageSection>
             ) : null}
+            <section className="w-full bg-[var(--adaptive-black100)] h-[0.1rem]" />
 
             <section className="flex flex-col gap-[3.2rem]">
                 <SubPageSection title={title} />
@@ -324,6 +349,10 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
                     <UI.Input
                         name="name"
                         placeholder="이름을 남겨주세요"
+                        maxLength={20}
+                        onChange={(event) => {
+                            event.currentTarget.value = sanitizeNameInput(event.currentTarget.value);
+                        }}
                     />
                 </label>
                 <label className="grid gap-3 text-[1.6rem] font-[700] text-black font-[NanumSquare]">
@@ -332,6 +361,11 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
                         name="phone"
                         placeholder="연락처를 남겨주세요"
                         type="tel"
+                        inputMode="numeric"
+                        maxLength={13}
+                        onChange={(event) => {
+                            event.currentTarget.value = formatPhoneNumber(event.currentTarget.value);
+                        }}
                     />
                 </label>
                 {showEmail ? (
@@ -345,11 +379,54 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
                     </label>
                 ) : null}
                 <label className="grid gap-3 text-[1.6rem] font-[700] text-black font-[NanumSquare]">
+                    지역
+                    <div className="grid gap-[0.8rem]">
+                        <div className="grid grid-cols-2 gap-[0.8rem]">
+                            <UI.Select
+                                className="rounded-[1.4rem] border border-[var(--adaptive-black100)] px-[1.6rem] h-[5.2rem]"
+                                options={[{ label: "~도 선택", value: "" }, ...Object.keys(REGION_OPTIONS).map((option) => ({ label: option, value: option }))]}
+                                // size="md"
+                                value={province}
+                                onChange={(event) => {
+                                    setProvince(event.target.value);
+                                    setCity("");
+                                }}
+                            />
+                            <UI.Select
+                                className="rounded-[1.4rem] border border-[var(--adaptive-black100)] px-[1.6rem] h-[5.2rem]"
+                                disabled={!province}
+                                options={[{ label: "~시 선택", value: "" }, ...cityOptions.map((option) => ({ label: option, value: option }))]}
+                                // size="md"
+                                value={city}
+                                onChange={(event) => setCity(event.target.value)}
+                            />
+                        </div>
+                        <UI.Input
+                            name="detailAddress"
+                            placeholder="상세 주소를 입력해주세요"
+                            value={detailAddress}
+                            onChange={(event) => setDetailAddress(event.target.value)}
+                        />
+                    </div>
+                </label>
+                <label className="grid gap-3 text-[1.6rem] font-[700] text-black font-[NanumSquare]">
                     연락 가능한 시각
-                    <UI.Input
-                        name="availableTime"
-                        placeholder="연락 가능한 시간을 남겨주세요"
-                    />
+                    <div className="grid grid-cols-2 gap-[0.8rem]">
+                        <UI.Select
+                            className="rounded-[1.4rem] border border-[var(--adaptive-black100)] px-[1.6rem] h-[5.2rem]"
+                            options={[{ label: "오전/오후 선택", value: "" }, ...CONTACT_PERIOD_OPTIONS.map((option) => ({ label: option, value: option }))]}
+                            size="md"
+                            value={contactPeriod}
+                            onChange={(event) => setContactPeriod(event.target.value)}
+                        />
+                        <UI.Select
+                            className="rounded-[1.4rem] border border-[var(--adaptive-black100)] px-[1.6rem] h-[5.2rem]"
+                            options={[{ label: "시간 선택", value: "" }, ...CONTACT_HOUR_OPTIONS.map((option) => ({ label: option, value: option }))]}
+                            size="md"
+                            value={contactHour}
+                            onChange={(event) => setContactHour(event.target.value)}
+                        />
+                    </div>
                 </label>
                 <label className="grid gap-3 text-[1.6rem] font-[700] text-black font-[NanumSquare]">
                     {messageLabel}
@@ -492,7 +569,7 @@ export function StudioSlider({ items, touch = false }: StudioSliderProps) {
             >
                 {sliderItems.map((item, index) => (
                     <article
-                        className="relative h-[50dvh] w-[50dvw] overflow-hidden rounded-[0rem] bg-black max-[86rem]:h-[28rem] max-[86rem]:w-[34rem]"
+                        className="relative h-[50dvh] w-[50dvw] overflow-hidden rounded-[0rem] bg-black max-[86rem]:h-[24rem] max-[86rem]:w-[min(34rem,calc(100vw-3.2rem))]"
                         key={`${item.title}-${index}`}
                     >
                         <img
@@ -501,8 +578,8 @@ export function StudioSlider({ items, touch = false }: StudioSliderProps) {
                             src={item.image}
                         />
 
-                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-[3.2rem] h-[50%] flex items-end">
-                            <h6 className="text-white font-[700] text-[3.2rem]">{item.title}</h6>
+                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent mobile:p-[2rem] pc:p-[3.2rem] h-[50%] flex items-end">
+                            <h6 className="text-white font-[700] mobile:text-[2.4rem] pc:text-[3.2rem]">{item.title}</h6>
                         </div>
                     </article>
                 ))}

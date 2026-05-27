@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { useVisibleGlobalModalsQuery } from "@/entities/globalModal/api/globalModal.query";
 import type { GlobalModal } from "@/entities/globalModal/model/globalModal.type";
+import { useGlobalModalPreviewStore } from "@/entities/globalModal/model/useGlobalModalPreviewStore";
 import Modal from "@/shared/ui/composed/Modal";
 
 type ActiveByPosition = Record<string, number>;
@@ -39,8 +40,14 @@ function isDismissed(modal: GlobalModal) {
     return value ? Number(value) > Date.now() : false;
 }
 
-export function GlobalModalLayer() {
-    const { data: modals } = useVisibleGlobalModalsQuery();
+type GlobalModalLayerProps = {
+    includePublic?: boolean;
+};
+
+export function GlobalModalLayer({ includePublic = true }: GlobalModalLayerProps) {
+    const { data: modals } = useVisibleGlobalModalsQuery(includePublic);
+    const previewModal = useGlobalModalPreviewStore((state) => state.previewModal);
+    const closePreviewModal = useGlobalModalPreviewStore((state) => state.closePreviewModal);
     const [activeByPosition, setActiveByPosition] = useState<ActiveByPosition>({});
     const [closedIds, setClosedIds] = useState<string[]>([]);
     const grouped = useMemo(() => {
@@ -57,8 +64,14 @@ export function GlobalModalLayer() {
     const visibleModals = Object.entries(grouped)
         .map(([key, items]) => items[activeByPosition[key] ?? 0])
         .filter(Boolean);
+    const layeredModals = previewModal ? [previewModal, ...visibleModals] : visibleModals;
 
     function closeModal(modal: GlobalModal) {
+        if (previewModal?.id === modal.id) {
+            closePreviewModal();
+            return;
+        }
+
         const until = getUntil(modal);
 
         if (until) {
@@ -80,38 +93,42 @@ export function GlobalModalLayer() {
         setClosedIds((previous) => [...previous, modal.id]);
     }
 
-    if (!visibleModals.length) {
+    if (!layeredModals.length) {
         return null;
     }
 
     return (
         <>
-            {visibleModals.map((modal) => (
+            {layeredModals.map((modal) => (
                 <Modal
-                    key={modal.id}
+                    key={previewModal?.id === modal.id ? `preview:${modal.id}` : modal.id}
                     title={modal.title}
                     description={modal.content}
                     open
                     placement={{ col: modal.col, row: modal.row }}
                     onClose={() => closeModal(modal)}
-                    className="max-w-[min(42rem,calc(100vw-3.2rem))]"
+                    className="w-fit max-w-[calc(100vw-3.2rem)] bg-transparent shadow-none"
+                    // className="w-fit max-w-[calc(100vw-3.2rem)] bg-transparent shadow-none"
                     actions={[
                         ...(modal.dismiss_type === "today" ? [{ title: "오늘 하루 닫기", type: "action" as const, onClick: () => closeModal(modal) }] : []),
                         ...(modal.dismiss_type === "days" ? [{ title: `${modal.dismiss_days ?? 1}일 동안 닫기`, type: "action" as const, onClick: () => closeModal(modal) }] : []),
                         { title: "닫기", type: "close" },
                     ]}
                 >
-                    {modal.image_url ? (
-                        <Modal.Container>
-                            <Modal.Item>
-                                <img
-                                    className="block max-h-[22rem] w-full object-cover"
-                                    alt=""
-                                    src={modal.image_url}
-                                />
-                            </Modal.Item>
-                        </Modal.Container>
-                    ) : null}
+                    <section>
+                        {modal.image_url ? (
+                            <img
+                                // className="block h-auto max-h-[calc(100dvh-3.2rem)] w-auto max-w-full object-contain"
+                                className="block h-auto min-h-[51.2rem] max-h-[50dvh] w-auto max-w-full object-contain"
+                                alt=""
+                                src={modal.image_url}
+                            />
+                        ) : null}
+                    </section>
+                    {/* // <Modal.Container>
+                    //     <Modal.Item>
+                    //     </Modal.Item>
+                    // </Modal.Container> */}
                 </Modal>
             ))}
         </>

@@ -8,7 +8,7 @@ import { useLayoutStore } from "@/shared/stores/useLayoutStore";
 import { InquiryModal } from "@/widgets/home/modal";
 import Image from "next/image";
 
-const socialItems = ["kakao", "insta", "blog"];
+const socialItems = ["kakao", "insta", "blog", ""];
 
 export const Floating = () => {
     const [isInquiryOpen, setIsInquiryOpen] = useState(false);
@@ -46,7 +46,7 @@ const FloatingBar = ({ onInquiryClick }: { onInquiryClick: () => void }) => {
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: 100, opacity: 0 }}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    className="fixed bottom-[1.6rem] left-[50%] transform translate-x-[-50%] bg-black h-[6.2rem] flex items-center rounded-full p-[0.4rem] mobile:max-w-[100dvw] pc:max-w-[var(--size-tablet)] w-full z-10"
+                    className="fixed bottom-[1.6rem] left-[50%] z-10 flex h-[6.2rem] w-[calc(100vw-1.6rem)] max-w-[var(--size-tablet)] -translate-x-1/2 items-center rounded-full bg-black p-[0.4rem] mobile:bottom-[max(1.6rem,env(safe-area-inset-bottom))]"
                 >
                     <div className="px-[1.6rem]">
                         <img
@@ -97,7 +97,7 @@ const QuickMenu = () => {
         <AnimatePresence>
             {isReadyLanding ? (
                 // <aside className="fixed right-7 bottom-[1.6rem] z-30 grid gap-4 max-[86rem]:hidden">
-                <aside className="fixed right-7 bottom-[1.6rem] z-30 max-[86rem]:hidden flex flex-col items-center justify-center gap-[2.4rem]">
+                <aside className="fixed right-7 bottom-[1.6rem] z-30 flex flex-col items-center justify-center gap-[2.4rem]">
                     <section className="flex flex-col gap-[0.8rem]">
                         {socialItems.map((item) => (
                             <a
@@ -105,12 +105,14 @@ const QuickMenu = () => {
                                 href="/bjSupport"
                                 key={item}
                             >
-                                <Image
-                                    src={`/images/icon/route/home/ico-floating-${item}.svg`}
-                                    alt=""
-                                    height={58}
-                                    width={58}
-                                />
+                                {item ? (
+                                    <Image
+                                        src={`/images/icon/route/home/ico-floating-${item}.svg`}
+                                        alt=""
+                                        height={58}
+                                        width={58}
+                                    />
+                                ) : null}
                             </a>
                         ))}
                     </section>

@@ -4,7 +4,7 @@ import Image from "@tiptap/extension-image";
 import { Placeholder } from "@tiptap/extensions/placeholder";
 import { EditorContent, useEditor, useEditorState } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, Fragment, useEffect, useRef, useState } from "react";
 import type { RichTextContent } from "@/shared/lib/richText/richText";
 import { emptyRichTextContent } from "@/shared/lib/richText/richText";
 
@@ -24,7 +24,8 @@ const toolbarButtons = [
     { label: "1.", action: "orderedList" },
 ] as const;
 
-const toolbarButtonClassName = "flex h-[3.2rem] w-[4.2rem] items-center justify-center rounded-[1.2rem] border text-[1.4rem] font-semibold transition-colors select-none";
+// const toolbarButtonClassName = "flex h-[3.2rem] w-[4.2rem] items-center justify-center rounded-[1.2rem] border text-[1.4rem] font-semibold transition-colors select-none";
+const toolbarButtonClassName = "flex flex-1 h-[5.2rem] items-center justify-center text-[1.4rem] font-semibold transition-colors select-none bg-[var(--adaptive-black200)]";
 const toolbarButtonIdleClassName = "border-slate-200 bg-white text-slate-700 hover:bg-[var(--adaptive-grey100)]";
 const toolbarButtonActiveClassName = "border-blue-500 bg-blue-50 text-blue-700";
 const editorContentClassName =
@@ -161,37 +162,41 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
     return (
         <div>
             <div
-                className="mb-[1.6rem] flex gap-[0.4rem]"
+                className="sticky z-10 bg-white flex border-b border-b-[var(--adaptive-black100)]"
                 data-rich-text-toolbar
             >
                 {toolbarButtons.map((button) => (
-                    <button
-                        className={`${toolbarButtonClassName} ${
-                            (button.action === "bold" && editorState?.isBold) ||
-                            (button.action === "italic" && editorState?.isItalic) ||
-                            (button.action === "underline" && editorState?.isUnderline) ||
-                            (button.action === "heading" && editorState?.isHeading) ||
-                            (button.action === "bulletList" && editorState?.isBulletList) ||
-                            (button.action === "orderedList" && editorState?.isOrderedList)
-                                ? toolbarButtonActiveClassName
-                                : toolbarButtonIdleClassName
-                        }`}
-                        key={button.action}
-                        onPointerDown={(event) => {
-                            event.preventDefault();
-                            runToolbarCommand(() => {
-                                if (button.action === "bold") editor?.chain().toggleBold().run();
-                                if (button.action === "italic") editor?.chain().toggleItalic().run();
-                                if (button.action === "underline") editor?.chain().toggleUnderline().run();
-                                if (button.action === "heading") editor?.chain().toggleHeading({ level: 2 }).run();
-                                if (button.action === "bulletList") editor?.chain().toggleBulletList().run();
-                                if (button.action === "orderedList") editor?.chain().toggleOrderedList().run();
-                            });
-                        }}
-                        type="button"
-                    >
-                        {button.label}
-                    </button>
+                    <Fragment key={button.action}>
+                        <button
+                            className={`${toolbarButtonClassName} ${
+                                (button.action === "bold" && editorState?.isBold) ||
+                                (button.action === "italic" && editorState?.isItalic) ||
+                                (button.action === "underline" && editorState?.isUnderline) ||
+                                (button.action === "heading" && editorState?.isHeading) ||
+                                (button.action === "bulletList" && editorState?.isBulletList) ||
+                                (button.action === "orderedList" && editorState?.isOrderedList)
+                                    ? toolbarButtonActiveClassName
+                                    : toolbarButtonIdleClassName
+                            }`}
+                            key={button.action}
+                            onPointerDown={(event) => {
+                                event.preventDefault();
+                                runToolbarCommand(() => {
+                                    if (button.action === "bold") editor?.chain().toggleBold().run();
+                                    if (button.action === "italic") editor?.chain().toggleItalic().run();
+                                    if (button.action === "underline") editor?.chain().toggleUnderline().run();
+                                    if (button.action === "heading") editor?.chain().toggleHeading({ level: 2 }).run();
+                                    if (button.action === "bulletList") editor?.chain().toggleBulletList().run();
+                                    if (button.action === "orderedList") editor?.chain().toggleOrderedList().run();
+                                });
+                            }}
+                            type="button"
+                        >
+                            {button.label}
+                        </button>
+
+                        <div className="h-[3.2rem] w-[0.1rem] my-auto bg-[var(--adaptive-black100)]" />
+                    </Fragment>
                 ))}
                 <button
                     className={`${toolbarButtonClassName} ${editorState?.isLink ? toolbarButtonActiveClassName : toolbarButtonIdleClassName}`}
@@ -237,7 +242,10 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
                 </button>
             </div>
 
-            <EditorContent editor={editor} />
+            <EditorContent
+                editor={editor}
+                className="p-[1.6rem]"
+            />
         </div>
     );
 }

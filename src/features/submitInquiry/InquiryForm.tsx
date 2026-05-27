@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useUploadImageMutation } from "@/entities/asset/api/asset.query";
 import { useCreateInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
+import { formatPhoneNumber, sanitizeNameInput } from "@/entities/inquiry/lib/formFields";
 import { showErrorToast } from "@/shared/lib/toast";
 import { emptyRichTextContent, extractRichTextPlainText, toJsonContent } from "@/shared/lib/richText/richText";
 import type { RichTextContent } from "@/shared/lib/richText/richText";
@@ -15,7 +16,7 @@ export function InquiryForm() {
     const [status, setStatus] = useState<InquiryStatus>("idle");
     const [message, setMessage] = useState("필요한 지원 내용을 남겨주세요.");
     const [inquiryBody, setInquiryBody] = useState<RichTextContent>(emptyRichTextContent);
-    const uploadImage = useUploadImageMutation();
+    const uploadImage = useUploadImageMutation("public");
     const createInquiry = useCreateInquiryMutation();
 
     async function handleImageUpload(file: File) {
@@ -30,8 +31,8 @@ export function InquiryForm() {
         setMessage("상담 신청을 저장하고 있습니다.");
 
         const formData = new FormData(event.currentTarget);
-        const name = String(formData.get("name") ?? "").trim();
-        const phone = String(formData.get("phone") ?? "").trim();
+        const name = sanitizeNameInput(String(formData.get("name") ?? "")).trim();
+        const phone = formatPhoneNumber(String(formData.get("phone") ?? "").trim());
         const inquiryMessage = extractRichTextPlainText(inquiryBody);
 
         if (!name || !phone || !inquiryMessage) {
@@ -70,6 +71,10 @@ export function InquiryForm() {
                 <input
                     className="w-full rounded-lg border border-slate-300 px-4 py-3.5"
                     name="name"
+                    maxLength={20}
+                    onChange={(event) => {
+                        event.currentTarget.value = sanitizeNameInput(event.currentTarget.value);
+                    }}
                     placeholder="이름"
                     type="text"
                 />
@@ -79,6 +84,11 @@ export function InquiryForm() {
                 <input
                     className="w-full rounded-lg border border-slate-300 px-4 py-3.5"
                     name="phone"
+                    inputMode="numeric"
+                    maxLength={13}
+                    onChange={(event) => {
+                        event.currentTarget.value = formatPhoneNumber(event.currentTarget.value);
+                    }}
                     placeholder="연락처"
                     type="tel"
                 />

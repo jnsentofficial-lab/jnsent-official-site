@@ -63,26 +63,26 @@ export function Analysis() {
                                     {item.thumbnail_url ? (
                                         <img
                                             alt={item.title}
-                                            className="aspect-square w-full rounded-[5.2rem] object-cover transition duration-300 group-hover:scale-[1.02] select-none border border-[var(--adaptive-grey200)]"
+                                            className="aspect-square w-full mobile:rounded-[2.4rem] pc:rounded-[3rem] object-cover transition duration-300 group-hover:scale-[1.02] select-none border border-[var(--adaptive-grey200)]"
                                             src={item.thumbnail_url}
                                         />
                                     ) : (
-                                        <span className="flex aspect-square w-full items-center justify-center rounded-[3rem] bg-[var(--adaptiveGrey100)] text-lg font-[700] text-[var(--adaptiveGrey500)]">
+                                        <span className="flex aspect-square w-full items-center justify-center mobile:rounded-[2.4rem] pc:rounded-[3rem] bg-[var(--adaptiveGrey100)] text-lg font-[700] text-[var(--adaptiveGrey500)]">
                                             이미지 없음
                                         </span>
                                     )}
 
                                     <div className="flex flex-col gap-[0.8rem]">
-                                        <section className="flex items-center gap-[1.2rem]">
+                                        <section className="flex items-center mobile:gap-[0.8rem] pc:gap-[1.2rem] mobile:text-[1.4rem] pc:text-[1.6rem]">
                                             <p>{formatDate(item.published_at)}</p>
 
-                                            <div className="h-[1.2rem] w-[0.1rem] bg-[var(--adaptive-black300)]" />
+                                            <div className="h-[1.2rem] w-[0.1rem] bg-[var(--adaptive-black200)]" />
 
                                             <p>조회 {formatViewCount(item.view_count)}</p>
                                         </section>
 
                                         <section>
-                                            <h6 className="text-[2.4rem] leading-[1.5] text-left">{item.title}</h6>
+                                            <h6 className="mobile:text-[1.6rem] pc:text-[2.4rem] leading-[1.5] text-left line-clamp-2 break-words">{item.title}</h6>
                                         </section>
                                     </div>
                                 </UI.Linker>

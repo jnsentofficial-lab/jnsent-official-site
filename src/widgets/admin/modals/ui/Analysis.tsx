@@ -2,6 +2,7 @@
 
 import { Fragment, useEffect, useState } from "react";
 import { useAdminGlobalModalsQuery, useDeleteGlobalModalMutation, useToggleGlobalModalMutation } from "@/entities/globalModal/api/globalModal.query";
+import { useGlobalModalPreviewStore } from "@/entities/globalModal/model/useGlobalModalPreviewStore";
 import type { GlobalModal } from "@/entities/globalModal/model/globalModal.type";
 import { GlobalModalEditor } from "@/features/manageGlobalModal/GlobalModalEditor";
 import UI from "@/shared/ui/UIComponent";
@@ -9,19 +10,23 @@ import { AdminListRow, AdminListSection, AdminPagination, AdminSidePanel, AdminT
 import { useAdminSidePanelStore } from "@/widgets/admin/shared/model/useAdminSidePanelStore";
 import Image from "next/image";
 import { Text } from "@/shared/ui/kit/Text";
+import { useToastStore } from "@/shared/model/stores/useToastStore";
 
 const PANEL_KEY = "/admin/modals";
 
 export function Analysis() {
+    const { setToast } = useToastStore();
     const { data: modals = [], isLoading } = useAdminGlobalModalsQuery();
     const [selectedModal, setSelectedModal] = useState<GlobalModal | null>(null);
     const [deleteTarget, setDeleteTarget] = useState<GlobalModal | null>(null);
-    const [previewTarget, setPreviewTarget] = useState<GlobalModal | null>(null);
     const [pendingToggleId, setPendingToggleId] = useState<string | null>(null);
     const [page, setPage] = useState(1);
+    const [currentTime] = useState(() => Date.now());
     const toggleModal = useToggleGlobalModalMutation();
     const deleteModal = useDeleteGlobalModalMutation();
-    const pageSize = 5;
+    const openPreviewModal = useGlobalModalPreviewStore((state) => state.openPreviewModal);
+    const closePreviewModal = useGlobalModalPreviewStore((state) => state.closePreviewModal);
+    const pageSize = useAdminSidePanelStore((state) => state.listPageSize);
     const totalPages = Math.max(1, Math.ceil(modals.length / pageSize));
     const visibleModals = modals.slice((page - 1) * pageSize, page * pageSize);
     const openPanel = useAdminSidePanelStore((state) => state.openPanel);
@@ -31,6 +36,12 @@ export function Analysis() {
         closePanel(PANEL_KEY);
     }, [closePanel]);
 
+    useEffect(() => {
+        setPage(1);
+    }, [pageSize]);
+
+    useEffect(() => closePreviewModal, [closePreviewModal]);
+
     return (
         <AdminWorkspace>
             <AdminTwoPanel
@@ -38,15 +49,22 @@ export function Analysis() {
                 current="팝업 관리"
                 title="팝업 관리"
                 action={
-                    <UI.Button
+                    <button
+                        className="absolute bottom-[1.6rem] right-[1.6rem] bg-black hover:bg-[var(--adaptive-blue500)] cursor-pointer flex flex-col justify-center items-center gap-[1.2rem] h-[5.8rem] w-[5.8rem] rounded-full z-100 shadow-[0_0_50px_0_var(--adaptive-black500)]"
                         onClick={() => {
                             setSelectedModal(null);
                             openPanel(PANEL_KEY);
                         }}
                         type="button"
                     >
-                        + 생성하기
-                    </UI.Button>
+                        <Image
+                            src={"/images/icon/outlined/ico-outlined-edit.svg"}
+                            alt=""
+                            width={32}
+                            height={32}
+                            className="invert"
+                        />
+                    </button>
                 }
                 left={
                     <AdminListSection
@@ -63,6 +81,11 @@ export function Analysis() {
                     >
                         {visibleModals.map((modal, mappedIdx) => {
                             const SELECTED = selectedModal?.id === modal.id;
+                            const hasEnded = modal.ends_at ? new Date(modal.ends_at).getTime() < currentTime : false;
+                            const statusLabel = hasEnded ? "종료" : modal.is_visible ? "진행중" : "숨김";
+                            const statusClassName = statusLabel === "진행중"
+                                ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]"
+                                : "bg-[var(--adaptive-grey200)] text-[var(--adaptive-grey600)]";
 
                             return (
                                 <Fragment key={modal.id}>
@@ -70,33 +93,36 @@ export function Analysis() {
                                         actions={
                                             <>
                                                 <UI.Button
-                                                    className="h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
+                                                    className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
                                                     onClick={() => setDeleteTarget(modal)}
                                                     type="button"
                                                 >
                                                     <Image
                                                         src={"/images/icon/outlined/ico-outlined-trash.svg"}
                                                         alt=""
-                                                        width={32}
-                                                        height={32}
+                                                        width={24}
+                                                        height={24}
                                                     />
                                                     <p>삭제</p>
                                                 </UI.Button>
                                                 <UI.Button
-                                                    className="h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
-                                                    onClick={() => setPreviewTarget(modal)}
+                                                    className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
+                                                    onClick={() => {
+                                                        openPreviewModal(modal);
+                                                        setToast({ msg: "메인에 실제로 노출될 위치/이미지 입니다.", time: 3, type: "success" });
+                                                    }}
                                                     type="button"
                                                 >
                                                     <Image
                                                         src={"/images/icon/outlined/ico-outlined-eye.svg"}
                                                         alt=""
-                                                        width={32}
-                                                        height={32}
+                                                        width={24}
+                                                        height={24}
                                                     />
                                                     <p>미리보기</p>
                                                 </UI.Button>
                                                 <UI.Button
-                                                    className="h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
+                                                    className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
                                                     onClick={() => {
                                                         setPendingToggleId(modal.id);
                                                         toggleModal.mutate(
@@ -111,21 +137,23 @@ export function Analysis() {
                                                     <Image
                                                         src={"/images/icon/outlined/ico-outlined-eye.svg"}
                                                         alt=""
-                                                        width={32}
-                                                        height={32}
+                                                        width={24}
+                                                        height={24}
                                                     />
                                                     {pendingToggleId === modal.id ? "변경중입니다.." : modal.is_visible ? "숨김" : "표시"}
                                                 </UI.Button>
                                             </>
                                         }
                                         description={
-                                            <p className="text-[1.4rem] text-[var(--adaptive-black500)]">
-                                                김주석 주임 <span className="mx-3">|</span>
-                                                {modal.starts_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.starts_at)) : "시작일 없음"} ~{" "}
-                                                {modal.ends_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.ends_at)) : "종료일 없음"}
-                                                <span className="mx-3">|</span>
-                                                <span className={modal.is_visible ? "text-[var(--adaptiveRed400)]" : ""}>{modal.is_visible ? "진행중" : "종료"}</span>
-                                            </p>
+                                            <Fragment>
+                                                <div className="flex items-center gap-[0.8rem] text-[1.4rem]">
+                                                    <p className="text-[var(--adaptive-grey500)] text-left">김주석 주임</p>
+                                                </div>
+                                                <p className="text-[1.4rem] text-[var(--adaptive-grey500)] text-left">
+                                                    {modal.starts_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.starts_at)) : "시작일 없음"} ~{" "}
+                                                    {modal.ends_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.ends_at)) : "종료일 없음"}
+                                                </p>
+                                            </Fragment>
                                         }
                                         onClick={() => {
                                             setSelectedModal(modal);
@@ -146,20 +174,23 @@ export function Analysis() {
                                             )
                                         }
                                         title={
-                                            SELECTED ? (
-                                                <Text.Shimmer
-                                                    color={{
-                                                        start: "#780B12",
-                                                        end: "#FF6B75",
-                                                    }}
-                                                    duration={4}
-                                                    className="text-[2.0rem]"
-                                                >
-                                                    {modal.title}
-                                                </Text.Shimmer>
-                                            ) : (
-                                                <h6 className="truncate text-[2.0rem]">{modal.title}</h6>
-                                            )
+                                            <div className="flex items-center gap-[0.8rem]">
+                                                {SELECTED ? (
+                                                    <Text.Shimmer
+                                                        color={{
+                                                            start: "#780B12",
+                                                            end: "#FF6B75",
+                                                        }}
+                                                        duration={4}
+                                                        className="text-[2.0rem]"
+                                                    >
+                                                        {modal.title}
+                                                    </Text.Shimmer>
+                                                ) : (
+                                                    <h6 className="truncate text-[2.0rem]">{modal.title}</h6>
+                                                )}
+                                                <span className={`rounded-full px-[1.0rem] py-[0.4rem] text-[1.2rem] font-[700] leading-none ${statusClassName}`}>{statusLabel}</span>
+                                            </div>
                                         }
                                     />
 
@@ -181,33 +212,6 @@ export function Analysis() {
                     </AdminSidePanel>
                 }
             />
-            {previewTarget ? (
-                <div className="fixed inset-0 z-[90] bg-black/30 p-10">
-                    <div className="grid h-full grid-cols-3 grid-rows-3 gap-4">
-                        <div
-                            className="rounded-[2.4rem] bg-black p-8 text-white shadow-[0_2rem_6rem_rgba(0,0,0,0.3)]"
-                            style={{ gridColumn: previewTarget.col, gridRow: previewTarget.row }}
-                        >
-                            <button
-                                className="mb-4 text-white/70"
-                                onClick={() => setPreviewTarget(null)}
-                                type="button"
-                            >
-                                닫기
-                            </button>
-                            {previewTarget.image_url ? (
-                                <img
-                                    alt=""
-                                    className="mb-5 max-h-48 w-full rounded-xl object-cover"
-                                    src={previewTarget.image_url}
-                                />
-                            ) : null}
-                            <h3 className="mt-0 mb-4 text-3xl font-[700]">{previewTarget.title}</h3>
-                            <p className="m-0 text-lg font-semibold leading-[1.5] text-white/80">{previewTarget.content}</p>
-                        </div>
-                    </div>
-                </div>
-            ) : null}
             <ConfirmDialog
                 open={Boolean(deleteTarget)}
                 title="선택한 팝업을 삭제 할까요?"

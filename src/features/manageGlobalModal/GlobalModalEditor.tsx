@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, FormEvent, Fragment, useEffect, useRef, useState } from "react";
+import { ChangeEvent, DragEvent, FormEvent, Fragment, useEffect, useRef, useState } from "react";
 import { useUploadImageMutation } from "@/entities/asset/api/asset.query";
 import { useCreateGlobalModalMutation, useUpdateGlobalModalMutation } from "@/entities/globalModal/api/globalModal.query";
 import type { GlobalModal } from "@/entities/globalModal/model/globalModal.type";
@@ -23,6 +23,7 @@ const statusClassName = "m-0 text-sm font-bold text-green-700";
 const buttonClassName = "";
 // const buttonClassName = "min-h-11 rounded-lg bg-blue-500 font-bold text-white";
 const previewButtonClassName = "grid gap-3 rounded-lg border border-[var(--adaptive-grey200)] bg-white p-3 text-left";
+const uploadZoneBaseClassName = "group relative overflow-hidden rounded-[2.4rem] border border-dashed px-6 py-8 text-center transition-all duration-200 cursor-pointer";
 
 function toIsoDateTime(value: FormDataEntryValue | null) {
     const text = String(value ?? "").trim();
@@ -51,6 +52,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
     const [isVisible, setIsVisible] = useState(true);
     const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
     const [selectedImagePreviewUrl, setSelectedImagePreviewUrl] = useState<string | null>(null);
+    const [isDragActive, setIsDragActive] = useState(false);
     const createGlobalModal = useCreateGlobalModalMutation();
     const updateGlobalModal = useUpdateGlobalModalMutation();
     const uploadImage = useUploadImageMutation();
@@ -93,6 +95,34 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
     function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
         const nextFile = event.target.files?.[0] ?? null;
         setSelectedImageFile(nextFile);
+    }
+
+    function handleDragOver(event: DragEvent<HTMLLabelElement>) {
+        event.preventDefault();
+        setIsDragActive(true);
+    }
+
+    function handleDragLeave(event: DragEvent<HTMLLabelElement>) {
+        event.preventDefault();
+        setIsDragActive(false);
+    }
+
+    function handleDrop(event: DragEvent<HTMLLabelElement>) {
+        event.preventDefault();
+        setIsDragActive(false);
+
+        const nextFile = event.dataTransfer.files?.[0];
+        if (!nextFile || !nextFile.type.startsWith("image/")) {
+            return;
+        }
+
+        setSelectedImageFile(nextFile);
+
+        if (fileInputRef.current) {
+            const transfer = new DataTransfer();
+            transfer.items.add(nextFile);
+            fileInputRef.current.files = transfer.files;
+        }
     }
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -141,11 +171,31 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
 
     return (
         <Fragment>
+            <h1 className="text-[3.2rem] mobile:px-[1.6rem] pc:px-[5.2rem] pt-[5.2rem]">편집하기</h1>
+
             <form
-                className={formClassName}
+                className="grid gap-10 mobile:px-[1.6rem] pc:px-[5.2rem] flex-1"
+                // className={formClassName}
                 onSubmit={handleSubmit}
                 ref={formRef}
             >
+                <label className={labelClassName}>
+                    현재 설정 이미지
+                    <span className="text-sm font-bold text-[var(--adaptive-grey600)]">
+                        {selectedImageFile ? "새로 선택한 이미지가 저장됩니다" : effectiveImageUrl ? "저장된 이미지가 유지됩니다" : "설정된 이미지가 없습니다"}
+                    </span>
+                    {effectiveImageUrl ? (
+                        <img
+                            alt={title ? `${title} 이미지 미리보기` : "모달 이미지 미리보기"}
+                            className=""
+                            // className="h-40 w-full rounded-lg object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                            src={effectiveImageUrl}
+                        />
+                    ) : (
+                        <p className="m-0 text-sm font-semibold text-[var(--adaptive-grey600)]">이미지를 업로드하면 여기에서 바로 확인할 수 있습니다.</p>
+                    )}
+                </label>
+
                 <label className={labelClassName}>
                     제목
                     <input
@@ -169,37 +219,45 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                         value={content}
                     />
                 </label> */}
-                <label className={labelClassName}>
-                    이미지 업로드
-                    <input
-                        className={inputClassName}
-                        accept="image/jpeg,image/png,image/webp"
-                        onChange={handleImageChange}
-                        name="image"
-                        ref={fileInputRef}
-                        type="file"
-                    />
-                </label>
-                <section className="grid gap-3 rounded-lg border border-[var(--adaptive-grey200)] bg-[var(--adaptive-grey50)] p-4">
-                    <div className="flex items-center justify-between gap-3">
-                        <strong className="text-lg font-[700] text-black">현재 설정 이미지</strong>
-                        <span className="text-sm font-bold text-[var(--adaptive-grey600)]">
-                            {selectedImageFile ? "새로 선택한 이미지가 저장됩니다" : effectiveImageUrl ? "저장된 이미지가 유지됩니다" : "설정된 이미지가 없습니다"}
-                        </span>
-                    </div>
-                    {effectiveImageUrl ? (
-                        <div className={previewButtonClassName}>
+                <div className={labelClassName}>
+                    <span>이미지 업로드</span>
+                    <label
+                        className={`${uploadZoneBaseClassName} ${isDragActive ? "border-[var(--adaptive-blue500)] bg-[linear-gradient(180deg,#f7fbff_0%,#edf5ff_100%)] shadow-[0_1.6rem_4rem_rgba(46,126,255,0.12)]" : "border-[var(--adaptive-grey300)] bg-[linear-gradient(180deg,#fcfcfc_0%,#f4f4f4_100%)] hover:border-[var(--adaptive-grey700)] hover:shadow-[0_1.2rem_3rem_rgba(15,23,42,0.08)]"}`}
+                        onDragLeave={handleDragLeave}
+                        onDragOver={handleDragOver}
+                        onDrop={handleDrop}
+                    >
+                        <input
+                            accept="image/jpeg,image/png,image/webp"
+                            className="sr-only"
+                            onChange={handleImageChange}
+                            name="image"
+                            ref={fileInputRef}
+                            type="file"
+                        />
+                        <div
+                            className={`pointer-events-none absolute inset-0 transition-opacity duration-200 ${isDragActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"} bg-[radial-gradient(circle_at_top,rgba(46,126,255,0.14),transparent_58%)]`}
+                        />
+                        <div className="relative z-[1] flex flex-col items-center gap-5">
+                            {/* <span className="flex h-[7.2rem] w-[7.2rem] items-center justify-center rounded-[2rem] border border-[var(--adaptive-grey300)] bg-white shadow-[0_1rem_2.4rem_rgba(15,23,42,0.08)]">
+                            </span> */}
                             <img
-                                alt={title ? `${title} 이미지 미리보기` : "모달 이미지 미리보기"}
-                                className="h-40 w-full rounded-lg object-cover"
-                                src={effectiveImageUrl}
+                                alt=""
+                                className="h-[3.2rem] w-[3.2rem]"
+                                src="/images/icon/outlined/ico-outlined-image.svg"
                             />
-                            <span className="truncate text-sm font-bold text-[var(--adaptive-grey700)]">{selectedImageFile?.name ?? imageUrlValue}</span>
+
+                            <div className="space-y-2">
+                                <p className="font-[NanumSquare] text-[var(--adaptive-black500)]">{isDragActive ? "여기에 이미지를 놓아주세요" : "파일을 끌어 놓거나 클릭해 업로드"}</p>
+                                <p className="text-[1.4rem] text-[var(--adaptive-black400)]">
+                                    PNG, JPG, WEBP 파일을 지원합니다.
+                                    {selectedImageFile ? ` 현재 선택: ${selectedImageFile.name}` : ""}
+                                </p>
+                            </div>
                         </div>
-                    ) : (
-                        <p className="m-0 text-sm font-semibold text-[var(--adaptive-grey600)]">이미지를 업로드하면 여기에서 바로 확인할 수 있습니다.</p>
-                    )}
-                </section>
+                    </label>
+                </div>
+
                 {/* <label className={labelClassName}>
                     이미지 URL
                     <input
@@ -211,23 +269,8 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                         value={imageUrlValue}
                     />
                 </label> */}
-                <fieldset className="m-0 grid gap-2.5 border-0 p-0">
-                    <legend className="font-bold text-slate-800">노출 위치</legend>
-                    <div className="grid aspect-square w-[min(24rem,100%)] grid-cols-3 grid-rows-3 gap-2">
-                        {positions.map((item) => (
-                            <UI.Button
-                                aria-pressed={position.col === item.col && position.row === item.row}
-                                className={`min-h-0 rounded-lg border font-bold ${position.col === item.col && position.row === item.row ? "border-blue-500 bg-blue-50 text-blue-700" : "border-slate-300 bg-slate-50 text-slate-700"}`}
-                                key={`${item.col}-${item.row}`}
-                                onClick={() => setPosition(item)}
-                                type="button"
-                            >
-                                {item.col},{item.row}
-                            </UI.Button>
-                        ))}
-                    </div>
-                </fieldset>
-                <label className={labelClassName}>
+
+                {/* <label className={labelClassName}>
                     Stack 순서
                     <input
                         className={inputClassName}
@@ -237,52 +280,72 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                         name="stackOrder"
                         type="number"
                     />
-                </label>
+                </label> */}
                 <section className="flex gap-[0.4rem]">
                     <label className={labelClassName}>
                         시작 일자
-                        <input
+                        <UI.Calendar
                             className={inputClassName}
                             name="startsAt"
                             onChange={(event) => setStartsAt(event.target.value)}
-                            type="datetime-local"
                             value={startsAt}
                         />
                     </label>
                     <label className={labelClassName}>
                         종료 일자
-                        <input
+                        <UI.Calendar
                             className={inputClassName}
                             name="endsAt"
                             onChange={(event) => setEndsAt(event.target.value)}
-                            type="datetime-local"
                             value={endsAt}
                         />
                     </label>
                 </section>
+
                 <label className={labelClassName}>
                     닫기 정책
-                    <select
+                    <UI.Select
                         className={inputClassName}
                         name="dismissType"
                         onChange={(event) => setDismissType(event.target.value as GlobalModal["dismiss_type"])}
+                        options={[
+                            { label: "닫기만", value: "none" },
+                            { label: "오늘 하루 동안 닫기", value: "today" },
+                            { label: "n일 동안 닫기", value: "days" },
+                        ]}
                         value={dismissType}
-                    >
-                        <option value="none">닫기만</option>
-                        <option value="today">오늘 하루 동안 닫기</option>
-                        <option value="days">n일 동안 닫기</option>
-                    </select>
-                </label>
-                <label className={labelClassName}>
-                    몇일동안 닫을까요?
-                    <input
-                        className={inputClassName}
-                        onChange={(event) => setDismissDays(Number(event.target.value))}
-                        value={dismissDays}
-                        min="1"
-                        name="dismissDays"
-                        type="number"
                     />
+                </label>
+
+                {dismissType === "days" ? (
+                    <label className={labelClassName}>
+                        몇일동안 닫을까요?
+                        <input
+                            className={inputClassName}
+                            onChange={(event) => setDismissDays(Number(event.target.value))}
+                            value={dismissDays}
+                            min="1"
+                            name="dismissDays"
+                            type="number"
+                        />
+                    </label>
+                ) : null}
+
+                <label className={labelClassName}>
+                    노출 위치
+                    <div className="grid aspect-square w-[min(24rem,100%)] grid-cols-3 grid-rows-3 gap-2">
+                        {positions.map((item) => (
+                            <UI.Button
+                                aria-pressed={position.col === item.col && position.row === item.row}
+                                className={`min-h-0 rounded-[1.6rem] font-bold ${position.col === item.col && position.row === item.row ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]" : "bg-[var(--adaptive-grey200)] hover:-[var(--adaptive-grey300)] text-[var(--adaptive-grey500)]"}`}
+                                key={`${item.col}-${item.row}`}
+                                onClick={() => setPosition(item)}
+                                type="button"
+                            >
+                                {item.col},{item.row}
+                            </UI.Button>
+                        ))}
+                    </div>
                 </label>
                 {/* <label className="flex items-center gap-2.5 font-bold text-slate-800">
                     <input
@@ -304,7 +367,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                 ) : null}
             </form>
 
-            <section className="flex absolute bottom-0 left-0 w-full">
+            <section className="flex w-full">
                 <UI.Button
                     className="bg-black hover:bg-[var(--adaptive-blue500)] text-white w-full"
                     onClick={() => formRef.current?.requestSubmit()}

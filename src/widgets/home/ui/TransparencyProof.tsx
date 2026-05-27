@@ -77,7 +77,7 @@ export function TransparencyProof() {
                         {`모든 데이터는 공개될 수 있을 때\n진짜가 됩니다.`}
                     </Text.Reveal>
 
-                    <p className="text-[2.4rem] leading-[1.5] text-[#ffffff90]">
+                    <p className="mobile:text-[1.8rem] pc:text-[2.4rem] leading-[1.5] text-[#ffffff90]">
                         제이엔에스는 말이 아닌, 실제 운영 데이터로 증명합니다.
                         <br />
                         초보 BJ분들도 안심하고 시작할 수 있는 투명한 환경을 약속드립니다.

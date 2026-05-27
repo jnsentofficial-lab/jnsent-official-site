@@ -1,6 +1,7 @@
 "use client";
 
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 export const adminPanelKeys = [
     "/admin/inquiries",
@@ -13,8 +14,10 @@ export type AdminPanelKey = (typeof adminPanelKeys)[number];
 
 type AdminSidePanelStore = {
     openedPanels: Record<AdminPanelKey, boolean>;
+    listPageSize: number;
     openPanel: (key: AdminPanelKey) => void;
     closePanel: (key: AdminPanelKey) => void;
+    setListPageSize: (size: number) => void;
 };
 
 const initialOpenedPanels = adminPanelKeys.reduce(
@@ -25,20 +28,32 @@ const initialOpenedPanels = adminPanelKeys.reduce(
     {} as Record<AdminPanelKey, boolean>,
 );
 
-export const useAdminSidePanelStore = create<AdminSidePanelStore>()((set) => ({
-    openedPanels: initialOpenedPanels,
-    openPanel: (key) =>
-        set((state) => ({
-            openedPanels: {
-                ...state.openedPanels,
-                [key]: true,
-            },
-        })),
-    closePanel: (key) =>
-        set((state) => ({
-            openedPanels: {
-                ...state.openedPanels,
-                [key]: false,
-            },
-        })),
-}));
+export const useAdminSidePanelStore = create<AdminSidePanelStore>()(
+    persist(
+        (set) => ({
+            openedPanels: initialOpenedPanels,
+            listPageSize: 5,
+            openPanel: (key) =>
+                set((state) => ({
+                    openedPanels: {
+                        ...state.openedPanels,
+                        [key]: true,
+                    },
+                })),
+            closePanel: (key) =>
+                set((state) => ({
+                    openedPanels: {
+                        ...state.openedPanels,
+                        [key]: false,
+                    },
+                })),
+            setListPageSize: (size) => set({ listPageSize: size }),
+        }),
+        {
+            name: "admin-side-panel-store",
+            partialize: (state) => ({
+                listPageSize: state.listPageSize,
+            }),
+        },
+    ),
+);
