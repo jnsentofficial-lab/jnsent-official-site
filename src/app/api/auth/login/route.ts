@@ -3,6 +3,7 @@ import { createSupabaseServerClient } from "@/shared/api/SupabaseServer";
 import { createSupabaseServiceClient } from "@/shared/api/SupabaseServer";
 import { createAuthManagerUser, resolveAdminIdentity, toAuthEmail, toManagerRole, verifyPasswordHash } from "@/shared/lib/AdminAccountAuth";
 import { apiError, apiOk } from "@/shared/lib/api/server";
+import { isMissingIsActiveColumnError } from "@/shared/lib/managerAccountSchema";
 
 async function migrateLegacyManagerAccount(loginId: string, password: string) {
     const supabase = createSupabaseServiceClient();
@@ -52,6 +53,21 @@ export async function POST(request: Request) {
 
     if (error || !identity.isAdmin) {
         return apiError("로그인 정보를 확인해주세요.", 401);
+    }
+
+    if (data.user?.id) {
+        const serviceSupabase = createSupabaseServiceClient();
+        let { data: account, error: accountError } = await serviceSupabase.from("manager_accounts").select("is_active").eq("auth_user_id", data.user.id).maybeSingle();
+
+        if (isMissingIsActiveColumnError(accountError)) {
+            account = null;
+            accountError = null;
+        }
+
+        if (account && !account.is_active) {
+            await supabase.auth.signOut();
+            return apiError("비활성화된 계정입니다.", 403);
+        }
     }
 
     const cookieStore = await cookies();

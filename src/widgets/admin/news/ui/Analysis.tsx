@@ -1,7 +1,6 @@
 "use client";
 
 import { Fragment, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { useAdminNewsQuery, useDeleteNewsMutation, useToggleNewsMutation } from "@/entities/news/api/news.query";
 import type { News } from "@/entities/news/model/news.type";
 import { NewsEditor } from "@/features/manageNews/NewsEditor";
@@ -14,7 +13,6 @@ import { Text } from "@/shared/ui/kit/Text";
 const PANEL_KEY = "/admin/news";
 
 export function Analysis() {
-    const router = useRouter();
     const { data: newsItems = [], isLoading } = useAdminNewsQuery();
     const [selectedNews, setSelectedNews] = useState<News | null>(null);
     const [deleteTarget, setDeleteTarget] = useState<News | null>(null);
@@ -62,7 +60,12 @@ export function Analysis() {
                 }
                 left={
                     <AdminListSection
-                        empty={<p className="py-16 text-2xl font-[700] text-[var(--adaptiveGrey500)]">등록된 뉴스가 없습니다.</p>}
+                        empty={
+                            <div className="bg-[var(--adaptive-grey100)] flex flex-col justify-center items-center gap-[1.2rem] p-[5.2rem]">
+                                <h5 className="text-[2.0rem]">현재 생성된 뉴스가 없습니다</h5>
+                                <p className="text-[var(--adaptive-grey500)] font-[400] text-center leading-[1.5]">오른쪽 하단의 작성하기 버튼을 통해 뉴스를 생성 할 수 있어요</p>
+                            </div>
+                        }
                         hasItems={newsItems.length > 0}
                         isLoading={isLoading}
                         pagination={
@@ -207,7 +210,7 @@ export function Analysis() {
                 onCancel={() => setPublishedTarget(null)}
                 onConfirm={() => {
                     if (publishedTarget) {
-                        router.push(`/news/${publishedTarget.slug}`);
+                        window.open(`/news/${publishedTarget.slug}`, "_blank", "noopener,noreferrer");
                     }
                     setPublishedTarget(null);
                 }}

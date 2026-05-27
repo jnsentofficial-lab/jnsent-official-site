@@ -5,6 +5,10 @@ export async function getManagerAccountsFetch() {
     return clientApi.get<ApiResponse<ManagerAccount[]>>("/api/admin/account/manager");
 }
 
+export async function checkManagerAccountLoginIdFetch(loginId: string) {
+    return clientApi.get<ApiResponse<{ available: boolean }>>(`/api/admin/account/manager?loginId=${encodeURIComponent(loginId)}`);
+}
+
 export async function createManagerAccountFetch(payload: UpsertManagerAccountPayload) {
     return clientApi.post<ApiResponse<ManagerAccount>>("/api/admin/account/manager", payload);
 }
