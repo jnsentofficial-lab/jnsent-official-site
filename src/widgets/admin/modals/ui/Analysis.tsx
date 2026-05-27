@@ -10,10 +10,12 @@ import { AdminListRow, AdminListSection, AdminPagination, AdminSidePanel, AdminT
 import { useAdminSidePanelStore } from "@/widgets/admin/shared/model/useAdminSidePanelStore";
 import Image from "next/image";
 import { Text } from "@/shared/ui/kit/Text";
+import { useToastStore } from "@/shared/model/stores/useToastStore";
 
 const PANEL_KEY = "/admin/modals";
 
 export function Analysis() {
+    const { setToast } = useToastStore();
     const { data: modals = [], isLoading } = useAdminGlobalModalsQuery();
     const [selectedModal, setSelectedModal] = useState<GlobalModal | null>(null);
     const [deleteTarget, setDeleteTarget] = useState<GlobalModal | null>(null);
@@ -99,7 +101,10 @@ export function Analysis() {
                                                 </UI.Button>
                                                 <UI.Button
                                                     className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
-                                                    onClick={() => openPreviewModal(modal)}
+                                                    onClick={() => {
+                                                        openPreviewModal(modal);
+                                                        setToast({ msg: "메인에 실제로 노출될 위치/이미지 입니다.", time: 3, type: "success" });
+                                                    }}
                                                     type="button"
                                                 >
                                                     <Image

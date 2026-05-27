@@ -133,24 +133,29 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
                     </section>
 
                     {imageUrls.length ? (
-                        <div className="grid grid-cols-2 gap-3 max-[86rem]:grid-cols-1">
-                            {imageUrls.map((imageUrl, index) => (
-                                <UI.Button
-                                    className={`${thumbnailButtonClassName} ${effectiveThumbnailUrl === imageUrl ? "border-black bg-white" : "border-[var(--adaptiveGrey200)] bg-white"}`}
-                                    key={imageUrl}
-                                    onClick={() => setSelectedThumbnailUrl(imageUrl)}
-                                    type="button"
-                                >
-                                    <img
-                                        alt={`첨부 이미지 ${index + 1}`}
-                                        className="h-28 w-full object-cover"
-                                        src={imageUrl}
-                                    />
-                                    <span className="text-base font-[700] text-black">
-                                        {index + 1}번째 이미지{effectiveThumbnailUrl === imageUrl ? " / 현재 썸네일" : ""}
-                                    </span>
-                                </UI.Button>
-                            ))}
+                        <div className="grid grid-cols-4 gap-3 max-[86rem]:grid-cols-1">
+                            {imageUrls.map((imageUrl, index) => {
+                                const SELECTED = effectiveThumbnailUrl === imageUrl;
+
+                                return (
+                                    <UI.Button
+                                        className={`${SELECTED ? "scale-100" : "scale-[0.9] opacity-50"} border border-[var(--adaptive-black100)]`}
+                                        // className={`${thumbnailButtonClassName} ${SELECTED ? "border-black bg-white" : "border-[var(--adaptiveGrey200)] bg-white"}`}
+                                        key={imageUrl}
+                                        onClick={() => setSelectedThumbnailUrl(imageUrl)}
+                                        type="button"
+                                    >
+                                        <img
+                                            alt={`첨부 이미지 ${index + 1}`}
+                                            className="w-full object-cover aspect-square"
+                                            src={imageUrl}
+                                        />
+                                        {/* <span className="text-base font-[700] text-black">
+                                            {index + 1}번째 이미지{SELECTED ? " / 현재 썸네일" : ""}
+                                        </span> */}
+                                    </UI.Button>
+                                );
+                            })}
                         </div>
                     ) : (
                         <div className="bg-[var(--adaptive-grey100)] p-[1.6rem]">

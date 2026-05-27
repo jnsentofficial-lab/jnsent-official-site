@@ -162,7 +162,7 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
     return (
         <div>
             <div
-                className="flex border-b border-b-[var(--adaptive-black100)]"
+                className="sticky z-10 bg-white flex border-b border-b-[var(--adaptive-black100)]"
                 data-rich-text-toolbar
             >
                 {toolbarButtons.map((button) => (
