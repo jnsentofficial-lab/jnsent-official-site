@@ -34,6 +34,7 @@ type ConfirmDialogProps = {
     title: string;
     description: string;
     targetLabel?: string;
+    targetTitle?: string;
     cancelLabel?: string;
     confirmLabel: string;
     tone?: "create" | "delete";
@@ -302,7 +303,9 @@ export function AdminSidePanel({ title, description, children }: AdminSidePanelP
     );
 }
 
-export function ConfirmDialog({ open, title, description, targetLabel, cancelLabel = "취소", confirmLabel, tone = "create", onCancel, onConfirm }: ConfirmDialogProps) {
+export function ConfirmDialog({ open, title, description, targetLabel, targetTitle, cancelLabel = "취소", confirmLabel, tone = "create", onCancel, onConfirm }: ConfirmDialogProps) {
+    const resolvedTargetTitle = targetTitle ?? (tone === "delete" ? "삭제 대상" : "확인 대상");
+
     useEffect(() => {
         if (!open) {
             return;
@@ -396,7 +399,7 @@ export function ConfirmDialog({ open, title, description, targetLabel, cancelLab
                                     damping: 10,
                                 }}
                             >
-                                <p className="text-[var(--adaptive-black300)] text-[1.4rem] font-[NanumSquare]">삭제 대상</p>
+                                <p className="text-[var(--adaptive-black300)] text-[1.4rem] font-[NanumSquare]">{resolvedTargetTitle}</p>
 
                                 <h6 className="text-[2.0rem] leading-[1.5]">{targetLabel}</h6>
                             </motion.section>

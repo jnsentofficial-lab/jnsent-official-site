@@ -3,6 +3,7 @@
 import { MouseEvent } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAdminSessionQuery, useLogoutAdminMutation } from "@/entities/auth/api/auth.query";
+import { canAccessManagerAccountPage, getManagerAccountRoleLabel } from "@/shared/lib/AdminAccountAuth";
 import { useLayoutStore } from "@/shared/stores/useLayoutStore";
 import UI from "@/shared/ui/UIComponent";
 import Image from "next/image";
@@ -26,7 +27,7 @@ export function AdminSidebar({ onMainNavigationClick }: AdminSidebarProps) {
     const logoutAdmin = useLogoutAdminMutation();
     const { data: session } = useAdminSessionQuery();
     const setIsMobileNavOpen = useLayoutStore((state) => state.setIsMobileNavOpen);
-    const canManageAccounts = session?.role === "admin" || session?.role === "manager";
+    const canManageAccounts = canAccessManagerAccountPage(session?.role);
     const navItems = adminNavItems.filter((item) => !("roles" in item) || canManageAccounts);
 
     async function handleLogout() {
@@ -50,7 +51,7 @@ export function AdminSidebar({ onMainNavigationClick }: AdminSidebarProps) {
                     />
                     <div className="flex flex-col">
                         <h6 className="font-[700]">{session?.name ?? "JNS"} 님</h6>
-                        <h6 className="text-[1.4rem] text-[var(--adaptive-grey600)]">{session?.role ?? "관리자"}</h6>
+                        <h6 className="text-[1.4rem] text-[var(--adaptive-grey600)]">{session?.role ? getManagerAccountRoleLabel(session.role) : "관리자"}</h6>
                     </div>
                 </div>
 

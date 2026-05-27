@@ -7,6 +7,7 @@ export type UpsertManagerAccountPayload = {
     id?: string;
     name: string;
     role: ManagerAccountRole;
+    is_active?: boolean;
     login_id: string;
     password?: string;
     password_confirm?: string;

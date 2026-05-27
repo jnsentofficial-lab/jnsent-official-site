@@ -58,6 +58,7 @@ export type Database = {
                     id: string;
                     title: string;
                     content: string;
+                    creator_name: string;
                     image_url: string | null;
                     col: number;
                     row: number;
@@ -74,6 +75,7 @@ export type Database = {
                     id?: string;
                     title: string;
                     content: string;
+                    creator_name?: string;
                     image_url?: string | null;
                     col?: number;
                     row?: number;
@@ -154,6 +156,7 @@ export type Database = {
                     id: string;
                     name: string;
                     role: "manager" | "admin" | "viewer";
+                    is_active: boolean;
                     login_id: string;
                     auth_user_id: string | null;
                     password_hash: string;
@@ -164,6 +167,7 @@ export type Database = {
                     id?: string;
                     name: string;
                     role?: "manager" | "admin" | "viewer";
+                    is_active?: boolean;
                     login_id: string;
                     auth_user_id?: string | null;
                     password_hash: string;

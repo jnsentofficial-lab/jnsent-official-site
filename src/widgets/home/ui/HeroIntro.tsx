@@ -12,6 +12,25 @@ export function HeroIntro() {
     const [isRevealComplete, setIsRevealComplete] = useState(false);
 
     useEffect(() => {
+        const { body, documentElement } = document;
+        const previousBodyOverflow = body.style.overflow;
+        const previousHtmlOverflow = documentElement.style.overflow;
+
+        if (!isRevealComplete) {
+            body.style.overflow = "hidden";
+            documentElement.style.overflow = "hidden";
+        } else {
+            body.style.overflow = "";
+            documentElement.style.overflow = "";
+        }
+
+        return () => {
+            body.style.overflow = previousBodyOverflow;
+            documentElement.style.overflow = previousHtmlOverflow;
+        };
+    }, [isRevealComplete]);
+
+    useEffect(() => {
         if (isRevealComplete) {
             console.log("끝");
             setIsReadyLanding(true);
@@ -23,7 +42,7 @@ export function HeroIntro() {
 
             return;
         }
-    }, [isRevealComplete]);
+    }, [isRevealComplete, setIsReadyLanding]);
 
     return (
         <section className="relative flex flex-col justify-center items-center h-[100dvh]">

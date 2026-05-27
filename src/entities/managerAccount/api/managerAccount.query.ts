@@ -1,10 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createManagerAccountFetch, deleteManagerAccountFetch, getManagerAccountsFetch, updateManagerAccountFetch } from "@/entities/managerAccount/api/managerAccount.api";
+import { checkManagerAccountLoginIdFetch, createManagerAccountFetch, deleteManagerAccountFetch, getManagerAccountsFetch, updateManagerAccountFetch } from "@/entities/managerAccount/api/managerAccount.api";
 import type { DeleteManagerAccountPayload, ManagerAccount, UpsertManagerAccountPayload } from "@/entities/managerAccount/model/managerAccount.type";
 import { useToastStore } from "@/shared/model/stores/useToastStore";
 
 export const ManagerAccountRoutes = {
     ADMIN_MANAGER_ACCOUNTS: "admin:managerAccounts",
+    ADMIN_MANAGER_ACCOUNTS_LOGIN_ID: "admin:managerAccounts:loginId",
 } as const;
 
 export const useManagerAccountsQuery = () => {
@@ -29,6 +30,23 @@ export const useCreateManagerAccountMutation = () => {
         onSuccess: () => {
             setToast({ msg: "담당자 계정을 등록했어요", time: 3, type: "success" });
             queryClient.invalidateQueries({ queryKey: [MUTATION_KEY] });
+        },
+        onError: (err: Error) => {
+            setToast({ msg: err.message ?? "에러 발생", time: 2, type: "fail" });
+        },
+    });
+
+    return { mutate, mutateAsync, isError, isIdle, isSuccess, isPending, isPaused, data, error, reset };
+};
+
+export const useCheckManagerAccountLoginIdMutation = () => {
+    const { setToast } = useToastStore();
+    const MUTATION_KEY = ManagerAccountRoutes.ADMIN_MANAGER_ACCOUNTS_LOGIN_ID;
+    const { data, mutate, mutateAsync, error, isError, isSuccess, isIdle, isPending, isPaused, reset } = useMutation({
+        mutationKey: [MUTATION_KEY, "useCheckManagerAccountLoginIdMutation"],
+        mutationFn: (loginId: string) => checkManagerAccountLoginIdFetch(loginId),
+        onSuccess: (response) => {
+            setToast({ msg: response.result.available ? "사용 가능한 아이디입니다." : "이미 사용 중인 아이디입니다.", time: 2, type: response.result.available ? "success" : "warning" });
         },
         onError: (err: Error) => {
             setToast({ msg: err.message ?? "에러 발생", time: 2, type: "fail" });

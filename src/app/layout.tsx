@@ -9,6 +9,7 @@ import { GlobalErrorBoundary } from "@/app/providers/GlobalErrorBoundary";
 import { GlobalErrorListener } from "@/app/providers/GlobalErrorListener";
 
 import { Toast } from "@/widgets/layout/Toast";
+import { ApiPendingOverlay } from "@/widgets/layout/ApiPendingOverlay";
 import { Header } from "@/widgets/layout/Header";
 import { Sidebar } from "@/widgets/layout/Sidebar";
 import { Progress } from "@/widgets/layout/Progress";
@@ -103,6 +104,7 @@ export default function RootLayout({
                             <Footer />
                             <Progress />
                             <Toast />
+                            <ApiPendingOverlay />
                         </AuthProvider>
                     </QueryProvider>
                 </GlobalErrorBoundary>

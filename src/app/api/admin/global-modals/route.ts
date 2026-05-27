@@ -1,5 +1,5 @@
 import { createSupabaseServiceClient } from "@/shared/api/SupabaseServer";
-import { hasAdminApiSession } from "@/shared/lib/adminApi";
+import { getAdminApiName, hasAdminApiSession } from "@/shared/lib/adminApi";
 import { apiError, apiOk } from "@/shared/lib/api/server";
 
 export async function GET() {
@@ -18,7 +18,15 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
+    const adminName = (await getAdminApiName()) ?? "관리자";
     const supabase = createSupabaseServiceClient();
-    const { data, error } = await supabase.from("global_modals").insert(body).select("*").single();
+    const { data, error } = await supabase
+        .from("global_modals")
+        .insert({
+            ...body,
+            creator_name: adminName,
+        })
+        .select("*")
+        .single();
     return error ? apiError(error.message, 400) : apiOk(data, { status: 201 });
 }
