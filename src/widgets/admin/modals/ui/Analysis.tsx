@@ -21,6 +21,7 @@ export function Analysis() {
     const [deleteTarget, setDeleteTarget] = useState<GlobalModal | null>(null);
     const [pendingToggleId, setPendingToggleId] = useState<string | null>(null);
     const [page, setPage] = useState(1);
+    const [currentTime] = useState(() => Date.now());
     const toggleModal = useToggleGlobalModalMutation();
     const deleteModal = useDeleteGlobalModalMutation();
     const openPreviewModal = useGlobalModalPreviewStore((state) => state.openPreviewModal);
@@ -80,6 +81,9 @@ export function Analysis() {
                     >
                         {visibleModals.map((modal, mappedIdx) => {
                             const SELECTED = selectedModal?.id === modal.id;
+                            const hasEnded = modal.ends_at ? new Date(modal.ends_at).getTime() < currentTime : false;
+                            const statusLabel = hasEnded ? "종료" : modal.is_visible ? "진행중" : "숨김";
+                            const statusClassName = statusLabel === "진행중" ? "text-[var(--adaptive-red400)]" : "";
 
                             return (
                                 <Fragment key={modal.id}>
@@ -141,11 +145,11 @@ export function Analysis() {
                                         description={
                                             <Fragment>
                                                 <div className="flex items-center gap-[0.8rem] text-[1.4rem]">
-                                                    <p className="text-[var(--adaptive-black500)] text-left">김주석 주임</p>
+                                                    <p className="text-[var(--adaptive-grey500)] text-left">김주석 주임</p>
                                                     <div className="h-[1.2rem] w-[0.1rem] bg-[var(--adaptive-black200)]" />
-                                                    <p className={modal.is_visible ? "text-[var(--adaptive-red400)]" : ""}>{modal.is_visible ? "진행중" : "종료"}</p>
+                                                    <p className={statusClassName}>{statusLabel}</p>
                                                 </div>
-                                                <p className="text-[1.4rem] text-[var(--adaptive-black500)] text-left">
+                                                <p className="text-[1.4rem] text-[var(--adaptive-grey500)] text-left">
                                                     {modal.starts_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.starts_at)) : "시작일 없음"} ~{" "}
                                                     {modal.ends_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(modal.ends_at)) : "종료일 없음"}
                                                 </p>

@@ -34,6 +34,7 @@ type ConfirmDialogProps = {
     title: string;
     description: string;
     targetLabel?: string;
+    cancelLabel?: string;
     confirmLabel: string;
     tone?: "create" | "delete";
     onCancel: () => void;
@@ -301,16 +302,41 @@ export function AdminSidePanel({ title, description, children }: AdminSidePanelP
     );
 }
 
-export function ConfirmDialog({ open, title, description, targetLabel, confirmLabel, tone = "create", onCancel, onConfirm }: ConfirmDialogProps) {
-    // if (!open) {
-    //     return null;
-    // }
+export function ConfirmDialog({ open, title, description, targetLabel, cancelLabel = "취소", confirmLabel, tone = "create", onCancel, onConfirm }: ConfirmDialogProps) {
+    useEffect(() => {
+        if (!open) {
+            return;
+        }
+
+        function handleKeyDown(event: KeyboardEvent) {
+            if (event.key === "Escape") {
+                onCancel();
+                return;
+            }
+
+            if (event.key === "Enter") {
+                event.preventDefault();
+                onConfirm();
+            }
+        }
+
+        document.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [open, onCancel, onConfirm]);
 
     return (
         <AnimatePresence mode="popLayout">
             {open ? (
                 <motion.div
                     className="fixed inset-0 z-[100] grid place-items-center bg-black/75 p-6 backdrop-blur-sm"
+                    onClick={(event) => {
+                        if (event.target === event.currentTarget) {
+                            onCancel();
+                        }
+                    }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -396,7 +422,7 @@ export function ConfirmDialog({ open, title, description, targetLabel, confirmLa
                                 onClick={onCancel}
                                 type="button"
                             >
-                                취소
+                                {cancelLabel}
                             </UI.Button>
                             <UI.Button
                                 className={`text-white font-[500] ${tone === "delete" ? "bg-[var(--adaptive-red500)]" : "bg-[var(--adaptive-blue500)]"}`}

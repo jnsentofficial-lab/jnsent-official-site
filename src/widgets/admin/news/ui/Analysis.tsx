@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useAdminNewsQuery, useDeleteNewsMutation, useToggleNewsMutation } from "@/entities/news/api/news.query";
 import type { News } from "@/entities/news/model/news.type";
 import { NewsEditor } from "@/features/manageNews/NewsEditor";
@@ -13,9 +14,11 @@ import { Text } from "@/shared/ui/kit/Text";
 const PANEL_KEY = "/admin/news";
 
 export function Analysis() {
+    const router = useRouter();
     const { data: newsItems = [], isLoading } = useAdminNewsQuery();
     const [selectedNews, setSelectedNews] = useState<News | null>(null);
     const [deleteTarget, setDeleteTarget] = useState<News | null>(null);
+    const [publishedTarget, setPublishedTarget] = useState<News | null>(null);
     const [page, setPage] = useState(1);
     const toggleNews = useToggleNewsMutation();
     const deleteNews = useDeleteNewsMutation();
@@ -72,6 +75,10 @@ export function Analysis() {
                     >
                         {visibleNewsItems.map((item, mappedIdx) => {
                             const SELECTED = selectedNews?.id === item.id;
+                            const publishStatusLabel = item.is_published ? "공개" : "비공개";
+                            const publishStatusClassName = item.is_published
+                                ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]"
+                                : "bg-[var(--adaptive-grey200)] text-[var(--adaptive-grey600)]";
 
                             return (
                                 <Fragment key={item.slug}>
@@ -108,9 +115,13 @@ export function Analysis() {
                                             </>
                                         }
                                         description={
-                                            <p className="text-[1.4rem] text-[var(--adaptive-grey500)]">
-                                                홍길동 <span className="mx-3">|</span> {item.published_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(item.published_at)) : "날짜 미정"}
-                                            </p>
+                                            <section className="flex items-center gap-[0.8rem] text-[1.4rem]">
+                                                <p className="text-[1.4rem] text-[var(--adaptive-grey500)]">홍길동</p>
+                                                <div className="h-[1.2rem] w-[0.1rem] bg-[var(--adaptive-black200)]" />
+                                                <p className="text-[1.4rem] text-[var(--adaptive-grey500)] text-left">
+                                                    {item.published_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(item.published_at)) : "날짜 미정"}
+                                                </p>
+                                            </section>
                                         }
                                         onClick={() => {
                                             setSelectedNews(item);
@@ -131,20 +142,23 @@ export function Analysis() {
                                             )
                                         }
                                         title={
-                                            SELECTED ? (
-                                                <Text.Shimmer
-                                                    color={{
-                                                        start: "#780B12",
-                                                        end: "#FF6B75",
-                                                    }}
-                                                    duration={4}
-                                                    className="text-[2.0rem]"
-                                                >
-                                                    {item.title}
-                                                </Text.Shimmer>
-                                            ) : (
-                                                <h6 className="text-[2.0rem] leading-[1.5]">{item.title}</h6>
-                                            )
+                                            <div className="flex items-center gap-[0.8rem]">
+                                                {SELECTED ? (
+                                                    <Text.Shimmer
+                                                        color={{
+                                                            start: "#780B12",
+                                                            end: "#FF6B75",
+                                                        }}
+                                                        duration={4}
+                                                        className="text-[2.0rem]"
+                                                    >
+                                                        {item.title}
+                                                    </Text.Shimmer>
+                                                ) : (
+                                                    <h6 className="text-[2.0rem] leading-[1.5]">{item.title}</h6>
+                                                )}
+                                                <span className={`rounded-full px-[1.0rem] py-[0.4rem] text-[1.2rem] font-[700] leading-none ${publishStatusClassName}`}>{publishStatusLabel}</span>
+                                            </div>
                                         }
                                     />
 
@@ -158,9 +172,12 @@ export function Analysis() {
                     <AdminSidePanel title={selectedNews ? "선택한 뉴스" : "생성하기"}>
                         <NewsEditor
                             news={selectedNews}
-                            onSaved={() => {
+                            onSaved={(savedNews) => {
                                 setSelectedNews(null);
                                 closePanel(PANEL_KEY);
+                                if (savedNews.is_published) {
+                                    setPublishedTarget(savedNews);
+                                }
                             }}
                         />
                     </AdminSidePanel>
@@ -179,6 +196,20 @@ export function Analysis() {
                         deleteNews.mutate({ id: deleteTarget.id });
                     }
                     setDeleteTarget(null);
+                }}
+            />
+            <ConfirmDialog
+                open={Boolean(publishedTarget)}
+                title="게시물 발행 완료"
+                description={publishedTarget ? `${publishedTarget.title}\n\n해당 게시물로 이동할까요?` : ""}
+                cancelLabel="유지하기"
+                confirmLabel="이동하기"
+                onCancel={() => setPublishedTarget(null)}
+                onConfirm={() => {
+                    if (publishedTarget) {
+                        router.push(`/news/${publishedTarget.slug}`);
+                    }
+                    setPublishedTarget(null);
                 }}
             />
         </AdminWorkspace>

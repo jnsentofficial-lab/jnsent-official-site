@@ -66,7 +66,7 @@ export const useToggleGlobalModalMutation = () => {
         mutationKey: [MUTATION_KEY, "useToggleGlobalModalMutation"],
         mutationFn: (payload: ToggleGlobalModalPayload) => toggleGlobalModalFetch(payload),
         onSuccess: () => {
-            setToast({ msg: "모달 상태를 변경했어요", time: 3, type: "success" });
+            setToast({ msg: "팝업 상태를 변경했어요", time: 3, type: "success" });
             queryClient.invalidateQueries({ queryKey: [MUTATION_KEY] });
         },
         onError: (err: Error) => {

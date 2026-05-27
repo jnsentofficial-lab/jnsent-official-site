@@ -11,7 +11,7 @@ import UI from "@/shared/ui/UIComponent";
 
 type NewsEditorProps = {
     news?: News | null;
-    onSaved?: () => void;
+    onSaved?: (news: News) => void;
 };
 
 const formClassName = "grid gap-8";
@@ -97,7 +97,7 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
             const nextSelectedThumbnailUrl = selectedThumbnailUrl ? (uploadedImageMap.get(selectedThumbnailUrl) ?? selectedThumbnailUrl) : null;
             const nextThumbnailUrl = nextSelectedThumbnailUrl && nextImageUrls.includes(nextSelectedThumbnailUrl) ? nextSelectedThumbnailUrl : (nextImageUrls[0] ?? null);
 
-            await upsertNews.mutateAsync({
+            const response = await upsertNews.mutateAsync({
                 slug: slug.trim(),
                 title: title.trim(),
                 summary: summary.trim() || null,
@@ -110,7 +110,7 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
             });
             resetPendingImages();
             setStatusMessage("NEWS가 저장되었습니다.");
-            onSaved?.();
+            onSaved?.(response.result);
         } catch {
             setStatusMessage("NEWS 저장에 실패했습니다.");
         }
@@ -121,7 +121,7 @@ export function NewsEditor({ news, onSaved }: NewsEditorProps) {
             <h1 className="text-[3.2rem] mobile:px-[1.6rem] pc:px-[5.2rem] pt-[5.2rem]">뉴스 {news ? "편집" : "생성"}</h1>
 
             <form
-                className="grid gap-10 mobile:px-[1.6rem] pc:px-[5.2rem]"
+                className="grid gap-10 mobile:px-[1.6rem] pc:px-[5.2rem] flex-1"
                 onSubmit={handleSubmit}
                 ref={formRef}
             >
