@@ -15,6 +15,18 @@ const positions = Array.from({ length: 9 }, (_, index) => ({
     col: (index % 3) + 1,
     row: Math.floor(index / 3) + 1,
 }));
+
+const positionLabels: Record<string, string> = {
+    "1-1": "좌상단 ↖",
+    "2-1": "상단 ↑",
+    "3-1": "우상단 ↗",
+    "1-2": "좌측 ←",
+    "2-2": "가운데 •",
+    "3-2": "우측 →",
+    "1-3": "좌하단 ↙",
+    "2-3": "하단 ↓",
+    "3-3": "우하단 ↘",
+};
 const formClassName = "flex flex-col gap-[2.4rem]";
 const labelClassName = "flex flex-col gap-[0.8rem] font-[NanumSquare]";
 const inputClassName = "h-[5.2rem] border border-[var(--adaptive-grey200)] hover:border-[var(--adaptive-grey700)] px-4 text-lg font-semibold";
@@ -288,7 +300,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                                 onClick={() => setPosition(item)}
                                 type="button"
                             >
-                                {item.col},{item.row}
+                                {positionLabels[`${item.col}-${item.row}`]}
                             </UI.Button>
                         ))}
                     </div>

@@ -16,16 +16,16 @@ export default function Layout({ children }: LayoutProps) {
 
     return (
         <>
-            <head>
-                <script
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-                    type="application/ld+json"
-                />
-                <Script
-                    id="smartlog-script"
-                    strategy="afterInteractive" // 주석 풀고 사용하시는 걸 추천합니다
-                    dangerouslySetInnerHTML={{
-                        __html: `
+            <script
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+                suppressHydrationWarning
+                type="application/ld+json"
+            />
+            <Script
+                id="smartlog-script"
+                strategy="afterInteractive" // 주석 풀고 사용하시는 걸 추천합니다
+                dangerouslySetInnerHTML={{
+                    __html: `
       var hpt_info={'_account':'UHPT-300051', '_server': 'a300'};
       
       // 외부 스크립트를 동적으로 로드하는 로직
@@ -39,9 +39,8 @@ export default function Layout({ children }: LayoutProps) {
         x.parentNode.insertBefore(s, x);
       })();
     `,
-                    }}
-                />
-            </head>
+                }}
+            />
             {children}
         </>
     );

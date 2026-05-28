@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import localFont from "next/font/local";
 
 import { AuthProvider } from "@/app/providers/AuthProvider";
@@ -13,8 +12,6 @@ import { ApiPendingOverlay } from "@/widgets/layout/ApiPendingOverlay";
 import { Header } from "@/widgets/layout/Header";
 import { Sidebar } from "@/widgets/layout/Sidebar";
 import { Progress } from "@/widgets/layout/Progress";
-
-import { createJsonLd } from "@/shared/lib/JsonLd";
 
 import { Footer } from "@/widgets/layout/Footer";
 
@@ -84,8 +81,6 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const jsonLd = createJsonLd();
-
     return (
         <html lang="ko">
             {/* <head>
