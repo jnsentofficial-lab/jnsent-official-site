@@ -1,12 +1,14 @@
 "use client";
 
-import { type MouseEvent, useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { type MouseEvent, type PointerEvent as ReactPointerEvent, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useCreateReportMutation, useReportsQuery } from "@/entities/report/api/report.query";
 import type { Report, ReportTargetType } from "@/entities/report/model/report.type";
 import { showErrorToast } from "@/shared/lib/toast";
 
 const DOT_SIZE = 14;
+const DOCK_MARGIN = 8;
 const TARGET_SELECTOR = "[data-report-id][data-report-type]";
 const TARGET_COLOR: Record<ReportTargetType, string> = {
     group: "#2563eb",
@@ -41,6 +43,10 @@ type ReportMarker = {
     left: number;
     top: number;
     rect: DOMRect | null;
+};
+type DockPosition = {
+    x: number;
+    y: number;
 };
 
 function clampRatio(value: number) {
@@ -134,12 +140,53 @@ function getMarkerFromReport(report: Report, currentScrollY: number) {
     };
 }
 
+function clampDockPosition(position: DockPosition, dockWidth: number, dockHeight: number) {
+    const maxX = Math.max(DOCK_MARGIN, window.innerWidth - dockWidth - DOCK_MARGIN);
+    const maxY = Math.max(DOCK_MARGIN, window.innerHeight - dockHeight - DOCK_MARGIN);
+
+    return {
+        x: Math.min(Math.max(position.x, DOCK_MARGIN), maxX),
+        y: Math.min(Math.max(position.y, 0), maxY),
+    };
+}
+
+function stickDockToEdge(position: DockPosition, dockWidth: number, dockHeight: number) {
+    const maxX = Math.max(DOCK_MARGIN, window.innerWidth - dockWidth - DOCK_MARGIN);
+    const maxY = Math.max(DOCK_MARGIN, window.innerHeight - dockHeight - DOCK_MARGIN);
+    const clamped = clampDockPosition(position, dockWidth, dockHeight);
+    const distances = [
+        { side: "top", value: clamped.y },
+        { side: "bottom", value: Math.abs(maxY - clamped.y) },
+        { side: "left", value: Math.abs(clamped.x - DOCK_MARGIN) },
+        { side: "right", value: Math.abs(maxX - clamped.x) },
+    ] as const;
+    const nearest = distances.reduce((closest, current) => (current.value < closest.value ? current : closest), distances[0]);
+
+    if (nearest.side === "top") {
+        return { x: clamped.x, y: 0 };
+    }
+
+    if (nearest.side === "bottom") {
+        return { x: clamped.x, y: maxY };
+    }
+
+    if (nearest.side === "left") {
+        return { x: DOCK_MARGIN, y: clamped.y };
+    }
+
+    return { x: maxX, y: clamped.y };
+}
+
 export function Report() {
     const pathname = usePathname() || "/";
     const overlayRef = useRef<HTMLDivElement | null>(null);
+    const dockRef = useRef<HTMLDivElement | null>(null);
+    const dockDragStateRef = useRef({ pointerId: -1, startX: 0, startY: 0, originX: 0, originY: 0 });
     const hoveredElementRef = useRef<HTMLElement | null>(null);
     const selectedElementRef = useRef<HTMLElement | null>(null);
     const [mode, setMode] = useState<ReportMode>("idle");
+    const [isDockCollapsed, setIsDockCollapsed] = useState(false);
+    const [dockPosition, setDockPosition] = useState<DockPosition>({ x: 0, y: 0 });
     const [draft, setDraft] = useState<DraftReport | null>(null);
     const [hoveredTarget, setHoveredTarget] = useState<TargetSnapshot | null>(null);
     const [selectedTarget, setSelectedTarget] = useState<TargetSnapshot | null>(null);
@@ -147,6 +194,10 @@ export function Report() {
     const [markers, setMarkers] = useState<ReportMarker[]>([]);
     const { data: reports, isFetching } = useReportsQuery(pathname, mode === "view");
     const { mutateAsync: createReport, isPending } = useCreateReportMutation();
+    const dockWidth = isDockCollapsed ? 192 : 300;
+    // const dockWidth = isDockCollapsed ? 148 : 390;
+    const dockHeight = isDockCollapsed ? 48 : 104;
+    const isTopDock = dockPosition.y === 0;
 
     useEffect(() => {
         setDraft(null);
@@ -155,6 +206,32 @@ export function Report() {
         hoveredElementRef.current = null;
         selectedElementRef.current = null;
     }, [pathname, mode]);
+
+    useEffect(() => {
+        const initialPosition = clampDockPosition(
+            {
+                x: Math.round((window.innerWidth - dockWidth) / 2),
+                y: 0,
+            },
+            dockWidth,
+            dockHeight,
+        );
+
+        setDockPosition((current) => {
+            if (current.x === 0 && current.y === 0) {
+                return initialPosition;
+            }
+
+            return clampDockPosition(current, dockWidth, dockHeight);
+        });
+
+        const handleResize = () => {
+            setDockPosition((current) => clampDockPosition(current, dockWidth, dockHeight));
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, [dockHeight, dockWidth]);
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
@@ -318,26 +395,124 @@ export function Report() {
         }
     };
 
+    const handleDockPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+        if ((event.target as HTMLElement).closest("button")) {
+            return;
+        }
+
+        dockDragStateRef.current = {
+            pointerId: event.pointerId,
+            startX: event.clientX,
+            startY: event.clientY,
+            originX: dockPosition.x,
+            originY: dockPosition.y,
+        };
+
+        event.currentTarget.setPointerCapture(event.pointerId);
+    };
+
+    const handleDockPointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+        if (dockDragStateRef.current.pointerId !== event.pointerId) {
+            return;
+        }
+
+        const nextPosition = clampDockPosition(
+            {
+                x: dockDragStateRef.current.originX + (event.clientX - dockDragStateRef.current.startX),
+                y: dockDragStateRef.current.originY + (event.clientY - dockDragStateRef.current.startY),
+            },
+            dockWidth,
+            dockHeight,
+        );
+
+        setDockPosition(stickDockToEdge(nextPosition, dockWidth, dockHeight));
+    };
+
+    const handleDockPointerUp = (event: ReactPointerEvent<HTMLDivElement>) => {
+        if (dockDragStateRef.current.pointerId !== event.pointerId) {
+            return;
+        }
+
+        dockDragStateRef.current.pointerId = -1;
+        if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+            event.currentTarget.releasePointerCapture(event.pointerId);
+        }
+    };
+
     return (
         <>
-            <div className="fixed right-[2rem] top-[2rem] z-[1100] flex flex-col items-end gap-[0.8rem]">
-                <div className="flex items-center gap-[0.8rem] rounded-full border border-[rgba(255,255,255,0.16)] bg-[rgba(15,23,42,0.92)] px-[0.4rem] py-[0.4rem] text-white shadow-[0_1.2rem_3rem_rgba(15,23,42,0.28)] backdrop-blur">
-                    <button
-                        type="button"
-                        onClick={() => setMode((current) => (current === "report" ? "idle" : "report"))}
-                        className={`rounded-full px-[1.2rem] py-[0.8rem] text-[1.3rem] font-semibold transition-colors ${mode === "report" ? "bg-[#ef4444] text-white" : "bg-white/10 text-white hover:bg-white/20"}`}
-                    >
-                        리포트 하기
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => setMode((current) => (current === "view" ? "idle" : "view"))}
-                        className={`rounded-full px-[1.2rem] py-[0.8rem] text-[1.3rem] font-semibold transition-colors ${mode === "view" ? "bg-[#2563eb] text-white" : "bg-white/10 text-white hover:bg-white/20"}`}
-                    >
-                        리포트 목록 보기
-                    </button>
-                </div>
-                <div className="rounded-full bg-[rgba(15,23,42,0.82)] px-[1.2rem] py-[0.7rem] text-[1.2rem] text-white shadow-[0_0.8rem_2rem_rgba(15,23,42,0.22)]">{helperText}</div>
+            <div
+                ref={dockRef}
+                className="fixed z-[1100] select-none mobile:hidden pc:block"
+                style={{
+                    left: dockPosition.x,
+                    top: dockPosition.y,
+                    width: dockWidth,
+                }}
+                onPointerDown={handleDockPointerDown}
+                onPointerMove={handleDockPointerMove}
+                onPointerUp={handleDockPointerUp}
+                onPointerCancel={handleDockPointerUp}
+            >
+                <motion.div
+                    animate={
+                        {
+                            // borderRadius: isDockCollapsed ? 999 : isTopDock ? 28 : 32,
+                            // borderRadius: isDockCollapsed ? 999 : isTopDock ? 28 : 32,
+                        }
+                    }
+                    transition={{ type: "spring", stiffness: 340, damping: 28 }}
+                    className={`overflow-hidden border border-white/10 bg-black shadow-[0_0_15.2rem_0_#00000090] text-white ${isTopDock ? "rounded-[0_0_1.6rem_1.6rem]" : "rounded-[1.6rem_1.6rem_0_0]"}`}
+                    // className={`overflow-hidden border border-white/10 bg-black shadow-[0_0_15.2rem_0_#00000090] text-white ${isTopDock ? "rounded-[3.2rem_3.2rem_0_0]" : "rounded-[0_0_3.2rem_3.2rem]"} ${isTopDock && !isDockCollapsed ? "rounded-t-none" : ""}`}
+                    // className={`overflow-hidden border border-white/10 bg-black shadow-[0_0_15.2rem_0_#00000090] text-white ${isTopDock && !isDockCollapsed ? "rounded-t-none" : ""}`}
+                >
+                    {/* {isTopDock && !isDockCollapsed ? <div className="mx-auto h-[0.9rem] w-[10rem] rounded-b-full bg-white/10" /> : null} */}
+
+                    <div className={`flex items-center justify-between gap-[1.2rem] p-[0.8rem] cursor-grab`}>
+                        {/* <div className={`flex items-center justify-between gap-[1.2rem] ${isDockCollapsed ? "px-[1.4rem] py-[1.2rem]" : "px-[1.6rem] pb-[1rem] pt-[0.9rem]"}`}> */}
+                        <div className="flex flex-col gap-[0.4rem] px-[1.6rem]">
+                            <p className="text-[1.4rem] font-bold text-white/92">리포트 도구</p>
+                            {!isDockCollapsed ? <p className="truncate text-[1.2rem] text-white/60">{helperText}</p> : null}
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() => setIsDockCollapsed((current) => !current)}
+                            className="shrink-0 rounded-full border border-white/10 bg-white/8 px-[1rem] py-[0.58rem] text-[1.15rem] font-semibold text-white transition-colors hover:bg-white/16"
+                        >
+                            {isDockCollapsed ? "열기" : "숨김"}
+                        </button>
+                    </div>
+
+                    <AnimatePresence initial={false}>
+                        {!isDockCollapsed ? (
+                            <motion.div
+                                key="dock-panel"
+                                initial={{ height: 0, opacity: 0, y: -10 }}
+                                animate={{ height: "auto", opacity: 1, y: 0 }}
+                                exit={{ height: 0, opacity: 0, y: -10 }}
+                                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                                className="overflow-hidden"
+                            >
+                                <div className="flex items-center gap-[0.4rem] px-[0.4rem] pb-[0.4rem]">
+                                    <button
+                                        type="button"
+                                        onClick={() => setMode((current) => (current === "report" ? "idle" : "report"))}
+                                        className={`cursor-pointer flex-1 rounded-[1.2rem] border px-[1.2rem] py-[0.95rem] text-[1.3rem] font-semibold transition-colors ${mode === "report" ? "border-[#ef4444] bg-[#ef4444] text-white shadow-[0_0.8rem_2rem_rgba(239,68,68,0.32)]" : "border-white/10 bg-[var(--adaptive-blue500)] text-white hover:bg-[var(--adaptive-blue300)]"}`}
+                                    >
+                                        {mode === "report" ? "리포트 선택 중단" : "리포트 하기"}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setMode((current) => (current === "view" ? "idle" : "view"))}
+                                        className={`cursor-pointer flex-1 rounded-[1.2rem] border px-[1.2rem] py-[0.95rem] text-[1.3rem] font-semibold transition-colors ${mode === "view" ? "border-[#2563eb] bg-[#2563eb] text-white shadow-[0_0.8rem_2rem_rgba(37,99,235,0.3)]" : "bg-[#ffffff20] border-transparent text-white hover:bg-[var(--adaptive-blue300)]"}`}
+                                    >
+                                        리포트 목록 보기
+                                    </button>
+                                </div>
+                            </motion.div>
+                        ) : null}
+                    </AnimatePresence>
+                </motion.div>
             </div>
 
             {mode !== "idle" ? (
