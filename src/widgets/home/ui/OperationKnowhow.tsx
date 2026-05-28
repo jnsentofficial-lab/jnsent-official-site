@@ -60,7 +60,7 @@ export function OperationKnowhow() {
                 <div className="w-full h-full flex flex-col justify-center items-start mobile:gap-[1.6rem] pc:gap-[5.2rem]">
                     <Text.Reveal
                         as="h2"
-                        className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[700] leading-[1.5]"
+                        className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]"
                         initialColor="#00000000"
                         midColor="rgb(255, 92, 118)"
                         revealColor="rgb(255, 255, 255)"
@@ -93,7 +93,7 @@ export function OperationKnowhow() {
                         {knowhowItems.map((item, index) => (
                             <motion.div
                                 key={item.title}
-                                className="flex flex-col mobile:gap-[0.8rem] pc:gap-[1.6rem]"
+                                className="flex flex-col mobile:gap-[0.4rem] pc:gap-[1.2rem]"
                                 // variants={{
                                 //     hidden: { opacity: 0, y: 132 },
                                 //     visible: { opacity: 1, y: 0 },
@@ -101,7 +101,7 @@ export function OperationKnowhow() {
                                 // transition={{ duration: 0, ease: "easeInOut" }}
                             >
                                 <h3 className="mobile:text-[1.8rem] pc:text-[2.4rem]">{item.title}</h3>
-                                <p className="mobile:text-[1.4rem] pc:text-[1.8rem] font-[500] leading-[1.5]">{item.text}</p>
+                                <p className="mobile:text-[1.4rem] pc:text-[1.8rem] font-[700] leading-[1.5] text-[#ffffffc1]">{item.text}</p>
                             </motion.div>
                         ))}
                     </motion.div>

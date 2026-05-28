@@ -53,7 +53,7 @@ export function PartnerRecruit() {
                     </h2> */}
                     <Text.Reveal
                         as="h2"
-                        className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[700] leading-[1.5]"
+                        className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]"
                         initialColor="#ffffff00"
                         midColor="rgb(255, 92, 118)"
                         revealColor="rgb(0, 0, 0)"
@@ -76,10 +76,10 @@ export function PartnerRecruit() {
                         {recruitInfo.map((item) => (
                             <div
                                 key={item.title}
-                                className="flex flex-col mobile:gap-[0.4rem] pc:gap-[1.6rem]"
+                                className="flex flex-col mobile:gap-[0.4rem] pc:gap-[1.2rem]"
                             >
                                 <h6 className="mobile:text-[1.8rem] pc:text-[2.4rem] font-[700]">{item.title}</h6>
-                                <p className="mobile:text-[1.4rem] pc:text-[1.8rem] text-[var(--adaptive-black400)] font-[500] leading-[1.5]">{item.text}</p>
+                                <p className="mobile:text-[1.4rem] pc:text-[1.8rem] text-[var(--adaptive-black400)] font-[700]">{item.text}</p>
                             </div>
                         ))}
                     </div>

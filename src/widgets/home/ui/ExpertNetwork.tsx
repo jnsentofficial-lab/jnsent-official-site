@@ -34,7 +34,7 @@ export function ExpertNetwork() {
             >
                 <Text.Reveal
                     as="h2"
-                    className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[700] leading-[1.5]"
+                    className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]"
                     initialColor="#00000000"
                     midColor="rgb(255, 92, 118)"
                     revealColor="rgb(0, 0, 0)"
@@ -49,8 +49,8 @@ export function ExpertNetwork() {
                     {`성장을 위한\n모든 분야의 전문가들이 함께합니다.`}
                 </Text.Reveal>
 
-                <div className="mx-auto h-[4rem] w-[0.1rem] bg-[var(--adaptive-black200)]" />
-                <div className="bg-[var(--adaptive-black200)] h-[0.1rem] w-[84.1%] mx-auto" />
+                <div className="mx-auto h-[4rem] w-[0.1rem] bg-[var(--adaptive-grey300)]" />
+                <div className="bg-[var(--adaptive-grey300)] h-[0.1rem] w-[84%] mx-auto" />
 
                 <div
                     className="mt-16 grid gap-5 md:grid-cols-3 xl:grid-cols-6"
@@ -60,14 +60,14 @@ export function ExpertNetwork() {
                     {experts.map((item, index) => (
                         <motion.article
                             // className="min-h-[15rem] rounded-2xl border border-black/5 bg-white px-5 py-7 shadow-[0_1rem_2.4rem_rgba(20,30,40,0.06)]"
-                            className="relative bg-white rounded-[2.4rem] flex flex-col gap-[1.6rem] justify-center items-center p-[1.6rem]"
+                            className="relative bg-white border border-[var(--adaptive-grey300)] rounded-[2.4rem] flex flex-col gap-[1.6rem] justify-center items-center p-[1.6rem]"
                             initial={{ opacity: 0, y: 24 }}
                             key={item.title}
                             transition={{ delay: index * 0.04, duration: 0.6 }}
                             viewport={{ once: true, amount: 0.25 }}
                             whileInView={{ opacity: 1, y: 0 }}
                         >
-                            <div className="h-[4rem] w-[0.1rem] bg-[var(--adaptive-black200)] absolute top-[-4rem] left-[50%] transform trnaslate-x-[-50%]" />
+                            <div className="h-[4.1rem] w-[0.1rem] bg-[var(--adaptive-grey300)] absolute top-[-4.1rem] left-[50%] transform trnaslate-x-[-50%]" />
                             <Image
                                 src={`/images/icon/outlined/${item.icon}.svg`}
                                 alt=""

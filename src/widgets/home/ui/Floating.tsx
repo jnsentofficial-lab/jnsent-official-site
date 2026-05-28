@@ -66,9 +66,9 @@ const FloatingBar = ({ onInquiryClick }: { onInquiryClick: () => void }) => {
                             classNameInner="gap-[3.2rem]"
                             // interaction
                         >
-                            <p className="text-[1.8rem] font-normal text-white">단일 방송 최고 250만 개 달성, 다음 주인공은 당신입니다</p>
-                            <p className="text-[1.8rem] font-normal text-white">✦</p>
-                            <p className="text-[1.8rem] font-normal text-white">지금 지원하고 더 빠르게 성장하세요</p>
+                            <p className="text-[1.8rem] font-[700] text-white">단일 방송 최고 250만 개 달성, 다음 주인공은 당신입니다</p>
+                            <p className="text-[1.8rem] font-[700] text-white">✦</p>
+                            <p className="text-[1.8rem] font-[700] text-white">지금 지원하고 더 빠르게 성장하세요</p>
                         </Text.Marquee>
 
                         <div className="absolute top-0 right-0 z-2 h-full w-[3.2rem] bg-[linear-gradient(270deg,_black,_transparent)]" />

@@ -23,7 +23,7 @@ export function BroadcastEnvironment() {
             >
                 <Text.Reveal
                     as="h2"
-                    className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[700] leading-[1.5]"
+                    className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]"
                     initialColor="#ffffff00"
                     revealColor="#000000"
                     highlightColor="#FF6B75"
@@ -57,10 +57,10 @@ export function BroadcastEnvironment() {
                     {supportItems.map((item) => (
                         <div
                             key={item.title}
-                            className="flex flex-col mobile:gap-[0.8rem] pc:gap-[1.6rem]"
+                            className="flex flex-col mobile:gap-[0.4rem] pc:gap-[1.2rem]"
                         >
                             <h6 className="text-right mobile:text-[1.8rem] pc:text-[2.4rem] font-[700]">{item.title}</h6>
-                            <p className="text-right mobile:text-[1.4rem] pc:text-[1.8rem] text-[var(--adaptive-black400)] font-[500]">{item.text}</p>
+                            <p className="text-right mobile:text-[1.4rem] pc:text-[1.8rem] text-[var(--adaptive-black400)] font-[700]">{item.text}</p>
                         </div>
                     ))}
                 </div>

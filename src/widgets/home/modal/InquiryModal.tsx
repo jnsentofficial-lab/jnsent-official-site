@@ -195,7 +195,7 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                     <section className="mx-auto flex min-h-full w-full max-w-[var(--size-tablet)] flex-col items-center justify-start gap-[2.4rem] px-[1.6rem] pb-[3.2rem] pt-[8rem] pc:justify-center pc:px-0">
                         {/* <main className="mx-auto w-full max-w-[68rem] flex-1 px-[2rem] pb-[6rem] pt-[8rem]"> */}
                         <motion.header
-                            className="flex flex-col mobile:gap-[0.8rem] pc:gap-[1.6rem] w-full"
+                            className="flex flex-col mobile:gap-[0.4rem] pc:gap-[1.2rem] w-full"
                             initial={{ opacity: 0, transform: "translateY(100px)" }}
                             animate={{ opacity: 1, transform: "translateY(0px)" }}
                             exit={{ opacity: 0, transform: "translateY(100px)" }}
@@ -214,7 +214,7 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                 당신의 가능성을 현실로 만드세요
                             </h2>
 
-                            <p className="mobile:text-[1.4rem] pc:text-[1.8rem] text-left font-medium text-[#888888]">성장을 위한 첫 상담을 지금 시작해보세요.</p>
+                            <p className="mobile:text-[1.4rem] pc:text-[1.8rem] text-left font-[500] text-[#888888]">성장을 위한 첫 상담을 지금 시작해보세요.</p>
                         </motion.header>
 
                         <form

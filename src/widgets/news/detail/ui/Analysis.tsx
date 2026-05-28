@@ -48,7 +48,7 @@ export function Analysis({ slug }: AnalysisProps) {
                     damping: 10,
                 }}
             >
-                <h1 className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[700] leading-[1.5]">{news?.title}</h1>
+                <h1 className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]">{news?.title}</h1>
                 <p className="text-[var(--adaptive-grey500)]">
                     {news?.published_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(news.published_at)) : "날짜 미정"}
                     <span className="mx-3">|</span>
