@@ -48,7 +48,8 @@ const FloatingBar = ({ onInquiryClick }: { onInquiryClick: () => void }) => {
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: 100, opacity: 0 }}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    className="fixed bottom-[1.6rem] left-[50%] z-10 flex h-[6.2rem] w-[calc(100vw-1.6rem)] max-w-[var(--size-tablet)] -translate-x-1/2 items-center rounded-full bg-black p-[0.4rem] mobile:bottom-[max(1.6rem,env(safe-area-inset-bottom))]"
+                    // className="fixed mobile:bottom-0 pc:bottom-[1.6rem] left-[50%] z-10 flex mobile:h-[5.2rem] pc:h-[6.2rem] mobile:w-auto pc:w-[calc(100vw-1.6rem)] max-w-[var(--size-tablet)] -translate-x-1/2 items-center mobile:rounded-0 pc:rounded-full bg-black p-[0.4rem]"
+                    className="fixed mobile:bottom-0 pc:bottom-[1.6rem] left-[50%] z-10 flex mobile:h-[4.2rem] pc:h-[6.2rem] mobile:w-[100dvw] pc:w-[calc(100vw-1.6rem)] mobile:max-w-auto pc:max-w-[var(--size-tablet)] -translate-x-1/2 items-center mobile:rounded-0 pc:rounded-full bg-black p-[0.4rem]"
                 >
                     <div className="px-[1.6rem]">
                         <img
@@ -100,7 +101,7 @@ const QuickMenu = () => {
             {/* {isReadyLanding ? ( */}
             {true ? (
                 <motion.aside
-                    className="fixed right-7 bottom-[1.6rem] z-30 flex flex-col items-center justify-center gap-[2.4rem]"
+                    className="fixed right-7 mobile:bottom-[calc(calc(4.2rem+1.6rem))] pc:bottom-[1.6rem] z-30 flex flex-col items-center justify-center gap-[2.4rem]"
                     data-report-id="플로팅 메뉴"
                     data-report-type="item"
                     // initial={{ y: 100, opacity: 0 }}
@@ -111,7 +112,8 @@ const QuickMenu = () => {
                     <section className="flex flex-col gap-[0.8rem]">
                         {socialItems.map((item) => (
                             <a
-                                className="grid h-[7.2rem] w-[7.2rem] place-items-center rounded-full bg-white text-sm font-[700] text-black shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.14)]"
+                                // className="grid h-[7.2rem] w-[7.2rem] place-items-center rounded-full bg-white text-sm font-[700] text-black shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.14)]"
+                                className="grid mobile:h-[4.2rem] mobile:w-[4.2rem] pc:h-[7.2rem] pc:w-[7.2rem] place-items-center rounded-full bg-white text-sm font-[700] text-black shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.14)]"
                                 href="/bjSupport"
                                 key={item}
                             >
@@ -128,7 +130,7 @@ const QuickMenu = () => {
                     </section>
                     <div className="mx-auto h-[0.1rem] w-8 bg-[var(--adaptive-black400)]" />
                     <a
-                        className="grid h-[7.2rem] w-[7.2rem] place-items-center rounded-full bg-black text-3xl font-light text-white shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.16)]"
+                        className="grid mobile:h-[4.2rem] mobile:w-[4.2rem] pc:h-[7.2rem] pc:w-[7.2rem] place-items-center rounded-full bg-black text-3xl font-light text-white shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.16)]"
                         href="#home"
                     >
                         <Image

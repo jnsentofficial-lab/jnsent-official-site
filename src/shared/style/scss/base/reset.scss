@@ -1,10 +1,5 @@
 :root {
-    font-family:
-        "SUIT",
-        "Malgun Gothic",
-        "Apple SD Gothic Neo",
-        "Segoe UI",
-        sans-serif;
+    font-family: "SUIT", "Malgun Gothic", "Apple SD Gothic Neo", "Segoe UI", sans-serif;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -17,15 +12,5 @@ h3,
 h4,
 h5,
 h6 {
-    font-family:
-        "NanumSquare",
-        "Malgun Gothic",
-        "Apple SD Gothic Neo",
-        "Segoe UI",
-        sans-serif;
-}
-
-.chat-icon {
-    bottom: 13.8rem !important;
-    right: 1.8rem !important;
+    font-family: "NanumSquare", "Malgun Gothic", "Apple SD Gothic Neo", "Segoe UI", sans-serif;
 }

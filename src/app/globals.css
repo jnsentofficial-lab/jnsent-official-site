@@ -350,3 +350,28 @@ input[type="password"] {
     --text-8xl: 9.6rem;
     --text-9xl: 12.8rem;
 }
+
+@media (width >= 9.375rem) {
+    #chatterbox-root {
+        .chat-icon {
+            right: 1.8rem !important;
+            bottom: 14.8rem !important;
+        }
+
+        img {
+            width: 4.2rem !important;
+        }
+    }
+}
+
+@media (width >= 90rem) {
+    #chatterbox-root {
+        .chat-icon {
+            bottom: 13.8rem !important;
+            right: 1.8rem !important;
+        }
+        img {
+            width: 7rem !important;
+        }
+    }
+}
