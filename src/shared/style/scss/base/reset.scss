@@ -1,5 +1,14 @@
 :root {
-    font-family: "SUIT";
+    font-family:
+        "SUIT",
+        "Malgun Gothic",
+        "Apple SD Gothic Neo",
+        "Segoe UI",
+        sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-synthesis: none;
 }
 
 h1,
@@ -8,7 +17,12 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: "NanumSquare", sans-serif;
+    font-family:
+        "NanumSquare",
+        "Malgun Gothic",
+        "Apple SD Gothic Neo",
+        "Segoe UI",
+        sans-serif;
 }
 
 .chat-icon {

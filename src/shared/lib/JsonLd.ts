@@ -7,13 +7,13 @@ export function createJsonLd() {
             {
                 "@type": "Organization",
                 "@id": `${siteUrl}/#organization`,
-                name: "New Project 2",
+                name: "제이엔에스 엔터테인먼트",
                 url: siteUrl,
             },
             {
                 "@type": "WebSite",
                 "@id": `${siteUrl}/#website`,
-                name: "New Project 2",
+                name: "제이엔에스 엔터테인먼트",
                 url: siteUrl,
                 publisher: {
                     "@id": `${siteUrl}/#organization`,

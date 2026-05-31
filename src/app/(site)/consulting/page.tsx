@@ -6,7 +6,7 @@ import Main from "@/widgets/layout/Main";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-    title: "엔터창업컨설팅 | New Project 2",
+    title: "엔터창업컨설팅 | 제이엔에스 엔터테인먼트",
     description: "엔터테인먼트 창업을 위한 운영 구조와 실행 계획을 안내합니다.",
 };
 

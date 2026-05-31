@@ -33,7 +33,11 @@ export function Analysis() {
             />
             <SubPageSplit
                 left={
-                    <div className="sticky top-[9.2rem] flex flex-col gap-[9.2rem]">
+                    <div
+                        className="sticky top-[9.2rem] flex flex-col gap-[9.2rem]"
+                        data-report-id="장비렌탈 안내 영역"
+                        data-report-type="group"
+                    >
                         <SubPageSection title={"주의사항"}>
                             <section className="bg-[var(--adaptive-black50)] rounded-[1.6rem] p-[1.6rem]">
                                 <p className="text-[var(--adaptive-black500)]">필요한 장비 선택 → 장비렌탈 신청 및 상담 → 출장 스케줄 예약 및 방문 설치</p>

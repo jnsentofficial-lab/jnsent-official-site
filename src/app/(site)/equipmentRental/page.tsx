@@ -6,7 +6,7 @@ import Main from "@/widgets/layout/Main";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-    title: "장비렌탈 | New Project 2",
+    title: "장비렌탈 | 제이엔에스 엔터테인먼트",
     description: "콘텐츠 제작과 방송 송출에 필요한 장비 렌탈을 안내합니다.",
 };
 

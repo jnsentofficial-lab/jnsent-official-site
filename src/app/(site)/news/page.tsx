@@ -6,8 +6,8 @@ import Main from "@/widgets/layout/Main";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-    title: "NEWS | New Project 2",
-    description: "New Project 2의 소식과 업데이트를 확인하세요.",
+    title: "NEWS | 제이엔에스 엔터테인먼트",
+    description: "제이엔에스 엔터테인먼트의 소식과 업데이트를 확인하세요.",
 };
 
 export default async function NewsListPage() {

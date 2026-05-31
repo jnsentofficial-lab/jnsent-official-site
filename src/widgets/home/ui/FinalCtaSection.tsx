@@ -14,6 +14,8 @@ export function FinalCtaSection() {
         <section
             ref={sectionRef}
             className="relative mobile:min-h-[100dvh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[100dvh] flex items-center justify-center"
+            data-report-id="최종 문의 유도 섹션"
+            data-report-type="group"
         >
             <div
                 className="absolute w-full left-[50%] transform translate-x-[-50%] inset-0 pointer-events-none z-0"
@@ -39,6 +41,8 @@ export function FinalCtaSection() {
 
             <motion.div
                 className="relative z-[100] mx-auto flex h-full max-w-[78rem] flex-col items-center justify-center"
+                data-report-id="최종 문의 유도 카피"
+                data-report-type="item"
                 initial={{ opacity: 0, y: 28 }}
                 transition={{ duration: 0.75 }}
                 viewport={{ once: true, amount: 0.3 }}
@@ -47,7 +51,7 @@ export function FinalCtaSection() {
                 <section className="flex flex-col gap-[1.6rem]">
                     <Text.Reveal
                         as="h2"
-                        className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[700] leading-[1.5]"
+                        className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]"
                         initialColor="#00000000"
                         midColor="rgb(255, 92, 118)"
                         revealColor="rgb(255, 255, 255)"
@@ -55,8 +59,9 @@ export function FinalCtaSection() {
                         align="center"
                         revealStartPosition={20}
                         revealEndPosition={60}
-                        delay={2}
-                        transition={0}
+                        // delay={2}
+                        // transition={0}
+                        transition={2}
                     >
                         {`제이엔에스와 함께\n신뢰할 수 있는 미래를 만들어보세요`}
                     </Text.Reveal>
@@ -69,6 +74,8 @@ export function FinalCtaSection() {
                 <motion.a
                     className="mt-10 inline-flex items-center justify-center rounded-full border border-white bg-black px-8 py-4 text-center text-base font-[700] text-white"
                     href="/bjSupport"
+                    data-report-id="최종 문의 유도 버튼"
+                    data-report-type="item"
                     whileHover={{ y: -2 }}
                 >
                     문의하기

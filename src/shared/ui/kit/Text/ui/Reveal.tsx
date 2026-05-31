@@ -354,7 +354,7 @@ export function Reveal({
     });
     const autoProgress = useAutoRevealProgress(interaction, scrollYProgress, resolvedTransition, delay, children);
     const rawProgress = interaction ? scrollYProgress : autoProgress;
-    const transitionProgress = useTransitionProgress(rawProgress, 0);
+    const transitionProgress = useTransitionProgress(rawProgress, interaction ? resolvedTransition : 0);
     const Tag = as;
     const completeRef = useRef(false);
     const resolvedHighlightColor = highlightColor ?? midColor;

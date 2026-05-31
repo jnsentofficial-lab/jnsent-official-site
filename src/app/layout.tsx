@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import localFont from "next/font/local";
 
 import { AuthProvider } from "@/app/providers/AuthProvider";
@@ -14,12 +13,13 @@ import { Header } from "@/widgets/layout/Header";
 import { Sidebar } from "@/widgets/layout/Sidebar";
 import { Progress } from "@/widgets/layout/Progress";
 
-import { createJsonLd } from "@/shared/lib/JsonLd";
-
 import { Footer } from "@/widgets/layout/Footer";
 
 import "@/shared/style/scss/index.scss";
 import "./globals.css";
+import { Report } from "@/widgets/layout/Report";
+
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
 
 // const nanumSquare = localFont({
 //     src: [
@@ -49,8 +49,31 @@ import "./globals.css";
 // });
 
 export const metadata: Metadata = {
-    title: "New Project 2",
-    description: "Corporate entertainment CMS site",
+    metadataBase: new URL(siteUrl),
+    title: "제이엔에스 엔터테인먼트",
+    description: "가능성을 현실로 만드는 제이엔에스 엔터테인먼트 입니다.",
+    openGraph: {
+        title: "제이엔에스 엔터테인먼트",
+        description: "가능성을 현실로 만드는 제이엔에스 엔터테인먼트 입니다.",
+        url: "https://도메인주소",
+        siteName: "제이엔에스 엔터테인먼트",
+        images: [
+            {
+                url: "/images/seo/og-default.jpg",
+                width: 1200,
+                height: 630,
+                alt: "제이엔에스 엔터테인먼트",
+            },
+        ],
+        locale: "ko_KR",
+        type: "website",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "제이엔에스 엔터테인먼트",
+        description: "가능성을 현실로 만드는 제이엔에스 엔터테인먼트 입니다.",
+        images: ["/images/seo/og-default.jpg"],
+    },
 };
 
 export default function RootLayout({
@@ -58,11 +81,9 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const jsonLd = createJsonLd();
-
     return (
         <html lang="ko">
-            <head>
+            {/* <head>
                 <script
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                     type="application/ld+json"
@@ -87,7 +108,7 @@ export default function RootLayout({
     `,
                     }}
                 />
-            </head>
+            </head> */}
             <body>
                 {/* <body className={`${nanumSquare.variable} ${nanumSquare.className}`}> */}
                 <GlobalErrorBoundary>
@@ -105,6 +126,7 @@ export default function RootLayout({
                             <Progress />
                             <Toast />
                             <ApiPendingOverlay />
+                            <Report />
                         </AuthProvider>
                     </QueryProvider>
                 </GlobalErrorBoundary>

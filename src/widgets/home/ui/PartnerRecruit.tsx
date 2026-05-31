@@ -11,8 +11,16 @@ const recruitInfo = [
 
 export function PartnerRecruit() {
     return (
-        <section className="min-h-[100dvh] mobile:py-[12.8rem] pc:py-0 flex justify-center mobile:flex-col-reverse pc:flex-row">
-            <div className="mobile:w-full pc:w-[50dvw]">
+        <section
+            className="min-h-[100dvh] mobile:py-[12.8rem] pc:py-0 flex justify-center mobile:flex-col-reverse pc:flex-row"
+            data-report-id="파트너 모집 섹션"
+            data-report-type="group"
+        >
+            <div
+                className="mobile:w-full pc:w-[50dvw]"
+                data-report-id="파트너 모집 이미지"
+                data-report-type="item"
+            >
                 <motion.img
                     className="w-full h-full object-cover opacity-55"
                     src={"/images/landing/bj.jpg"}
@@ -30,6 +38,8 @@ export function PartnerRecruit() {
 
             <div
                 className="flex items-center pc:ml-[9.2rem] mobile:p-[1.6rem] pc:p-0 mobile:w-full pc:w-[calc(50dvw-9.2rem)]"
+                data-report-id="파트너 모집 카피"
+                data-report-type="item"
                 // initial={{ opacity: 0, x: 32 }}
                 // whileInView={{ opacity: 1, x: 0 }}
                 // viewport={{ once: true, amount: 0.25 }}
@@ -43,7 +53,7 @@ export function PartnerRecruit() {
                     </h2> */}
                     <Text.Reveal
                         as="h2"
-                        className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[700] leading-[1.5]"
+                        className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]"
                         initialColor="#ffffff00"
                         midColor="rgb(255, 92, 118)"
                         revealColor="rgb(0, 0, 0)"
@@ -51,20 +61,25 @@ export function PartnerRecruit() {
                         align="left"
                         revealStartPosition={20}
                         revealEndPosition={60}
-                        delay={10}
-                        transition={20}
+                        // delay={10}
+                        // transition={20}
+                        transition={2}
                     >
                         {`제이엔에스와 함께 \성장할 파트너를 찾습니다`}
                     </Text.Reveal>
 
-                    <div className="mt-[1.6rem] grid gap-10">
+                    <div
+                        className="mt-[1.6rem] grid gap-10"
+                        data-report-id="파트너 모집 안내 목록"
+                        data-report-type="item"
+                    >
                         {recruitInfo.map((item) => (
                             <div
                                 key={item.title}
-                                className="flex flex-col mobile:gap-[0.4rem] pc:gap-[1.6rem]"
+                                className="flex flex-col mobile:gap-[0.4rem] pc:gap-[1.2rem]"
                             >
                                 <h6 className="mobile:text-[1.8rem] pc:text-[2.4rem] font-[700]">{item.title}</h6>
-                                <p className="mobile:text-[1.4rem] pc:text-[1.8rem] text-[var(--adaptive-black400)] font-[500] leading-[1.5]">{item.text}</p>
+                                <p className="mobile:text-[1.4rem] pc:text-[1.8rem] text-[var(--adaptive-black400)] font-[700]">{item.text}</p>
                             </div>
                         ))}
                     </div>

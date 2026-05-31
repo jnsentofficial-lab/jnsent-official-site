@@ -22,6 +22,8 @@ export function TransparencyProof() {
         <section
             className="relative flex items-center justify-center mobile:min-h-[100dvh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[100dvh]"
             ref={sectionRef}
+            data-report-id="데이터 공개 섹션"
+            data-report-type="group"
         >
             {/* <motion.div
                 className="absolute inset-0 bg-[url('/images/landing/meeting.webp')] bg-cover bg-center opacity-55"
@@ -56,6 +58,8 @@ export function TransparencyProof() {
             <div className="relative z-[1] w-full">
                 <div
                     className="mx-auto flex max-w-[var(--size-pc)] flex-col gap-[3.2rem]"
+                    data-report-id="데이터 공개 카피"
+                    data-report-type="item"
                     // initial={{ opacity: 0, y: 32 }}
                     // whileInView={{ opacity: 1, y: 0 }}
                     // viewport={{ once: true, amount: 0.25 }}
@@ -63,15 +67,16 @@ export function TransparencyProof() {
                 >
                     <Text.Reveal
                         as="h2"
-                        className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[700] leading-[1.5]"
+                        className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]"
                         initialColor="#00000000"
                         midColor="rgb(255, 92, 118)"
                         revealColor="rgb(255, 255, 255)"
                         revealWindow={0.5}
                         revealStartPosition={20}
                         revealEndPosition={60}
-                        delay={1}
-                        transition={0}
+                        // delay={1}
+                        // transition={2}
+                        transition={2}
                         align="left"
                     >
                         {`모든 데이터는 공개될 수 있을 때\n진짜가 됩니다.`}
@@ -84,7 +89,11 @@ export function TransparencyProof() {
                     </p>
                 </div>
 
-                <div className="mt-24 grid gap-6 md:grid-cols-3">
+                <div
+                    className="mt-24 grid gap-6 md:grid-cols-3"
+                    data-report-id="데이터 공개 카드 목록"
+                    data-report-type="item"
+                >
                     {/* {proofCards.map((item, index) => (
                         <section
                             key={item.title}

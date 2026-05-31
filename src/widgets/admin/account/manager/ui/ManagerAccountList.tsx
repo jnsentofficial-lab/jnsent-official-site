@@ -50,6 +50,8 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
                 return (
                     <Fragment key={account.id}>
                         <AdminListRow
+                            reportId={`관리자 계정 행 ${account.login_id}`}
+                            reportType="item"
                             actions={
                                 <UI.Button
                                     className="flex items-center h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
