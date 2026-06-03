@@ -17,7 +17,7 @@ export function SiteFooter() {
                         className="invert mobile:w-[5.2rem] pc:w-[7.2rem]"
                         // className={`${isNowDarkMode ? "invert" : ""}`}
                     />
-                    <p className="mt-5 mb-0 mobile:text-[1.6rem] pc:text-[7.2rem] font-[700] leading-[1.5] text-white/45">
+                    <p className="mt-5 mb-0 mobile:text-[1.6rem] pc:text-[2.4rem] font-[900] leading-[1.5] text-white/45">
                         JNS ENTERTAINMENT
                         <br />
                         제이엔에스엔터테인먼트

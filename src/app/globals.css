@@ -322,7 +322,7 @@ html {
 }
 
 body {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
 }
 
 input[type="password"] {
@@ -365,6 +365,10 @@ input[type="password"] {
 }
 
 @media (width >= 90rem) {
+    body {
+        font-size: 1.6rem;
+    }
+
     #chatterbox-root {
         .chat-icon {
             bottom: 13.8rem !important;
