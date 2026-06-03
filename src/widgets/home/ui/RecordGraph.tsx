@@ -468,26 +468,27 @@ const GraphVer3 = () => {
                 {growthBadges.map((badge, index) => (
                     <motion.div
                         key={badge.year}
-                        className="absolute -translate-x-1/2 rounded-[2rem] border border-[rgba(75,195,187,0.18)] bg-[rgba(255,255,255,0.94)] px-[1.6rem] py-[1.2rem] text-center shadow-[0_18px_36px_rgba(72,195,188,0.12)]"
+                        className="absolute -translate-x-1/2 rounded-[2rem] bg-[var(--adaptive-red50)] px-[1.6rem] py-[1.2rem] text-center"
                         style={{ left: badge.left, top: badge.top }}
                         initial={{ opacity: 0, y: 24, scale: 0.94 }}
                         whileInView={{ opacity: 1, y: 0, scale: 1 }}
                         viewport={{ amount: 0.25, once: false }}
                         transition={{ duration: 0.55, delay: 0.3 * index + 0.35, ease: graphEase }}
                     >
-                        <div className="text-[1.9rem] font-black leading-none text-[#48c3bc]">{badge.value}</div>
-                        <div className="mt-[0.6rem] text-[1.2rem] font-bold text-[#7a7f89]">전년 대비</div>
+                        <div className="text-[1.9rem] font-black leading-none text-[var(--adaptive-red500)]">{badge.value}</div>
+                        <div className="mt-[0.6rem] text-[1.2rem] font-bold text-[var(--adaptive-red300)]">전년 대비</div>
                     </motion.div>
                 ))}
 
                 <motion.div
-                    className="absolute right-[3.5%] top-[7.5%] rounded-[2.6rem] bg-[#48c3bc] px-[2.4rem] py-[2rem] text-center text-white shadow-[0_24px_40px_rgba(72,195,188,0.2)]"
-                    initial={{ opacity: 0, scale: 0.8, rotate: -4 }}
+                    className="absolute right-[2.5%] top-[7.5%] rounded-[2.6rem] bg-[#48c3bc] px-[2.4rem] py-[2rem] text-center text-white shadow-[0_24px_40px_rgba(72,195,188,0.2)]"
+                    initial={{ opacity: 0, scale: 0.2 }}
+                    exit={{ opacity: 0, scale: 0.2 }}
                     whileInView={{
                         opacity: 1,
                         scale: 1,
-                        rotate: 0,
-                        y: [0, -10, 0, 10, 0],
+                        // rotate: 0,
+                        y: [-10, 10, -10],
                     }}
                     viewport={{ amount: 0.25, once: false }}
                     transition={{
