@@ -337,7 +337,7 @@ const GraphVer3 = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ amount: 0.2, once: false }}
             transition={{ duration: 0.7, ease: graphEase }}
-            className="my-auto"
+            className="mt-auto"
             // style={{
             //     maskImage: "linear-gradient(90deg, transparent 0%, transparent 10%, black 18%, black 100%)",
             //     WebkitMaskImage: "linear-gradient(90deg, transparent 0%, transparent 18%, black 60%, black 100%)",
