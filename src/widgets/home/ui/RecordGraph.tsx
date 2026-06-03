@@ -365,16 +365,35 @@ const GraphVer3 = () => {
             >
                 {linePoints.map((point) => (
                     <g key={`${mode}-${point.name}`}>
-                        <motion.line
-                            x1={point.x}
-                            y1={config.reportChartHeight - config.chartBottomPadding}
-                            x2={point.x}
-                            y2={point.y}
-                            stroke="var(--adaptive-grey900)"
-                            strokeDasharray="5 6"
-                            strokeWidth={config.barWidth}
-                            initial={{ pathLength: 0, opacity: 0 }}
-                            whileInView={{ pathLength: 1, opacity: 1 }}
+                        {/* 
+                          To have an 8px rounded top on the bar,
+                          Use <rect> instead of <line> for the bar, with rx only on the top side.
+                          In SVG, rx/ry round all corners, but we can "clip" the bottom by overlaying a rect, or via a clipPath.
+                          For clarity and cross-browser reliability, use a clipPath that only rounds the top corners.
+                        */}
+                        <clipPath id={`bar-clip-${mode}-${point.name}`}>
+                            <path
+                                d={`
+                                    M ${point.x - config.barWidth / 2} ${point.y + 8}
+                                    a 8 8 0 0 1 8 -8
+                                    h ${config.barWidth - 16}
+                                    a 8 8 0 0 1 8 8
+                                    v ${config.reportChartHeight - config.chartBottomPadding - point.y - 8}
+                                    h -${config.barWidth}
+                                    Z
+                                `}
+                            />
+                        </clipPath>
+                        <motion.rect
+                            x={point.x - config.barWidth / 2}
+                            y={point.y}
+                            width={config.barWidth}
+                            height={config.reportChartHeight - config.chartBottomPadding - point.y}
+                            fill="var(--adaptive-grey900)"
+                            clipPath={`url(#bar-clip-${mode}-${point.name})`}
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: config.reportChartHeight - config.chartBottomPadding - point.y, opacity: 1 }}
+                            whileInView={{ height: config.reportChartHeight - config.chartBottomPadding - point.y, opacity: 1 }}
                             viewport={{ amount: 0.25, once: false }}
                             transition={{ duration: 0.8, delay: 0.16 * linePoints.indexOf(point), ease: graphEase }}
                         />
@@ -457,7 +476,7 @@ const GraphVer3 = () => {
                             y={config.reportChartHeight - (mode === "mobile" ? 14 : 60)}
                             textAnchor="middle"
                             fontSize={config.yearFontSize}
-                            fontWeight="700"
+                            fontWeight="900"
                             fill="var(--adaptive-grey900)"
                         >
                             {point.name}

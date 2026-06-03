@@ -16,8 +16,8 @@ const equipmentChips = [
     // { label: "조명", options: ["룩스패드43H", "룩스패드22", "소프트박스", "레일조명"] },
     { label: "CPU", options: ["인텔 코어 울트라 시리즈2-270K", "인텔 15세대 울트라 5 225에로우레이크"], required: true },
     { label: "GPU", options: ["GEFORCE RTX 5060"], required: true },
-    { label: "카메라", options: ["R8 RP"], required: true },
-    { label: "렌즈", options: ["캐논 24mm", "캐논 28mm"], required: true },
+    { label: "카메라", options: ["캐논 EOS R8", "캐논 EOS RP"], required: true },
+    { label: "렌즈", options: ["RF 24mm F1.8", "RF 28mm F2.8"], required: true },
     { label: "조명", options: ["룩스패드43H", "룩스패드22", "소프트박스"], required: true },
 ];
 

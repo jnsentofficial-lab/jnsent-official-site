@@ -89,7 +89,7 @@ const Modal = ({ title, description, open, onClose, children, className, actions
     if (!isClient) return null; // SSR 단계에서는 아무것도 렌더링하지 않음
 
     // const modalClassName = `${className ? className : "max-w-[calc(var(--modal-width)-(1.6rem*4))]"} max-h-[calc(100dvh-(1.6rem*2))] z-[100000000] w-full bg-[var(--color-gray-100)] rounded-[3.2rem] flex flex-col shadow-[0_0_20rem_10rem_#00000060] overflow-hidden`;
-    const modalClassName = `${className ? className : "max-w-[calc(var(--modal-width)-(1.6rem*4))]"} max-h-[calc(100dvh-(1.6rem*2))] z-[100000000] bg-[var(--color-gray-100)] rounded-[3.2rem] flex flex-col shadow-[0_0_20rem_10rem_#00000060] overflow-hidden`;
+    const modalClassName = `${className ? className : "max-w-[calc(var(--modal-width)-(1.6rem*4))]"} max-h-[calc(100dvh-(1.6rem*2))] z-[100000000] bg-[var(--color-gray-100)] rounded-[2.4rem] flex flex-col shadow-[0_0_20rem_10rem_#00000060] overflow-hidden`;
     const placementClassName = placement
         ? `${placement.row === 1 ? "self-start" : placement.row === 3 ? "self-end" : "self-center"} ${placement.col === 1 ? "justify-self-start" : placement.col === 3 ? "justify-self-end" : "justify-self-center"}`
         : "";

@@ -7,9 +7,9 @@ import { SubPageSection } from "@/widgets/layout/ui/SubPageLayout";
 import { Fragment } from "react/jsx-runtime";
 
 const studioItems = [
-    { title: "개인방송 스튜디오 (좌측)", image: "/images/landing/studio2.jpg" },
-    { title: "개인방송 스튜디오", image: "/images/landing/studio3.jpg" },
-    { title: "엑셀 스튜디오", image: "/images/landing/room.jpg" },
+    { title: "엑셀 스튜디오 (좌측)", image: "/images/landing/studio2.jpg" },
+    { title: "엑셀 스튜디오 (우측)", image: "/images/landing/studio3.jpg" },
+    { title: "개인방송 스튜디오", image: "/images/landing/room.jpg" },
 ];
 
 export function Analysis() {
@@ -26,7 +26,7 @@ export function Analysis() {
                         엑셀 스튜디오 대관
                     </>
                 }
-                description={"엑셀 및 개인 방송, 라이브 커머스 등 콘텐츠 성격에 최적화된 맞춤형 공간을 제공합니다."}
+                description={"엑셀 및 개인 방송 콘텐츠 성격에 최적화된\n맞춤형 공간을 제공합니다."}
             />
 
             <StudioSlider
