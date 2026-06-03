@@ -34,7 +34,7 @@ export function Analysis({ slug }: AnalysisProps) {
 
     return (
         // <div className="mx-auto w-[min(68rem,calc(100%_-_3.2rem))] pt-[calc(50dvh-1.6rem-17.4rem-3.2rem)] pb-[3.2rem] mx-[1.6rem]">
-        <div className="mx-auto w-[min(68rem,calc(100%_-_3.2rem))] pt-[calc(50dvh-1.6rem-17.4rem-3.2rem)] pb-[3.2rem] mx-[1.6rem] flex flex-col gap-[5.2rem]">
+        <div className="mx-auto w-[min(68rem,calc(100%_-_3.2rem))] mobile:pt-[calc(7.2rem+(1.6rem*2))] pc:pt-[calc(50dvh-1.6rem-17.4rem-3.2rem)] pb-[3.2rem] mx-[1.6rem] flex flex-col gap-[5.2rem]">
             <motion.section
                 className="flex flex-col gap-[0.8rem]"
                 initial={{ opacity: 0, transform: "translateY(100px)" }}
@@ -48,8 +48,8 @@ export function Analysis({ slug }: AnalysisProps) {
                     damping: 10,
                 }}
             >
-                <h1 className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]">{news?.title}</h1>
-                <p className="text-[var(--adaptive-grey500)]">
+                <h1 className="text-center mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]">{news?.title}</h1>
+                <p className="text-center text-[var(--adaptive-grey500)]">
                     {news?.published_at ? new Intl.DateTimeFormat("ko-KR").format(new Date(news.published_at)) : "날짜 미정"}
                     <span className="mx-3">|</span>
                     조회 {formatViewCount(news?.view_count)}

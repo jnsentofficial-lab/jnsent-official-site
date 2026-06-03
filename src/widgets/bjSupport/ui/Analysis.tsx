@@ -34,6 +34,8 @@ export function Analysis() {
                 description={content?.description ?? "방송 시작과 성장에 필요한 상담, 장비, 공간, 운영 관리를 함께 지원합니다."}
             />
             <SubPageSplit
+                leftTabLabel="지원 안내"
+                rightTabLabel="신청하기"
                 left={
                     <div className="grid gap-8">
                         <h2 className="m-0 text-3xl font-[700] text-black">지원 안내</h2>

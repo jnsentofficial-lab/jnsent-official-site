@@ -54,7 +54,7 @@ export function InquiryDetailSidebar({ inquiry }: InquiryDetailSidebarProps) {
     }
 
     return (
-        <aside className="relative grid grid-rows-[1fr_1fr_auto] flex-col h-full">
+        <aside className="relative grid grid-rows-[1fr_1fr_auto] overflow-auto flex-col h-full">
             {/* 질문 */}
             <section className="flex-1 flex flex-col mobile:gap-[2.4rem] pc:gap-[5.2rem] bg-[#F3F3F3] mobile:p-[2.4rem_1.6rem] pc:p-[5.2rem]">
                 {/* 게시물 정보 */}

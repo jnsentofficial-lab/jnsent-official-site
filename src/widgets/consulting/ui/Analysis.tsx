@@ -40,18 +40,20 @@ export function Analysis() {
             />
 
             <SubPageSplit
+                leftTabLabel="컨설팅 안내"
+                rightTabLabel="문의하기"
                 left={
-                    <div className="flex flex-col gap-[9.2rem]">
+                    <div className="flex flex-col mobile:gap-[3.2rem] pc:gap-[9.2rem]">
                         <SubPageSection title={"컨설팅 분야"}>
                             <div className="flex flex-col gap-[1.6rem]">
                                 {consultingAreas.map((area) => (
                                     <section
                                         key={area.title}
-                                        className="rounded-[2.4rem] bg-[var(--adaptive-black50)] p-[1.6rem_2.4rem] flex flex-col gap-[1.6rem]"
+                                        className="rounded-[2.4rem] bg-[var(--adaptive-black50)] mobile:p-[1.6rem_1.8rem] pc:p-[1.6rem_2.4rem] flex flex-col gap-[1.6rem]"
                                     >
-                                        <h3 className="text-[2.0rem] font-[700] text-black">{area.title}</h3>
+                                        <h3 className="mobie:text-[1.6rem] pc:text-[2.0rem] font-[700] text-black">{area.title}</h3>
 
-                                        <section className="flex flex-col gap-[1.2rem]">
+                                        <section className="flex flex-col mobile:gap-[0.8rem] pc:gap-[1.2rem]">
                                             {area.list.map((mappedItem, mappedIdx) => (
                                                 <p
                                                     key={mappedIdx}

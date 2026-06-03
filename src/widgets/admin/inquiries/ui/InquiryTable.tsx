@@ -33,7 +33,7 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
             empty={
                 <div className="bg-[var(--adaptive-grey100)] flex flex-col justify-center items-center gap-[1.2rem] p-[5.2rem]">
                     <h5 className="text-[2.0rem]">현재 등록된 문의가 없습니다</h5>
-                    <p className="text-[var(--adaptive-grey500)] font-[400] text-center leading-[1.5]">이곳에 고객들이 남겨주신 문의 목록이 나타나요</p>
+                    <p className="text-[var(--adaptive-grey500)] font-[600] text-center leading-[1.5]">이곳에 고객들이 남겨주신 문의 목록이 나타나요</p>
                 </div>
             }
             hasItems={inquiries.length > 0}
@@ -50,9 +50,7 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
                 {visibleInquiries.map((inquiry, mappedIdx) => {
                     const SELECTED = selectedInquiryId === inquiry.id;
                     const answerStatusLabel = inquiry.hasAnswer ? "답변완료" : "대기중";
-                    const answerStatusClassName = inquiry.hasAnswer
-                        ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]"
-                        : "bg-[var(--adaptive-grey200)] text-[var(--adaptive-grey600)]";
+                    const answerStatusClassName = inquiry.hasAnswer ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]" : "bg-[var(--adaptive-grey200)] text-[var(--adaptive-grey600)]";
 
                     return (
                         <Fragment key={`${inquiry.name}-${inquiry.category}`}>

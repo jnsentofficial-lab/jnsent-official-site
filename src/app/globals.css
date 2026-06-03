@@ -303,6 +303,7 @@
     --size-pc-full-hd: 192rem;
     --size-pc-wide: 144rem;
     --size-pc: 144rem;
+    /* --size-pc: 144rem; */
     --size-tablet: 76.8rem;
     --size-phablet: 51.2rem;
     --size-mobile: 37.6rem;
@@ -322,7 +323,7 @@ html {
 }
 
 body {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
 }
 
 input[type="password"] {
@@ -334,7 +335,7 @@ input[type="password"] {
 @theme {
     --breakpoint-mobile: 9.375rem; /* 344px 이상 */
     --breakpoint-tablet: 48rem; /* 768px 이상 */
-    --breakpoint-pc: 90rem; /* 1440px 이상 */
+    --breakpoint-pc: 48rem; /* 1440px 이상 */
 
     --text-xs: 1.2rem;
     --text-sm: 1.4rem;
@@ -349,4 +350,33 @@ input[type="password"] {
     --text-7xl: 7.2rem;
     --text-8xl: 9.6rem;
     --text-9xl: 12.8rem;
+}
+
+@media (width >= 9.375rem) {
+    #chatterbox-root {
+        .chat-icon {
+            right: 1.8rem !important;
+            bottom: 14.8rem !important;
+        }
+
+        img {
+            width: 4.2rem !important;
+        }
+    }
+}
+
+@media (width >= 90rem) {
+    body {
+        font-size: 1.6rem;
+    }
+
+    #chatterbox-root {
+        .chat-icon {
+            bottom: 13.8rem !important;
+            right: 1.8rem !important;
+        }
+        img {
+            width: 7rem !important;
+        }
+    }
 }

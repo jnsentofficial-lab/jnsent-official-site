@@ -1,17 +1,131 @@
 "use client";
 
-import { Text } from "@/shared/ui/kit/Text";
-import { motion } from "framer-motion";
 import Image from "next/image";
+import { motion } from "framer-motion";
+import { Bar, CartesianGrid, ComposedChart, LabelList, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+
+import { Text } from "@/shared/ui/kit/Text";
+
+const datas = [
+    { name: "2023", amount: 29.8, growth: 213.1 },
+    { name: "2024", amount: 93.2, growth: 100.6 },
+    { name: "2025", amount: 187, growth: null },
+];
 
 const records = [
     { value: 2500000, label: "개인방송 단일 최고" },
     { value: 6230000, label: "주간 BJ 최고 기록" },
-    { value: 7324709, label: "크루방송 단일 회차 최고" },
+    { value: 8007828, label: "크루방송 단일 회차 최고" },
 ];
 
-/** path(30,390)→(725,45) + 끝점 원 여유만 포함 */
-const GRAPH_VIEWBOX = "14 21 735 385";
+function GrowthLabel({ x = 0, y = 0, value }: { x?: number; y?: number; value?: number | null }) {
+    if (value == null) {
+        return null;
+    }
+
+    return (
+        <g transform={`translate(${x - 52}, ${y - 96})`}>
+            <line
+                x1="52"
+                y1="84"
+                x2="52"
+                y2="136"
+                stroke="#ffb3bc"
+                strokeDasharray="4 4"
+                opacity="0.8"
+            />
+            <rect
+                width="104"
+                height="60"
+                rx="18"
+                fill="rgba(255,255,255,0.96)"
+                stroke="rgba(255, 132, 146, 0.18)"
+            />
+            <text
+                x="52"
+                y="24"
+                textAnchor="middle"
+                fontSize="12"
+                fontWeight="700"
+                fill="#ff5b68"
+            >
+                {`+${value}%`}
+            </text>
+            <text
+                x="52"
+                y="42"
+                textAnchor="middle"
+                fontSize="10"
+                fontWeight="600"
+                fill="#4b5563"
+            >
+                전년 대비
+            </text>
+        </g>
+    );
+}
+
+function AmountLabel({ x = 0, y = 0, value }: { x?: number; y?: number; value?: number }) {
+    if (value == null) {
+        return null;
+    }
+
+    return (
+        <text
+            x={x}
+            y={y - 18}
+            textAnchor="middle"
+            fontSize="14"
+            fontWeight="700"
+            fill="#111111"
+        >
+            <tspan>약 </tspan>
+            <tspan
+                fill="#ff5b68"
+                fontSize="18"
+            >
+                {value}
+            </tspan>
+            <tspan>억</tspan>
+        </text>
+    );
+}
+
+function CurveDot(props: { cx?: number; cy?: number; index?: number }) {
+    const { cx = 0, cy = 0, index = 0 } = props;
+
+    return (
+        <g>
+            {index === datas.length - 1 ? (
+                <path
+                    d={`M ${cx + 8} ${cy - 3} Q ${cx + 22} ${cy - 22} ${cx + 34} ${cy - 38}`}
+                    fill="none"
+                    stroke="#ff5b68"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                />
+            ) : null}
+            {index === datas.length - 1 ? (
+                <path
+                    d={`M ${cx + 30} ${cy - 42} L ${cx + 40} ${cy - 40} L ${cx + 35} ${cy - 30} Z`}
+                    fill="#ff5b68"
+                />
+            ) : null}
+            <circle
+                cx={cx}
+                cy={cy}
+                r="7"
+                fill="rgba(255,91,104,0.12)"
+            />
+            <circle
+                cx={cx}
+                cy={cy}
+                r="4"
+                fill="#ff5b68"
+            />
+        </g>
+    );
+}
 
 export function RecordGraph() {
     return (
@@ -21,7 +135,9 @@ export function RecordGraph() {
             data-report-type="group"
         >
             <div
-                className="absolute top-[clamp(1.6rem,4vw,4rem)] left-1/2 z-10 w-full -translate-x-1/2 px-[clamp(1.6rem,4vw,4rem)]"
+                className="absolute top-[calc(50%-(1.6rem*2))] left-1/2 z-10 w-full -translate-x-1/2 translate-y-[-50%] px-[clamp(1.6rem,4vw,4rem)]"
+                // className="absolute top-[clamp(1.6rem,4vw,4rem)] left-1/2 z-10 w-full -translate-x-1/2 px-[clamp(1.6rem,4vw,4rem)]"
+
                 data-report-id="플랫폼 기록 카피"
                 data-report-type="item"
             >
@@ -105,70 +221,91 @@ export function RecordGraph() {
             </div>
 
             <motion.div
-                className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-x-hidden"
+                // className="pointer-events-none absolute left-[50%] inset-0 z-0 flex items-center justify-center overflow-x-hidden"
+                // className="pointer-events-none absolute left-[25%] inset-0 z-0 flex items-center justify-center overflow-x-hidden"
+                className="pointer-events-none absolute inset-x-0 mobile:bottom-0 mobile:left-0 mobile:h-1/2 mobile:opacity-50 pc:left-[25%] pc:inset-y-0 pc:h-full pc:opacity-100 z-0 flex items-center justify-center overflow-x-hidden"
                 data-report-id="플랫폼 기록 그래프"
                 data-report-type="item"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
-                viewport={{ amount: 0.25, once: false }}
+                viewport={{ amount: 0.2, once: false }}
                 transition={{ duration: 0.9 }}
                 style={{
-                    maskImage: "linear-gradient(90deg, transparent 0%, transparent 18%, black 55%, black 100%)",
+                    maskImage: "linear-gradient(90deg, transparent 0%, transparent 10%, black 35%, black 100%)",
                     WebkitMaskImage: "linear-gradient(90deg, transparent 0%, transparent 18%, black 55%, black 100%)",
                 }}
             >
-                <svg
-                    viewBox={GRAPH_VIEWBOX}
-                    preserveAspectRatio="xMidYMid meet"
-                    className="block h-auto w-full max-w-none"
-                    aria-hidden
-                >
-                    <motion.polyline
-                        fill="none"
-                        points="30,390 190,310 330,345 470,160 615,220 725,45"
-                        stroke="#ff7b86"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        initial={{ pathLength: 0, opacity: 0.25 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        viewport={{ amount: 0.25, once: false }}
-                        transition={{ duration: 1.2, ease: "easeInOut" }}
-                    />
-                    <motion.circle
-                        cx="725"
-                        cy="45"
-                        fill="#ff6b7650"
-                        r="2"
-                        animate={{
-                            opacity: [0.25, 1, 0.25],
-                        }}
-                        transition={{
-                            repeat: Infinity,
-                            duration: 1,
-                            repeatDelay: 0,
-                            ease: "easeInOut",
-                        }}
-                    />
-                    <motion.circle
-                        cx="725"
-                        cy="45"
-                        fill="#ff6b76"
-                        r="3"
-                        initial={{ pathLength: 0, opacity: 0.25 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        viewport={{ amount: 0.25, once: false }}
-                        transition={{ duration: 1.2, ease: "easeOut" }}
-                    />
+                <ResponsiveContainer>
+                    <ComposedChart
+                        data={datas}
+                        // margin={{ top: 72, right: 50, bottom: 18, left: 24 }}
+                        margin={{ top: 72 }}
+                    >
+                        <CartesianGrid
+                            vertical={false}
+                            stroke="rgba(148, 163, 184, 0.25)"
+                            strokeDasharray="4 6"
+                        />
+                        <XAxis
+                            dataKey="name"
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: "#374151", fontSize: 13, fontWeight: 500 }}
+                        />
+                        <YAxis
+                            axisLine={false}
+                            tickLine={false}
+                            tickMargin={12}
+                            domain={[0, 200]}
+                            ticks={[0, 50, 100, 150, 200]}
+                            tick={{ fill: "#9ca3af", fontSize: 12 }}
+                        />
 
-                    <circle
-                        cx="725"
-                        cy="45"
-                        fill="#ff6b76"
-                        opacity="0.12"
-                        r="8"
-                    />
-                </svg>
+                        <Tooltip
+                            contentStyle={{
+                                borderRadius: "1.6rem",
+                                background: "rgba(255,255,255,0.98)",
+                                boxShadow: "0 16px 50px rgba(255, 91, 104, 0.18)",
+                                border: "none",
+                            }}
+                            itemStyle={{
+                                color: "#ff5b68",
+                            }}
+                            wrapperStyle={{
+                                borderRadius: "1rem",
+                            }}
+                            formatter={(value) => [`${value ?? 0}억`, "매출"]}
+                            labelFormatter={(label) => `${label}년`}
+                        />
+                        <Line
+                            type="monotone"
+                            dataKey="amount"
+                            stroke="#ff5b68"
+                            strokeWidth={2}
+                            dot={<CurveDot />}
+                            activeDot={false}
+                        />
+                        <Bar
+                            dataKey="amount"
+                            barSize={128}
+                            fill="#111111"
+                            radius={[24, 24, 0, 0]}
+                            activeBar={{
+                                fill: "#111111",
+                            }}
+                        >
+                            <LabelList
+                                dataKey="amount"
+                                position="top"
+                                content={<AmountLabel />}
+                            />
+                            <LabelList
+                                dataKey="growth"
+                                content={<GrowthLabel />}
+                            />
+                        </Bar>
+                    </ComposedChart>
+                </ResponsiveContainer>
             </motion.div>
         </section>
     );

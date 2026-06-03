@@ -61,7 +61,7 @@ export function AdminSidebar({ onMainNavigationClick }: AdminSidebarProps) {
                         height={42}
                         alt=""
                     />
-                    <div className="flex flex-col">
+                    <div className="flex flex-col gap-[0.8rem]">
                         <h6 className="font-[700]">{session?.name ?? "JNS"} 님</h6>
                         <h6 className="text-[1.4rem] text-[var(--adaptive-grey600)]">{session?.role ? getManagerAccountRoleLabel(session.role) : "관리자"}</h6>
                     </div>
