@@ -32,6 +32,8 @@ export function Analysis() {
                 description={"최고의 장비를\n합리적인 비용으로 렌탈해드립니다."}
             />
             <SubPageSplit
+                leftTabLabel="렌탈 안내"
+                rightTabLabel="렌탈 신청"
                 left={
                     <div
                         className="sticky top-[9.2rem] flex flex-col gap-[9.2rem]"

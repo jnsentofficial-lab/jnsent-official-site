@@ -40,6 +40,8 @@ export function Analysis() {
             />
 
             <SubPageSplit
+                leftTabLabel="컨설팅 안내"
+                rightTabLabel="문의하기"
                 left={
                     <div className="flex flex-col gap-[9.2rem]">
                         <SubPageSection title={"컨설팅 분야"}>

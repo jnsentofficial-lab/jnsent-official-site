@@ -35,6 +35,8 @@ export function Analysis() {
             />
 
             <SubPageSplit
+                leftTabLabel="이용 안내"
+                rightTabLabel="문의하기"
                 left={
                     <SubPageSection title={"주의사항"}>
                         <NoticeBox />

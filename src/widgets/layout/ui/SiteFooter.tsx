@@ -6,17 +6,18 @@ export function SiteFooter() {
     return (
         <footer className="bg-black py-16 mobile:px-[1.6rem] pc:px-0 text-white">
             {/* <div className="mx-auto grid w-[min(112rem,calc(100%_-_3.2rem))] grid-cols-2 gap-20 max-[86rem]:grid-cols-1"> */}
-            <div className="mx-auto grid max-w-[var(--size-pc)] grid-cols-2 gap-20 max-[86rem]:grid-cols-1">
+            {/* <div className="mx-auto grid max-w-[var(--size-pc)] grid-cols-2 gap-20 max-[86rem]:grid-cols-1"> */}
+            <div className="mx-auto grid max-w-[var(--size-pc)] grid-cols-2 mobile:gap-[1.6rem] pc:gap-20 max-[86rem]:grid-cols-1">
                 <div>
                     <Image
                         src={"/images/common/ico-logo.svg"}
                         width={72}
                         height={72}
                         alt=""
-                        className="invert"
+                        className="invert mobile:w-[5.2rem] pc:w-[7.2rem]"
                         // className={`${isNowDarkMode ? "invert" : ""}`}
                     />
-                    <p className="mt-5 mb-0 text-xl font-[700] leading-[1.5] text-white/45">
+                    <p className="mt-5 mb-0 mobile:text-[1.6rem] pc:text-[7.2rem] font-[700] leading-[1.5] text-white/45">
                         JNS ENTERTAINMENT
                         <br />
                         제이엔에스엔터테인먼트

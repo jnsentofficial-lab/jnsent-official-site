@@ -21,6 +21,8 @@ type SubPageSplitProps = {
     left: ReactNode;
     right: ReactNode;
     className?: string;
+    leftTabLabel?: ReactNode;
+    rightTabLabel?: ReactNode;
 };
 
 type InfoCardProps = {
@@ -137,7 +139,15 @@ export function SubPageHero({ current, title, description }: SubPageHeroProps) {
     );
 }
 
-export function SubPageSplit({ left, right, className = "" }: SubPageSplitProps) {
+export function SubPageSplit({
+    left,
+    right,
+    className = "",
+    leftTabLabel = "좌측",
+    rightTabLabel = "우측",
+}: SubPageSplitProps) {
+    const [mobileTab, setMobileTab] = useState<"left" | "right">("left");
+
     return (
         <section
             className={`mx-[1.6rem] pb-[14rem] max-[86rem]:pb-24 ${className}`}
@@ -145,8 +155,33 @@ export function SubPageSplit({ left, right, className = "" }: SubPageSplitProps)
             data-report-type="group"
         >
             <div className="mx-auto grid max-w-[var(--size-pc)] w-full grid-cols-4 gap-16 max-[86rem]:grid-cols-1">
+                <div
+                    className="hidden max-[86rem]:flex col-span-4 rounded-[1.6rem] bg-[var(--adaptive-black50)] p-[0.4rem]"
+                    data-report-id="서브페이지 모바일 탭"
+                    data-report-type="group"
+                >
+                    <button
+                        type="button"
+                        className={`flex-1 rounded-[1.2rem] px-[1.6rem] py-[1.2rem] text-[1.6rem] font-[700] transition-colors ${mobileTab === "left" ? "bg-white text-black" : "text-[var(--adaptive-grey500)]"}`}
+                        onClick={() => setMobileTab("left")}
+                        data-report-id="서브페이지 모바일 좌측 탭"
+                        data-report-type="item"
+                    >
+                        {leftTabLabel}
+                    </button>
+                    <button
+                        type="button"
+                        className={`flex-1 rounded-[1.2rem] px-[1.6rem] py-[1.2rem] text-[1.6rem] font-[700] transition-colors ${mobileTab === "right" ? "bg-white text-black" : "text-[var(--adaptive-grey500)]"}`}
+                        onClick={() => setMobileTab("right")}
+                        data-report-id="서브페이지 모바일 우측 탭"
+                        data-report-type="item"
+                    >
+                        {rightTabLabel}
+                    </button>
+                </div>
+
                 <motion.div
-                    className="col-span-2"
+                    className={`col-span-2 ${mobileTab === "right" ? "max-[86rem]:hidden" : ""}`}
                     data-report-id="서브페이지 좌측 영역"
                     data-report-type="item"
                     initial={{ opacity: 0, transform: "translateY(100px)" }}
@@ -164,7 +199,7 @@ export function SubPageSplit({ left, right, className = "" }: SubPageSplitProps)
                 </motion.div>
 
                 <motion.div
-                    className="col-span-2"
+                    className={`col-span-2 ${mobileTab === "left" ? "max-[86rem]:hidden" : ""}`}
                     data-report-id="서브페이지 우측 영역"
                     data-report-type="item"
                     initial={{ opacity: 0, transform: "translateY(100px)" }}
