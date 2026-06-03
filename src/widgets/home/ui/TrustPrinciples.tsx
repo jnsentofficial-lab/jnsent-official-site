@@ -127,7 +127,7 @@ export function TrustPrinciples() {
 
                         <section className="flex flex-col gap-[1.6rem]">
                             {/* <div className="grid mobile:grid-cols-[1fr_1fr] pc:grid-cols-[1fr_1fr_1fr_1fr] mobile:gap-[3.2rem] pc:gap-0"> */}
-                            <div className="grid mobile:grid-cols-[1fr_1fr] pc:grid-cols-[1fr_1fr] mobile:gap-[3.2rem] pc:gap-0">
+                            <div className="grid mobile:grid-cols-[1fr_1fr] pc:grid-cols-[1fr_1fr] mobile:gap-[3.2rem] pc:gap-[3.2rem_0]">
                                 {openItems.map((mappedItem, mappedIdx) => (
                                     <div key={mappedIdx}>
                                         <Image

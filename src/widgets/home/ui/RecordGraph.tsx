@@ -277,278 +277,249 @@ const GraphVer2 = () => {
 };
 
 const GraphVer3 = () => {
-    const reportChartHeight = 600;
-    const reportChartWidth = 920;
-    // const reportChartWidth = 920;
-    const chartLeftPadding = 86;
-    const chartRightPadding = 48;
-    const chartTopPadding = 90;
-    const chartBottomPadding = 84;
-    const innerWidth = reportChartWidth - chartLeftPadding - chartRightPadding;
-    const innerHeight = reportChartHeight - chartTopPadding - chartBottomPadding;
-    const maxAmount = 200;
-    const stepX = innerWidth / Math.max(graphBars.length - 1, 1);
-    const linePoints = graphBars.map((bar, index) => {
-        const x = chartLeftPadding + stepX * index;
-        const y = chartTopPadding + innerHeight - (bar.amount / maxAmount) * innerHeight;
-        let growthValue: string | undefined = undefined;
-
-        if (index > 0) {
-            const prevAmount = graphBars[index - 1].amount;
-            const growth = ((bar.amount - prevAmount) / prevAmount) * 100;
-            growthValue = `+${growth.toFixed(1)}%`;
-        }
-
-        return {
-            ...bar,
-            x,
-            y,
-            formattedAmount: bar.amount.toLocaleString("ko-KR"),
-            growthValue, // will be undefined for the first point, string otherwise
-        };
-    });
-    const linePath = linePoints.reduce((path, point, index) => {
-        if (index === 0) {
-            return `M ${point.x} ${point.y}`;
-        }
-
-        const previousPoint = linePoints[index - 1];
-        const rise = point.y - previousPoint.y;
-        const controlX1 = previousPoint.x + stepX * 0.42;
-        const controlY1 = previousPoint.y + rise * 0.1;
-        const controlX2 = point.x - stepX * 0.16;
-        const controlY2 = point.y - rise * 0.78;
-
-        return `${path} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${point.x} ${point.y}`;
-    }, "");
-    const gridValues = [0, 40, 80, 120, 160, 200];
-    const growthBadges = linePoints.slice(1).map((point, index) => {
-        const previousPoint = linePoints[index];
-        const growth = ((point.amount - previousPoint.amount) / previousPoint.amount) * 100;
-        const isLastBadge = index === linePoints.slice(1).length - 1;
-
-        return {
-            year: point.name,
-            value: `+${growth.toFixed(1)}%`,
-            left: `${((point.x + (isLastBadge ? -78 : 0)) / reportChartWidth) * 100}%`,
-            top: `${((point.y - (isLastBadge ? 156 : 88)) / reportChartHeight) * 100}%`,
-            align: isLastBadge ? "right" : "center",
-        };
-    });
     const graphEase = [0.22, 1, 0.36, 1] as const;
     const hoverEase = [0.44, 0.05, 0.55, 0.95] as const;
+    const chartConfigs = {
+        desktop: {
+            reportChartWidth: 920,
+            reportChartHeight: 600,
+            chartLeftPadding: 86,
+            chartRightPadding: 48,
+            chartTopPadding: 90,
+            chartBottomPadding: 84,
+            barWidth: 90,
+            amountY: 18,
+            growthLabelY: 64,
+            growthValueFontSize: 14,
+            growthCaptionFontSize: 10,
+            amountPrefixFontSize: 14,
+            amountValueFontSize: 24,
+            yearFontSize: 22,
+            dotOuter: 12,
+            dotInner: 7,
+        },
+        mobile: {
+            reportChartWidth: 360,
+            reportChartHeight: 420,
+            chartLeftPadding: 28,
+            chartRightPadding: 20,
+            chartTopPadding: 76,
+            chartBottomPadding: 32,
+            barWidth: 62,
+            amountY: 12,
+            growthLabelY: 42,
+            growthValueFontSize: 9,
+            growthCaptionFontSize: 7,
+            amountPrefixFontSize: 8,
+            amountValueFontSize: 14,
+            yearFontSize: 10,
+            dotOuter: 7,
+            dotInner: 4,
+        },
+    } as const;
+
+    const renderChart = (mode: keyof typeof chartConfigs) => {
+        const config = chartConfigs[mode];
+        const innerWidth = config.reportChartWidth - config.chartLeftPadding - config.chartRightPadding;
+        const innerHeight = config.reportChartHeight - config.chartTopPadding - config.chartBottomPadding;
+        const maxAmount = 200;
+        const stepX = innerWidth / Math.max(graphBars.length - 1, 1);
+        const linePoints = graphBars.map((bar, index) => {
+            const x = config.chartLeftPadding + stepX * index;
+            const y = config.chartTopPadding + innerHeight - (bar.amount / maxAmount) * innerHeight;
+            let growthValue: string | undefined;
+
+            if (index > 0) {
+                const prevAmount = graphBars[index - 1].amount;
+                const growth = ((bar.amount - prevAmount) / prevAmount) * 100;
+                growthValue = `+${growth.toFixed(1)}%`;
+            }
+
+            return {
+                ...bar,
+                x,
+                y,
+                formattedAmount: bar.amount.toLocaleString("ko-KR"),
+                growthValue,
+            };
+        });
+        const linePath = linePoints.reduce((path, point, index) => {
+            if (index === 0) {
+                return `M ${point.x} ${point.y}`;
+            }
+
+            const previousPoint = linePoints[index - 1];
+            const rise = point.y - previousPoint.y;
+            const controlX1 = previousPoint.x + stepX * (mode === "mobile" ? 0.38 : 0.42);
+            const controlY1 = previousPoint.y + rise * 0.1;
+            const controlX2 = point.x - stepX * (mode === "mobile" ? 0.12 : 0.16);
+            const controlY2 = point.y - rise * (mode === "mobile" ? 0.7 : 0.78);
+
+            return `${path} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${point.x} ${point.y}`;
+        }, "");
+
+        return (
+            <svg
+                viewBox={`0 0 ${config.reportChartWidth} ${config.reportChartHeight}`}
+                className="h-full w-full"
+            >
+                {linePoints.map((point) => (
+                    <g key={`${mode}-${point.name}`}>
+                        <motion.line
+                            x1={point.x}
+                            y1={config.reportChartHeight - config.chartBottomPadding}
+                            x2={point.x}
+                            y2={point.y}
+                            stroke="var(--adaptive-grey900)"
+                            strokeDasharray="5 6"
+                            strokeWidth={config.barWidth}
+                            initial={{ pathLength: 0, opacity: 0 }}
+                            whileInView={{ pathLength: 1, opacity: 1 }}
+                            viewport={{ amount: 0.25, once: false }}
+                            transition={{ duration: 0.8, delay: 0.16 * linePoints.indexOf(point), ease: graphEase }}
+                        />
+
+                        {point.growthValue ? (
+                            <>
+                                <motion.text
+                                    x={point.x}
+                                    y={point.y - config.growthLabelY}
+                                    textAnchor="middle"
+                                    fontWeight="700"
+                                    fill="var(--adaptive-grey500)"
+                                    initial={{ opacity: 0, y: 16 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ amount: 0.25, once: false }}
+                                    transition={{ duration: 0.55, delay: 0.4 * linePoints.indexOf(point) + 0.15, ease: graphEase }}
+                                >
+                                    <tspan
+                                        fontSize={config.growthCaptionFontSize}
+                                        fontWeight="700"
+                                    >
+                                        전년대비
+                                    </tspan>
+                                </motion.text>
+
+                                <motion.text
+                                    x={point.x}
+                                    y={point.y - (config.growthLabelY - (mode === "mobile" ? 10 : 16))}
+                                    textAnchor="middle"
+                                    fontWeight="700"
+                                    fill="var(--adaptive-red500)"
+                                    initial={{ opacity: 0, y: 16 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ amount: 0.25, once: false }}
+                                    transition={{ duration: 0.55, delay: 0.3 * linePoints.indexOf(point) + 0.15, ease: graphEase }}
+                                >
+                                    <tspan
+                                        fontSize={config.growthValueFontSize}
+                                        fontWeight="800"
+                                    >
+                                        {point.growthValue}
+                                    </tspan>
+                                </motion.text>
+                            </>
+                        ) : null}
+
+                        <motion.text
+                            x={point.x}
+                            y={point.y - config.amountY}
+                            textAnchor="middle"
+                            fontWeight="700"
+                            fill="#000000"
+                            initial={{ opacity: 0, y: 16 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ amount: 0.25, once: false }}
+                            transition={{ duration: 0.55, delay: 0.2 * linePoints.indexOf(point) + 0.15, ease: graphEase }}
+                        >
+                            <tspan
+                                fontSize={config.amountPrefixFontSize}
+                                fontWeight="600"
+                            >
+                                약&nbsp;
+                            </tspan>
+                            <tspan
+                                fontSize={config.amountValueFontSize}
+                                fontWeight="800"
+                            >
+                                {point.formattedAmount}
+                            </tspan>
+                            <tspan
+                                fontSize={config.amountValueFontSize}
+                                fontWeight="800"
+                            >
+                                억
+                            </tspan>
+                        </motion.text>
+
+                        <text
+                            x={point.x}
+                            y={config.reportChartHeight - (mode === "mobile" ? 14 : 60)}
+                            textAnchor="middle"
+                            fontSize={config.yearFontSize}
+                            fontWeight="700"
+                            fill="var(--adaptive-grey900)"
+                        >
+                            {point.name}
+                        </text>
+                    </g>
+                ))}
+
+                <motion.path
+                    d={linePath}
+                    fill="none"
+                    stroke="var(--adaptive-red500)"
+                    strokeWidth={mode === "mobile" ? 2 : 4}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    initial={{ pathLength: 0, opacity: 0.4 }}
+                    whileInView={{ pathLength: 1, opacity: 1 }}
+                    viewport={{ amount: 0.25, once: false }}
+                    transition={{ duration: 1.8, ease: graphEase }}
+                />
+
+                {linePoints.map((point, index) => (
+                    <motion.g
+                        key={`${mode}-${point.name}-dot`}
+                        initial={{ scale: 0, opacity: 0 }}
+                        whileInView={{ scale: 1, opacity: 1 }}
+                        viewport={{ amount: 0.25, once: false }}
+                        transition={{ duration: 0.45, delay: 0.24 * index + 0.25, ease: graphEase }}
+                        style={{ transformOrigin: `${point.x}px ${point.y}px` }}
+                    >
+                        <circle
+                            cx={point.x}
+                            cy={point.y}
+                            r={config.dotOuter}
+                            fill="var(--adaptive-redOpacity100)"
+                        />
+                        <circle
+                            cx={point.x}
+                            cy={point.y}
+                            r={config.dotInner}
+                            fill="var(--adaptive-red500)"
+                        />
+                    </motion.g>
+                ))}
+            </svg>
+        );
+    };
 
     return (
         <motion.div
-            // className="mx-auto max-w-[120rem] rounded-[4rem] bg-white"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ amount: 0.2, once: false }}
             transition={{ duration: 0.7, ease: graphEase }}
-            className="mt-auto"
-            // style={{
-            //     maskImage: "linear-gradient(90deg, transparent 0%, transparent 10%, black 18%, black 100%)",
-            //     WebkitMaskImage: "linear-gradient(90deg, transparent 0%, transparent 18%, black 60%, black 100%)",
-            // }}
+            className="mt-auto ml-auto flex w-full justify-end"
         >
-            {/* <div className="relative mt-[5.6rem] overflow-hidden rounded-[3.2rem] border border-[#e9ecef] bg-[#fcfcfb] px-[2.4rem] pb-[2.4rem] pt-[3.2rem]"> */}
-            <div className="relative mt-[5.6rem] px-[2.4rem] pb-[2.4rem] pt-[3.2rem]">
-                {/* <div className="mb-[1.6rem] text-[2rem] font-semibold text-[#5f666d]">(단위: 억 원)</div> */}
-
-                <svg
-                    viewBox={`0 0 ${reportChartWidth} ${reportChartHeight}`}
-                    className="w-full"
-                >
-                    {/* 선 */}
-                    {/* {gridValues.map((value) => {
-                        const y = chartTopPadding + innerHeight - (value / maxAmount) * innerHeight;
-
-                        return (
-                            <g key={value}>
-                                <line
-                                    x1={chartLeftPadding}
-                                    y1={y}
-                                    x2={reportChartWidth - chartRightPadding}
-                                    y2={y}
-                                    stroke="#dde2e5"
-                                    strokeWidth="1"
-                                />
-                                <text
-                                    x={18}
-                                    y={y + 7}
-                                    fontSize="22"
-                                    fontWeight="500"
-                                    fill="#6d747b"
-                                >
-                                    {value.toLocaleString("ko-KR")}
-                                </text>
-                            </g>
-                        );
-                    })} */}
-
-                    {linePoints.map((point) => (
-                        <g
-                            key={point.name}
-                            style={{ position: "relative" }}
-                        >
-                            <motion.line
-                                x1={point.x}
-                                y1={reportChartHeight - chartBottomPadding}
-                                x2={point.x}
-                                y2={point.y}
-                                stroke="var(--adaptive-grey900)"
-                                // stroke="#8ad6d0"
-                                strokeDasharray="5 6"
-                                strokeWidth="50"
-                                initial={{ pathLength: 0, opacity: 0 }}
-                                whileInView={{ pathLength: 1, opacity: 1 }}
-                                viewport={{ amount: 0.25, once: false }}
-                                transition={{ duration: 0.8, delay: 0.16 * linePoints.indexOf(point), ease: graphEase }}
-                            />
-                            <motion.text
-                                x={point.x}
-                                y={point.y - 64}
-                                textAnchor="middle"
-                                fontWeight="700"
-                                fill="var(--adaptive-grey500)"
-                                // fill="#57bcb5"
-                                initial={{ opacity: 0, y: 16 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ amount: 0.25, once: false }}
-                                transition={{ duration: 0.55, delay: 0.4 * linePoints.indexOf(point) + 0.15, ease: graphEase }}
-                            >
-                                <tspan
-                                    fontSize="10"
-                                    fontWeight="700"
-                                >
-                                    전년대비
-                                </tspan>
-                            </motion.text>
-
-                            <motion.text
-                                x={point.x}
-                                y={point.y - 48}
-                                textAnchor="middle"
-                                fontWeight="700"
-                                fill="var(--adaptive-red500)"
-                                // fill="#57bcb5"
-                                initial={{ opacity: 0, y: 16 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ amount: 0.25, once: false }}
-                                transition={{ duration: 0.55, delay: 0.3 * linePoints.indexOf(point) + 0.15, ease: graphEase }}
-                            >
-                                <tspan
-                                    fontSize="14"
-                                    fontWeight="800"
-                                >
-                                    {point.growthValue}
-                                </tspan>
-                            </motion.text>
-
-                            <motion.text
-                                x={point.x}
-                                y={point.y - 18}
-                                textAnchor="middle"
-                                fontWeight="700"
-                                fill="#000000"
-                                initial={{ opacity: 0, y: 16 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ amount: 0.25, once: false }}
-                                transition={{ duration: 0.55, delay: 0.2 * linePoints.indexOf(point) + 0.15, ease: graphEase }}
-                            >
-                                <tspan
-                                    fontSize="14"
-                                    fontWeight="600"
-                                >
-                                    약&nbsp;
-                                </tspan>
-                                <tspan
-                                    fontSize="24"
-                                    fontWeight="800"
-                                >
-                                    {point.formattedAmount}
-                                </tspan>
-                                <tspan
-                                    fontSize="24"
-                                    fontWeight="800"
-                                >
-                                    억
-                                </tspan>
-                            </motion.text>
-
-                            <text
-                                x={point.x}
-                                y={reportChartHeight - 60}
-                                textAnchor="middle"
-                                fontSize="22"
-                                fontWeight="700"
-                                fill="var(--adaptive-grey900)"
-                            >
-                                {point.name}
-                            </text>
-                        </g>
-                    ))}
-
-                    <motion.path
-                        d={linePath}
-                        fill="none"
-                        stroke="var(--adaptive-red500)"
-                        strokeWidth="4"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        initial={{ pathLength: 0, opacity: 0.4 }}
-                        whileInView={{ pathLength: 1, opacity: 1 }}
-                        viewport={{ amount: 0.25, once: false }}
-                        transition={{ duration: 1.8, ease: graphEase }}
-                    />
-
-                    {linePoints.map((point, index) => (
-                        <motion.g
-                            key={`${point.name}-dot`}
-                            initial={{ scale: 0, opacity: 0 }}
-                            whileInView={{ scale: 1, opacity: 1 }}
-                            viewport={{ amount: 0.25, once: false }}
-                            transition={{ duration: 0.45, delay: 0.24 * index + 0.25, ease: graphEase }}
-                            style={{ transformOrigin: `${point.x}px ${point.y}px` }}
-                        >
-                            <circle
-                                cx={point.x}
-                                cy={point.y}
-                                r="12"
-                                fill="var(--adaptive-redOpacity100)"
-                            />
-                            <circle
-                                cx={point.x}
-                                cy={point.y}
-                                r="7"
-                                fill="var(--adaptive-red500)"
-                            />
-                        </motion.g>
-                    ))}
-                </svg>
-
-                {/* {growthBadges.map((badge, index) => (
-                    <motion.div
-                        key={badge.year}
-                        className="absolute rounded-[2rem] bg-[var(--adaptive-red50)] px-[1.6rem] py-[1.2rem] text-center"
-                        style={{
-                            left: badge.left,
-                            top: badge.top,
-                            transform: badge.align === "right" ? "translate(-100%, 0)" : "translate(-50%, 0)",
-                        }}
-                        initial={{ opacity: 0, y: 24, scale: 0.94 }}
-                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                        viewport={{ amount: 0.25, once: false }}
-                        transition={{ duration: 0.55, delay: 0.3 * index + 0.35, ease: graphEase }}
-                    >
-                        <div className="text-[1.9rem] font-black leading-none text-[var(--adaptive-red500)]">{badge.value}</div>
-                        <div className="mt-[0.6rem] text-[1.2rem] font-bold text-[var(--adaptive-red300)]">전년 대비</div>
-                    </motion.div>
-                ))} */}
+            <div className="relative mt-[5.6rem] h-[46dvh] w-full px-[1.2rem] pb-[1.2rem] pt-[1.6rem] md:h-[80dvh] md:w-[80dvw] md:px-[2.4rem] md:pb-[2.4rem] md:pt-[3.2rem]">
+                <div className="h-full md:hidden">{renderChart("mobile")}</div>
+                <div className="hidden h-full md:block">{renderChart("desktop")}</div>
 
                 {false ? (
                     <motion.div
-                        className="absolute right-[0.8rem] top-[-2.2rem] rounded-[2.6rem] bg-[#48c3bc] px-[2.4rem] py-[2rem] text-center text-white shadow-[0_24px_40px_rgba(72,195,188,0.2)]"
+                        className="absolute right-[4%] top-[5%] rounded-[1.8rem] bg-[#48c3bc] px-[1.4rem] py-[1.2rem] text-center text-white shadow-[0_24px_40px_rgba(72,195,188,0.2)] md:right-[0.8rem] md:top-[-2.2rem] md:rounded-[2.6rem] md:px-[2.4rem] md:py-[2rem]"
                         initial={{ opacity: 0, scale: 0.2 }}
                         whileInView={{
                             opacity: 1,
@@ -562,7 +533,7 @@ const GraphVer3 = () => {
                             y: { duration: 2.8, ease: hoverEase, repeat: Infinity, repeatType: "loop", repeatDelay: 0.1 },
                         }}
                     >
-                        <div className="text-[2.8rem] font-black flex items-center">
+                        <div className="flex items-center text-[1.8rem] font-black md:text-[2.8rem]">
                             <Text.Rolling
                                 value={187}
                                 rollingCount={5}
@@ -571,10 +542,8 @@ const GraphVer3 = () => {
                             <p>억</p>
                         </div>
 
-                        {/* <div className="text-[2.8rem] font-black leading-[1.1]">{linePoints.at(-1)?.formattedAmount}억</div> */}
-
-                        <div className="mt-[0.6rem] text-[2.4rem] font-black leading-[1.1]">돌파!!</div>
-                        <div className="absolute bottom-[-1.6rem] left-1/2 h-0 w-0 -translate-x-1/2 border-l-[1.6rem] border-r-[1.6rem] border-t-[2.2rem] border-l-transparent border-r-transparent border-t-[#48c3bc]" />
+                        <div className="mt-[0.4rem] text-[1.6rem] font-black leading-[1.1] md:mt-[0.6rem] md:text-[2.4rem]">돌파!!</div>
+                        <div className="absolute bottom-[-1rem] left-1/2 h-0 w-0 -translate-x-1/2 border-l-[1rem] border-r-[1rem] border-t-[1.4rem] border-l-transparent border-r-transparent border-t-[#48c3bc] md:bottom-[-1.6rem] md:border-l-[1.6rem] md:border-r-[1.6rem] md:border-t-[2.2rem]" />
                     </motion.div>
                 ) : null}
             </div>
