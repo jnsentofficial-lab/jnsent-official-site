@@ -304,19 +304,36 @@ const GraphVer3 = () => {
         }
 
         const previousPoint = linePoints[index - 1];
-        const controlX = (previousPoint.x + point.x) / 2;
+        const rise = point.y - previousPoint.y;
+        const controlX1 = previousPoint.x + stepX * 0.42;
+        const controlY1 = previousPoint.y + rise * 0.1;
+        const controlX2 = point.x - stepX * 0.16;
+        const controlY2 = point.y - rise * 0.78;
 
-        return `${path} C ${controlX} ${previousPoint.y}, ${controlX} ${point.y}, ${point.x} ${point.y}`;
+        return `${path} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${point.x} ${point.y}`;
     }, "");
     const gridValues = [0, 40, 80, 120, 160, 200];
+    const growthBadges = linePoints.slice(1).map((point, index) => {
+        const previousPoint = linePoints[index];
+        const growth = ((point.amount - previousPoint.amount) / previousPoint.amount) * 100;
+
+        return {
+            year: point.name,
+            value: `+${growth.toFixed(1)}%`,
+            left: `${(point.x / reportChartWidth) * 100}%`,
+            top: `${((point.y - 88) / reportChartHeight) * 100}%`,
+        };
+    });
+    const graphEase = [0.22, 1, 0.36, 1] as const;
+    const hoverEase = [0.44, 0.05, 0.55, 0.95] as const;
 
     return (
         <motion.div
             // className="mx-auto max-w-[120rem] rounded-[4rem] bg-white"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ amount: 0.2, once: true }}
-            transition={{ duration: 0.7 }}
+            viewport={{ amount: 0.2, once: false }}
+            transition={{ duration: 0.7, ease: graphEase }}
             style={{
                 maskImage: "linear-gradient(90deg, transparent 0%, transparent 10%, black 18%, black 100%)",
                 WebkitMaskImage: "linear-gradient(90deg, transparent 0%, transparent 18%, black 60%, black 100%)",
@@ -379,8 +396,8 @@ const GraphVer3 = () => {
                                 strokeWidth="50"
                                 initial={{ pathLength: 0, opacity: 0 }}
                                 whileInView={{ pathLength: 1, opacity: 1 }}
-                                viewport={{ amount: 0.25, once: true }}
-                                transition={{ duration: 0.6, delay: 0.15 * linePoints.indexOf(point) }}
+                                viewport={{ amount: 0.25, once: false }}
+                                transition={{ duration: 0.8, delay: 0.16 * linePoints.indexOf(point), ease: graphEase }}
                             />
                             <motion.text
                                 x={point.x}
@@ -388,11 +405,12 @@ const GraphVer3 = () => {
                                 textAnchor="middle"
                                 fontSize="24"
                                 fontWeight="700"
-                                fill="#57bcb5"
+                                fill="#000000"
+                                // fill="#57bcb5"
                                 initial={{ opacity: 0, y: 16 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ amount: 0.25 }}
-                                transition={{ duration: 0.45, delay: 0.2 * linePoints.indexOf(point) + 0.15 }}
+                                viewport={{ amount: 0.25, once: false }}
+                                transition={{ duration: 0.55, delay: 0.2 * linePoints.indexOf(point) + 0.15, ease: graphEase }}
                             >
                                 약 {point.formattedAmount}억
                             </motion.text>
@@ -418,8 +436,8 @@ const GraphVer3 = () => {
                         strokeLinejoin="round"
                         initial={{ pathLength: 0, opacity: 0.4 }}
                         whileInView={{ pathLength: 1, opacity: 1 }}
-                        viewport={{ amount: 0.25 }}
-                        transition={{ duration: 1.5, ease: "easeOut" }}
+                        viewport={{ amount: 0.25, once: false }}
+                        transition={{ duration: 1.8, ease: graphEase }}
                     />
 
                     {linePoints.map((point, index) => (
@@ -427,8 +445,8 @@ const GraphVer3 = () => {
                             key={`${point.name}-dot`}
                             initial={{ scale: 0, opacity: 0 }}
                             whileInView={{ scale: 1, opacity: 1 }}
-                            viewport={{ amount: 0.25 }}
-                            transition={{ duration: 0.35, delay: 0.28 * index + 0.25 }}
+                            viewport={{ amount: 0.25, once: false }}
+                            transition={{ duration: 0.45, delay: 0.24 * index + 0.25, ease: graphEase }}
                             style={{ transformOrigin: `${point.x}px ${point.y}px` }}
                         >
                             <circle
@@ -447,21 +465,47 @@ const GraphVer3 = () => {
                     ))}
                 </svg>
 
+                {growthBadges.map((badge, index) => (
+                    <motion.div
+                        key={badge.year}
+                        className="absolute -translate-x-1/2 rounded-[2rem] border border-[rgba(75,195,187,0.18)] bg-[rgba(255,255,255,0.94)] px-[1.6rem] py-[1.2rem] text-center shadow-[0_18px_36px_rgba(72,195,188,0.12)]"
+                        style={{ left: badge.left, top: badge.top }}
+                        initial={{ opacity: 0, y: 24, scale: 0.94 }}
+                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                        viewport={{ amount: 0.25, once: false }}
+                        transition={{ duration: 0.55, delay: 0.3 * index + 0.35, ease: graphEase }}
+                    >
+                        <div className="text-[1.9rem] font-black leading-none text-[#48c3bc]">{badge.value}</div>
+                        <div className="mt-[0.6rem] text-[1.2rem] font-bold text-[#7a7f89]">전년 대비</div>
+                    </motion.div>
+                ))}
+
                 <motion.div
                     className="absolute right-[3.5%] top-[7.5%] rounded-[2.6rem] bg-[#48c3bc] px-[2.4rem] py-[2rem] text-center text-white shadow-[0_24px_40px_rgba(72,195,188,0.2)]"
                     initial={{ opacity: 0, scale: 0.8, rotate: -4 }}
-                    whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-                    viewport={{ amount: 0.25 }}
-                    transition={{ duration: 0.5, delay: 1.1 }}
+                    whileInView={{
+                        opacity: 1,
+                        scale: 1,
+                        rotate: 0,
+                        y: [0, -10, 0, 10, 0],
+                    }}
+                    viewport={{ amount: 0.25, once: false }}
+                    transition={{
+                        opacity: { duration: 0.45, delay: 1.05, ease: graphEase },
+                        scale: { duration: 0.45, delay: 1.05, ease: graphEase },
+                        rotate: { duration: 0.45, delay: 1.05, ease: graphEase },
+                        y: { duration: 2.8, ease: hoverEase, repeat: Infinity, repeatType: "loop", delay: 1.2 },
+                    }}
                 >
                     <div className="text-[2.8rem] font-black flex items-center">
                         <Text.Rolling
-                            value={20}
+                            value={187}
                             rollingCount={5}
                             textSize={30}
                         />
                         <p>억</p>
                     </div>
+
                     {/* <div className="text-[2.8rem] font-black leading-[1.1]">{linePoints.at(-1)?.formattedAmount}억</div> */}
 
                     <div className="mt-[0.6rem] text-[2.4rem] font-black leading-[1.1]">돌파!!</div>
