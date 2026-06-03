@@ -68,7 +68,7 @@ export function TrustPrinciples() {
                 </Text.Reveal>
 
                 <section
-                    className="w-full flex gap-[1.6rem] items-center mobile:flex-col pc:flex-row"
+                    className="w-full flex gap-[1.6rem] items-center mobile:flex-col pc:flex-row pc:items-stretch"
                     data-report-id="신뢰 원칙 레이아웃"
                     data-report-type="item"
                 >
@@ -79,7 +79,7 @@ export function TrustPrinciples() {
                     >
                         {principleItems.map((item) => (
                             <article
-                                className="rounded-[3.2rem] p-[3.2rem] flex flex-col gap-[1.2rem]"
+                                className="rounded-[3.2rem] p-[3.2rem] flex flex-col gap-[1.2rem] bg-white"
                                 // className="rounded-2xl bg-white px-8 py-7 shadow-[0_1.2rem_3rem_rgba(20,30,40,0.06)]"
                                 key={item.title}
                             >
@@ -90,7 +90,7 @@ export function TrustPrinciples() {
                     </div>
 
                     <Image
-                        src={`/images/icon/outlined/ico-outlined-arrow-single-right.svg`}
+                        src={`/images/icon/outlined/ico-outlined-arrow-right.svg`}
                         alt=""
                         width={48}
                         height={48}
@@ -101,7 +101,8 @@ export function TrustPrinciples() {
                         // className="relative min-h-[43rem] overflow-hidden rounded-[2.4rem] bg-[url('/images/landing/meeting.webp')] bg-cover bg-center p-8 text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
                         // className="relative aspect-square overflow-hidden rounded-[2.4rem] bg-[url('/images/landing/meeting.png')] bg-cover bg-center text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
                         // className="relative aspect overflow-hidden rounded-[2.4rem] bg-[url('/images/landing/meeting.png')] bg-cover bg-center text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
-                        className="relative flex-1 overflow-hidden rounded-[2.4rem] bg-[url('/images/landing/meeting.png')] bg-cover bg-center text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
+                        // className="relative flex-1 overflow-hidden rounded-[2.4rem] bg-[url('/images/landing/meeting.png')] bg-cover bg-center text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
+                        className="relative flex flex-1 flex-col justify-between self-stretch overflow-hidden rounded-[2.4rem] bg-[linear-gradient(0deg,#000000f7_10%,#00000050)] p-[3.2rem] text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
                         data-report-id="신뢰 원칙 증빙 카드"
                         data-report-type="item"
                         initial={{ opacity: 0, x: 28 }}
@@ -109,43 +110,49 @@ export function TrustPrinciples() {
                         viewport={{ once: true, amount: 0.25 }}
                         whileInView={{ opacity: 1, x: 0 }}
                     >
+                        <img
+                            src={"/images/landing/meeting.png"}
+                            alt=""
+                            className="absolute top-0 left-0 w-full h-full object-cover z-[-1]"
+                        />
                         {/* <section className="bg-[linear-gradient(0deg,#000000f7_10%,#00000050)] h-full flex-1 p-[3.2rem] flex flex-col justify-between"> */}
-                        <section className="bg-[linear-gradient(0deg,#000000f7_10%,#00000050)] h-full flex-1 p-[3.2rem] gap-[12.0rem] h-full flex flex-col justify-between">
-                            <section className="flex flex-col gap-[1.6rem]">
-                                <p className="text-[1.8rem] font-[500]">제이엔에스는 모든 항목에 대해</p>
-                                <h6 className="leading-[1.5] text-[2.4rem]">
-                                    미팅 시 실제 자료를
-                                    <br />
-                                    투명하게 공개합니다.
-                                </h6>
-                            </section>
-
-                            <section className="flex flex-col gap-[1.6rem]">
-                                <div className="grid mobile:grid-cols-[1fr_1fr] pc:grid-cols-[1fr_1fr_1fr_1fr] mobile:gap-[3.2rem] pc:gap-0">
-                                    {openItems.map((mappedItem, mappedIdx) => (
-                                        <div key={mappedIdx}>
-                                            <Image
-                                                src={`/images/icon/outlined/${mappedItem.icon}.svg`}
-                                                alt=""
-                                                width={48}
-                                                height={48}
-                                            />
-                                            <p className="leading-[1.5] font-[400] whitespace-break-spaces">{mappedItem.description}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="w-full bg-[#ffffff50] h-[0.1rem]" />
-                                <div className="flex items-center gap-[0.8rem]">
-                                    <Image
-                                        src={`/images/icon/colored/ico-colored-checked-green.svg`}
-                                        alt=""
-                                        width={20}
-                                        height={20}
-                                    />
-                                    <p className="text-[#89FF49] font-[400] leading-[1.5]">말이 아닌, 눈으로 확인 할 수 있는 신뢰를 약속드립니다.</p>
-                                </div>
-                            </section>
+                        <section className="flex flex-col gap-[1.6rem]">
+                            <p className="text-[1.8rem] font-[500]">제이엔에스는 모든 항목에 대해</p>
+                            <h6 className="leading-[1.5] font-[900] text-[2.8rem]">
+                                미팅 시 실제 자료를
+                                <br />
+                                투명하게 공개합니다.
+                            </h6>
                         </section>
+
+                        <section className="flex flex-col gap-[1.6rem]">
+                            {/* <div className="grid mobile:grid-cols-[1fr_1fr] pc:grid-cols-[1fr_1fr_1fr_1fr] mobile:gap-[3.2rem] pc:gap-0"> */}
+                            <div className="grid mobile:grid-cols-[1fr_1fr] pc:grid-cols-[1fr_1fr] mobile:gap-[3.2rem] pc:gap-0">
+                                {openItems.map((mappedItem, mappedIdx) => (
+                                    <div key={mappedIdx}>
+                                        <Image
+                                            src={`/images/icon/outlined/${mappedItem.icon}.svg`}
+                                            alt=""
+                                            width={48}
+                                            height={48}
+                                        />
+                                        <p className="text-[1.8rem] leading-[1.5] font-[600]">{mappedItem.description}</p>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="w-full bg-[#ffffff50] h-[0.1rem]" />
+                            <div className="flex items-center gap-[0.8rem]">
+                                <Image
+                                    src={`/images/icon/colored/ico-colored-checked-green.svg`}
+                                    alt=""
+                                    width={20}
+                                    height={20}
+                                />
+                                <p className="text-[#89FF49] font-[600] leading-[1.5] text-[1.8rem]">말이 아닌, 눈으로 확인 할 수 있는 신뢰를 약속드립니다.</p>
+                            </div>
+                        </section>
+                        {/* <section className="bg-[linear-gradient(0deg,#000000f7_10%,#00000050)] h-full flex-1 p-[3.2rem] h-full flex flex-col justify-between">
+                        </section> */}
                     </motion.article>
                 </section>
             </div>
