@@ -279,6 +279,7 @@ const GraphVer2 = () => {
 const GraphVer3 = () => {
     const reportChartHeight = 600;
     const reportChartWidth = 920;
+    // const reportChartWidth = 920;
     const chartLeftPadding = 86;
     const chartRightPadding = 48;
     const chartTopPadding = 90;
@@ -316,12 +317,14 @@ const GraphVer3 = () => {
     const growthBadges = linePoints.slice(1).map((point, index) => {
         const previousPoint = linePoints[index];
         const growth = ((point.amount - previousPoint.amount) / previousPoint.amount) * 100;
+        const isLastBadge = index === linePoints.slice(1).length - 1;
 
         return {
             year: point.name,
             value: `+${growth.toFixed(1)}%`,
-            left: `${(point.x / reportChartWidth) * 100}%`,
-            top: `${((point.y - 88) / reportChartHeight) * 100}%`,
+            left: `${((point.x + (isLastBadge ? -78 : 0)) / reportChartWidth) * 100}%`,
+            top: `${((point.y - (isLastBadge ? 156 : 88)) / reportChartHeight) * 100}%`,
+            align: isLastBadge ? "right" : "center",
         };
     });
     const graphEase = [0.22, 1, 0.36, 1] as const;
@@ -334,10 +337,10 @@ const GraphVer3 = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ amount: 0.2, once: false }}
             transition={{ duration: 0.7, ease: graphEase }}
-            style={{
-                maskImage: "linear-gradient(90deg, transparent 0%, transparent 10%, black 18%, black 100%)",
-                WebkitMaskImage: "linear-gradient(90deg, transparent 0%, transparent 18%, black 60%, black 100%)",
-            }}
+            // style={{
+            //     maskImage: "linear-gradient(90deg, transparent 0%, transparent 10%, black 18%, black 100%)",
+            //     WebkitMaskImage: "linear-gradient(90deg, transparent 0%, transparent 18%, black 60%, black 100%)",
+            // }}
         >
             {/* <div className="relative mt-[5.6rem] overflow-hidden rounded-[3.2rem] border border-[#e9ecef] bg-[#fcfcfb] px-[2.4rem] pb-[2.4rem] pt-[3.2rem]"> */}
             <div className="relative mt-[5.6rem] overflow-hidden rounded-[3.2rem] px-[2.4rem] pb-[2.4rem] pt-[3.2rem]">
@@ -347,7 +350,8 @@ const GraphVer3 = () => {
                     viewBox={`0 0 ${reportChartWidth} ${reportChartHeight}`}
                     className="w-full"
                 >
-                    {gridValues.map((value) => {
+                    {/* 선 */}
+                    {/* {gridValues.map((value) => {
                         const y = chartTopPadding + innerHeight - (value / maxAmount) * innerHeight;
 
                         return (
@@ -371,17 +375,7 @@ const GraphVer3 = () => {
                                 </text>
                             </g>
                         );
-                    })}
-
-                    {/* <line
-                        x1={chartLeftPadding}
-                        y1={reportChartHeight - chartBottomPadding}
-                        x2={reportChartWidth - chartRightPadding}
-                        y2={reportChartHeight - chartBottomPadding}
-                        stroke="#101418"
-                        strokeWidth="3"
-                        className="z-[100]"
-                    /> */}
+                    })} */}
 
                     {linePoints.map((point) => (
                         <g key={point.name}>
@@ -403,7 +397,6 @@ const GraphVer3 = () => {
                                 x={point.x}
                                 y={point.y - 18}
                                 textAnchor="middle"
-                                fontSize="24"
                                 fontWeight="700"
                                 fill="#000000"
                                 // fill="#57bcb5"
@@ -412,7 +405,24 @@ const GraphVer3 = () => {
                                 viewport={{ amount: 0.25, once: false }}
                                 transition={{ duration: 0.55, delay: 0.2 * linePoints.indexOf(point) + 0.15, ease: graphEase }}
                             >
-                                약 {point.formattedAmount}억
+                                <tspan
+                                    fontSize="14"
+                                    fontWeight="600"
+                                >
+                                    약{" "}
+                                </tspan>
+                                <tspan
+                                    fontSize="24"
+                                    fontWeight="800"
+                                >
+                                    {point.formattedAmount}
+                                </tspan>
+                                <tspan
+                                    fontSize="24"
+                                    fontWeight="800"
+                                >
+                                    억
+                                </tspan>
                             </motion.text>
                             <text
                                 x={point.x}
@@ -468,8 +478,12 @@ const GraphVer3 = () => {
                 {growthBadges.map((badge, index) => (
                     <motion.div
                         key={badge.year}
-                        className="absolute -translate-x-1/2 rounded-[2rem] bg-[var(--adaptive-red50)] px-[1.6rem] py-[1.2rem] text-center"
-                        style={{ left: badge.left, top: badge.top }}
+                        className="absolute rounded-[2rem] bg-[var(--adaptive-red50)] px-[1.6rem] py-[1.2rem] text-center"
+                        style={{
+                            left: badge.left,
+                            top: badge.top,
+                            transform: badge.align === "right" ? "translate(-100%, 0)" : "translate(-50%, 0)",
+                        }}
                         initial={{ opacity: 0, y: 24, scale: 0.94 }}
                         whileInView={{ opacity: 1, y: 0, scale: 1 }}
                         viewport={{ amount: 0.25, once: false }}
@@ -483,19 +497,16 @@ const GraphVer3 = () => {
                 <motion.div
                     className="absolute right-[2.5%] top-[7.5%] rounded-[2.6rem] bg-[#48c3bc] px-[2.4rem] py-[2rem] text-center text-white shadow-[0_24px_40px_rgba(72,195,188,0.2)]"
                     initial={{ opacity: 0, scale: 0.2 }}
-                    exit={{ opacity: 0, scale: 0.2 }}
                     whileInView={{
                         opacity: 1,
                         scale: 1,
-                        // rotate: 0,
                         y: [-10, 10, -10],
                     }}
                     viewport={{ amount: 0.25, once: false }}
                     transition={{
-                        opacity: { duration: 0.45, delay: 1.05, ease: graphEase },
-                        scale: { duration: 0.45, delay: 1.05, ease: graphEase },
-                        rotate: { duration: 0.45, delay: 1.05, ease: graphEase },
-                        y: { duration: 2.8, ease: hoverEase, repeat: Infinity, repeatType: "loop", delay: 1.2 },
+                        opacity: { duration: 0.35, delay: 0.5, ease: graphEase },
+                        scale: { duration: 0.45, delay: 0.5, ease: graphEase },
+                        y: { duration: 2.8, ease: hoverEase, repeat: Infinity, repeatType: "loop", repeatDelay: 0.1 },
                     }}
                 >
                     <div className="text-[2.8rem] font-black flex items-center">
