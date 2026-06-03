@@ -230,10 +230,10 @@ export function RecordGraph() {
                 whileInView={{ opacity: 1 }}
                 viewport={{ amount: 0.2, once: false }}
                 transition={{ duration: 0.9 }}
-                // style={{
-                //     maskImage: "linear-gradient(90deg, transparent 0%, transparent 18%, black 55%, black 100%)",
-                //     WebkitMaskImage: "linear-gradient(90deg, transparent 0%, transparent 18%, black 55%, black 100%)",
-                // }}
+                style={{
+                    maskImage: "linear-gradient(90deg, transparent 0%, transparent 10%, black 35%, black 100%)",
+                    WebkitMaskImage: "linear-gradient(90deg, transparent 0%, transparent 18%, black 55%, black 100%)",
+                }}
             >
                 <ResponsiveContainer>
                     <ComposedChart
@@ -287,9 +287,9 @@ export function RecordGraph() {
                         />
                         <Bar
                             dataKey="amount"
-                            barSize={56}
+                            barSize={128}
                             fill="#111111"
-                            radius={[12, 12, 0, 0]}
+                            radius={[24, 24, 0, 0]}
                             activeBar={{
                                 fill: "#111111",
                             }}

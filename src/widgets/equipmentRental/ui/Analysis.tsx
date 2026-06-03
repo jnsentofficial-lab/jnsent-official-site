@@ -65,8 +65,8 @@ export function Analysis() {
                                     width={32}
                                     height={32}
                                 />
-                                <section className="flex flex-col gap-[0.8rem]">
-                                    <h5 className="text-[1.8rem]">문의가 필요하신가요?</h5>
+                                <section className="flex flex-col mobile:gap-[0.4rem] pc:gap-[0.8rem]">
+                                    <h5 className="font-[900] mobile:text-[1.4rem] pc:text-[1.8rem]">문의가 필요하신가요?</h5>
                                     <p className="leading-[1.5]">장비 상담 및 렌탈 관련 문의는 언제든지 연락주세요.</p>
                                 </section>
                             </section>

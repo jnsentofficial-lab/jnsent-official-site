@@ -87,19 +87,20 @@ export function SubPageHero({ current, title, description }: SubPageHeroProps) {
                         damping: 10,
                     }}
                 >
-                    <p className="mobile:text-[1.4rem] pc:text-[2.4rem] text-[var(--adaptive-grey500)]">메인</p>
+                    <p className="mobile:text-[1.8rem] pc:text-[2.4rem] text-[var(--adaptive-grey500)]">메인</p>
                     <img
                         src={"/images/icon/outlined/ico-outlined-arrow-right.svg"}
                         alt=""
-                        className="mobile:w-[2rem] pc:w-[3.6rem]"
+                        className="mobile:w-[2.4rem] pc:w-[3.6rem]"
                     />
-                    <p className="mobile:text-[1.4rem] pc:text-[2.4rem] font-[700]">{current}</p>
+                    <p className="mobile:text-[1.8rem] pc:text-[2.4rem] font-[700]">{current}</p>
                 </motion.section>
 
-                <section className="grid grid-cols-4 mobile:gap-[0.8rem] pc:gap-16 max-[86rem]:grid-cols-1">
+                {/* <section className="grid grid-cols-4 mobile:gap-[0.8rem] pc:gap-16 max-[86rem]:grid-cols-1"> */}
+                <section className="grid mobile:grid-cols-1 pc:grid-cols-4 mobile:gap-[1.2rem]">
                     {/* <section className="grid grid-cols-4 gap-16 max-[86rem]:grid-cols-1"> */}
                     <motion.h1
-                        className="col-span-2 whitespace-break-spaces font-[900] mobile:text-[2.4rem] pc:text-[5.2rem] leading-[1.5]"
+                        className="col-span-2 whitespace-break-spaces font-[900] mobile:text-[2.8rem] pc:text-[5.2rem] leading-[1.5]"
                         data-report-id={`${current} 히어로 제목`}
                         data-report-type="item"
                         initial={{ opacity: 0, transform: "translateY(100px)" }}
@@ -117,7 +118,7 @@ export function SubPageHero({ current, title, description }: SubPageHeroProps) {
                     </motion.h1>
 
                     <motion.p
-                        className="col-span-2 mobile:text-[1.6rem] pc:text-[2.4rem] font-[NanumSquare] whitespace-break-spaces leading-[1.5]"
+                        className="col-span-2 mobile:text-[2rem] pc:text-[2.4rem] font-[NanumSquare] whitespace-break-spaces leading-[1.5]"
                         data-report-id={`${current} 히어로 설명`}
                         data-report-type="item"
                         // className="col-span-2 m-0 pt-5 text-[2.4rem] font-[NanumSquare] whitespace-break-spaces leading-[1.5] text-black max-[86rem]:pt-0 max-[86rem]:text-2xl"
@@ -145,20 +146,20 @@ export function SubPageSplit({ left, right, className = "", leftTabLabel = "좌�
 
     return (
         <section
-            className={`mx-[1.6rem] pb-[14rem] max-[86rem]:pb-24 ${className}`}
+            className={`mx-[1.6rem] pb-[14rem] mobile:pb-24 ${className}`}
             data-report-id="서브페이지 분할 섹션"
             data-report-type="group"
         >
             <div className="mx-auto grid max-w-[var(--size-pc)] w-full grid-cols-4 gap-16 max-[86rem]:grid-cols-1">
                 <div
-                    className="hidden max-[86rem]:flex col-span-4 rounded-[1.6rem] bg-[var(--adaptive-black50)] p-[0.2rem] fixed bottom-[1.6rem] left-[50%] transform translate-x-[-50%] w-[calc(100%-(1.6rem*2))] z-[100]"
+                    className="shadow-[0_0_100px_0_var(--adaptive-grey500)] overflow-hidden pc:hidden mobile:flex col-span-4 rounded-[1.6rem] bg-[var(--adaptive-black50)] p-[0.4rem] fixed bottom-[1.6rem] left-[50%] transform translate-x-[-50%] w-[calc(100%-(1.6rem*2))] z-[100] max-w-[var(--size-mobile)]"
                     // className="hidden max-[86rem]:flex col-span-4 rounded-[1.6rem] bg-[var(--adaptive-black50)] p-[0.4rem]"
                     data-report-id="서브페이지 모바일 탭"
                     data-report-type="group"
                 >
                     <button
                         type="button"
-                        className={`flex-1 rounded-[1.2rem] px-[1.6rem] py-[1.2rem] text-[1.6rem] font-[700] transition-colors ${mobileTab === "left" ? "shadow-[var(--shadow-normal)] bg-white text-black" : "text-[var(--adaptive-grey500)]"}`}
+                        className={`flex-1 rounded-[1.2rem] px-[1.6rem] py-[1.2rem] text-[1.6rem] font-[700] transition-colors ${mobileTab === "left" ? "shadow-[0_0_20px_0_var(--adaptive-grey500)] bg-white text-black" : "text-[var(--adaptive-grey500)]"}`}
                         onClick={() => setMobileTab("left")}
                         data-report-id="서브페이지 모바일 좌측 탭"
                         data-report-type="item"
@@ -167,7 +168,7 @@ export function SubPageSplit({ left, right, className = "", leftTabLabel = "좌�
                     </button>
                     <button
                         type="button"
-                        className={`flex-1 rounded-[1.2rem] px-[1.6rem] py-[1.2rem] text-[1.6rem] font-[700] transition-colors ${mobileTab === "right" ? "shadow-[var(--shadow-normal)] bg-white text-black" : "text-[var(--adaptive-grey500)]"}`}
+                        className={`flex-1 rounded-[1.2rem] px-[1.6rem] py-[1.2rem] text-[1.6rem] font-[700] transition-colors ${mobileTab === "right" ? "shadow-[0_0_20px_0_var(--adaptive-grey500)] bg-white text-black" : "text-[var(--adaptive-grey500)]"}`}
                         onClick={() => setMobileTab("right")}
                         data-report-id="서브페이지 모바일 우측 탭"
                         data-report-type="item"
@@ -277,7 +278,7 @@ export function NoticeBox() {
                     height={32}
                 />
                 <section className="flex flex-col gap-[0.8rem]">
-                    <h5 className="text-[1.8rem]">문의가 필요하신가요?</h5>
+                    <h5 className="font-[900] mobile:text-[1.4rem] pc:text-[1.8rem]">문의가 필요하신가요?</h5>
                     <p className="leading-[1.5]">장비 상담 및 렌탈 관련 문의는 언제든지 연락주세요.</p>
                 </section>
             </section>

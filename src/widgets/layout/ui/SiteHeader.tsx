@@ -77,8 +77,8 @@ export function SiteHeader() {
             </div>
 
             {isMobileNavOpen ? (
-                <div className="fixed inset-0 top-0 z-100 flex min-h-[100dvh] flex-col bg-white p-[2.4rem] pc:hidden">
-                    <div className="mb-[4rem] flex items-center justify-between">
+                <div className="fixed inset-0 top-0 z-100 flex min-h-[100dvh] flex-col bg-white gap-[1.6rem] p-[2.4rem] pc:hidden">
+                    <div className="flex items-center justify-between">
                         <UI.Linker
                             className="shrink-0 text-2xl"
                             href="/"
@@ -102,7 +102,7 @@ export function SiteHeader() {
                     </div>
 
                     <nav
-                        className="flex flex-1 flex-col gap-[2.0rem]"
+                        className="flex flex-1 flex-col"
                         aria-label="모바일 주요 메뉴"
                         data-report-id="모바일 헤더 메뉴"
                         data-report-type="item"
