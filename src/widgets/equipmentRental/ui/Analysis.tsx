@@ -36,13 +36,15 @@ export function Analysis() {
                 rightTabLabel="렌탈 신청"
                 left={
                     <div
-                        className="sticky top-[9.2rem] flex flex-col gap-[9.2rem]"
+                        className="sticky top-[9.2rem] flex flex-col mobile:gap-[3.2rem] pc:gap-[9.2rem]"
                         data-report-id="장비렌탈 안내 영역"
                         data-report-type="group"
                     >
                         <SubPageSection title={"주의사항"}>
                             <section className="bg-[var(--adaptive-black50)] rounded-[1.6rem] p-[1.6rem]">
-                                <p className="text-[var(--adaptive-black500)]">필요한 장비 선택 → 장비렌탈 신청 및 상담 → 출장 스케줄 예약 및 방문 설치</p>
+                                <p className="mobile:text-[1.4rem] pc:text-[1.6rem] text-[var(--adaptive-black500)] leading-[1.5]">
+                                    필요한 장비 선택 → 장비렌탈 신청 및 상담 → 출장 스케줄 예약 및 방문 설치
+                                </p>
                             </section>
 
                             <section className="flex flex-col gap-[0.8rem]">
@@ -65,7 +67,7 @@ export function Analysis() {
                                 />
                                 <section className="flex flex-col gap-[0.8rem]">
                                     <h5 className="text-[1.8rem]">문의가 필요하신가요?</h5>
-                                    <p>장비 상담 및 렌탈 관련 문의는 언제든지 연락주세요.</p>
+                                    <p className="leading-[1.5]">장비 상담 및 렌탈 관련 문의는 언제든지 연락주세요.</p>
                                 </section>
                             </section>
 
