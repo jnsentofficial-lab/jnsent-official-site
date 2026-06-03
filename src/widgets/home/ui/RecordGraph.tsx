@@ -242,7 +242,7 @@ const GraphVer2 = () => {
 
                         <div className="absolute bottom-[calc(100%+2.4rem)] left-1/2 -translate-x-1/2 whitespace-nowrap text-center">
                             <div className="leading-none">
-                                <span className="text-[1.8rem] font-semibold text-[#7a7f89]">약 </span>
+                                <span className="text-[1.8rem] font-semibold text-[#7a7f89]">약</span>
                                 <span className="text-[clamp(3.6rem,2vw,6rem)] font-black tracking-[-0.04em] text-[#f0717d]">{bar.amount}</span>
                                 <span className="text-[1.8rem] font-semibold text-[#7a7f89]">억</span>
                             </div>
@@ -291,12 +291,20 @@ const GraphVer3 = () => {
     const linePoints = graphBars.map((bar, index) => {
         const x = chartLeftPadding + stepX * index;
         const y = chartTopPadding + innerHeight - (bar.amount / maxAmount) * innerHeight;
+        let growthValue: string | undefined = undefined;
+
+        if (index > 0) {
+            const prevAmount = graphBars[index - 1].amount;
+            const growth = ((bar.amount - prevAmount) / prevAmount) * 100;
+            growthValue = `+${growth.toFixed(1)}%`;
+        }
 
         return {
             ...bar,
             x,
             y,
             formattedAmount: bar.amount.toLocaleString("ko-KR"),
+            growthValue, // will be undefined for the first point, string otherwise
         };
     });
     const linePath = linePoints.reduce((path, point, index) => {
@@ -344,8 +352,8 @@ const GraphVer3 = () => {
             // }}
         >
             {/* <div className="relative mt-[5.6rem] overflow-hidden rounded-[3.2rem] border border-[#e9ecef] bg-[#fcfcfb] px-[2.4rem] pb-[2.4rem] pt-[3.2rem]"> */}
-            <div className="relative mt-[5.6rem] overflow-hidden rounded-[3.2rem] px-[2.4rem] pb-[2.4rem] pt-[3.2rem]">
-                <div className="mb-[1.6rem] text-[2rem] font-semibold text-[#5f666d]">(단위: 억 원)</div>
+            <div className="relative mt-[5.6rem] px-[2.4rem] pb-[2.4rem] pt-[3.2rem]">
+                {/* <div className="mb-[1.6rem] text-[2rem] font-semibold text-[#5f666d]">(단위: 억 원)</div> */}
 
                 <svg
                     viewBox={`0 0 ${reportChartWidth} ${reportChartHeight}`}
@@ -379,13 +387,16 @@ const GraphVer3 = () => {
                     })} */}
 
                     {linePoints.map((point) => (
-                        <g key={point.name}>
+                        <g
+                            key={point.name}
+                            style={{ position: "relative" }}
+                        >
                             <motion.line
                                 x1={point.x}
                                 y1={reportChartHeight - chartBottomPadding}
                                 x2={point.x}
                                 y2={point.y}
-                                stroke="#000000"
+                                stroke="var(--adaptive-grey900)"
                                 // stroke="#8ad6d0"
                                 strokeDasharray="5 6"
                                 strokeWidth="50"
@@ -396,11 +407,50 @@ const GraphVer3 = () => {
                             />
                             <motion.text
                                 x={point.x}
+                                y={point.y - 64}
+                                textAnchor="middle"
+                                fontWeight="700"
+                                fill="var(--adaptive-grey500)"
+                                // fill="#57bcb5"
+                                initial={{ opacity: 0, y: 16 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ amount: 0.25, once: false }}
+                                transition={{ duration: 0.55, delay: 0.4 * linePoints.indexOf(point) + 0.15, ease: graphEase }}
+                            >
+                                <tspan
+                                    fontSize="10"
+                                    fontWeight="700"
+                                >
+                                    전년대비
+                                </tspan>
+                            </motion.text>
+
+                            <motion.text
+                                x={point.x}
+                                y={point.y - 48}
+                                textAnchor="middle"
+                                fontWeight="700"
+                                fill="var(--adaptive-red500)"
+                                // fill="#57bcb5"
+                                initial={{ opacity: 0, y: 16 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ amount: 0.25, once: false }}
+                                transition={{ duration: 0.55, delay: 0.3 * linePoints.indexOf(point) + 0.15, ease: graphEase }}
+                            >
+                                <tspan
+                                    fontSize="14"
+                                    fontWeight="800"
+                                >
+                                    {point.growthValue}
+                                </tspan>
+                            </motion.text>
+
+                            <motion.text
+                                x={point.x}
                                 y={point.y - 18}
                                 textAnchor="middle"
                                 fontWeight="700"
                                 fill="#000000"
-                                // fill="#57bcb5"
                                 initial={{ opacity: 0, y: 16 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ amount: 0.25, once: false }}
@@ -410,7 +460,7 @@ const GraphVer3 = () => {
                                     fontSize="14"
                                     fontWeight="600"
                                 >
-                                    약{" "}
+                                    약&nbsp;
                                 </tspan>
                                 <tspan
                                     fontSize="24"
@@ -425,13 +475,14 @@ const GraphVer3 = () => {
                                     억
                                 </tspan>
                             </motion.text>
+
                             <text
                                 x={point.x}
-                                y={reportChartHeight - 30}
+                                y={reportChartHeight - 60}
                                 textAnchor="middle"
                                 fontSize="22"
-                                fontWeight="500"
-                                fill="#666d74"
+                                fontWeight="700"
+                                fill="var(--adaptive-grey900)"
                             >
                                 {point.name}
                             </text>
@@ -441,7 +492,7 @@ const GraphVer3 = () => {
                     <motion.path
                         d={linePath}
                         fill="none"
-                        stroke="#4bc3bb"
+                        stroke="var(--adaptive-red500)"
                         strokeWidth="4"
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -464,19 +515,19 @@ const GraphVer3 = () => {
                                 cx={point.x}
                                 cy={point.y}
                                 r="12"
-                                fill="rgba(75,195,187,0.22)"
+                                fill="var(--adaptive-redOpacity100)"
                             />
                             <circle
                                 cx={point.x}
                                 cy={point.y}
                                 r="7"
-                                fill="#4bc3bb"
+                                fill="var(--adaptive-red500)"
                             />
                         </motion.g>
                     ))}
                 </svg>
 
-                {growthBadges.map((badge, index) => (
+                {/* {growthBadges.map((badge, index) => (
                     <motion.div
                         key={badge.year}
                         className="absolute rounded-[2rem] bg-[var(--adaptive-red50)] px-[1.6rem] py-[1.2rem] text-center"
@@ -493,37 +544,39 @@ const GraphVer3 = () => {
                         <div className="text-[1.9rem] font-black leading-none text-[var(--adaptive-red500)]">{badge.value}</div>
                         <div className="mt-[0.6rem] text-[1.2rem] font-bold text-[var(--adaptive-red300)]">전년 대비</div>
                     </motion.div>
-                ))}
+                ))} */}
 
-                <motion.div
-                    className="absolute right-[2.5%] top-[7.5%] rounded-[2.6rem] bg-[#48c3bc] px-[2.4rem] py-[2rem] text-center text-white shadow-[0_24px_40px_rgba(72,195,188,0.2)]"
-                    initial={{ opacity: 0, scale: 0.2 }}
-                    whileInView={{
-                        opacity: 1,
-                        scale: 1,
-                        y: [-10, 10, -10],
-                    }}
-                    viewport={{ amount: 0.25, once: false }}
-                    transition={{
-                        opacity: { duration: 0.35, delay: 0.5, ease: graphEase },
-                        scale: { duration: 0.45, delay: 0.5, ease: graphEase },
-                        y: { duration: 2.8, ease: hoverEase, repeat: Infinity, repeatType: "loop", repeatDelay: 0.1 },
-                    }}
-                >
-                    <div className="text-[2.8rem] font-black flex items-center">
-                        <Text.Rolling
-                            value={187}
-                            rollingCount={5}
-                            textSize={30}
-                        />
-                        <p>억</p>
-                    </div>
+                {false ? (
+                    <motion.div
+                        className="absolute right-[0.8rem] top-[-2.2rem] rounded-[2.6rem] bg-[#48c3bc] px-[2.4rem] py-[2rem] text-center text-white shadow-[0_24px_40px_rgba(72,195,188,0.2)]"
+                        initial={{ opacity: 0, scale: 0.2 }}
+                        whileInView={{
+                            opacity: 1,
+                            scale: 1,
+                            y: [-10, 10, -10],
+                        }}
+                        viewport={{ amount: 0.25, once: false }}
+                        transition={{
+                            opacity: { duration: 0.35, delay: 0.5, ease: graphEase },
+                            scale: { duration: 0.45, delay: 0.5, ease: graphEase },
+                            y: { duration: 2.8, ease: hoverEase, repeat: Infinity, repeatType: "loop", repeatDelay: 0.1 },
+                        }}
+                    >
+                        <div className="text-[2.8rem] font-black flex items-center">
+                            <Text.Rolling
+                                value={187}
+                                rollingCount={5}
+                                textSize={30}
+                            />
+                            <p>억</p>
+                        </div>
 
-                    {/* <div className="text-[2.8rem] font-black leading-[1.1]">{linePoints.at(-1)?.formattedAmount}억</div> */}
+                        {/* <div className="text-[2.8rem] font-black leading-[1.1]">{linePoints.at(-1)?.formattedAmount}억</div> */}
 
-                    <div className="mt-[0.6rem] text-[2.4rem] font-black leading-[1.1]">돌파!!</div>
-                    <div className="absolute bottom-[-1.6rem] left-1/2 h-0 w-0 -translate-x-1/2 border-l-[1.6rem] border-r-[1.6rem] border-t-[2.2rem] border-l-transparent border-r-transparent border-t-[#48c3bc]" />
-                </motion.div>
+                        <div className="mt-[0.6rem] text-[2.4rem] font-black leading-[1.1]">돌파!!</div>
+                        <div className="absolute bottom-[-1.6rem] left-1/2 h-0 w-0 -translate-x-1/2 border-l-[1.6rem] border-r-[1.6rem] border-t-[2.2rem] border-l-transparent border-r-transparent border-t-[#48c3bc]" />
+                    </motion.div>
+                ) : null}
             </div>
         </motion.div>
     );
