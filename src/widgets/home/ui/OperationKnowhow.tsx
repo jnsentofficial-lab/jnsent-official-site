@@ -60,7 +60,7 @@ export function OperationKnowhow() {
                 <div className="w-full h-full flex flex-col justify-center items-start mobile:gap-[1.6rem] pc:gap-[5.2rem]">
                     <Text.Reveal
                         as="h2"
-                        className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]"
+                        className="mobile:text-[2.4rem] pc:text-[3.8rem] text-right font-[900] leading-[1.5]"
                         initialColor="#00000000"
                         midColor="rgb(255, 92, 118)"
                         revealColor="rgb(255, 255, 255)"
@@ -72,12 +72,12 @@ export function OperationKnowhow() {
                         // transition={0}
                         transition={2}
                     >
-                        {`2017년부터 쌓아온 운영 노하우\n당신의 성장에만 집중합니다.`}
+                        {`2017년부터 쌓아온 운영 노하우\n당신의 성장에만 집중합니다`}
                     </Text.Reveal>
                     {/* <p>{progress}</p> */}
 
                     <motion.div
-                        className="flex flex-col gap-[2.4rem] mt-[1.4rem]"
+                        className="flex flex-col gap-[2.4rem] mt-[1.4rem] pl-[9.0rem]"
                         data-report-id="운영 노하우 목록"
                         data-report-type="item"
                         // variants={{
@@ -100,8 +100,8 @@ export function OperationKnowhow() {
                                 // }}
                                 // transition={{ duration: 0, ease: "easeInOut" }}
                             >
-                                <h3 className="mobile:text-[1.8rem] pc:text-[2.4rem]">{item.title}</h3>
-                                <p className="mobile:text-[1.4rem] pc:text-[1.8rem] font-[700] leading-[1.5] text-[#ffffffc1]">{item.text}</p>
+                                <h3 className="mobile:text-[1.8rem] text-right pc:text-[2.4rem]">{item.title}</h3>
+                                <p className="mobile:text-[1.4rem] text-right pc:text-[1.8rem] font-[700] leading-[1.5] text-[#ffffffc1]">{item.text}</p>
                             </motion.div>
                         ))}
                     </motion.div>

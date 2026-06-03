@@ -223,12 +223,12 @@ export function RecordGraph() {
             <motion.div
                 // className="pointer-events-none absolute left-[50%] inset-0 z-0 flex items-center justify-center overflow-x-hidden"
                 // className="pointer-events-none absolute left-[25%] inset-0 z-0 flex items-center justify-center overflow-x-hidden"
-                className="pointer-events-none absolute mobile:left-0 pc:left-[25%] inset-0 z-0 flex items-center justify-center overflow-x-hidden"
+                className="pointer-events-none absolute inset-x-0 mobile:bottom-0 mobile:left-0 mobile:h-1/2 mobile:opacity-50 pc:left-[25%] pc:inset-y-0 pc:h-full pc:opacity-100 z-0 flex items-center justify-center overflow-x-hidden"
                 data-report-id="플랫폼 기록 그래프"
                 data-report-type="item"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
-                viewport={{ amount: 0.25, once: false }}
+                viewport={{ amount: 0.2, once: false }}
                 transition={{ duration: 0.9 }}
                 // style={{
                 //     maskImage: "linear-gradient(90deg, transparent 0%, transparent 18%, black 55%, black 100%)",
@@ -239,6 +239,7 @@ export function RecordGraph() {
                     <ComposedChart
                         data={datas}
                         // margin={{ top: 72, right: 50, bottom: 18, left: 24 }}
+                        margin={{ top: 72 }}
                     >
                         <CartesianGrid
                             vertical={false}

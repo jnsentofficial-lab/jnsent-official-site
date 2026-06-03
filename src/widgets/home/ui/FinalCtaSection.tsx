@@ -25,7 +25,7 @@ export function FinalCtaSection() {
             >
                 <motion.img
                     className="w-full h-full object-cover"
-                    src={"/images/landing/cta.jpg"}
+                    src={"/images/landing/cta.png"}
                     alt=""
                     style={{
                         maskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
