@@ -114,8 +114,8 @@ export function RecordGraph() {
                     </motion.div>
                 </div>
 
-                {/* <GraphVer2 /> */}
                 <GraphVer3 />
+                {/* <GraphVer2 /> */}
             </section>
         </>
     );
@@ -356,14 +356,15 @@ const GraphVer3 = () => {
                         );
                     })}
 
-                    <line
+                    {/* <line
                         x1={chartLeftPadding}
                         y1={reportChartHeight - chartBottomPadding}
                         x2={reportChartWidth - chartRightPadding}
                         y2={reportChartHeight - chartBottomPadding}
                         stroke="#101418"
                         strokeWidth="3"
-                    />
+                        className="z-[100]"
+                    /> */}
 
                     {linePoints.map((point) => (
                         <g key={point.name}>
@@ -372,9 +373,10 @@ const GraphVer3 = () => {
                                 y1={reportChartHeight - chartBottomPadding}
                                 x2={point.x}
                                 y2={point.y}
-                                stroke="#8ad6d0"
+                                stroke="#000000"
+                                // stroke="#8ad6d0"
                                 strokeDasharray="5 6"
-                                strokeWidth="1.5"
+                                strokeWidth="50"
                                 initial={{ pathLength: 0, opacity: 0 }}
                                 whileInView={{ pathLength: 1, opacity: 1 }}
                                 viewport={{ amount: 0.25, once: true }}
@@ -389,10 +391,10 @@ const GraphVer3 = () => {
                                 fill="#57bcb5"
                                 initial={{ opacity: 0, y: 16 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ amount: 0.25, once: true }}
+                                viewport={{ amount: 0.25 }}
                                 transition={{ duration: 0.45, delay: 0.2 * linePoints.indexOf(point) + 0.15 }}
                             >
-                                {point.formattedAmount}
+                                약 {point.formattedAmount}억
                             </motion.text>
                             <text
                                 x={point.x}
@@ -416,7 +418,7 @@ const GraphVer3 = () => {
                         strokeLinejoin="round"
                         initial={{ pathLength: 0, opacity: 0.4 }}
                         whileInView={{ pathLength: 1, opacity: 1 }}
-                        viewport={{ amount: 0.25, once: true }}
+                        viewport={{ amount: 0.25 }}
                         transition={{ duration: 1.5, ease: "easeOut" }}
                     />
 
@@ -425,7 +427,7 @@ const GraphVer3 = () => {
                             key={`${point.name}-dot`}
                             initial={{ scale: 0, opacity: 0 }}
                             whileInView={{ scale: 1, opacity: 1 }}
-                            viewport={{ amount: 0.25, once: true }}
+                            viewport={{ amount: 0.25 }}
                             transition={{ duration: 0.35, delay: 0.28 * index + 0.25 }}
                             style={{ transformOrigin: `${point.x}px ${point.y}px` }}
                         >
@@ -446,27 +448,25 @@ const GraphVer3 = () => {
                 </svg>
 
                 <motion.div
-                    className="absolute right-[5.5%] top-[6.5%] rounded-[2.6rem] bg-[#48c3bc] px-[2.4rem] py-[2rem] text-center text-white shadow-[0_24px_40px_rgba(72,195,188,0.2)]"
+                    className="absolute right-[3.5%] top-[7.5%] rounded-[2.6rem] bg-[#48c3bc] px-[2.4rem] py-[2rem] text-center text-white shadow-[0_24px_40px_rgba(72,195,188,0.2)]"
                     initial={{ opacity: 0, scale: 0.8, rotate: -4 }}
                     whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-                    viewport={{ amount: 0.25, once: true }}
+                    viewport={{ amount: 0.25 }}
                     transition={{ duration: 0.5, delay: 1.1 }}
                 >
-                    <div className="text-[2.8rem] font-black leading-[1.1]">{linePoints.at(-1)?.formattedAmount}억</div>
+                    <div className="text-[2.8rem] font-black flex items-center">
+                        <Text.Rolling
+                            value={20}
+                            rollingCount={5}
+                            textSize={30}
+                        />
+                        <p>억</p>
+                    </div>
+                    {/* <div className="text-[2.8rem] font-black leading-[1.1]">{linePoints.at(-1)?.formattedAmount}억</div> */}
+
                     <div className="mt-[0.6rem] text-[2.4rem] font-black leading-[1.1]">돌파!!</div>
                     <div className="absolute bottom-[-1.6rem] left-1/2 h-0 w-0 -translate-x-1/2 border-l-[1.6rem] border-r-[1.6rem] border-t-[2.2rem] border-l-transparent border-r-transparent border-t-[#48c3bc]" />
                 </motion.div>
-
-                <div className="mt-[2rem] flex flex-wrap justify-end gap-[1rem]">
-                    {records.map((record) => (
-                        <div
-                            key={record.label}
-                            className="rounded-full bg-[#f3f6f8] px-[1.4rem] py-[0.8rem] text-[1.4rem] font-semibold text-[#5f666d]"
-                        >
-                            {record.label}
-                        </div>
-                    ))}
-                </div>
             </div>
         </motion.div>
     );
