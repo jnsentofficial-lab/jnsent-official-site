@@ -6,9 +6,7 @@ import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import { Text } from "@/shared/ui/kit/Text";
 import { useLayoutStore } from "@/shared/stores/useLayoutStore";
 import { InquiryModal } from "@/widgets/home/modal";
-import Image from "next/image";
-
-const socialItems = ["kakao", "insta", "blog", ""];
+import { QuickMenu } from "./QuickMenu";
 
 export const Floating = () => {
     const [isInquiryOpen, setIsInquiryOpen] = useState(false);
@@ -49,9 +47,9 @@ const FloatingBar = ({ onInquiryClick }: { onInquiryClick: () => void }) => {
                     exit={{ y: 100, opacity: 0 }}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     // className="fixed mobile:bottom-0 pc:bottom-[1.6rem] left-[50%] z-10 flex mobile:h-[5.2rem] pc:h-[6.2rem] mobile:w-auto pc:w-[calc(100vw-1.6rem)] max-w-[var(--size-tablet)] -translate-x-1/2 items-center mobile:rounded-0 pc:rounded-full bg-black p-[0.4rem]"
-                    className="fixed mobile:bottom-0 pc:bottom-[1.6rem] left-[50%] z-10 flex mobile:h-[4.2rem] pc:h-[6.2rem] mobile:w-[100dvw] pc:w-[calc(100vw-1.6rem)] mobile:max-w-auto pc:max-w-[var(--size-tablet)] -translate-x-1/2 items-center mobile:rounded-0 pc:rounded-full bg-black p-[0.4rem]"
+                    className="fixed bottom-[1.6rem] left-[50%] z-10 flex mobile:h-[5.2rem] pc:h-[6.2rem] mobile:w-[calc(100vw-13.6rem)] pc:w-[calc(100vw-1.6rem)] max-w-[var(--size-tablet)] -translate-x-1/2 items-center rounded-full bg-black p-[0.4rem]"
                 >
-                    <div className="px-[1.6rem]">
+                    <div className="mobile:px-[0.8rem] pc:px-[1.6rem]">
                         <img
                             src={"/images/icon/outlined/ico-outlined-siren-white.svg"}
                             alt=""
@@ -90,59 +88,6 @@ const FloatingBar = ({ onInquiryClick }: { onInquiryClick: () => void }) => {
                     </button>
                 </motion.section>
             )}
-        </AnimatePresence>
-    );
-};
-
-const QuickMenu = () => {
-    const { isReadyLanding } = useLayoutStore();
-    return (
-        <AnimatePresence>
-            {/* {isReadyLanding ? ( */}
-            {true ? (
-                <motion.aside
-                    className="fixed right-7 mobile:bottom-[calc(calc(4.2rem+1.6rem))] pc:bottom-[1.6rem] z-30 flex flex-col items-center justify-center gap-[2.4rem]"
-                    data-report-id="플로팅 메뉴"
-                    data-report-type="item"
-                    // initial={{ y: 100, opacity: 0 }}
-                    // animate={{ y: 0, opacity: 1 }}
-                    // exit={{ y: 100, opacity: 0 }}
-                    // transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                >
-                    <section className="flex flex-col gap-[0.8rem]">
-                        {socialItems.map((item) => (
-                            <a
-                                // className="grid h-[7.2rem] w-[7.2rem] place-items-center rounded-full bg-white text-sm font-[700] text-black shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.14)]"
-                                className="grid mobile:h-[4.2rem] mobile:w-[4.2rem] pc:h-[7.2rem] pc:w-[7.2rem] place-items-center rounded-full bg-white text-sm font-[700] text-black shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.14)]"
-                                href="/bjSupport"
-                                key={item}
-                            >
-                                {item ? (
-                                    <Image
-                                        src={`/images/icon/route/home/ico-floating-${item}.svg`}
-                                        alt=""
-                                        height={58}
-                                        width={58}
-                                    />
-                                ) : null}
-                            </a>
-                        ))}
-                    </section>
-                    <div className="mx-auto h-[0.1rem] w-8 bg-[var(--adaptive-black400)]" />
-                    <a
-                        className="grid mobile:h-[4.2rem] mobile:w-[4.2rem] pc:h-[7.2rem] pc:w-[7.2rem] place-items-center rounded-full bg-black text-3xl font-light text-white shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.16)]"
-                        href="#home"
-                    >
-                        <Image
-                            src={`/images/icon/route/home/ico-floating-up.svg`}
-                            alt=""
-                            height={58}
-                            width={58}
-                            className="invert"
-                        />
-                    </a>
-                </motion.aside>
-            ) : null}
         </AnimatePresence>
     );
 };

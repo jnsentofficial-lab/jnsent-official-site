@@ -80,7 +80,7 @@ export function HeroIntro() {
                     <Text.Reveal
                         as="h2"
                         interaction={false}
-                        className="mobile:text-[2.4rem] pc:text-[4.2rem] font-[900] leading-[1.5] whitespace-break-spaces"
+                        className="mobile:text-[2.4rem] pc:text-[4.2rem] font-[900] leading-[1.5] mobile:whitespace-break-spaces pc:whitespace-nowrap"
                         initialColor="#ffffff00"
                         revealColor="#000000"
                         subHighlightColor="#A953FF"
@@ -93,7 +93,7 @@ export function HeroIntro() {
                             setIsRevealComplete(true);
                         }}
                     >
-                        {`검증된 운영구조 투명한 정산 제이엔에스에 있습니다.`}
+                        {`검증된 운영구조 투명한\n정산 제이엔에스에 있습니다.`}
                     </Text.Reveal>
                 </motion.div>
             ) : null}

@@ -102,12 +102,21 @@ export function RecordGraph() {
                         >
                             {records.map((record) => (
                                 <div key={record.label}>
-                                    <Text.Rolling
-                                        value={record.value}
-                                        textSize={28}
-                                        rollingCount={5}
-                                    />
-                                    <span className="mt-2 block text-[1.8rem] text-base font-bold text-neutral-500">{record.label}</span>
+                                    <span className="block mobile:hidden">
+                                        <Text.Rolling
+                                            value={record.value}
+                                            textSize={28}
+                                            rollingCount={5}
+                                        />
+                                    </span>
+                                    <span className="hidden mobile:block">
+                                        <Text.Rolling
+                                            value={record.value}
+                                            textSize={24}
+                                            rollingCount={5}
+                                        />
+                                    </span>
+                                    <span className="mt-2 block mobile:text-[1.4rem] pc:text-[1.8rem] text-base font-bold text-neutral-500">{record.label}</span>
                                 </div>
                             ))}
                         </div>
@@ -120,161 +129,6 @@ export function RecordGraph() {
         </>
     );
 }
-
-const GraphVer2 = () => {
-    const graphLinePath = graphBars.reduce((path, bar, index) => {
-        const top = GRAPH_BASELINE - bar.height;
-
-        if (index === 0) {
-            return `M ${bar.center} ${top}`;
-        }
-
-        const previousBar = graphBars[index - 1];
-        const previousTop = GRAPH_BASELINE - previousBar.height;
-        const controlX = (previousBar.center + bar.center) / 2;
-        const controlY = Math.min(previousTop, top) - (index === graphBars.length - 1 ? 14 : 8);
-
-        return `${path} Q ${controlX} ${controlY} ${bar.center} ${top}`;
-    }, "");
-
-    return (
-        <motion.div
-            className="pointer-events-none absolute inset-x-0 z-0 flex items-center justify-center overflow-x-hidden mobile:bottom-0 mobile:left-0 mobile:h-1/2 mobile:opacity-50 pc:left-[25%] pc:inset-y-0 pc:h-[90dvh] pc:opacity-100"
-            data-report-id="플랫폼 기록 그래프 v2"
-            data-report-type="item"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ amount: 0.2, once: false }}
-            transition={{ duration: 0.9 }}
-            style={{
-                maskImage: "linear-gradient(90deg, transparent 0%, transparent 10%, black 18%, black 100%)",
-                WebkitMaskImage: "linear-gradient(90deg, transparent 0%, transparent 18%, black 60%, black 100%)",
-            }}
-        >
-            <div className="relative h-full w-full">
-                <div className="absolute inset-x-0 top-[14%] border-t border-dashed border-[rgba(255,189,197,0.26)]" />
-                <div className="absolute inset-x-0 top-[38%] border-t border-dashed border-[rgba(255,189,197,0.18)]" />
-                <div className="absolute inset-x-0 top-[62%] border-t border-dashed border-[rgba(255,189,197,0.14)]" />
-                <div className="absolute inset-x-0 bottom-[12%] border-t border-dashed border-[rgba(255,189,197,0.12)]" />
-
-                <svg
-                    viewBox="0 0 100 100"
-                    preserveAspectRatio="none"
-                    className="absolute inset-0 h-full w-full overflow-visible"
-                >
-                    <defs>
-                        <linearGradient
-                            id="graphVer2Line"
-                            x1="12%"
-                            y1="82%"
-                            x2="92%"
-                            y2="8%"
-                        >
-                            <stop
-                                offset="0%"
-                                stopColor="#ffe7ea"
-                                stopOpacity="0.2"
-                            />
-                            <stop
-                                offset="42%"
-                                stopColor="#ffb2bb"
-                                stopOpacity="0.62"
-                            />
-                            <stop
-                                offset="100%"
-                                stopColor={ACCENT_COLOR}
-                                stopOpacity="1"
-                            />
-                        </linearGradient>
-                    </defs>
-
-                    <path
-                        d={graphLinePath}
-                        fill="none"
-                        stroke="url(#graphVer2Line)"
-                        strokeWidth="0.48"
-                        strokeLinecap="round"
-                    />
-                    <path
-                        d="M 87.2 6.8 L 92.8 11.5 L 87.2 16.2"
-                        fill="none"
-                        stroke={ACCENT_COLOR}
-                        strokeWidth="0.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    />
-
-                    {graphBars.map((bar) => {
-                        const top = GRAPH_BASELINE - bar.height;
-
-                        return (
-                            <g key={bar.name}>
-                                <circle
-                                    cx={bar.center}
-                                    cy={top}
-                                    r="1.1"
-                                    fill="rgba(255,107,117,0.18)"
-                                />
-                                <circle
-                                    cx={bar.center}
-                                    cy={top}
-                                    r="0.5"
-                                    fill={ACCENT_COLOR}
-                                />
-                            </g>
-                        );
-                    })}
-                </svg>
-
-                {graphBars.map((bar, index) => (
-                    <div
-                        key={bar.name}
-                        className="absolute bottom-[12%]"
-                        style={{ left: bar.left, width: bar.width, height: `${bar.height}%` }}
-                    >
-                        <div
-                            className="relative h-full w-full overflow-hidden rounded-t-[3.6rem] bg-[#050505] shadow-[inset_18px_0_32px_rgba(255,255,255,0.1),0_24px_48px_rgba(0,0,0,0.14)]"
-                            style={{ opacity: index === 0 ? 0.26 : 1 }}
-                        >
-                            <div className="absolute inset-y-0 left-0 w-[26%] bg-[linear-gradient(90deg,rgba(255,255,255,0.22),rgba(255,255,255,0))]" />
-                            <div className="absolute inset-x-[14%] top-0 h-[1px] bg-[rgba(255,255,255,0.16)]" />
-                        </div>
-
-                        <div className="absolute bottom-[calc(100%+2.4rem)] left-1/2 -translate-x-1/2 whitespace-nowrap text-center">
-                            <div className="leading-none">
-                                <span className="text-[1.8rem] font-semibold text-[#7a7f89]">약</span>
-                                <span className="text-[clamp(3.6rem,2vw,6rem)] font-black tracking-[-0.04em] text-[#f0717d]">{bar.amount}</span>
-                                <span className="text-[1.8rem] font-semibold text-[#7a7f89]">억</span>
-                            </div>
-
-                            {index > 0 ? (
-                                <div className="mx-auto mt-[1.6rem] flex w-fit flex-col items-center rounded-[2.2rem] border border-[rgba(255,167,177,0.25)] bg-[rgba(255,255,255,0.92)] px-[1.8rem] py-[1.4rem] shadow-[0_20px_40px_rgba(255,182,193,0.18)]">
-                                    <span className="text-[2rem] font-black leading-none text-[#f38a93]">
-                                        +{(((bar.amount - graphBars[index - 1].amount) / graphBars[index - 1].amount) * 100).toFixed(1)}%
-                                    </span>
-                                    <span className="mt-[0.6rem] text-[1.3rem] font-bold text-[#7a7f89]">전년 대비</span>
-                                </div>
-                            ) : null}
-                        </div>
-
-                        <div className="absolute left-1/2 top-[calc(100%+1.6rem)] -translate-x-1/2 text-[1.8rem] font-semibold tracking-[0.08em] text-[#69707b]">{bar.name}</div>
-                    </div>
-                ))}
-
-                <div className="absolute right-[8%] bottom-[10%] flex flex-col gap-[1rem]">
-                    {records.map((record) => (
-                        <div
-                            key={record.label}
-                            className="rounded-full border border-[rgba(255,214,219,0.8)] bg-[rgba(255,255,255,0.9)] px-[1.4rem] py-[0.9rem] text-[1.3rem] font-bold text-[#6f7680] shadow-[0_12px_24px_rgba(255,192,199,0.12)]"
-                        >
-                            {record.label}
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </motion.div>
-    );
-};
 
 const GraphVer3 = () => {
     const graphEase = [0.22, 1, 0.36, 1] as const;
@@ -299,22 +153,22 @@ const GraphVer3 = () => {
             dotInner: 7,
         },
         mobile: {
-            reportChartWidth: 360,
+            reportChartWidth: 412,
             reportChartHeight: 420,
             chartLeftPadding: 28,
             chartRightPadding: 20,
             chartTopPadding: 76,
             chartBottomPadding: 32,
-            barWidth: 62,
+            barWidth: 80,
             amountY: 12,
             growthLabelY: 42,
-            growthValueFontSize: 9,
-            growthCaptionFontSize: 7,
-            amountPrefixFontSize: 8,
-            amountValueFontSize: 14,
-            yearFontSize: 10,
-            dotOuter: 7,
-            dotInner: 4,
+            growthValueFontSize: 19,
+            growthCaptionFontSize: 17,
+            amountPrefixFontSize: 18,
+            amountValueFontSize: 24,
+            yearFontSize: 24,
+            dotOuter: 17,
+            dotInner: 9,
         },
     } as const;
 
@@ -553,11 +407,22 @@ const GraphVer3 = () => {
                         }}
                     >
                         <div className="flex items-center text-[1.8rem] font-black md:text-[2.8rem]">
-                            <Text.Rolling
-                                value={187}
-                                rollingCount={5}
-                                textSize={30}
-                            />
+                            <span className="block mobile:hidden">
+                                <Text.Rolling
+                                    value={187}
+                                    rollingCount={5}
+                                    textSize={38}
+                                />
+                            </span>
+
+                            <span className="hidden mobile:block">
+                                <Text.Rolling
+                                    value={187}
+                                    rollingCount={5}
+                                    textSize={30}
+                                />
+                            </span>
+
                             <p>억</p>
                         </div>
 
