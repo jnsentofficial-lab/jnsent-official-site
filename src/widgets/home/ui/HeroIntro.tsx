@@ -77,24 +77,46 @@ export function HeroIntro() {
                     data-report-id="메인 히어로 랜딩 텍스트"
                     data-report-type="item"
                 >
-                    <Text.Reveal
-                        as="h2"
-                        interaction={false}
-                        className="mobile:text-[2.4rem] pc:text-[4.2rem] font-[900] leading-[1.5] mobile:whitespace-break-spaces pc:whitespace-nowrap"
-                        initialColor="#ffffff00"
-                        revealColor="#000000"
-                        subHighlightColor="#A953FF"
-                        highlightColor="#FF6B75"
-                        revealWindow={0.5}
-                        delay={0.1}
-                        transition={2}
-                        onRevealComplete={() => {
-                            console.log("2");
-                            setIsRevealComplete(true);
-                        }}
-                    >
-                        {`검증된 운영구조 투명한\n정산 제이엔에스에 있습니다.`}
-                    </Text.Reveal>
+                    <span className="hidden pc:block">
+                        <Text.Reveal
+                            as="h2"
+                            interaction={false}
+                            className="mobile:text-[2.4rem] pc:text-[4.2rem] font-[900] leading-[1.5]"
+                            initialColor="#ffffff00"
+                            revealColor="#000000"
+                            subHighlightColor="#A953FF"
+                            highlightColor="#FF6B75"
+                            revealWindow={0.5}
+                            delay={0.1}
+                            transition={2}
+                            onRevealComplete={() => {
+                                console.log("2");
+                                setIsRevealComplete(true);
+                            }}
+                        >
+                            검증된 운영구조 투명한 정산 제이엔에스에 있습니다.
+                        </Text.Reveal>
+                    </span>
+                    <span className="block pc:hidden">
+                        <Text.Reveal
+                            as="h2"
+                            interaction={false}
+                            className="mobile:text-[2.4rem] pc:text-[4.2rem] font-[900] leading-[1.5] mobile:whitespace-break-spaces pc:whitespace-nowrap"
+                            initialColor="#ffffff00"
+                            revealColor="#000000"
+                            subHighlightColor="#A953FF"
+                            highlightColor="#FF6B75"
+                            revealWindow={0.5}
+                            delay={0.1}
+                            transition={2}
+                            onRevealComplete={() => {
+                                console.log("2");
+                                setIsRevealComplete(true);
+                            }}
+                        >
+                            {`검증된 운영구조 투명한\n정산 제이엔에스에 있습니다.`}
+                        </Text.Reveal>
+                    </span>
                 </motion.div>
             ) : null}
         </section>

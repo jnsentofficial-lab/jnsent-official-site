@@ -89,12 +89,28 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
             if (event.key === "Escape") onClose();
         };
 
-        const previousOverflow = document.body.style.overflow;
-        document.body.style.overflow = "hidden";
+        const { body, documentElement } = document;
+        const scrollY = window.scrollY;
+        const previousBodyOverflow = body.style.overflow;
+        const previousBodyPosition = body.style.position;
+        const previousBodyTop = body.style.top;
+        const previousBodyWidth = body.style.width;
+        const previousHtmlOverflow = documentElement.style.overflow;
+
+        body.style.overflow = "hidden";
+        body.style.position = "fixed";
+        body.style.top = `-${scrollY}px`;
+        body.style.width = "100%";
+        documentElement.style.overflow = "hidden";
         window.addEventListener("keydown", handleKeyDown);
 
         return () => {
-            document.body.style.overflow = previousOverflow;
+            body.style.overflow = previousBodyOverflow;
+            body.style.position = previousBodyPosition;
+            body.style.top = previousBodyTop;
+            body.style.width = previousBodyWidth;
+            documentElement.style.overflow = previousHtmlOverflow;
+            window.scrollTo(0, scrollY);
             window.removeEventListener("keydown", handleKeyDown);
         };
     }, [open, onClose]);
@@ -177,7 +193,7 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="inquiry-modal-title"
-                    className="fixed inset-0 z-[200000] flex h-[100dvh] flex-col bg-[#ffffffe2] backdrop-blur-2xl overflow-y-auto"
+                    className="fixed inset-0 z-[200000] flex h-[100dvh] flex-col overflow-hidden bg-[#ffffffe2] backdrop-blur-2xl"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -192,10 +208,10 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                         ×
                     </button>
 
-                    <section className="mx-auto flex min-h-full w-full max-w-[var(--size-tablet)] flex-col items-center justify-start gap-[2.4rem] px-[1.6rem] pb-[3.2rem] pt-[8rem] pc:justify-center pc:px-0">
+                    <section className="mx-auto flex h-full w-full max-w-[var(--size-tablet)] flex-col overflow-y-auto overscroll-contain px-[1.6rem] pb-[3.2rem] pt-[8rem] pc:px-0">
                         {/* <main className="mx-auto w-full max-w-[68rem] flex-1 px-[2rem] pb-[6rem] pt-[8rem]"> */}
                         <motion.header
-                            className="flex flex-col mobile:gap-[0.4rem] pc:gap-[1.2rem] w-full"
+                            className="flex w-full flex-col mobile:gap-[0.4rem] pc:gap-[1.2rem]"
                             initial={{ opacity: 0, transform: "translateY(100px)" }}
                             animate={{ opacity: 1, transform: "translateY(0px)" }}
                             exit={{ opacity: 0, transform: "translateY(100px)" }}
@@ -218,7 +234,7 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                         </motion.header>
 
                         <form
-                            className="grid gap-[3.2rem] w-full pb-[1.6rem]"
+                            className="grid w-full gap-[3.2rem] pb-[1.6rem]"
                             onSubmit={handleSubmit}
                             // initial={{ opacity: 0, transform: "translateY(100px)" }}
                             // animate={{ opacity: 1, transform: "translateY(0px)" }}

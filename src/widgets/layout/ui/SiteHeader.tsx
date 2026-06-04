@@ -3,6 +3,7 @@
 import { useLayoutStore } from "@/shared/stores/useLayoutStore";
 import UI from "@/shared/ui/UIComponent";
 import Image from "next/image";
+import { useEffect } from "react";
 
 const navigationItems = [
     { href: "/", label: "메인" },
@@ -15,9 +16,25 @@ const navigationItems = [
 export function SiteHeader() {
     const { isNowDarkMode, isMobileNavOpen, setIsMobileNavOpen } = useLayoutStore();
 
+    useEffect(() => {
+        const { body, documentElement } = document;
+        const previousBodyOverflow = body.style.overflow;
+        const previousHtmlOverflow = documentElement.style.overflow;
+
+        if (isMobileNavOpen) {
+            body.style.overflow = "hidden";
+            documentElement.style.overflow = "hidden";
+        }
+
+        return () => {
+            body.style.overflow = previousBodyOverflow;
+            documentElement.style.overflow = previousHtmlOverflow;
+        };
+    }, [isMobileNavOpen]);
+
     return (
         <header
-            className="fixed top-0 left-[50%] transform translate-x-[-50%] z-40 w-full bg-[linear-gradient(0deg,_transparent,var(--adaptive-background))] h-[7.2rem]"
+            className="fixed top-0 left-[50%] transform translate-x-[-50%] z-1000 w-full bg-[linear-gradient(0deg,_transparent,var(--adaptive-background))] h-[7.2rem]"
             data-report-id="상단 헤더"
             data-report-type="group"
         >
@@ -77,7 +94,7 @@ export function SiteHeader() {
             </div>
 
             {isMobileNavOpen ? (
-                <div className="fixed inset-0 top-0 z-100 flex min-h-[100dvh] flex-col bg-white gap-[1.6rem] p-[2.4rem] pc:hidden">
+                <div className="fixed inset-0 top-0 z-100 flex min-h-[100dvh] flex-col bg-white gap-[1.6rem] p-[2.4rem_2.4rem_5.2rem] pc:hidden">
                     <div className="flex items-center justify-between">
                         <UI.Linker
                             className="shrink-0 text-2xl"
@@ -93,7 +110,7 @@ export function SiteHeader() {
                         </UI.Linker>
 
                         <UI.Button
-                            className="min-h-[4.8rem] min-w-[4.8rem] bg-transparent px-0 text-[2.8rem] leading-none touch-manipulation"
+                            className="min-h-[4.8rem] min-w-[4.8rem] text-black bg-transparent px-0 text-[2.8rem] leading-none touch-manipulation"
                             onClick={() => setIsMobileNavOpen(false)}
                             type="button"
                         >
@@ -102,14 +119,14 @@ export function SiteHeader() {
                     </div>
 
                     <nav
-                        className="flex flex-1 flex-col"
+                        className="flex flex-1 flex-col justify-end"
                         aria-label="모바일 주요 메뉴"
                         data-report-id="모바일 헤더 메뉴"
                         data-report-type="item"
                     >
                         {navigationItems.map((item) => (
                             <UI.Linker
-                                className="text-[2.4rem] hover:text-[#ff6673]"
+                                className="text-[2.4rem] text-black hover:text-[#ff6673]"
                                 href={item.href}
                                 key={item.href}
                                 onClick={() => setIsMobileNavOpen(false)}
@@ -119,7 +136,7 @@ export function SiteHeader() {
                         ))}
                     </nav>
 
-                    <section className="w-full flex flex-col gap-[1.6rem]">
+                    {/* <section className="w-full flex flex-col gap-[1.6rem]">
                         <div className="h-[0.1rem] w-full bg-[var(--adaptive-grey200)]" />
                         <UI.Linker
                             className="flex items-center w-full"
@@ -135,7 +152,7 @@ export function SiteHeader() {
                                 height={32}
                             />
                         </UI.Linker>
-                    </section>
+                    </section> */}
                 </div>
             ) : null}
         </header>

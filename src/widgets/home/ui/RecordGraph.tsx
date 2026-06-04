@@ -112,7 +112,7 @@ export function RecordGraph() {
                                     <span className="hidden mobile:block">
                                         <Text.Rolling
                                             value={record.value}
-                                            textSize={24}
+                                            textSize={20}
                                             rollingCount={5}
                                         />
                                     </span>
@@ -238,6 +238,7 @@ const GraphVer3 = () => {
                                 `}
                             />
                         </clipPath>
+
                         <motion.rect
                             x={point.x - config.barWidth / 2}
                             y={point.y}

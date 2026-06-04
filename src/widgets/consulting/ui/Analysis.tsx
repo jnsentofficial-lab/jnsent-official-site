@@ -33,11 +33,20 @@ export function Analysis() {
             data-report-id="엔터창업 페이지"
             data-report-type="group"
         >
-            <SubPageHero
-                current="엔터창업"
-                title={"엔터창업"}
-                description={"라이브 콘텐츠 및 BJ 매니지먼트 운영 경험을 바탕으로\n엔터테인먼트 및 방송 관련 창업 컨설팅을 진행하고 있습니다."}
-            />
+            <div className="hidden pc:block">
+                <SubPageHero
+                    current="엔터창업"
+                    title={"엔터창업"}
+                    description={"라이브 콘텐츠 및 BJ 매니지먼트 운영 경험을 바탕으로\n엔터테인먼트 및 방송 관련 창업 컨설팅을 진행하고 있습니다."}
+                />
+            </div>
+            <div className="hidden mobile:block">
+                <SubPageHero
+                    current="엔터창업"
+                    title={"엔터창업"}
+                    description={"라이브 콘텐츠 및\nBJ 매니지먼트 운영 경험을 바탕으로\n엔터테인먼트 및 방송 관련 창업 컨설팅을 진행하고 있습니다."}
+                />
+            </div>
 
             <SubPageSplit
                 leftTabLabel="컨설팅 안내"

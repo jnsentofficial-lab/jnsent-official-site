@@ -372,18 +372,18 @@ input[type="password"] {
         .chat-icon {
             transition: 0.45s cubic-bezier(0.22, 1, 0.36, 1) !important;
             /* right: 1.6rem !important; */
-            bottom: calc(50% - 5.1rem) !important;
+            bottom: calc(50% - 6.8rem) !important;
         }
 
         img {
-            width: 4.4rem !important;
+            width: 5.4rem !important;
         }
     }
 
     body[data-quick-menu-mobile-hidden="true"] #chatterbox-root {
         .chat-icon {
             opacity: 0;
-            right: -4.4rem !important;
+            right: -5.4rem !important;
         }
     }
 
@@ -393,7 +393,7 @@ input[type="password"] {
     }
 }
 
-@media (width >= 90rem) {
+@media (width >= 768px) {
     body {
         font-size: 1.6rem;
     }

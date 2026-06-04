@@ -152,14 +152,14 @@ export function SubPageSplit({ left, right, className = "", leftTabLabel = "좌�
         >
             <div className="mx-auto grid max-w-[var(--size-pc)] w-full grid-cols-4 gap-16 max-[86rem]:grid-cols-1">
                 <div
-                    className="shadow-[0_0_100px_0_var(--adaptive-grey500)] overflow-hidden pc:hidden mobile:flex col-span-4 rounded-[1.6rem] bg-[var(--adaptive-black50)] p-[0.4rem] fixed bottom-[1.6rem] left-[50%] transform translate-x-[-50%] w-[calc(100%-(1.6rem*2))] z-[100] max-w-[var(--size-mobile)]"
+                    className="shadow-[0_0_100px_0_var(--adaptive-grey900)] overflow-hidden pc:hidden mobile:flex col-span-4 rounded-full bg-[var(--adaptive-black50)] p-[0.4rem] fixed bottom-[2.4rem] left-[50%] transform translate-x-[-50%] w-[calc(100%-(1.6rem*2))] z-[100] max-w-[var(--size-mobile)]"
                     // className="hidden max-[86rem]:flex col-span-4 rounded-[1.6rem] bg-[var(--adaptive-black50)] p-[0.4rem]"
                     data-report-id="서브페이지 모바일 탭"
                     data-report-type="group"
                 >
                     <button
                         type="button"
-                        className={`flex-1 rounded-[1.2rem] px-[1.6rem] py-[1.2rem] text-[1.6rem] font-[700] transition-colors ${mobileTab === "left" ? "shadow-[0_0_20px_0_var(--adaptive-grey500)] bg-white text-black" : "text-[var(--adaptive-grey500)]"}`}
+                        className={`flex-1 rounded-full px-[1.6rem] py-[1.2rem] text-[1.6rem] font-[700] transition-colors ${mobileTab === "left" ? "shadow-[0_0_20px_0_var(--adaptive-grey400)] bg-white text-black" : "text-[var(--adaptive-grey500)]"}`}
                         onClick={() => setMobileTab("left")}
                         data-report-id="서브페이지 모바일 좌측 탭"
                         data-report-type="item"
@@ -168,7 +168,7 @@ export function SubPageSplit({ left, right, className = "", leftTabLabel = "좌�
                     </button>
                     <button
                         type="button"
-                        className={`flex-1 rounded-[1.2rem] px-[1.6rem] py-[1.2rem] text-[1.6rem] font-[700] transition-colors ${mobileTab === "right" ? "shadow-[0_0_20px_0_var(--adaptive-grey500)] bg-white text-black" : "text-[var(--adaptive-grey500)]"}`}
+                        className={`flex-1 rounded-full px-[1.6rem] py-[1.2rem] text-[1.6rem] font-[700] transition-colors ${mobileTab === "right" ? "shadow-[0_0_20px_0_var(--adaptive-grey400)] bg-white text-black" : "text-[var(--adaptive-grey500)]"}`}
                         onClick={() => setMobileTab("right")}
                         data-report-id="서브페이지 모바일 우측 탭"
                         data-report-type="item"
