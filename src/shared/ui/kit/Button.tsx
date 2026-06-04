@@ -5,8 +5,9 @@ import { useState } from "react";
 import { ButtonProps } from "../model/ui-props";
 
 // Size type and sizeHeights from Input.tsx
-type ButtonSize = "sm" | "md" | "lg" | "xlg";
+type ButtonSize = "xsm" | "sm" | "md" | "lg" | "xlg";
 const sizeHeights: Record<ButtonSize, string> = {
+    xsm: "3.2rem",
     sm: "4.2rem",
     md: "5.2rem",
     lg: "5.2rem",

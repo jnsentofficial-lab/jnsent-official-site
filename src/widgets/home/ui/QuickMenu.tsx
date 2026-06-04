@@ -72,7 +72,7 @@ export const QuickMenu = () => {
 
     return (
         <AnimatePresence>
-            {isReadyLanding || currentPathName !== "/" ? (
+            {(isReadyLanding || currentPathName !== "/") && !currentPathName.includes("/admin") ? (
                 <motion.aside
                     className="fixed mobile:top-[50%] mobile:right-[1.6rem] mobile:-translate-y-1/2 pc:top-auto pc:right-7 pc:bottom-[1.6rem] pc:translate-y-0 z-30 flex flex-col items-center justify-center gap-[2.4rem]"
                     data-report-id="플로팅 메뉴"

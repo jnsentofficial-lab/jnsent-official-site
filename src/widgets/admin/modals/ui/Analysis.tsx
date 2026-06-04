@@ -178,7 +178,7 @@ export function Analysis() {
                                             )
                                         }
                                         title={
-                                            <div className="flex items-center gap-[0.8rem]">
+                                            <div className="flex items-center mobile:flex-col-reverse mobile:items-start pc:flex-row pc:items-center gap-[0.8rem]">
                                                 {SELECTED ? (
                                                     <Text.Shimmer
                                                         color={{

@@ -86,7 +86,7 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
                                 onClick={() => onSelectInquiry(inquiry)}
                                 selected={SELECTED}
                                 title={
-                                    <div className="flex items-center gap-[0.8rem]">
+                                    <div className="flex items-center mobile:flex-col-reverse mobile:items-start pc:flex-row pc:items-center gap-[0.8rem]">
                                         {SELECTED ? (
                                             <Text.Shimmer
                                                 color={{
@@ -101,6 +101,7 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
                                         ) : (
                                             <h6 className="text-[2.0rem] leading-[1.5] text-left">{inquiry.message}</h6>
                                         )}
+
                                         <span className={`rounded-full px-[1.0rem] py-[0.4rem] text-[1.2rem] font-[700] leading-none ${answerStatusClassName}`}>{answerStatusLabel}</span>
                                     </div>
                                 }

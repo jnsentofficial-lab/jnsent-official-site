@@ -86,7 +86,7 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
                             onClick={() => onSelectAccount(account)}
                             selected={SELECTED}
                             title={
-                                <div className="flex items-center gap-[0.8rem]">
+                                <div className="flex items-center mobile:flex-col-reverse mobile:items-start pc:flex-row pc:items-center gap-[0.8rem]">
                                     {SELECTED ? (
                                         <Text.Shimmer
                                             color={{
@@ -102,15 +102,16 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
                                         <h6 className="text-[2.0rem]">{account.login_id}</h6>
                                     )}
 
-                                    <section className="flex gap-[0.4rem] border border-[var(--adaptive-grey500)] p-[0.2rem_0.4rem] rounded-[0.8rem]">
-                                        <p className="text-[var(--adaptive-grey600)]">{getManagerAccountRoleLabel(account.role)}</p>
-                                        {/* <div className="h-[1.2rem] w-[0.1rem] bg-[var(--adaptive-grey300)] my-auto" /> */}
+                                    <section className="flex gap-[0.4rem]">
+                                        <p className={`rounded-full px-[1.0rem] py-[0.4rem] text-[1.4rem] font-[500] leading-none bg-[var(--adaptive-grey200)] text-[var(--adaptive-grey600)]`}>
+                                            {getManagerAccountRoleLabel(account.role)}
+                                        </p>
+                                        <p
+                                            className={`rounded-full px-[1.0rem] py-[0.4rem] text-[1.4rem] font-[500] leading-none ${account.is_active ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]" : "bg-[var(--adaptive-red200)] text-[var(--adaptive-red600)]"}`}
+                                        >
+                                            {account.is_active ? "활성" : "비활성"}
+                                        </p>
                                     </section>
-                                    <p
-                                        className={`rounded-full px-[1.0rem] py-[0.4rem] text-[1.4rem] font-[500] leading-none ${account.is_active ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]" : "bg-[var(--adaptive-grey200)] text-[var(--adaptive-grey600)]"}`}
-                                    >
-                                        {account.is_active ? "활성" : "비활성"}
-                                    </p>
                                 </div>
                             }
                         />
