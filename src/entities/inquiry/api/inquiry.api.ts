@@ -1,5 +1,5 @@
 import { clientApi, type ApiResponse } from "@/shared/lib/api/client";
-import type { AdminInquiry, CreateInquiryCommentPayload, CreateInquiryPayload, DeleteInquiryPayload, Inquiry, InquiryComment, UpdateInquiryStatusPayload } from "@/entities/inquiry/model/inquiry.type";
+import type { AdminInquiry, CreateInquiryCommentPayload, CreateInquiryPayload, DeleteInquiryPayload, Inquiry, InquiryComment, UpdateInquiryCommentPayload, UpdateInquiryStatusPayload } from "@/entities/inquiry/model/inquiry.type";
 
 export async function createInquiryFetch(payload: CreateInquiryPayload) {
     return clientApi.post<ApiResponse<Inquiry>>("/api/inquiries", {
@@ -38,7 +38,14 @@ export async function getInquiryCommentsFetch(inquiryId: string) {
 
 export async function createInquiryCommentFetch(payload: CreateInquiryCommentPayload) {
     return clientApi.post<ApiResponse<InquiryComment>>(`/api/admin/inquiries/${payload.inquiry_id}/comments`, {
-        manager_name: payload.manager_name,
+        message: payload.message,
+        message_body: payload.message_body,
+    });
+}
+
+export async function updateInquiryCommentFetch(payload: UpdateInquiryCommentPayload) {
+    return clientApi.patch<ApiResponse<InquiryComment>>(`/api/admin/inquiries/${payload.inquiry_id}/comments`, {
+        id: payload.id,
         message: payload.message,
         message_body: payload.message_body,
     });
