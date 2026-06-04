@@ -1,5 +1,6 @@
 import { createSupabaseServiceClient } from "@/shared/api/SupabaseServer";
 import { buildAvailableTime, buildRegion, formatPhoneNumber, sanitizeAgeInput, sanitizeNameInput } from "@/entities/inquiry/lib/formFields";
+import { sendInquiryNotification } from "@/entities/inquiry/lib/inquiryNotification.server";
 import { apiError, apiOk } from "@/shared/lib/api/server";
 
 export async function POST(request: Request) {
@@ -38,5 +39,15 @@ export async function POST(request: Request) {
         .select("*")
         .single();
 
-    return error ? apiError(error.message, 400) : apiOk(data, { status: 201 });
+    if (error) {
+        return apiError(error.message, 400);
+    }
+
+    try {
+        await sendInquiryNotification(data);
+    } catch (mailError) {
+        console.error("Failed to send inquiry notification", mailError);
+    }
+
+    return apiOk(data, { status: 201 });
 }
