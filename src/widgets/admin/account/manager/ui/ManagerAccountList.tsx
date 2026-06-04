@@ -116,11 +116,11 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
                                     )}
 
                                     <section className="flex gap-[0.4rem]">
-                                        <p className={`rounded-full px-[1.0rem] py-[0.4rem] text-[1.4rem] font-[500] leading-none bg-[var(--adaptive-grey200)] text-[var(--adaptive-grey600)]`}>
+                                        <p className={`rounded-full px-[1.0rem] py-[0.2rem] text-[1.4rem] font-[500] leading-none bg-[var(--adaptive-grey200)] text-[var(--adaptive-grey600)]`}>
                                             {getManagerAccountRoleLabel(account.role)}
                                         </p>
                                         <p
-                                            className={`rounded-full px-[1.0rem] py-[0.4rem] text-[1.4rem] font-[500] leading-none ${account.is_active ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]" : "bg-[var(--adaptive-red200)] text-[var(--adaptive-red600)]"}`}
+                                            className={`rounded-full px-[1.0rem] py-[0.2rem] text-[1.2rem] font-[500] leading-none ${account.is_active ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]" : "bg-[var(--adaptive-red100)] text-[var(--adaptive-red600)]"}`}
                                         >
                                             {account.is_active ? "활성" : "비활성"}
                                         </p>
