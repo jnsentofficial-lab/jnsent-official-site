@@ -193,7 +193,7 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="inquiry-modal-title"
-                    className="fixed inset-0 z-[200000] flex h-[100dvh] flex-col overflow-hidden bg-[#ffffffe2] backdrop-blur-2xl"
+                    className="fixed inset-0 z-[2000000000000] flex h-[100dvh] flex-col overflow-hidden bg-[#ffffffe2] backdrop-blur-2xl"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
