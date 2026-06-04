@@ -88,7 +88,7 @@ export const QuickMenu = () => {
                     <section className="flex flex-col gap-[0.8rem]">
                         {socialItems.map((item) => (
                             <a
-                                className={`grid mobile:h-[5.2rem] mobile:w-[5.2rem] pc:h-[7.2rem] pc:w-[7.2rem] place-items-center rounded-full ${!!item ? "bg-white" : "bg-transparent"} text-sm font-[700] text-black shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.14)]`}
+                                className={`grid mobile:h-[4.8rem] mobile:w-[4.8rem] pc:h-[7.2rem] pc:w-[7.2rem] place-items-center rounded-full ${!!item ? "bg-white" : "bg-transparent"} text-sm font-[700] text-black shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.14)]`}
                                 href="/bjSupport"
                                 key={item}
                             >
@@ -106,7 +106,7 @@ export const QuickMenu = () => {
                     </section>
                     <div className="mx-auto h-[0.1rem] w-8 bg-[var(--adaptive-black400)]" />
                     <a
-                        className="grid mobile:h-[5.2rem] mobile:w-[5.2rem] pc:h-[7.2rem] pc:w-[7.2rem] place-items-center rounded-full bg-black text-3xl font-light text-white shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.16)]"
+                        className="grid mobile:h-[4.8rem] mobile:w-[4.8rem] pc:h-[7.2rem] pc:w-[7.2rem] place-items-center rounded-full bg-black text-3xl font-light text-white shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.16)]"
                         // href="#home"
                         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                     >

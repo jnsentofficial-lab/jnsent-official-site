@@ -1,9 +1,11 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import { useLayoutStore } from "@/shared/stores/useLayoutStore";
 import UI from "@/shared/ui/UIComponent";
 import Image from "next/image";
 import { useEffect } from "react";
+import useNavigate from "@/shared/hooks/useNavigate";
 
 const navigationItems = [
     { href: "/", label: "메인" },
@@ -14,6 +16,7 @@ const navigationItems = [
 ];
 
 export function SiteHeader() {
+    const { currentPathName } = useNavigate();
     const { isNowDarkMode, isMobileNavOpen, setIsMobileNavOpen } = useLayoutStore();
 
     useEffect(() => {
@@ -93,50 +96,72 @@ export function SiteHeader() {
                 </UI.Button>
             </div>
 
-            {isMobileNavOpen ? (
-                <div className="fixed inset-0 top-0 z-100 flex min-h-[100dvh] flex-col bg-white gap-[1.6rem] p-[2.4rem_2.4rem_5.2rem] pc:hidden">
-                    <div className="flex items-center justify-between">
-                        <UI.Linker
-                            className="shrink-0 text-2xl"
-                            href="/"
-                            onClick={() => setIsMobileNavOpen(false)}
-                        >
-                            <Image
-                                src={"/images/common/ico-logo.svg"}
-                                width={52}
-                                height={52}
-                                alt=""
-                            />
-                        </UI.Linker>
-
-                        <UI.Button
-                            className="min-h-[4.8rem] min-w-[4.8rem] text-black bg-transparent px-0 text-[2.8rem] leading-none touch-manipulation"
-                            onClick={() => setIsMobileNavOpen(false)}
-                            type="button"
-                        >
-                            ×
-                        </UI.Button>
-                    </div>
-
-                    <nav
-                        className="flex flex-1 flex-col justify-end gap-[1.6rem]"
-                        aria-label="모바일 주요 메뉴"
-                        data-report-id="모바일 헤더 메뉴"
-                        data-report-type="item"
+            <AnimatePresence>
+                {isMobileNavOpen ? (
+                    <motion.div
+                        className="fixed inset-0 top-0 z-100 flex min-h-[100dvh] flex-col bg-white gap-[1.6rem] p-[2.4rem_2.4rem_5.2rem] pc:hidden"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{
+                            duration: 0.25,
+                            ease: [0.45, 0, 0.55, 1],
+                        }}
                     >
-                        {navigationItems.map((item) => (
+                        <div className="flex items-center justify-between">
                             <UI.Linker
-                                className="text-[2.8rem] text-black hover:text-[#ff6673]"
-                                href={item.href}
-                                key={item.href}
+                                className="shrink-0 text-2xl"
+                                href="/"
                                 onClick={() => setIsMobileNavOpen(false)}
                             >
-                                {item.label}
+                                <Image
+                                    src={"/images/common/ico-logo.svg"}
+                                    width={52}
+                                    height={52}
+                                    alt=""
+                                />
                             </UI.Linker>
-                        ))}
-                    </nav>
 
-                    {/* <section className="w-full flex flex-col gap-[1.6rem]">
+                            <UI.Button
+                                className="min-h-[4.8rem] min-w-[4.8rem] text-black bg-transparent px-0 text-[2.8rem] leading-none touch-manipulation"
+                                onClick={() => setIsMobileNavOpen(false)}
+                                type="button"
+                            >
+                                ×
+                            </UI.Button>
+                        </div>
+
+                        <nav
+                            className="flex flex-1 flex-col justify-end gap-[1.6rem]"
+                            aria-label="모바일 주요 메뉴"
+                            data-report-id="모바일 헤더 메뉴"
+                            data-report-type="item"
+                        >
+                            {navigationItems.map((item, index) => (
+                                <motion.div
+                                    key={item.href}
+                                    initial={{ opacity: 0, translateY: 100 }}
+                                    animate={{ opacity: 1, translateY: 0 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{
+                                        delay: 0.1 * (index + 1),
+                                        duration: 0.5,
+                                        ease: [0.22, 1, 0.36, 1],
+                                    }}
+                                >
+                                    <UI.Linker
+                                        className={`${currentPathName === item.href ? "text-[var(--adaptive-red500)]" : "text-[var(--adaptive-grey500)]"} text-[2.8rem] hover:text-[#ff6673]`}
+                                        href={item.href}
+                                        key={item.href}
+                                        onClick={() => setIsMobileNavOpen(false)}
+                                    >
+                                        {item.label}
+                                    </UI.Linker>
+                                </motion.div>
+                            ))}
+                        </nav>
+
+                        {/* <section className="w-full flex flex-col gap-[1.6rem]">
                         <div className="h-[0.1rem] w-full bg-[var(--adaptive-grey200)]" />
                         <UI.Linker
                             className="flex items-center w-full"
@@ -153,8 +178,9 @@ export function SiteHeader() {
                             />
                         </UI.Linker>
                     </section> */}
-                </div>
-            ) : null}
+                    </motion.div>
+                ) : null}
+            </AnimatePresence>
         </header>
     );
 }

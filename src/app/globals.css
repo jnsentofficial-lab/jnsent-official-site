@@ -373,18 +373,18 @@ input[type="password"] {
             z-index: 10 !important;
             transition: 0.45s cubic-bezier(0.22, 1, 0.36, 1) !important;
             /* right: 1.6rem !important; */
-            bottom: calc(50% - 6.8rem) !important;
+            bottom: calc(50% - 6rem) !important;
         }
 
         img {
-            width: 5.4rem !important;
+            width: 4.8rem !important;
         }
     }
 
     body[data-quick-menu-mobile-hidden="true"] #chatterbox-root {
         .chat-icon {
             opacity: 0;
-            right: -5.4rem !important;
+            right: -4.8rem !important;
         }
     }
 

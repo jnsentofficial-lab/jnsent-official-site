@@ -53,7 +53,7 @@ const Select = ({ className = "", icon = defaultIcon, iconClassName = "", option
             <select
                 {...props}
                 className={`${className} w-full appearance-none border px-[1.2rem] cursor-pointer hover:bg-[var(--adaptive-grey100)]`}
-                style={{ minHeight: "3.2rem" }}
+                style={{ minHeight: height }}
                 onClick={onClick}
             >
                 {options.map((option) => (

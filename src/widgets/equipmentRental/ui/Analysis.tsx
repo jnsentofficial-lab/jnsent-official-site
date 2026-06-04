@@ -64,6 +64,7 @@ export function Analysis() {
                                     alt=""
                                     width={32}
                                     height={32}
+                                    className="mobile:hidden pc:block"
                                 />
                                 <section className="flex flex-col mobile:gap-[0.4rem] pc:gap-[0.8rem]">
                                     <h5 className="font-[900] mobile:text-[1.6rem] pc:text-[1.8rem]">문의가 필요하신가요?</h5>
