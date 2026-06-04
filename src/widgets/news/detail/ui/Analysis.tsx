@@ -2,6 +2,7 @@
 
 import { usePublishedNewsDetailQuery, usePublishedNewsQuery } from "@/entities/news/api/news.query";
 import { showErrorToast, showSuccessToast } from "@/shared/lib/toast";
+import Skeleton from "@/shared/ui/kit/Skeleton";
 import { RichTextRenderer } from "@/shared/ui/richText/RichTextRenderer";
 import UI from "@/shared/ui/UIComponent";
 import { motion } from "framer-motion";
@@ -16,9 +17,84 @@ function formatViewCount(value?: number) {
     return new Intl.NumberFormat("ko-KR").format(value ?? 0);
 }
 
+function NewsDetailSkeleton() {
+    return (
+        <div className="mx-auto w-[min(68rem,calc(100%_-_3.2rem))] mobile:pt-[calc(7.2rem+(1.6rem*2))] pc:pt-[calc(1.6rem-17.4rem-3.2rem)] pb-[3.2rem] mx-[1.6rem] flex flex-col gap-[5.2rem]">
+            <section className="flex flex-col gap-[0.8rem]">
+                <Skeleton.Div
+                    target={false}
+                    className={{ skeleton: "h-[5.6rem] w-full max-w-[42rem]" }}
+                />
+                <Skeleton.Div
+                    target={false}
+                    className={{ skeleton: "h-[2.4rem] w-[18rem]" }}
+                />
+            </section>
+
+            <section className="flex flex-col gap-[1.6rem]">
+                <Skeleton.Div
+                    target={false}
+                    className={{ skeleton: "aspect-square w-full rounded-[5.2rem]" }}
+                />
+                <div className="flex flex-col gap-[1.2rem]">
+                    <Skeleton.Div
+                        target={false}
+                        className={{ skeleton: "h-[2.4rem] w-full" }}
+                    />
+                    <Skeleton.Div
+                        target={false}
+                        className={{ skeleton: "h-[2.4rem] w-full" }}
+                    />
+                    <Skeleton.Div
+                        target={false}
+                        className={{ skeleton: "h-[2.4rem] w-[72%]" }}
+                    />
+                </div>
+            </section>
+
+            <section className="flex justify-center gap-[1.2rem]">
+                <Skeleton.Div
+                    target={false}
+                    className={{ skeleton: "h-[5.6rem] w-[14rem] rounded-full" }}
+                />
+                <Skeleton.Div
+                    target={false}
+                    className={{ skeleton: "h-[5.6rem] w-[14rem] rounded-full" }}
+                />
+            </section>
+
+            <div className="w-full h-[0.1rem] bg-[var(--adaptive-black100)]" />
+
+            <section className="flex flex-col gap-[3.2rem]">
+                <div className="flex flex-col gap-[0.8rem]">
+                    <Skeleton.Div
+                        target={false}
+                        className={{ skeleton: "h-[2rem] w-[6rem]" }}
+                    />
+                    <Skeleton.Div
+                        target={false}
+                        className={{ skeleton: "h-[3.2rem] w-full max-w-[36rem]" }}
+                    />
+                </div>
+
+                <div className="flex flex-col gap-[0.8rem]">
+                    <Skeleton.Div
+                        target={false}
+                        className={{ skeleton: "h-[2rem] w-[6rem]" }}
+                    />
+                    <Skeleton.Div
+                        target={false}
+                        className={{ skeleton: "h-[3.2rem] w-full max-w-[36rem]" }}
+                    />
+                </div>
+            </section>
+        </div>
+    );
+}
+
 export function Analysis({ slug }: AnalysisProps) {
     const { data: news, isLoading } = usePublishedNewsDetailQuery(slug);
-    const { data: newsList } = usePublishedNewsQuery();
+    const { data: newsList, isLoading: isNewsListLoading } = usePublishedNewsQuery();
     const currentIndex = newsList.findIndex((item) => item.slug === slug);
     const prevNews = currentIndex > 0 ? newsList[currentIndex - 1] : null;
     const nextNews = currentIndex >= 0 && currentIndex < newsList.length - 1 ? newsList[currentIndex + 1] : null;
@@ -31,6 +107,13 @@ export function Analysis({ slug }: AnalysisProps) {
             showErrorToast("링크 복사에 실패했어요", 2);
         }
     };
+
+    if (isLoading || isNewsListLoading) {
+        return <NewsDetailSkeleton />;
+    }
+
+    const newsNavigationClassName = "flex flex-col gap-[0.8rem]";
+    const newsNavigationLinkClassName = `${newsNavigationClassName} hover:text-[var(--adaptive-red500)]`;
 
     return (
         // <div className="mx-auto w-[min(68rem,calc(100%_-_3.2rem))] pt-[calc(50dvh-1.6rem-17.4rem-3.2rem)] pb-[3.2rem] mx-[1.6rem]">
@@ -119,23 +202,35 @@ export function Analysis({ slug }: AnalysisProps) {
 
             {/* <div className="mt-16 grid gap-8 border-t border-[var(--adaptiveGrey200)] pt-10"> */}
             <section className="flex flex-col gap-[3.2rem]">
-                <UI.Linker
-                    href={`/news/${prevNews?.slug}`}
-                    className="flex flex-col gap-[0.8rem] hover:text-[var(--adaptive-red500)]"
-                >
-                    <p className="text-left text-[var(--adaptive-black300)]">이전글</p>
+                {prevNews ? (
+                    <UI.Linker
+                        href={`/news/${prevNews.slug}`}
+                        className={newsNavigationLinkClassName}
+                    >
+                        <p className="text-left text-[var(--adaptive-black300)]">이전글</p>
+                        <h6 className="text-[2.4rem]">{prevNews.title}</h6>
+                    </UI.Linker>
+                ) : (
+                    <div className={newsNavigationClassName}>
+                        <p className="text-left text-[var(--adaptive-black300)]">이전글</p>
+                        <h6 className="text-[2.4rem] text-[var(--adaptive-black300)]">이전글이 없습니다.</h6>
+                    </div>
+                )}
 
-                    <h6 className="text-[2.4rem]">{prevNews ? prevNews.title : "이전글이 없습니다."}</h6>
-                </UI.Linker>
-
-                <UI.Linker
-                    href={`/news/${nextNews?.slug}`}
-                    className="flex flex-col gap-[0.8rem] hover:text-[var(--adaptive-red500)]"
-                >
-                    <p className="text-left text-[var(--adaptive-black300)]">다음글</p>
-
-                    <h6 className="text-[2.4rem]">{nextNews ? nextNews.title : "이전글이 없습니다."}</h6>
-                </UI.Linker>
+                {nextNews ? (
+                    <UI.Linker
+                        href={`/news/${nextNews.slug}`}
+                        className={newsNavigationLinkClassName}
+                    >
+                        <p className="text-left text-[var(--adaptive-black300)]">다음글</p>
+                        <h6 className="text-[2.4rem]">{nextNews.title}</h6>
+                    </UI.Linker>
+                ) : (
+                    <div className={newsNavigationClassName}>
+                        <p className="text-left text-[var(--adaptive-black300)]">다음글</p>
+                        <h6 className="text-[2.4rem] text-[var(--adaptive-black300)]">다음글이 없습니다.</h6>
+                    </div>
+                )}
             </section>
         </div>
     );
