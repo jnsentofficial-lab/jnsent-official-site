@@ -56,7 +56,7 @@ export function SubPageHero({ current, title, description }: SubPageHeroProps) {
     return (
         // <section className="pt-[calc(50dvh-7.2rem-17.4rem-9.2rem)] pb-[9.2rem] mx-[1.6rem]">
         <section
-            className="mobile:pt-[calc(3.2rem+7.2rem+1.6rem)] pc:pt-[calc(50dvh-1.6rem-17.4rem-5.2rem)] pb-[3.2rem] mx-[1.6rem]"
+            className="mobile:pt-[calc(7.2rem+1.6rem)] pc:pt-[calc(50dvh-1.6rem-17.4rem-5.2rem)] pb-[3.2rem] mx-[1.6rem]"
             data-report-id={`${current} 히어로 섹션`}
             data-report-type="group"
             // className="pt-[calc(50dvh-1.6rem-17.4rem-3.2rem)] pb-[3.2rem] mx-[1.6rem]"

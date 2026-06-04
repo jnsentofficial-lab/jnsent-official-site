@@ -2,7 +2,6 @@
 
 import { InfoCard, InquiryRequestForm, SubPageHero, SubPageSplit } from "@/widgets/layout/ui";
 import { DottedItem, SubPageSection } from "@/widgets/layout/ui/SubPageLayout";
-import { ReactNode } from "react";
 
 const consultingAreas = [
     {
@@ -33,14 +32,14 @@ export function Analysis() {
             data-report-id="엔터창업 페이지"
             data-report-type="group"
         >
-            <div className="hidden pc:block">
+            <div className="mobile:hidden pc:block">
                 <SubPageHero
                     current="엔터창업"
                     title={"엔터창업"}
                     description={"라이브 콘텐츠 및 BJ 매니지먼트 운영 경험을 바탕으로\n엔터테인먼트 및 방송 관련 창업 컨설팅을 진행하고 있습니다."}
                 />
             </div>
-            <div className="hidden mobile:block">
+            <div className="mobile:block pc:hidden">
                 <SubPageHero
                     current="엔터창업"
                     title={"엔터창업"}
@@ -54,19 +53,19 @@ export function Analysis() {
                 left={
                     <div className="flex flex-col mobile:gap-[3.2rem] pc:gap-[9.2rem]">
                         <SubPageSection title={"컨설팅 분야"}>
-                            <div className="flex flex-col gap-[1.6rem]">
+                            <div className="flex flex-col gap-[0.8rem]">
                                 {consultingAreas.map((area) => (
                                     <section
                                         key={area.title}
-                                        className="rounded-[2.4rem] bg-[var(--adaptive-black50)] mobile:p-[1.6rem_1.8rem] pc:p-[1.6rem_2.4rem] flex flex-col gap-[1.6rem]"
+                                        className="rounded-[2.4rem] border border-[var(--adaptive-black100)] mobile:p-[1.6rem_1.8rem] pc:p-[1.6rem_2.4rem] flex flex-col gap-[1.6rem] select-none"
                                     >
-                                        <h3 className="mobie:text-[1.6rem] pc:text-[2.0rem] font-[700] text-black">{area.title}</h3>
+                                        <h3 className="mobie:text-[1.4rem] pc:text-[1.6rem] font-[700] text-black">{area.title}</h3>
 
                                         <section className="flex flex-col mobile:gap-[0.8rem] pc:gap-[1.2rem]">
                                             {area.list.map((mappedItem, mappedIdx) => (
                                                 <p
                                                     key={mappedIdx}
-                                                    className="text-[var(--adaptive-black300)] font-[500]"
+                                                    className="text-[var(--adaptive-black300)]"
                                                 >
                                                     {mappedItem}
                                                 </p>

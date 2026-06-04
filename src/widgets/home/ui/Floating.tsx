@@ -47,13 +47,13 @@ const FloatingBar = ({ onInquiryClick }: { onInquiryClick: () => void }) => {
                     exit={{ y: 100, opacity: 0 }}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     // className="fixed mobile:bottom-0 pc:bottom-[1.6rem] left-[50%] z-10 flex mobile:h-[5.2rem] pc:h-[6.2rem] mobile:w-auto pc:w-[calc(100vw-1.6rem)] max-w-[var(--size-tablet)] -translate-x-1/2 items-center mobile:rounded-0 pc:rounded-full bg-black p-[0.4rem]"
-                    className="fixed bottom-[2.4rem] left-[50%] z-10 flex mobile:h-[5.2rem] pc:h-[6.2rem] mobile:w-[calc(100vw-5.6rem)] pc:w-[calc(100vw-1.6rem)] max-w-[var(--size-tablet)] -translate-x-1/2 items-center rounded-full bg-black p-[0.4rem]"
+                    className="fixed bottom-[2.4rem] left-[50%] z-1000 flex mobile:h-[5.2rem] pc:h-[6.2rem] mobile:w-[calc(100vw-5.6rem)] pc:w-[calc(100vw-1.6rem)] max-w-[var(--size-tablet)] -translate-x-1/2 items-center rounded-full bg-black p-[0.4rem]"
                 >
                     <div className="mobile:px-[0.8rem] pc:px-[1.6rem]">
                         <img
                             src={"/images/icon/outlined/ico-outlined-siren-white.svg"}
                             alt=""
-                            className="w-[2.8rem]"
+                            className="mobile:w-[2.4rem] pc:w-[2.8rem]"
                         />
                     </div>
 
@@ -65,9 +65,9 @@ const FloatingBar = ({ onInquiryClick }: { onInquiryClick: () => void }) => {
                             classNameInner="gap-[3.2rem]"
                             // interaction
                         >
-                            <p className="text-[1.8rem] font-[700] text-white">단일 방송 최고 250만 개 달성, 다음 주인공은 당신입니다</p>
-                            <p className="text-[1.8rem] font-[700] text-white">✦</p>
-                            <p className="text-[1.8rem] font-[700] text-white">지금 지원하고 더 빠르게 성장하세요</p>
+                            <p className="mobile:text-[1.6rem] pc:text-[1.8rem] font-[700] text-white">단일 방송 최고 250만 개 달성, 다음 주인공은 당신입니다</p>
+                            <p className="mobile:text-[1.6rem] pc:text-[1.8rem] font-[700] text-white">✦</p>
+                            <p className="mobile:text-[1.6rem] pc:text-[1.8rem] font-[700] text-white">지금 지원하고 더 빠르게 성장하세요</p>
                         </Text.Marquee>
 
                         <div className="absolute top-0 right-0 z-2 h-full w-[3.2rem] bg-[linear-gradient(270deg,_black,_transparent)]" />
@@ -78,12 +78,12 @@ const FloatingBar = ({ onInquiryClick }: { onInquiryClick: () => void }) => {
                         onClick={onInquiryClick}
                         className="flex shrink-0 cursor-pointer items-center gap-[1.2rem] px-[1.2rem]"
                     >
-                        <p className="text-[1.8rem] font-bold text-white">문의하기</p>
+                        <p className="mobile:text-[1.6rem] pc:text-[1.8rem] font-bold text-white">문의하기</p>
 
                         <img
                             src={"/images/icon/outlined/ico-outlined-arrow-single-up.svg"}
                             alt=""
-                            className="w-[2.0rem]"
+                            className="mobile:w-[1.6rem] pc:w-[2.0rem]"
                         />
                     </button>
                 </motion.section>

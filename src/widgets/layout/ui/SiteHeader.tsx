@@ -119,14 +119,14 @@ export function SiteHeader() {
                     </div>
 
                     <nav
-                        className="flex flex-1 flex-col justify-end"
+                        className="flex flex-1 flex-col justify-end gap-[1.6rem]"
                         aria-label="모바일 주요 메뉴"
                         data-report-id="모바일 헤더 메뉴"
                         data-report-type="item"
                     >
                         {navigationItems.map((item) => (
                             <UI.Linker
-                                className="text-[2.4rem] text-black hover:text-[#ff6673]"
+                                className="text-[2.8rem] text-black hover:text-[#ff6673]"
                                 href={item.href}
                                 key={item.href}
                                 onClick={() => setIsMobileNavOpen(false)}

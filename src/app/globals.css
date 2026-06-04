@@ -370,6 +370,7 @@ input[type="password"] {
 @media (width >= 9.375rem) {
     #chatterbox-root {
         .chat-icon {
+            z-index: 10 !important;
             transition: 0.45s cubic-bezier(0.22, 1, 0.36, 1) !important;
             /* right: 1.6rem !important; */
             bottom: calc(50% - 6.8rem) !important;
@@ -400,6 +401,7 @@ input[type="password"] {
 
     #chatterbox-root {
         .chat-icon {
+            z-index: 10 !important;
             bottom: 13.8rem !important;
             right: 1.8rem !important;
         }

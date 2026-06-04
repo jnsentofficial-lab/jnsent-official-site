@@ -49,22 +49,39 @@ export function FinalCtaSection() {
                 whileInView={{ opacity: 1, y: 0 }}
             >
                 <section className="flex flex-col gap-[1.6rem]">
-                    <Text.Reveal
-                        as="h2"
-                        className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]"
-                        initialColor="#00000000"
-                        midColor="rgb(255, 92, 118)"
-                        revealColor="rgb(255, 255, 255)"
-                        revealWindow={0.5}
-                        align="center"
-                        revealStartPosition={20}
-                        revealEndPosition={60}
-                        // delay={2}
-                        // transition={0}
-                        transition={2}
-                    >
-                        {`제이엔에스와 함께\n신뢰할 수 있는 미래를 만들어보세요`}
-                    </Text.Reveal>
+                    <div className="mobile:hidden pc:block">
+                        <Text.Reveal
+                            as="h2"
+                            className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]"
+                            initialColor="#00000000"
+                            midColor="rgb(255, 92, 118)"
+                            revealColor="rgb(255, 255, 255)"
+                            revealWindow={0.5}
+                            align="center"
+                            revealStartPosition={20}
+                            revealEndPosition={60}
+                            transition={2}
+                        >
+                            {`제이엔에스와 함께\n신뢰할 수 있는 미래를 만들어보세요`}
+                        </Text.Reveal>
+                    </div>
+
+                    <div className="mobile:block pc:hidden">
+                        <Text.Reveal
+                            as="h2"
+                            className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]"
+                            initialColor="#00000000"
+                            midColor="rgb(255, 92, 118)"
+                            revealColor="rgb(255, 255, 255)"
+                            revealWindow={0.5}
+                            align="center"
+                            revealStartPosition={20}
+                            revealEndPosition={60}
+                            transition={2}
+                        >
+                            {`제이엔에스와 함께\n신뢰할 수 있는\n미래를 만들어보세요`}
+                        </Text.Reveal>
+                    </div>
 
                     <p className="text-center text-[2.0rem] text-[var(--adaptive-greyOpacity700)] font-[500] leading-[1.5]">
                         성장에 필요한 장비, 공간, 매니징, 정산 구조까지 처음부터 투명하게 안내합니다.
