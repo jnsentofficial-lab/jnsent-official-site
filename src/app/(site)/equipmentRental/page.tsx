@@ -17,7 +17,7 @@ export default async function EquipmentRentalPage() {
     return (
         <Main
             id="equipment-rental"
-            className={{ inner: "", container: "min-h-[calc(100dvh-10.8rem)]" }}
+            className={{ inner: "", container: "min-h-[calc(100svh-10.8rem)]" }}
         >
             <EquipmentRentalView />
         </Main>

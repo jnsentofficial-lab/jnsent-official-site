@@ -18,6 +18,7 @@ import { Footer } from "@/widgets/layout/Footer";
 import "@/shared/style/scss/index.scss";
 import "./globals.css";
 import { Report } from "@/widgets/layout/Report";
+import { QuickMenu } from "@/widgets/home/ui";
 
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
 
@@ -127,6 +128,7 @@ export default function RootLayout({
                             <Toast />
                             <ApiPendingOverlay />
                             <Report />
+                            <QuickMenu />
                         </AuthProvider>
                     </QueryProvider>
                 </GlobalErrorBoundary>

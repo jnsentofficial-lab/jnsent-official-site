@@ -74,7 +74,7 @@ export function Analysis() {
                     </>
                 }
                 right={
-                    <AdminSidePanel title={"생성하기"}>
+                    <AdminSidePanel title={sidebarMode === "create" ? "계정 생성" : "계정 편집"}>
                         <ManagerAccountSidebar
                             account={selectedAccount}
                             mode={sidebarMode}

@@ -17,15 +17,15 @@ const positions = Array.from({ length: 9 }, (_, index) => ({
 }));
 
 const positionLabels: Record<string, string> = {
-    "1-1": "좌상단 ↖",
-    "2-1": "상단 ↑",
-    "3-1": "우상단 ↗",
-    "1-2": "좌측 ←",
-    "2-2": "가운데 •",
-    "3-2": "우측 →",
-    "1-3": "좌하단 ↙",
-    "2-3": "하단 ↓",
-    "3-3": "우하단 ↘",
+    "1-1": "↖",
+    "2-1": "↑",
+    "3-1": "↗",
+    "1-2": "←",
+    "2-2": "•",
+    "3-2": "→",
+    "1-3": "↙",
+    "2-3": "↓",
+    "3-3": "↘",
 };
 const formClassName = "flex flex-col gap-[2.4rem]";
 const labelClassName = "flex flex-col gap-[0.8rem] font-[NanumSquare]";
@@ -174,16 +174,16 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
             setImageUrlValue("");
             setSelectedImageFile(null);
             setSelectedImagePreviewUrl(null);
-            setStatusMessage("모달이 저장되었습니다.");
+            setStatusMessage("팝업이 저장되었습니다.");
             onSaved?.();
         } catch {
-            setStatusMessage("모달 저장에 실패했습니다.");
+            setStatusMessage("팝업 저장에 실패했습니다.");
         }
     }
 
     return (
         <Fragment>
-            <h1 className="text-[3.2rem] mobile:px-[1.6rem] pc:px-[5.2rem] pt-[5.2rem]">편집하기</h1>
+            <h1 className="text-[3.2rem] mobile:px-[1.6rem] pc:px-[5.2rem] pt-[5.2rem]">{modal ? "편집하기" : "생성하기"}</h1>
 
             <form
                 className="flex flex-col gap-[3.8rem] mobile:px-[1.6rem] pc:px-[5.2rem] flex-1"
@@ -196,7 +196,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                     <input
                         className={inputClassName}
                         name="title"
-                        placeholder="모달 제목"
+                        placeholder="팝업 제목"
                         onChange={(event) => setTitle(event.target.value)}
                         required
                         type="text"
@@ -209,7 +209,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                         className="min-h-[13.2rem] resize-y border border-black px-4 py-3 text-lg font-semibold"
                         name="content"
                         onChange={(event) => setContent(event.target.value)}
-                        placeholder="모달 내용을 입력하세요."
+                        placeholder="팝업 내용을 입력하세요."
                         required
                         value={content}
                     />
@@ -267,9 +267,9 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                         name="dismissType"
                         onChange={(event) => setDismissType(event.target.value as GlobalModal["dismiss_type"])}
                         options={[
-                            { label: "닫기만", value: "none" },
-                            { label: "오늘 하루 동안 닫기", value: "today" },
-                            { label: "n일 동안 닫기", value: "days" },
+                            { label: "닫기만 가능", value: "none" },
+                            { label: "오늘 하루 보이지 않기", value: "today" },
+                            { label: "며칠 동안 보이지 않기", value: "days" },
                         ]}
                         value={dismissType}
                     />
@@ -291,11 +291,12 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
 
                 <label className={labelClassName}>
                     노출 위치
+                    <p className="text-[var(--adaptive-grey500)] text-[1.4rem]">* 팝업의 위치를 설정 할 수 있어요</p>
                     <div className="grid aspect-square w-[min(24rem,100%)] grid-cols-3 grid-rows-3 gap-2">
                         {positions.map((item) => (
                             <UI.Button
                                 aria-pressed={position.col === item.col && position.row === item.row}
-                                className={`min-h-0 rounded-[1.6rem] font-bold ${position.col === item.col && position.row === item.row ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]" : "bg-[var(--adaptive-grey200)] hover:-[var(--adaptive-grey300)] text-[var(--adaptive-grey500)]"}`}
+                                className={`min-h-0 rounded-[1.6rem] font-[Inter] text-[3.2rem] font-extrabold ${position.col === item.col && position.row === item.row ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]" : "bg-[var(--adaptive-grey200)] hover:-[var(--adaptive-grey300)] text-[var(--adaptive-grey500)]"}`}
                                 key={`${item.col}-${item.row}`}
                                 onClick={() => setPosition(item)}
                                 type="button"
@@ -361,7 +362,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                     </span>
                     {effectiveImageUrl ? (
                         <img
-                            alt={title ? `${title} 이미지 미리보기` : "모달 이미지 미리보기"}
+                            alt={title ? `${title} 이미지 미리보기` : "팝업 이미지 미리보기"}
                             className=""
                             // className="h-40 w-full rounded-lg object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                             src={effectiveImageUrl}

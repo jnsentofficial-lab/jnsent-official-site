@@ -81,7 +81,7 @@ export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
     return (
         <Main
             id="news-detail"
-            className={{ inner: "", container: "min-h-[calc(100dvh-10.8rem)]" }}
+            className={{ inner: "", container: "min-h-[calc(100svh-10.8rem)]" }}
         >
             <NewsDetailView slug={slug} />
         </Main>

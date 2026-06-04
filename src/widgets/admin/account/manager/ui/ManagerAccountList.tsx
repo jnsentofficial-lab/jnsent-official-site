@@ -53,9 +53,23 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
                             reportId={`관리자 계정 행 ${account.login_id}`}
                             reportType="item"
                             actions={
+                                // <UI.Button
+                                //     className="flex items-center justify-start h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
+                                //     disabled={!canDelete}
+                                //     onClick={() => setDeleteTarget(account)}
+                                //     type="button"
+                                //     tooltip={[
+                                //         {
+                                //             type: "disabled",
+                                //             msg: isReservedMasterLoginId(account.login_id) ? "마스터 계정은 삭제할 수 없습니다." : "삭제 권한이 없는 계정입니다.",
+                                //         },
+                                //     ]}
+                                // >
+                                //     <p className="mobile:text-[var(--adaptive-red500)] pc:text-black">삭제</p>
+                                // </UI.Button>
                                 <UI.Button
-                                    className="flex items-center h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
                                     disabled={!canDelete}
+                                    className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
                                     onClick={() => setDeleteTarget(account)}
                                     type="button"
                                     tooltip={[
@@ -65,14 +79,13 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
                                         },
                                     ]}
                                 >
-                                    <Image
-                                        src={"/images/icon/outlined/ico-outlined-trash.svg"}
-                                        alt=""
-                                        width={24}
-                                        height={24}
-                                    />
-
-                                    <p className="mobile:text-[var(--adaptive-red500)] pc:text-black">삭제</p>
+                                    {/* <Image
+                                    src={"/images/icon/outlined/ico-outlined-trash.svg"}
+                                    alt=""
+                                    width={24}
+                                    height={24}
+                                /> */}
+                                    <span className="text-base font-[700] w-full text-left">삭제</span>
                                 </UI.Button>
                             }
                             contentClassName="flex-col items-start"
@@ -86,7 +99,7 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
                             onClick={() => onSelectAccount(account)}
                             selected={SELECTED}
                             title={
-                                <div className="flex items-center gap-[0.8rem]">
+                                <div className="flex items-center mobile:flex-col-reverse mobile:items-start pc:flex-row pc:items-center gap-[0.8rem]">
                                     {SELECTED ? (
                                         <Text.Shimmer
                                             color={{
@@ -102,15 +115,16 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
                                         <h6 className="text-[2.0rem]">{account.login_id}</h6>
                                     )}
 
-                                    <section className="flex gap-[0.4rem] border border-[var(--adaptive-grey500)] p-[0.2rem_0.4rem] rounded-[0.8rem]">
-                                        <p className="text-[var(--adaptive-grey600)]">{getManagerAccountRoleLabel(account.role)}</p>
-                                        {/* <div className="h-[1.2rem] w-[0.1rem] bg-[var(--adaptive-grey300)] my-auto" /> */}
+                                    <section className="flex gap-[0.4rem]">
+                                        <p className={`rounded-full px-[1.0rem] py-[0.2rem] text-[1.4rem] font-[500] leading-none bg-[var(--adaptive-grey200)] text-[var(--adaptive-grey600)]`}>
+                                            {getManagerAccountRoleLabel(account.role)}
+                                        </p>
+                                        <p
+                                            className={`rounded-full px-[1.0rem] py-[0.2rem] text-[1.2rem] font-[500] leading-none ${account.is_active ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]" : "bg-[var(--adaptive-red100)] text-[var(--adaptive-red600)]"}`}
+                                        >
+                                            {account.is_active ? "활성" : "비활성"}
+                                        </p>
                                     </section>
-                                    <p
-                                        className={`rounded-full px-[1.0rem] py-[0.4rem] text-[1.4rem] font-[500] leading-none ${account.is_active ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]" : "bg-[var(--adaptive-grey200)] text-[var(--adaptive-grey600)]"}`}
-                                    >
-                                        {account.is_active ? "활성" : "비활성"}
-                                    </p>
                                 </div>
                             }
                         />

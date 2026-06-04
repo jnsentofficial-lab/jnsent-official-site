@@ -24,6 +24,46 @@ function formatViewCount(value?: number) {
     return new Intl.NumberFormat("ko-KR").format(value ?? 0);
 }
 
+function NewsListSkeleton() {
+    return (
+        <div className="mx-[1.6rem] grid pc:grid-cols-3 mobile:grid-cols-2 mobile:gap-[3.2rem_1.6rem] pc:gap-[5.2rem_1.6rem]">
+            {Array.from({ length: 9 }).map((_, index) => (
+                <div
+                    className="flex flex-col justify-start gap-[2.4rem]"
+                    key={index}
+                >
+                    <Skeleton.Div
+                        target={false}
+                        className={{ skeleton: "aspect-square w-full mobile:rounded-[2.4rem] pc:rounded-[3rem]" }}
+                    />
+
+                    <div className="flex flex-col gap-[0.8rem]">
+                        <div className="flex items-center mobile:gap-[0.8rem] pc:gap-[1.2rem]">
+                            <Skeleton.Div
+                                target={false}
+                                className={{ skeleton: "h-[1.8rem] w-[10rem]" }}
+                            />
+                            <Skeleton.Div
+                                target={false}
+                                className={{ skeleton: "h-[1.2rem] w-[0.1rem]" }}
+                            />
+                            <Skeleton.Div
+                                target={false}
+                                className={{ skeleton: "h-[1.8rem] w-[7rem]" }}
+                            />
+                        </div>
+
+                        <Skeleton.Div
+                            target={false}
+                            className={{ skeleton: "h-[3.2rem] w-full" }}
+                        />
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+}
+
 export function Analysis() {
     const { data: news, isLoading } = usePublishedNewsQuery();
     const [page, setPage] = useState(1);
@@ -54,7 +94,9 @@ export function Analysis() {
                     damping: 10,
                 }}
             >
-                {news.length ? (
+                {isLoading ? (
+                    <NewsListSkeleton />
+                ) : news.length ? (
                     <Fragment>
                         <div className="mx-[1.6rem] grid pc:grid-cols-3 mobile:grid-cols-2 mobile:gap-[3.2rem_1.6rem] pc:gap-[5.2rem_1.6rem]">
                             {visibleNews.map((item) => (

@@ -210,7 +210,7 @@ export function Report() {
     useEffect(() => {
         const initialPosition = clampDockPosition(
             {
-                x: Math.round((window.innerWidth - dockWidth) / 2),
+                x: window.innerWidth - dockWidth - DOCK_MARGIN,
                 y: 0,
             },
             dockWidth,
@@ -443,7 +443,7 @@ export function Report() {
         <>
             <div
                 ref={dockRef}
-                className="fixed z-[1100] select-none mobile:hidden pc:block"
+                className="fixed z-[1100000000] select-none mobile:hidden pc:block"
                 style={{
                     left: dockPosition.x,
                     top: dockPosition.y,
