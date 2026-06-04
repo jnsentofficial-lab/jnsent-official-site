@@ -2,12 +2,14 @@
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { useUploadImageMutation } from "@/entities/asset/api/asset.query";
+import { buildPublicInquiryPath } from "@/entities/inquiry/lib/publicPath";
 import { useCreateInquiryCommentMutation, useInquiryCommentsQuery, useUpdateInquiryCommentMutation } from "@/entities/inquiry/api/inquiry.query";
 import type { Inquiry } from "@/entities/inquiry/model/inquiry.type";
 import { emptyRichTextContent, extractRichTextPlainText, toJsonContent, toRichTextContent } from "@/shared/lib/richText/richText";
 import type { RichTextContent } from "@/shared/lib/richText/richText";
 import { RichTextEditor } from "@/shared/ui/richText/RichTextEditor";
-import { RichTextRenderer } from "@/shared/ui/richText/RichTextRenderer";
+import { useToastStore } from "@/shared/model/stores/useToastStore";
+import { InquiryAnswerSection, InquiryQuestionSection } from "@/widgets/admin/inquiries/ui/InquiryDetailContent";
 import UI from "@/shared/ui/UIComponent";
 
 type InquiryDetailSidebarProps = {
@@ -19,6 +21,7 @@ export function InquiryDetailSidebar({ inquiry }: InquiryDetailSidebarProps) {
     const [commentBody, setCommentBody] = useState<RichTextContent>(emptyRichTextContent);
     const [isEditing, setIsEditing] = useState(false);
     const uploadImage = useUploadImageMutation();
+    const { setToast } = useToastStore();
     const createComment = useCreateInquiryCommentMutation();
     const updateComment = useUpdateInquiryCommentMutation();
     const { data: comments = [] } = useInquiryCommentsQuery(inquiry?.id);
@@ -74,6 +77,21 @@ export function InquiryDetailSidebar({ inquiry }: InquiryDetailSidebarProps) {
         setIsEditing(false);
     }
 
+    async function handleCopyShareLink() {
+        if (!inquiry || typeof window === "undefined") {
+            return;
+        }
+
+        const shareUrl = `${window.location.origin}${buildPublicInquiryPath(inquiry.id)}`;
+
+        try {
+            await navigator.clipboard.writeText(shareUrl);
+            setToast({ msg: "공유 링크를 복사했어요", time: 3, type: "success" });
+        } catch {
+            setToast({ msg: "링크 복사에 실패했어요", time: 3, type: "fail" });
+        }
+    }
+
     if (!inquiry) {
         return (
             <div className="flex justify-center items-center h-full">
@@ -84,48 +102,15 @@ export function InquiryDetailSidebar({ inquiry }: InquiryDetailSidebarProps) {
 
     return (
         <aside className="relative grid grid-rows-[1fr_1fr_auto] overflow-auto flex-col h-full">
-            {/* 질문 */}
-            <section className="flex-1 flex flex-col mobile:gap-[2.4rem] pc:gap-[5.2rem] bg-[#F3F3F3] mobile:p-[2.4rem_1.6rem] pc:p-[5.2rem]">
-                {/* 게시물 정보 */}
-                <div className="flex flex-col gap-[1.6rem]">
-                    <h6 className="text-[var(--adaptive-black300)] text-[1.8rem]">선택한 질문</h6>
-
-                    <h2 className="mobile:text-[2.4rem] pc:text-[3.2rem] leading-[1.5]">{inquiry.message}</h2>
-
-                    <p className="text-[1.4rem] text-[var(--adaptive-black400)]">
-                        {new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.created_at))} ~ {new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.updated_at))}
-                    </p>
-                </div>
-                {/* 게시물 정보 END */}
-
-                {/* 게시물 내용 */}
-                <RichTextRenderer
-                    className="mobile:text-[1.6rem] pc:text-[2.0rem]"
-                    content={inquiry.message_body}
-                    fallback={inquiry.message}
-                />
-                {/* 게시물 내용 END */}
-            </section>
-            {/* 질문 END */}
+            <InquiryQuestionSection inquiry={inquiry} />
 
             {/* 답변 */}
-            <section className="flex-1 block mobile:p-[2.4rem_1.6rem] pc:p-[5.2rem]">
-                <h6 className="mb-[1.6rem] text-[1.8rem] text-[var(--adaptive-black300)]">관리자 답변</h6>
+            {latestComment && !isEditing ? (
+                <InquiryAnswerSection comment={latestComment} />
+            ) : (
+                <section className="flex-1 block mobile:p-[2.4rem_1.6rem] pc:p-[5.2rem]">
+                    <h6 className="mb-[1.6rem] text-[1.8rem] text-[var(--adaptive-black300)]">관리자 답변</h6>
 
-                {latestComment && !isEditing ? (
-                    <div className="flex flex-col gap-[2.0rem]">
-                        <div className="flex flex-col gap-[0.8rem]">
-                            <p className="text-[1.4rem] font-[700] text-[var(--adaptive-black300)]">{latestComment.manager_name}</p>
-                            <p className="text-[1.3rem] text-[var(--adaptive-black400)]">{new Intl.DateTimeFormat("ko-KR").format(new Date(latestComment.created_at))}</p>
-                        </div>
-
-                        <RichTextRenderer
-                            className="mobile:text-[1.6rem] pc:text-[2.0rem]"
-                            content={latestComment.message_body}
-                            fallback={latestComment.message}
-                        />
-                    </div>
-                ) : (
                     <form
                         onSubmit={(event) => {
                             void handleSubmit(event);
@@ -139,21 +124,33 @@ export function InquiryDetailSidebar({ inquiry }: InquiryDetailSidebarProps) {
                             placeholder="이곳을 눌러 답변을 작성해주세요"
                         />
                     </form>
-                )}
-            </section>
+                </section>
+            )}
             {/* 답변 END */}
 
             {latestComment && !isEditing ? (
-                <UI.Button
-                    className="sticky bottom-0 text-white bg-black"
-                    onClick={() => {
-                        setCommentBody(toRichTextContent(latestComment.message_body));
-                        setIsEditing(true);
-                    }}
-                    type="button"
-                >
-                    답변 수정하기
-                </UI.Button>
+                <div className="sticky bottom-0 flex w-full bg-white">
+                    <UI.Button
+                        className="text-white bg-black flex-1"
+                        onClick={() => {
+                            setCommentBody(toRichTextContent(latestComment.message_body));
+                            setIsEditing(true);
+                        }}
+                        type="button"
+                    >
+                        답변 수정하기
+                    </UI.Button>
+
+                    <UI.Button
+                        className="px-[2.0rem] bg-[var(--adaptive-blue400)] text-[var(--adaptive-grey50)]"
+                        onClick={() => {
+                            void handleCopyShareLink();
+                        }}
+                        type="button"
+                    >
+                        공유하기
+                    </UI.Button>
+                </div>
             ) : (
                 <UI.Button
                     className="sticky bottom-0 text-white bg-black"

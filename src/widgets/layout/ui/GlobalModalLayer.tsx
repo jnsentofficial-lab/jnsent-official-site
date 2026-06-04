@@ -118,7 +118,8 @@ export function GlobalModalLayer({ includePublic = true }: GlobalModalLayerProps
                     <section>
                         {modal.image_url ? (
                             <img
-                                className="block h-auto max-h-[50dvh] w-auto max-w-full object-contain"
+                                // className="block h-auto max-h-[50dvh] w-auto max-w-full object-contain"
+                                className="block h-auto max-h-[100dvh] w-auto max-w-full object-contain"
                                 alt=""
                                 src={modal.image_url}
                             />

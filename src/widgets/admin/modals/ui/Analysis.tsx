@@ -98,31 +98,18 @@ export function Analysis() {
                                             <>
                                                 <UI.Button
                                                     className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
-                                                    onClick={() => setDeleteTarget(modal)}
-                                                    type="button"
-                                                >
-                                                    <Image
-                                                        src={"/images/icon/outlined/ico-outlined-trash.svg"}
-                                                        alt=""
-                                                        width={24}
-                                                        height={24}
-                                                    />
-                                                    <p>삭제</p>
-                                                </UI.Button>
-                                                <UI.Button
-                                                    className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
                                                     onClick={() => {
                                                         openPreviewModal(modal);
                                                         setToast({ msg: "메인에 실제로 노출될 위치/이미지 입니다.", time: 3, type: "success" });
                                                     }}
                                                     type="button"
                                                 >
-                                                    <Image
+                                                    {/* <Image
                                                         src={"/images/icon/outlined/ico-outlined-eye.svg"}
                                                         alt=""
                                                         width={24}
                                                         height={24}
-                                                    />
+                                                    /> */}
                                                     <p>미리보기</p>
                                                 </UI.Button>
                                                 <UI.Button
@@ -138,13 +125,26 @@ export function Analysis() {
                                                     }}
                                                     type="button"
                                                 >
-                                                    <Image
+                                                    {/* <Image
                                                         src={"/images/icon/outlined/ico-outlined-eye.svg"}
                                                         alt=""
                                                         width={24}
                                                         height={24}
-                                                    />
+                                                    /> */}
                                                     {pendingToggleId === modal.id ? "변경중입니다.." : modal.is_visible ? "숨김" : "표시"}
+                                                </UI.Button>
+                                                <UI.Button
+                                                    className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
+                                                    onClick={() => setDeleteTarget(modal)}
+                                                    type="button"
+                                                >
+                                                    {/* <Image
+                                                        src={"/images/icon/outlined/ico-outlined-trash.svg"}
+                                                        alt=""
+                                                        width={24}
+                                                        height={24}
+                                                    /> */}
+                                                    <p>삭제</p>
                                                 </UI.Button>
                                             </>
                                         }

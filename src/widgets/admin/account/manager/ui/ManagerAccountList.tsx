@@ -53,9 +53,23 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
                             reportId={`관리자 계정 행 ${account.login_id}`}
                             reportType="item"
                             actions={
+                                // <UI.Button
+                                //     className="flex items-center justify-start h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
+                                //     disabled={!canDelete}
+                                //     onClick={() => setDeleteTarget(account)}
+                                //     type="button"
+                                //     tooltip={[
+                                //         {
+                                //             type: "disabled",
+                                //             msg: isReservedMasterLoginId(account.login_id) ? "마스터 계정은 삭제할 수 없습니다." : "삭제 권한이 없는 계정입니다.",
+                                //         },
+                                //     ]}
+                                // >
+                                //     <p className="mobile:text-[var(--adaptive-red500)] pc:text-black">삭제</p>
+                                // </UI.Button>
                                 <UI.Button
-                                    className="flex items-center h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
                                     disabled={!canDelete}
+                                    className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
                                     onClick={() => setDeleteTarget(account)}
                                     type="button"
                                     tooltip={[
@@ -65,14 +79,13 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
                                         },
                                     ]}
                                 >
-                                    <Image
-                                        src={"/images/icon/outlined/ico-outlined-trash.svg"}
-                                        alt=""
-                                        width={24}
-                                        height={24}
-                                    />
-
-                                    <p className="mobile:text-[var(--adaptive-red500)] pc:text-black">삭제</p>
+                                    {/* <Image
+                                    src={"/images/icon/outlined/ico-outlined-trash.svg"}
+                                    alt=""
+                                    width={24}
+                                    height={24}
+                                /> */}
+                                    <span className="text-base font-[700] w-full text-left">삭제</span>
                                 </UI.Button>
                             }
                             contentClassName="flex-col items-start"

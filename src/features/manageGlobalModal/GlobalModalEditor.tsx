@@ -17,15 +17,15 @@ const positions = Array.from({ length: 9 }, (_, index) => ({
 }));
 
 const positionLabels: Record<string, string> = {
-    "1-1": "좌상단 ↖",
-    "2-1": "상단 ↑",
-    "3-1": "우상단 ↗",
-    "1-2": "좌측 ←",
-    "2-2": "가운데 •",
-    "3-2": "우측 →",
-    "1-3": "좌하단 ↙",
-    "2-3": "하단 ↓",
-    "3-3": "우하단 ↘",
+    "1-1": "↖",
+    "2-1": "↑",
+    "3-1": "↗",
+    "1-2": "←",
+    "2-2": "•",
+    "3-2": "→",
+    "1-3": "↙",
+    "2-3": "↓",
+    "3-3": "↘",
 };
 const formClassName = "flex flex-col gap-[2.4rem]";
 const labelClassName = "flex flex-col gap-[0.8rem] font-[NanumSquare]";
@@ -267,9 +267,9 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                         name="dismissType"
                         onChange={(event) => setDismissType(event.target.value as GlobalModal["dismiss_type"])}
                         options={[
-                            { label: "닫기만", value: "none" },
-                            { label: "오늘 하루 동안 닫기", value: "today" },
-                            { label: "n일 동안 닫기", value: "days" },
+                            { label: "닫기만 가능", value: "none" },
+                            { label: "오늘 하루 보이지 않기", value: "today" },
+                            { label: "며칠 동안 보이지 않기", value: "days" },
                         ]}
                         value={dismissType}
                     />
@@ -291,11 +291,12 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
 
                 <label className={labelClassName}>
                     노출 위치
+                    <p className="text-[var(--adaptive-grey500)] text-[1.4rem]">* 팝업의 위치를 설정 할 수 있어요</p>
                     <div className="grid aspect-square w-[min(24rem,100%)] grid-cols-3 grid-rows-3 gap-2">
                         {positions.map((item) => (
                             <UI.Button
                                 aria-pressed={position.col === item.col && position.row === item.row}
-                                className={`min-h-0 rounded-[1.6rem] font-bold ${position.col === item.col && position.row === item.row ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]" : "bg-[var(--adaptive-grey200)] hover:-[var(--adaptive-grey300)] text-[var(--adaptive-grey500)]"}`}
+                                className={`min-h-0 rounded-[1.6rem] font-[Inter] text-[3.2rem] font-extrabold ${position.col === item.col && position.row === item.row ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]" : "bg-[var(--adaptive-grey200)] hover:-[var(--adaptive-grey300)] text-[var(--adaptive-grey500)]"}`}
                                 key={`${item.col}-${item.row}`}
                                 onClick={() => setPosition(item)}
                                 type="button"

@@ -5,7 +5,10 @@ export function isMissingIsActiveColumnError(error?: PostgrestError | Error | nu
     const message = String(error?.message ?? "").toLowerCase();
     const code = typeof error === "object" && error !== null && "code" in error ? String(error.code ?? "") : "";
 
-    return code === "42703" && message.includes("is_active");
+    return (
+        message.includes("is_active") &&
+        (code === "42703" || code.startsWith("PGRST") || message.includes("schema cache") || message.includes("could not find"))
+    );
 }
 
 export function normalizeManagerAccount<T extends Partial<ManagerAccount>>(account: T): ManagerAccount {

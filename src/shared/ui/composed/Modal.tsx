@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Fragment, ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import UI from "../UIComponent";
+import useNavigate from "@/shared/hooks/useNavigate";
 
 // import UI from "@/features/shell/ui/UIComponent";
 // import Icon from "@/shared/ui/Icon";
@@ -36,6 +37,8 @@ interface BottomSheetProps {
 const Modal = ({ title, description, open, onClose, children, className, actions: actions = [], onInit, placement }: BottomSheetProps) => {
     const [isClient, setIsClient] = useState(false);
     const [isMobileViewport, setIsMobileViewport] = useState(false);
+
+    const { currentPathName } = useNavigate();
 
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -98,7 +101,7 @@ const Modal = ({ title, description, open, onClose, children, className, actions
         <Fragment>
             {ReactDOM.createPortal(
                 <AnimatePresence mode="popLayout">
-                    {open && (
+                    {open && !currentPathName.includes("/qna") && (
                         <Fragment>
                             {/* Dimmed */}
                             {/* <motion.div

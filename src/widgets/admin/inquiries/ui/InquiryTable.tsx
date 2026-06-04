@@ -14,6 +14,12 @@ type InquiryTableProps = {
     onSelectInquiry: (inquiry: AdminInquiry) => void;
 };
 
+const inquiryCategoryLabelMap: Record<string, string> = {
+    consulting: "창업 문의",
+    studio_rental: "스튜디오 대여/대관 문의",
+    equipment_rental: "장비 렌탈 문의",
+};
+
 export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTableProps) {
     const { data: inquiries = [], isLoading } = useAdminInquiriesQuery();
     const deleteInquiry = useDeleteInquiryMutation();
@@ -51,6 +57,7 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
                     const SELECTED = selectedInquiryId === inquiry.id;
                     const answerStatusLabel = inquiry.hasAnswer ? "답변완료" : "대기중";
                     const answerStatusClassName = inquiry.hasAnswer ? "bg-[var(--adaptive-blue100)] text-[var(--adaptive-blue500)]" : "bg-[var(--adaptive-grey200)] text-[var(--adaptive-grey600)]";
+                    const categoryLabel = inquiryCategoryLabelMap[inquiry.category] ?? inquiry.category;
 
                     return (
                         <Fragment key={`${inquiry.name}-${inquiry.category}`}>
@@ -76,17 +83,21 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
                                 contentClassName="flex-col items-start"
                                 description={
                                     <div className="flex flex-wrap items-center gap-4 text-lg font-semibold text-black">
+                                        {/* <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{categoryLabel}</p>
+                                        <p className="text-[var(--adaptive-black300)] text-[1.4rem]">|</p> */}
                                         <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{inquiry.name}</p>
                                         <p className="text-[var(--adaptive-black300)] text-[1.4rem]">|</p>
                                         <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.created_at))}</p>
-                                        <p className="text-[var(--adaptive-black300)] text-[1.4rem]">~</p>
-                                        <p className="text-[var(--adaptive-black300)] text-[1.4rem]">{new Intl.DateTimeFormat("ko-KR").format(new Date(inquiry.updated_at))}</p>
                                     </div>
                                 }
                                 onClick={() => onSelectInquiry(inquiry)}
                                 selected={SELECTED}
                                 title={
-                                    <div className="flex items-center mobile:flex-col-reverse mobile:items-start pc:flex-row pc:items-center gap-[0.8rem]">
+                                    <div className="flex items-center flex-col gap-[1.2rem] items-start">
+                                        <section className="flex items-center gap-[0.8rem]">
+                                            <span className={`rounded-full px-[1.0rem] py-[0.4rem] text-[1.2rem] font-[700] leading-none ${answerStatusClassName}`}>{answerStatusLabel}</span>
+                                            <p className="text-[var(--adaptive-black500)] font-bold text-[1.4rem]">{categoryLabel}</p>
+                                        </section>
                                         {SELECTED ? (
                                             <Text.Shimmer
                                                 color={{
@@ -94,15 +105,13 @@ export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTabl
                                                     end: "#FF6B75",
                                                 }}
                                                 duration={4}
-                                                className="text-[2.0rem]"
+                                                className="text-[2.0rem] text-left leading-[1.5]"
                                             >
                                                 {inquiry.message}
                                             </Text.Shimmer>
                                         ) : (
                                             <h6 className="text-[2.0rem] leading-[1.5] text-left">{inquiry.message}</h6>
                                         )}
-
-                                        <span className={`rounded-full px-[1.0rem] py-[0.4rem] text-[1.2rem] font-[700] leading-none ${answerStatusClassName}`}>{answerStatusLabel}</span>
                                     </div>
                                 }
                             />

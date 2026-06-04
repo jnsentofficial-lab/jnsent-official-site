@@ -227,7 +227,7 @@ export function SubPageSection({ title, className, children }: InfoCardProps) {
             data-report-type="group"
         >
             <h2
-                className={`${className} flex items-center whitespace-nowrap gap-[1.2rem] mobile:text-[2rem] pc:text-[2.4rem] font-[900] font-[NanumSquare] text-black whitespace-break-spaces leading-[1.5]`}
+                className={`${className} flex items-center whitespace-break-spaces gap-[1.2rem] mobile:text-[2rem] pc:text-[2.4rem] font-[900] font-[NanumSquare] text-black whitespace-break-spaces leading-[1.5]`}
                 data-report-id={`서브페이지 섹션 제목 ${title}`}
                 data-report-type="item"
             >
