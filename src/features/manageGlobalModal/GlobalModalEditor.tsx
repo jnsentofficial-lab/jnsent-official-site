@@ -174,10 +174,10 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
             setImageUrlValue("");
             setSelectedImageFile(null);
             setSelectedImagePreviewUrl(null);
-            setStatusMessage("모달이 저장되었습니다.");
+            setStatusMessage("팝업이 저장되었습니다.");
             onSaved?.();
         } catch {
-            setStatusMessage("모달 저장에 실패했습니다.");
+            setStatusMessage("팝업 저장에 실패했습니다.");
         }
     }
 
@@ -196,7 +196,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                     <input
                         className={inputClassName}
                         name="title"
-                        placeholder="모달 제목"
+                        placeholder="팝업 제목"
                         onChange={(event) => setTitle(event.target.value)}
                         required
                         type="text"
@@ -209,7 +209,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                         className="min-h-[13.2rem] resize-y border border-black px-4 py-3 text-lg font-semibold"
                         name="content"
                         onChange={(event) => setContent(event.target.value)}
-                        placeholder="모달 내용을 입력하세요."
+                        placeholder="팝업 내용을 입력하세요."
                         required
                         value={content}
                     />
@@ -362,7 +362,7 @@ export function GlobalModalEditor({ modal, onSaved }: GlobalModalEditorProps) {
                     </span>
                     {effectiveImageUrl ? (
                         <img
-                            alt={title ? `${title} 이미지 미리보기` : "모달 이미지 미리보기"}
+                            alt={title ? `${title} 이미지 미리보기` : "팝업 이미지 미리보기"}
                             className=""
                             // className="h-40 w-full rounded-lg object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                             src={effectiveImageUrl}

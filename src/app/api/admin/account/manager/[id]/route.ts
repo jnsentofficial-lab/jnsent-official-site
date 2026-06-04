@@ -6,6 +6,7 @@ import { isMissingIsActiveColumnError, normalizeManagerAccount } from "@/shared/
 import type { Database } from "@/shared/types/Database";
 
 type RouteProps = { params: Promise<{ id: string }> };
+const IS_ACTIVE_SCHEMA_ERROR_MESSAGE = "manager_accounts.is_active 컬럼이 현재 DB 스키마에 반영되지 않았습니다. Supabase migration 적용 후 다시 시도해주세요.";
 
 export async function PATCH(request: Request, { params }: RouteProps) {
     const actorRole = await getAdminApiRole();
@@ -90,9 +91,7 @@ export async function PATCH(request: Request, { params }: RouteProps) {
         .single();
 
     if (isMissingIsActiveColumnError(error)) {
-        const { is_active: _isActive, ...fallbackUpdate } = update;
-
-        ({ data, error } = await supabase.from("manager_accounts").update(fallbackUpdate).eq("id", id).select("*").single());
+        return apiError(IS_ACTIVE_SCHEMA_ERROR_MESSAGE, 500);
     }
 
     if (error || !data) {

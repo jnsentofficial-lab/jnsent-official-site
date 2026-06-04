@@ -76,9 +76,7 @@ const Calendar = ({ className = "", size = "md", type = "datetime-local", placeh
                 style={{ ...style, minHeight: height }}
                 type="button"
             >
-                <span className={displayValue ? "text-inherit" : "text-[var(--adaptive-grey500)]"}>
-                    {displayValue || placeholder || "날짜를 선택해주세요"}
-                </span>
+                <span className={displayValue ? "text-inherit" : "text-[var(--adaptive-grey500)]"}>{displayValue || placeholder || "선택해주세요"}</span>
             </button>
         </div>
     );

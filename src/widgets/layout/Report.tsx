@@ -210,7 +210,7 @@ export function Report() {
     useEffect(() => {
         const initialPosition = clampDockPosition(
             {
-                x: Math.round((window.innerWidth - dockWidth) / 2),
+                x: window.innerWidth - dockWidth - DOCK_MARGIN,
                 y: 0,
             },
             dockWidth,
