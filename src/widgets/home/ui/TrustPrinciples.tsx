@@ -98,17 +98,13 @@ export function TrustPrinciples() {
                     />
 
                     <motion.article
-                        // className="relative min-h-[43rem] overflow-hidden rounded-[2.4rem] bg-[url('/images/landing/meeting.webp')] bg-cover bg-center p-8 text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
-                        // className="relative aspect-square overflow-hidden rounded-[2.4rem] bg-[url('/images/landing/meeting.png')] bg-cover bg-center text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
-                        // className="relative aspect overflow-hidden rounded-[2.4rem] bg-[url('/images/landing/meeting.png')] bg-cover bg-center text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
-                        // className="relative flex-1 overflow-hidden rounded-[2.4rem] bg-[url('/images/landing/meeting.png')] bg-cover bg-center text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
                         className="relative flex flex-1 flex-col justify-between self-stretch overflow-hidden rounded-[2.4rem] bg-[linear-gradient(0deg,#000000f7_10%,#00000050)] mobile:p-[2.0rem] pc:p-[3.2rem] gap-[1.6rem] text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
                         data-report-id="신뢰 원칙 증빙 카드"
                         data-report-type="item"
-                        initial={{ opacity: 0, x: 28 }}
+                        initial={{ opacity: 0 }}
                         transition={{ duration: 0.7 }}
-                        viewport={{ once: true, amount: 0.25 }}
-                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ amount: 0.25 }}
+                        whileInView={{ opacity: 1 }}
                     >
                         <img
                             src={"/images/landing/meeting.png"}
@@ -118,6 +114,7 @@ export function TrustPrinciples() {
                         {/* <section className="bg-[linear-gradient(0deg,#000000f7_10%,#00000050)] h-full flex-1 p-[3.2rem] flex flex-col justify-between"> */}
                         <section className="flex flex-col mobile:gap-[0.8rem] pc:gap-[1.6rem]">
                             <p className="mobile:text-[1.4rem] pc:text-[1.8rem]">제이엔에스는 모든 항목에 대해</p>
+
                             <h6 className="leading-[1.5] font-[900] mobile:text-[1.8rem] pc:text-[2.8rem]">
                                 미팅 시 실제 자료를
                                 <br />

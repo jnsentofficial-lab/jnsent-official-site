@@ -28,26 +28,43 @@ export function ExpertNetwork() {
             data-report-type="group"
         >
             <div
-                className="mx-auto max-w-[var(--size-pc)] w-full text-center"
+                className="mx-auto max-w-[var(--size-pc)] w-full text-center flex flex-col gap-[3.2rem]"
                 data-report-id="전문가 네트워크 카피"
                 data-report-type="item"
             >
-                <Text.Reveal
-                    as="h2"
-                    className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]"
-                    initialColor="#00000000"
-                    midColor="rgb(255, 92, 118)"
-                    revealColor="rgb(0, 0, 0)"
-                    revealWindow={0.5}
-                    align="center"
-                    revealStartPosition={20}
-                    revealEndPosition={60}
-                    // delay={2}
-                    // transition={0}
-                    transition={2}
-                >
-                    {`성장을 위한\n모든 분야의 전문가들이 함께합니다.`}
-                </Text.Reveal>
+                <div className="mobile:hidden pc:block">
+                    <Text.Reveal
+                        as="h2"
+                        className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]"
+                        initialColor="#00000000"
+                        midColor="rgb(255, 92, 118)"
+                        revealColor="rgb(0, 0, 0)"
+                        revealWindow={0.5}
+                        align="center"
+                        revealStartPosition={20}
+                        revealEndPosition={60}
+                        transition={2}
+                    >
+                        {`성장을 위한\n모든 분야의 전문가들이 함께합니다`}
+                    </Text.Reveal>
+                </div>
+
+                <div className="mobile:block pc:hidden">
+                    <Text.Reveal
+                        as="h2"
+                        className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]"
+                        initialColor="#00000000"
+                        midColor="rgb(255, 92, 118)"
+                        revealColor="rgb(0, 0, 0)"
+                        revealWindow={0.5}
+                        align="center"
+                        revealStartPosition={20}
+                        revealEndPosition={60}
+                        transition={2}
+                    >
+                        {`성장을 위한 모든 분야의\n전문가들이 함께합니다`}
+                    </Text.Reveal>
+                </div>
 
                 <OrganizationChartPC />
                 <OrganizationChartMobile />

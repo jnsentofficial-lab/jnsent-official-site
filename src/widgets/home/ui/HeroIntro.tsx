@@ -114,7 +114,7 @@ export function HeroIntro() {
                                 setIsRevealComplete(true);
                             }}
                         >
-                            {`검증된 운영구조 투명한\n정산 제이엔에스에 있습니다.`}
+                            {`검증된 운영구조 투명한 정산\n제이엔에스에 있습니다.`}
                         </Text.Reveal>
                     </span>
                 </motion.div>
