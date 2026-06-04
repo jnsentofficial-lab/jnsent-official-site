@@ -107,7 +107,8 @@ export const QuickMenu = () => {
                     <div className="mx-auto h-[0.1rem] w-8 bg-[var(--adaptive-black400)]" />
                     <a
                         className="grid mobile:h-[5.2rem] mobile:w-[5.2rem] pc:h-[7.2rem] pc:w-[7.2rem] place-items-center rounded-full bg-black text-3xl font-light text-white shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.16)]"
-                        href="#home"
+                        // href="#home"
+                        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                     >
                         <Image
                             src="/images/icon/route/home/ico-floating-up.svg"

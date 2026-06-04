@@ -161,7 +161,7 @@ export function SubPageSplit({ left, right, className = "", leftTabLabel = "좌�
                 > */}
                 <button
                     type="button"
-                    className={`flex-1 rounded-full flex items-center gap-[0.4rem] px-[2.0rem] py-[1.6rem] text-[1.6rem] font-[700] transition-colors fixed bottom-[2.4rem] right-[2.4rem] ${IS_LEFT_SIDE_VIEW ? "bg-[var(--adaptive-blue300)]" : "bg-[var(--adaptive-grey500)]"} z-[1000] text-white shadow-[0_0_100px_0_var(--adaptive-grey900)]`}
+                    className={`flex-1 rounded-full flex items-center gap-[0.4rem] ${IS_LEFT_SIDE_VIEW ? "flex-row" : "flex-row-reverse"} px-[2.0rem] py-[1.2rem] text-[1.6rem] font-[700] transition-colors fixed bottom-[2.4rem] right-[2.4rem] ${IS_LEFT_SIDE_VIEW ? "bg-[var(--adaptive-blue300)]" : "bg-[var(--adaptive-grey500)]"} z-[1000] text-white shadow-[0_0_100px_0_var(--adaptive-grey900)]`}
                     onClick={() => {
                         setMobileTab(IS_LEFT_SIDE_VIEW ? "right" : "left");
                         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -169,13 +169,13 @@ export function SubPageSplit({ left, right, className = "", leftTabLabel = "좌�
                     data-report-id="서브페이지 모바일 좌측 탭"
                     data-report-type="item"
                 >
-                    {IS_LEFT_SIDE_VIEW ? rightTabLabel : "돌아가기"}
+                    {IS_LEFT_SIDE_VIEW ? rightTabLabel : "이전으로"}
                     <Image
                         src={"/images/icon/outlined/ico-outlined-arrow-right.svg"}
                         alt=""
                         width={20}
                         height={20}
-                        className="invert brightness-0"
+                        className={`${IS_LEFT_SIDE_VIEW ? "" : "rotate-180"} invert brightness-0`}
                     />
                 </button>
 
@@ -286,7 +286,8 @@ export function NoticeBox() {
             </section>
 
             <UI.Button
-                className="w-full bg-[var(--adaptive-black50)] text-[var(--adaptive-black500)] rounded-[1.6rem] h-[5.4rem]"
+                size="sm"
+                className="w-full bg-[var(--adaptive-black50)] text-[var(--adaptive-black500)] rounded-[1.6rem]"
                 // href="/bjSupport"
             >
                 1:1 문의하기
