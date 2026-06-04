@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { useLayoutStore } from "@/shared/stores/useLayoutStore";
+import useNavigate from "@/shared/hooks/useNavigate";
 
 const socialItems = ["kakao", "insta", "blog", ""];
 
@@ -14,6 +15,8 @@ const QUICK_MENU_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 export const QuickMenu = () => {
     const { isReadyLanding } = useLayoutStore();
+    const { currentPathName } = useNavigate();
+
     const [isMobile, setIsMobile] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
 
@@ -69,7 +72,7 @@ export const QuickMenu = () => {
 
     return (
         <AnimatePresence>
-            {isReadyLanding ? (
+            {isReadyLanding || currentPathName !== "/" ? (
                 <motion.aside
                     className="fixed mobile:top-[50%] mobile:right-[1.6rem] mobile:-translate-y-1/2 pc:top-auto pc:right-7 pc:bottom-[1.6rem] pc:translate-y-0 z-30 flex flex-col items-center justify-center gap-[2.4rem]"
                     data-report-id="플로팅 메뉴"

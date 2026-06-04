@@ -23,7 +23,7 @@ export const Floating = () => {
             {/* 하단 플로팅 바 */}
 
             {/* 퀵 메뉴 */}
-            <QuickMenu />
+            {/* <QuickMenu /> */}
             {/* 퀵 메뉴 END */}
 
             {/* 스크롤 가이드 */}

@@ -34,11 +34,11 @@ export function SiteHeader() {
 
     return (
         <header
-            className="fixed top-0 left-[50%] transform translate-x-[-50%] z-1000 w-full bg-[linear-gradient(0deg,_transparent,var(--adaptive-background))] h-[7.2rem]"
+            className="fixed top-0 left-[50%] transform translate-x-[-50%] z-1000000 w-full bg-[linear-gradient(0deg,_transparent,var(--adaptive-background))] pc:h-[7.2rem]"
             data-report-id="상단 헤더"
             data-report-type="group"
         >
-            <div className="mx-auto h-full w-full max-w-[var(--size-pc)] flex justify-between items-center mobile:px-[1.6rem] pc:px-0">
+            <div className="mx-auto h-full w-full max-w-[var(--size-pc)] flex justify-between items-center mobile:p-[2.4rem] pc:px-0">
                 <UI.Linker
                     className="shrink-0 text-2xl"
                     href="/"

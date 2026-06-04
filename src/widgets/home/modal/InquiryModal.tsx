@@ -208,10 +208,13 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                         ×
                     </button>
 
-                    <section className="mx-auto flex h-full w-full max-w-[var(--size-tablet)] flex-col overflow-y-auto overscroll-contain px-[1.6rem] pb-[3.2rem] pt-[8rem] pc:px-0">
+                    <section
+                        className="mx-auto flex gap-[2.4rem] h-full min-h-0 w-full max-w-[var(--size-tablet)] flex-col overflow-y-auto overscroll-contain px-[1.6rem] pb-[3.2rem] pt-[8rem] pc:px-0"
+                        data-lenis-prevent
+                    >
                         {/* <main className="mx-auto w-full max-w-[68rem] flex-1 px-[2rem] pb-[6rem] pt-[8rem]"> */}
                         <motion.header
-                            className="flex w-full flex-col mobile:gap-[0.4rem] pc:gap-[1.2rem]"
+                            className="flex w-full flex-col gap-[1.2rem]"
                             initial={{ opacity: 0, transform: "translateY(100px)" }}
                             animate={{ opacity: 1, transform: "translateY(0px)" }}
                             exit={{ opacity: 0, transform: "translateY(100px)" }}
@@ -316,7 +319,7 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                         <SelectInput
                                             className="h-[5.2rem]"
                                             hasError={Boolean(fieldErrors.region)}
-                                            options={[{ label: "~도 선택", value: "" }, ...Object.keys(REGION_OPTIONS).map((option) => ({ label: option, value: option }))]}
+                                            options={[{ label: "광역시·도 선택", value: "" }, ...Object.keys(REGION_OPTIONS).map((option) => ({ label: option, value: option }))]}
                                             value={province}
                                             onChange={(event) => {
                                                 setProvince(event.target.value);
@@ -330,7 +333,7 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                                             className="h-[5.2rem]"
                                             disabled={!province}
                                             hasError={Boolean(fieldErrors.region)}
-                                            options={[{ label: "~시 선택", value: "" }, ...cityOptions.map((option) => ({ label: option, value: option }))]}
+                                            options={[{ label: "시·군·구 선택", value: "" }, ...cityOptions.map((option) => ({ label: option, value: option }))]}
                                             value={city}
                                             onChange={(event) => {
                                                 setCity(event.target.value);
