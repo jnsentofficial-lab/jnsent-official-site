@@ -13,7 +13,7 @@ export function FinalCtaSection() {
     return (
         <section
             ref={sectionRef}
-            className="relative mobile:min-h-[100dvh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[100dvh] flex items-center justify-center"
+            className="relative mobile:min-h-[100svh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[100svh] flex items-center justify-center"
             data-report-id="최종 문의 유도 섹션"
             data-report-type="group"
         >

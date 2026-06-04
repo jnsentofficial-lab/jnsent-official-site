@@ -12,7 +12,7 @@ const recruitInfo = [
 export function PartnerRecruit() {
     return (
         <section
-            className="min-h-[100dvh] mobile:py-[12.8rem] pc:py-0 flex justify-center mobile:flex-col-reverse pc:flex-row"
+            className="min-h-[100svh] mobile:py-[12.8rem] pc:py-0 flex justify-center mobile:flex-col-reverse pc:flex-row"
             data-report-id="파트너 모집 섹션"
             data-report-type="group"
         >

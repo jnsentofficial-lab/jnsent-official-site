@@ -45,7 +45,7 @@ export function HeroIntro() {
     }, [isRevealComplete, setIsReadyLanding]);
 
     return (
-        <section className="relative flex flex-col justify-center items-center h-[100dvh]">
+        <section className="relative flex flex-col justify-center items-center h-[100svh]">
             <motion.div
                 layout="position"
                 data-report-id="메인 히어로 랜딩 텍스트"

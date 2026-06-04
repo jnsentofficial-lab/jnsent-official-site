@@ -23,7 +23,7 @@ export function ExpertNetwork() {
     return (
         <section
             ref={sectionRef}
-            className="flex justify-center items-center mobile:min-h-[100dvh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[100dvh]"
+            className="flex justify-center items-center mobile:min-h-[100svh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[100svh]"
             data-report-id="전문가 네트워크 섹션"
             data-report-type="group"
         >

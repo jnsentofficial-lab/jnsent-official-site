@@ -317,13 +317,28 @@
 }
 
 html {
+    height: 100%;
     line-height: 1 !important; /* 1 */
     -webkit-text-size-adjust: 100% !important; /* 2 */
+    overflow-x: hidden;
+    overscroll-behavior-y: none;
     transition: background-color 0.25s cubic-bezier(0.42, 0, 0.58, 1); /* ease-in-out */
 }
 
 body {
     font-size: 1.4rem;
+    min-height: 100svh;
+    overflow-x: hidden;
+}
+
+@supports (-webkit-touch-callout: none) {
+    html {
+        height: -webkit-fill-available;
+    }
+
+    body {
+        min-height: -webkit-fill-available;
+    }
 }
 
 input[type="password"] {

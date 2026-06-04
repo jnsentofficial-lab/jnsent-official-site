@@ -24,7 +24,7 @@ export function RecordGraph() {
     return (
         <>
             <section
-                className="relative h-dvh min-h-0 overflow-x-clip flex flex-col"
+                className="relative h-svh min-h-0 overflow-x-clip flex flex-col"
                 data-report-id="플랫폼 기록 섹션"
                 data-report-type="group"
             >
@@ -144,8 +144,8 @@ const GraphVer3 = () => {
             barWidth: 90,
             amountY: 18,
             growthLabelY: 64,
-            growthValueFontSize: 14,
-            growthCaptionFontSize: 10,
+            growthValueFontSize: 20,
+            growthCaptionFontSize: 17,
             amountPrefixFontSize: 14,
             amountValueFontSize: 24,
             yearFontSize: 22,
@@ -160,8 +160,8 @@ const GraphVer3 = () => {
             chartTopPadding: 76,
             chartBottomPadding: 32,
             barWidth: 80,
-            amountY: 12,
-            growthLabelY: 42,
+            amountY: 22,
+            growthLabelY: 62,
             growthValueFontSize: 19,
             growthCaptionFontSize: 17,
             amountPrefixFontSize: 18,
@@ -256,7 +256,7 @@ const GraphVer3 = () => {
                             <>
                                 <motion.text
                                     x={point.x}
-                                    y={point.y - config.growthLabelY}
+                                    y={point.y - config.growthLabelY - 12}
                                     textAnchor="middle"
                                     fontWeight="700"
                                     fill="var(--adaptive-grey500)"

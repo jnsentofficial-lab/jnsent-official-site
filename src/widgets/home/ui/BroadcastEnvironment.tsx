@@ -12,7 +12,7 @@ const supportItems = [
 export function BroadcastEnvironment() {
     return (
         <section
-            className="min-h-[100dvh] mobile:py-[12.8rem] pc:py-0 flex mobile:flex-col pc:flex-row items-center"
+            className="min-h-[100svh] mobile:py-[12.8rem] pc:py-0 flex mobile:flex-col pc:flex-row items-center"
             data-report-id="방송 환경 섹션"
             data-report-type="group"
         >

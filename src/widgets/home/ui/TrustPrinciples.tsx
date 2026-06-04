@@ -40,7 +40,7 @@ export function TrustPrinciples() {
         // <section className="bg-[#f3f6f7] py-[16rem] max-[86rem]:py-24">
         <section
             ref={sectionRef}
-            className="min-h-[100dvh] mobile:py-[12.8rem] pc:py-0 flex mobile:flex-col pc:flex-row justify-center items-center"
+            className="min-h-[100svh] mobile:py-[12.8rem] pc:py-0 flex mobile:flex-col pc:flex-row justify-center items-center"
             data-report-id="신뢰 원칙 섹션"
             data-report-type="group"
         >
