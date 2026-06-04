@@ -277,13 +277,13 @@ export function AdminListRow({ selected = false, onClick, title, description, th
 
     return (
         <section
-            className="relative flex items-center justify-between gap-[1.2rem] mobile:min-h-[9.2rem]"
+            className="relative flex mobile:items-start pc:items-start justify-between gap-[1.2rem] py-[2.0rem]"
             ref={rowRef}
             data-report-id={reportId}
             data-report-type={reportType}
         >
             <UI.Button
-                className={`${selected ? "text-[var(--adaptive-red500)]" : ""} ${thumbnail ? "justify-start" : "justify-center"} flex h-full min-h-[9.2rem] flex-1 items-center gap-[1.2rem] transition hover:bg-white min-w-0 ${contentClassName}`}
+                className={`${selected ? "text-[var(--adaptive-red500)]" : ""} ${thumbnail ? "justify-start" : "justify-center"} flex h-full min-h-[9.2rem] flex-1 mobile:items-start pc:items-start pc:justify-start gap-[1.2rem] transition hover:bg-white min-w-0 ${contentClassName}`}
                 onClick={onClick}
                 type="button"
             >
@@ -301,7 +301,8 @@ export function AdminListRow({ selected = false, onClick, title, description, th
                     <div className="relative">
                         <UI.Button
                             // className="min-h-[4.4rem] rounded-[1.2rem] border border-[var(--adaptive-grey200)] bg-white px-[1.2rem] text-[1.4rem] font-[700] touch-manipulation"
-                            className=""
+                            size="xsm"
+                            className="bg-[var(--adaptive-grey200)] px-[0.6rem] rounded-[1.2rem]"
                             onClick={() => setIsActionMenuOpen((prev) => !prev)}
                             type="button"
                         >

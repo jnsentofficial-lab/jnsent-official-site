@@ -110,7 +110,7 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
     return (
         <Fragment>
             <section className="flex flex-col flex-1 gap-[5.2rem]">
-                <h1 className="text-[3.2rem] mobile:px-[1.6rem] pc:px-[5.2rem] pt-[5.2rem]">계정 편집</h1>
+                <h1 className="text-[3.2rem] mobile:px-[1.6rem] pc:px-[5.2rem] pt-[5.2rem]">{isCreateMode ? "계정 생성" : "계정 편집"}</h1>
 
                 <form
                     className="flex flex-col gap-[3.8rem] mobile:px-[1.6rem] pc:px-[5.2rem] flex-1"
@@ -239,7 +239,7 @@ export function ManagerAccountSidebar({ account, mode, onSaved }: ManagerAccount
                               ]
                     }
                 >
-                    {isPending ? "저장 중" : isCreateMode ? "등록하기" : "저장하기"}
+                    {isPending ? "저장 중" : isCreateMode ? "등록하기" : "수정하기"}
                 </UI.Button>
 
                 {/* {isEditMode ? (

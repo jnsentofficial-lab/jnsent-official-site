@@ -12,7 +12,7 @@ const recruitInfo = [
 export function PartnerRecruit() {
     return (
         <section
-            className="min-h-[100dvh] mobile:py-[12.8rem] pc:py-0 flex justify-center mobile:flex-col-reverse pc:flex-row"
+            className="min-h-[100svh] mobile:py-[12.8rem] pc:py-0 flex justify-center mobile:flex-col-reverse pc:flex-row"
             data-report-id="파트너 모집 섹션"
             data-report-type="group"
         >
@@ -53,7 +53,7 @@ export function PartnerRecruit() {
                     </h2> */}
                     <Text.Reveal
                         as="h2"
-                        className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]"
+                        className="mobile:text-[2.4rem] pc:text-[3.8rem] mobile:whitespace-break-spaces pc:whitespace-pre font-[900] leading-[1.5]"
                         initialColor="#ffffff00"
                         midColor="rgb(255, 92, 118)"
                         revealColor="rgb(0, 0, 0)"
@@ -65,7 +65,7 @@ export function PartnerRecruit() {
                         // transition={20}
                         transition={2}
                     >
-                        {`제이엔에스와 함께 \성장할 파트너를 찾습니다`}
+                        {`제이엔에스와 함께\n성장할 파트너를 찾습니다`}
                     </Text.Reveal>
 
                     <div
@@ -76,9 +76,9 @@ export function PartnerRecruit() {
                         {recruitInfo.map((item) => (
                             <div
                                 key={item.title}
-                                className="flex flex-col mobile:gap-[0.4rem] pc:gap-[1.2rem]"
+                                className="flex flex-col gap-[1.2rem]"
                             >
-                                <h6 className="mobile:text-[1.8rem] pc:text-[2.4rem] font-[700]">{item.title}</h6>
+                                <h6 className="mobile:text-[1.6rem] pc:text-[2.4rem] font-[900]">{item.title}</h6>
                                 <p className="mobile:text-[1.4rem] pc:text-[1.8rem] text-[var(--adaptive-black400)] font-[700]">{item.text}</p>
                             </div>
                         ))}

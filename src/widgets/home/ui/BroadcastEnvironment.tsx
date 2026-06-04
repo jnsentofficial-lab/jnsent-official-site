@@ -12,7 +12,7 @@ const supportItems = [
 export function BroadcastEnvironment() {
     return (
         <section
-            className="min-h-[100dvh] mobile:py-[12.8rem] pc:py-0 flex mobile:flex-col pc:flex-row items-center"
+            className="min-h-[100svh] mobile:py-[12.8rem] pc:py-0 flex mobile:flex-col pc:flex-row items-center"
             data-report-id="방송 환경 섹션"
             data-report-type="group"
         >
@@ -57,15 +57,15 @@ export function BroadcastEnvironment() {
                     {supportItems.map((item) => (
                         <div
                             key={item.title}
-                            className="flex flex-col mobile:gap-[0.4rem] pc:gap-[1.2rem]"
+                            className="flex flex-col gap-[1.2rem]"
                         >
-                            <h6 className="text-right mobile:text-[1.8rem] pc:text-[2.4rem] font-[700]">{item.title}</h6>
+                            <h6 className="text-right mobile:text-[1.6rem] pc:text-[2.4rem] font-[900]">{item.title}</h6>
                             <p className="text-right mobile:text-[1.4rem] pc:text-[1.8rem] text-[var(--adaptive-black400)] font-[700]">{item.text}</p>
                         </div>
                     ))}
                 </div>
 
-                <p className="mt-12 text-sm leading-[1.5] text-right text-neutral-400">* 온라인 이미지만 속지 마세요. 실제 방송 환경을 직접 눈으로 확인하실 수 있습니다.</p>
+                <p className="mt-12 text-sm leading-[1.5] text-right whitespace-break-spaces text-neutral-400">{`* 온라인 이미지에 속지 마세요.\n실제 방송 환경을 직접 눈으로 확인하실 수 있습니다.`}</p>
             </div>
 
             <div

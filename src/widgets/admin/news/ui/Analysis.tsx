@@ -92,30 +92,30 @@ export function Analysis() {
                                             <>
                                                 <UI.Button
                                                     className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
-                                                    onClick={() => setDeleteTarget(item)}
+                                                    onClick={() => toggleNews.mutate({ id: item.id, is_published: !item.is_published })}
                                                     type="button"
                                                 >
-                                                    <Image
+                                                    {/* <Image
                                                         src={"/images/icon/outlined/ico-outlined-trash.svg"}
                                                         alt=""
                                                         width={24}
                                                         height={24}
-                                                    />
-                                                    <span className="text-base font-[700]">삭제</span>
+                                                    /> */}
+                                                    <span className="text-base font-[700]">{item.is_published ? "비공개" : "공개"}</span>
                                                 </UI.Button>
 
                                                 <UI.Button
                                                     className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
-                                                    onClick={() => toggleNews.mutate({ id: item.id, is_published: !item.is_published })}
+                                                    onClick={() => setDeleteTarget(item)}
                                                     type="button"
                                                 >
-                                                    <Image
+                                                    {/* <Image
                                                         src={"/images/icon/outlined/ico-outlined-trash.svg"}
                                                         alt=""
                                                         width={24}
                                                         height={24}
-                                                    />
-                                                    {item.is_published ? "비공개" : "공개"}
+                                                    /> */}
+                                                    <span className="text-base font-[700]">삭제</span>
                                                 </UI.Button>
                                             </>
                                         }
@@ -147,7 +147,7 @@ export function Analysis() {
                                             )
                                         }
                                         title={
-                                            <div className="flex items-center gap-[0.8rem]">
+                                            <div className="flex items-center mobile:flex-col-reverse mobile:items-start pc:flex-row pc:items-center gap-[0.8rem]">
                                                 {SELECTED ? (
                                                     <Text.Shimmer
                                                         color={{

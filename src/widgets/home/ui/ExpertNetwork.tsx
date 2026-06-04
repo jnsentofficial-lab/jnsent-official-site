@@ -4,7 +4,7 @@ import { useSectionTheme } from "@/shared/hooks";
 import { Text } from "@/shared/ui/kit/Text";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useRef } from "react";
+import { Fragment, useRef } from "react";
 
 const experts = [
     { icon: "ico-outlined-checklist", title: "전담 매니저", text: "방송 일정 및 성장 방향 관리" },
@@ -23,64 +23,125 @@ export function ExpertNetwork() {
     return (
         <section
             ref={sectionRef}
-            className="flex justify-center items-center mobile:min-h-[100dvh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[100dvh]"
+            className="flex justify-center items-center mobile:min-h-[100svh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[100svh]"
             data-report-id="전문가 네트워크 섹션"
             data-report-type="group"
         >
             <div
-                className="mx-auto max-w-[var(--size-pc)] w-full text-center"
+                className="mx-auto max-w-[var(--size-pc)] w-full text-center flex flex-col gap-[3.2rem]"
                 data-report-id="전문가 네트워크 카피"
                 data-report-type="item"
             >
-                <Text.Reveal
-                    as="h2"
-                    className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]"
-                    initialColor="#00000000"
-                    midColor="rgb(255, 92, 118)"
-                    revealColor="rgb(0, 0, 0)"
-                    revealWindow={0.5}
-                    align="center"
-                    revealStartPosition={20}
-                    revealEndPosition={60}
-                    // delay={2}
-                    // transition={0}
-                    transition={2}
-                >
-                    {`성장을 위한\n모든 분야의 전문가들이 함께합니다.`}
-                </Text.Reveal>
-
-                <div className="mx-auto h-[4rem] w-[0.1rem] bg-[var(--adaptive-grey300)]" />
-                <div className="bg-[var(--adaptive-grey300)] h-[0.1rem] w-[84%] mx-auto" />
-
-                <div
-                    className="mt-16 grid gap-5 md:grid-cols-3 xl:grid-cols-6"
-                    data-report-id="전문가 네트워크 목록"
-                    data-report-type="item"
-                >
-                    {experts.map((item, index) => (
-                        <motion.article
-                            // className="min-h-[15rem] rounded-2xl border border-black/5 bg-white px-5 py-7 shadow-[0_1rem_2.4rem_rgba(20,30,40,0.06)]"
-                            className="relative bg-white border border-[var(--adaptive-grey300)] rounded-[2.4rem] flex flex-col gap-[1.6rem] justify-center items-center p-[1.6rem]"
-                            initial={{ opacity: 0, y: 24 }}
-                            key={item.title}
-                            transition={{ delay: index * 0.04, duration: 0.6 }}
-                            viewport={{ once: true, amount: 0.25 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                        >
-                            <div className="h-[4.1rem] w-[0.1rem] bg-[var(--adaptive-grey300)] absolute top-[-4.1rem] left-[50%] transform trnaslate-x-[-50%]" />
-                            <Image
-                                src={`/images/icon/outlined/${item.icon}.svg`}
-                                alt=""
-                                width={48}
-                                height={48}
-                            />
-
-                            <h6 className="block text-[2.0rem] font-[700] text-black">{item.title}</h6>
-                            <p className="mb-0 text-[1.6rem] font-semibold leading-[1.55] text-neutral-500">{item.text}</p>
-                        </motion.article>
-                    ))}
+                <div className="mobile:hidden pc:block">
+                    <Text.Reveal
+                        as="h2"
+                        className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]"
+                        initialColor="#00000000"
+                        midColor="rgb(255, 92, 118)"
+                        revealColor="rgb(0, 0, 0)"
+                        revealWindow={0.5}
+                        align="center"
+                        revealStartPosition={20}
+                        revealEndPosition={60}
+                        transition={2}
+                    >
+                        {`성장을 위한\n모든 분야의 전문가들이 함께합니다`}
+                    </Text.Reveal>
                 </div>
+
+                <div className="mobile:block pc:hidden">
+                    <Text.Reveal
+                        as="h2"
+                        className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]"
+                        initialColor="#00000000"
+                        midColor="rgb(255, 92, 118)"
+                        revealColor="rgb(0, 0, 0)"
+                        revealWindow={0.5}
+                        align="center"
+                        revealStartPosition={20}
+                        revealEndPosition={60}
+                        transition={2}
+                    >
+                        {`성장을 위한 모든 분야의\n전문가들이 함께합니다`}
+                    </Text.Reveal>
+                </div>
+
+                <OrganizationChartPC />
+                <OrganizationChartMobile />
             </div>
         </section>
     );
 }
+
+const OrganizationChartPC = () => {
+    return (
+        <section className="mobile:hidden pc:block">
+            <div className="mx-auto h-[4rem] w-[0.1rem] bg-[var(--adaptive-grey300)]" />
+            <div className="bg-[var(--adaptive-grey300)] h-[0.1rem] w-[84%] mx-auto" />
+
+            <div
+                className="mt-16 grid gap-5 md:grid-cols-3 xl:grid-cols-6"
+                data-report-id="전문가 네트워크 목록"
+                data-report-type="item"
+            >
+                {experts.map((item, index) => (
+                    <motion.article
+                        // className="min-h-[15rem] rounded-2xl border border-black/5 bg-white px-5 py-7 shadow-[0_1rem_2.4rem_rgba(20,30,40,0.06)]"
+                        className="relative bg-white border border-[var(--adaptive-grey300)] rounded-[2.4rem] flex flex-col gap-[1.6rem] justify-center items-center p-[1.6rem]"
+                        initial={{ opacity: 0, y: 24 }}
+                        key={item.title}
+                        transition={{ delay: index * 0.04, duration: 0.6 }}
+                        viewport={{ once: true, amount: 0.25 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                    >
+                        <div className="h-[4.1rem] w-[0.1rem] bg-[var(--adaptive-grey300)] absolute top-[-4.1rem] left-[50%] transform trnaslate-x-[-50%]" />
+                        <Image
+                            src={`/images/icon/outlined/${item.icon}.svg`}
+                            alt=""
+                            width={48}
+                            height={48}
+                        />
+
+                        <h6 className="block text-[2.0rem] font-[700] text-black">{item.title}</h6>
+                        <p className="mb-0 text-[1.6rem] font-semibold leading-[1.55] text-neutral-500">{item.text}</p>
+                    </motion.article>
+                ))}
+            </div>
+        </section>
+    );
+};
+
+const OrganizationChartMobile = () => {
+    return (
+        <section
+            className="mobile:grid pc:hidden grid grid-cols-2 gap-[0.8rem]"
+            data-report-id="전문가 네트워크 목록"
+            data-report-type="item"
+        >
+            {experts.map((item, index) => (
+                <motion.article
+                    // className="min-h-[15rem] rounded-2xl border border-black/5 bg-white px-5 py-7 shadow-[0_1rem_2.4rem_rgba(20,30,40,0.06)]"
+                    className="relative bg-[var(--adaptive-grey-50)] border border-[var(--adaptive-grey300)] rounded-[2.4rem] flex flex-col mobile:gap-[1.2rem] pc:gap-[1.6rem] justify-center items-center p-[0.8rem_0.2rem]"
+                    initial={{ opacity: 0, y: 24 }}
+                    key={item.title}
+                    transition={{ delay: index * 0.04, duration: 0.6 }}
+                    viewport={{ once: true, amount: 0.25 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                >
+                    <Image
+                        src={`/images/icon/outlined/${item.icon}.svg`}
+                        alt=""
+                        width={48}
+                        height={48}
+                        className="mobile:w-[3.2rem] pc:w-[4.8rem]"
+                    />
+
+                    <section className="flex flex-col gap-[0.4rem]">
+                        <h6 className="block text-[1.6rem] font-[700] text-[var(--adaptive-grey900)]">{item.title}</h6>
+                        <p className="mb-0 text-[1.4rem] font-semibold leading-[1.55] text-neutral-500">{item.text}</p>
+                    </section>
+                </motion.article>
+            ))}
+        </section>
+    );
+};

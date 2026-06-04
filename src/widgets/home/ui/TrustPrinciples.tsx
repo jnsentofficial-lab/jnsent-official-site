@@ -40,7 +40,7 @@ export function TrustPrinciples() {
         // <section className="bg-[#f3f6f7] py-[16rem] max-[86rem]:py-24">
         <section
             ref={sectionRef}
-            className="min-h-[100dvh] mobile:py-[12.8rem] pc:py-0 flex mobile:flex-col pc:flex-row justify-center items-center"
+            className="min-h-[100svh] mobile:py-[12.8rem] pc:py-0 flex mobile:flex-col pc:flex-row justify-center items-center"
             data-report-id="신뢰 원칙 섹션"
             data-report-type="group"
         >
@@ -79,7 +79,7 @@ export function TrustPrinciples() {
                     >
                         {principleItems.map((item) => (
                             <article
-                                className="rounded-[3.2rem] p-[3.2rem] flex flex-col gap-[1.2rem] bg-white"
+                                className="mobile:rounded-[2.0rem] pc:rounded-[3.2rem] mobile:p-[1.6rem] pc:p-[3.2rem] flex flex-col gap-[1.2rem] bg-white"
                                 // className="rounded-2xl bg-white px-8 py-7 shadow-[0_1.2rem_3rem_rgba(20,30,40,0.06)]"
                                 key={item.title}
                             >
@@ -98,17 +98,13 @@ export function TrustPrinciples() {
                     />
 
                     <motion.article
-                        // className="relative min-h-[43rem] overflow-hidden rounded-[2.4rem] bg-[url('/images/landing/meeting.webp')] bg-cover bg-center p-8 text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
-                        // className="relative aspect-square overflow-hidden rounded-[2.4rem] bg-[url('/images/landing/meeting.png')] bg-cover bg-center text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
-                        // className="relative aspect overflow-hidden rounded-[2.4rem] bg-[url('/images/landing/meeting.png')] bg-cover bg-center text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
-                        // className="relative flex-1 overflow-hidden rounded-[2.4rem] bg-[url('/images/landing/meeting.png')] bg-cover bg-center text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
-                        className="relative flex flex-1 flex-col justify-between self-stretch overflow-hidden rounded-[2.4rem] bg-[linear-gradient(0deg,#000000f7_10%,#00000050)] p-[3.2rem] text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
+                        className="relative flex flex-1 flex-col justify-between self-stretch overflow-hidden rounded-[2.4rem] bg-[linear-gradient(0deg,#000000f7_10%,#00000050)] mobile:p-[2.0rem] pc:p-[3.2rem] gap-[1.6rem] text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
                         data-report-id="신뢰 원칙 증빙 카드"
                         data-report-type="item"
-                        initial={{ opacity: 0, x: 28 }}
+                        initial={{ opacity: 0 }}
                         transition={{ duration: 0.7 }}
-                        viewport={{ once: true, amount: 0.25 }}
-                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ amount: 0.25 }}
+                        whileInView={{ opacity: 1 }}
                     >
                         <img
                             src={"/images/landing/meeting.png"}
@@ -116,9 +112,10 @@ export function TrustPrinciples() {
                             className="absolute top-0 left-0 w-full h-full object-cover z-[-1]"
                         />
                         {/* <section className="bg-[linear-gradient(0deg,#000000f7_10%,#00000050)] h-full flex-1 p-[3.2rem] flex flex-col justify-between"> */}
-                        <section className="flex flex-col gap-[1.6rem]">
-                            <p className="text-[1.8rem] font-[500]">제이엔에스는 모든 항목에 대해</p>
-                            <h6 className="leading-[1.5] font-[900] text-[2.8rem]">
+                        <section className="flex flex-col mobile:gap-[0.8rem] pc:gap-[1.6rem]">
+                            <p className="mobile:text-[1.4rem] pc:text-[1.8rem]">제이엔에스는 모든 항목에 대해</p>
+
+                            <h6 className="leading-[1.5] font-[900] mobile:text-[1.8rem] pc:text-[2.8rem]">
                                 미팅 시 실제 자료를
                                 <br />
                                 투명하게 공개합니다.
@@ -127,7 +124,7 @@ export function TrustPrinciples() {
 
                         <section className="flex flex-col gap-[1.6rem]">
                             {/* <div className="grid mobile:grid-cols-[1fr_1fr] pc:grid-cols-[1fr_1fr_1fr_1fr] mobile:gap-[3.2rem] pc:gap-0"> */}
-                            <div className="grid mobile:grid-cols-[1fr_1fr] pc:grid-cols-[1fr_1fr] mobile:gap-[3.2rem] pc:gap-0">
+                            <div className="grid mobile:grid-cols-[1fr_1fr] pc:grid-cols-[1fr_1fr] mobile:gap-[1.2rem_0.4rem] pc:gap-[3.2rem_0]">
                                 {openItems.map((mappedItem, mappedIdx) => (
                                     <div key={mappedIdx}>
                                         <Image
@@ -135,20 +132,22 @@ export function TrustPrinciples() {
                                             alt=""
                                             width={48}
                                             height={48}
+                                            className="mobile:w-[3.2rem] pc:w-[4.8rem]"
                                         />
-                                        <p className="text-[1.8rem] leading-[1.5] font-[600]">{mappedItem.description}</p>
+                                        <p className="mobile:text-[1.4rem] pc:text-[1.8rem] leading-[1.5] font-[600]">{mappedItem.description}</p>
                                     </div>
                                 ))}
                             </div>
                             <div className="w-full bg-[#ffffff50] h-[0.1rem]" />
-                            <div className="flex items-center gap-[0.8rem]">
+                            <div className="flex mobile:items-start pc:items-center gap-[0.8rem]">
                                 <Image
                                     src={`/images/icon/colored/ico-colored-checked-green.svg`}
                                     alt=""
                                     width={20}
                                     height={20}
+                                    className="mobile:pt-[0.2rem] pc:pt-0 mobile:w-[1.6rem] pc:w-[2.0rem]"
                                 />
-                                <p className="text-[#89FF49] font-[600] leading-[1.5] text-[1.8rem]">말이 아닌, 눈으로 확인 할 수 있는 신뢰를 약속드립니다.</p>
+                                <p className="text-[#89FF49] font-[600] leading-[1.5] mobile:text-[1.4rem] pc:text-[1.8rem]">말이 아닌, 눈으로 확인 할 수 있는 신뢰를 약속드립니다.</p>
                             </div>
                         </section>
                         {/* <section className="bg-[linear-gradient(0deg,#000000f7_10%,#00000050)] h-full flex-1 p-[3.2rem] h-full flex flex-col justify-between">

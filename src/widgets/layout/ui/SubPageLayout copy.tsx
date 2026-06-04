@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, Fragment, ReactNode, useEffect, useRef, useState } from "react";
+import { FormEvent, ReactNode, useEffect, useRef, useState } from "react";
 import { motion, PanInfo, useAnimationFrame, useMotionValue } from "framer-motion";
 import { useCreateInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
 import { buildAvailableTime, buildRegion, CONTACT_HOUR_OPTIONS, CONTACT_PERIOD_OPTIONS, formatPhoneNumber, REGION_OPTIONS, sanitizeNameInput } from "@/entities/inquiry/lib/formFields";
@@ -56,7 +56,7 @@ export function SubPageHero({ current, title, description }: SubPageHeroProps) {
     return (
         // <section className="pt-[calc(50dvh-7.2rem-17.4rem-9.2rem)] pb-[9.2rem] mx-[1.6rem]">
         <section
-            className="mobile:pt-[calc(3.2rem+7.2rem+1.6rem)] pc:pt-[calc(50dvh-1.6rem-17.4rem-5.2rem)] pb-[3.2rem] mx-[1.6rem]"
+            className="mobile:pt-[calc(7.2rem+1.6rem)] pc:pt-[calc(50dvh-1.6rem-17.4rem-5.2rem)] pb-[3.2rem] mx-[1.6rem]"
             data-report-id={`${current} 히어로 섹션`}
             data-report-type="group"
             // className="pt-[calc(50dvh-1.6rem-17.4rem-3.2rem)] pb-[3.2rem] mx-[1.6rem]"
@@ -144,8 +144,6 @@ export function SubPageHero({ current, title, description }: SubPageHeroProps) {
 export function SubPageSplit({ left, right, className = "", leftTabLabel = "좌측", rightTabLabel = "우측" }: SubPageSplitProps) {
     const [mobileTab, setMobileTab] = useState<"left" | "right">("left");
 
-    const IS_LEFT_SIDE_VIEW = mobileTab === "left";
-
     return (
         <section
             className={`mx-[1.6rem] pb-[14rem] mobile:pb-24 ${className}`}
@@ -153,31 +151,31 @@ export function SubPageSplit({ left, right, className = "", leftTabLabel = "좌�
             data-report-type="group"
         >
             <div className="mx-auto grid max-w-[var(--size-pc)] w-full grid-cols-4 gap-[5.2rem] max-[86rem]:grid-cols-1">
-                {/* <div
+                <div
                     className="shadow-[0_0_100px_0_var(--adaptive-grey900)] overflow-hidden pc:hidden mobile:flex col-span-4 rounded-full bg-[var(--adaptive-black50)] p-[0.4rem] fixed bottom-[2.4rem] left-[50%] transform translate-x-[-50%] w-[calc(100%-(1.6rem*2))] z-[100] max-w-[var(--size-mobile)]"
                     // className="hidden max-[86rem]:flex col-span-4 rounded-[1.6rem] bg-[var(--adaptive-black50)] p-[0.4rem]"
                     data-report-id="서브페이지 모바일 탭"
                     data-report-type="group"
-                > */}
-                <button
-                    type="button"
-                    className={`mobile:fixed pc:hidden flex-1 rounded-full flex items-center gap-[0.4rem] ${IS_LEFT_SIDE_VIEW ? "flex-row" : "flex-row-reverse"} px-[2.0rem] py-[1.2rem] text-[1.6rem] font-[700] transition-colors fixed bottom-[2.4rem] right-[2.4rem] ${IS_LEFT_SIDE_VIEW ? "bg-[var(--adaptive-blue300)]" : "bg-[var(--adaptive-grey500)]"} z-[1000] text-white shadow-[0_0_100px_0_var(--adaptive-grey900)]`}
-                    onClick={() => {
-                        setMobileTab(IS_LEFT_SIDE_VIEW ? "right" : "left");
-                        window.scrollTo({ top: 0, behavior: "smooth" });
-                    }}
-                    data-report-id="서브페이지 모바일 좌측 탭"
-                    data-report-type="item"
                 >
-                    {IS_LEFT_SIDE_VIEW ? rightTabLabel : "이전으로"}
-                    <Image
-                        src={"/images/icon/outlined/ico-outlined-arrow-right.svg"}
-                        alt=""
-                        width={20}
-                        height={20}
-                        className={`${IS_LEFT_SIDE_VIEW ? "" : "rotate-180"} invert brightness-0`}
-                    />
-                </button>
+                    <button
+                        type="button"
+                        className={`flex-1 rounded-full px-[1.6rem] py-[1.2rem] text-[1.6rem] font-[700] transition-colors ${mobileTab === "left" ? "shadow-[0_0_20px_0_var(--adaptive-grey400)] bg-white text-black" : "text-[var(--adaptive-grey500)]"}`}
+                        onClick={() => setMobileTab("left")}
+                        data-report-id="서브페이지 모바일 좌측 탭"
+                        data-report-type="item"
+                    >
+                        {leftTabLabel}
+                    </button>
+                    <button
+                        type="button"
+                        className={`flex-1 rounded-full px-[1.6rem] py-[1.2rem] text-[1.6rem] font-[700] transition-colors ${mobileTab === "right" ? "shadow-[0_0_20px_0_var(--adaptive-grey400)] bg-white text-black" : "text-[var(--adaptive-grey500)]"}`}
+                        onClick={() => setMobileTab("right")}
+                        data-report-id="서브페이지 모바일 우측 탭"
+                        data-report-type="item"
+                    >
+                        {rightTabLabel}
+                    </button>
+                </div>
 
                 <motion.div
                     className={`col-span-2 ${mobileTab === "right" ? "max-[86rem]:hidden" : ""}`}
@@ -227,12 +225,11 @@ export function SubPageSection({ title, className, children }: InfoCardProps) {
             data-report-type="group"
         >
             <h2
-                className={`${className} flex items-center whitespace-break-spaces gap-[1.2rem] mobile:text-[2rem] pc:text-[2.4rem] font-[900] font-[NanumSquare] text-black whitespace-break-spaces leading-[1.5]`}
+                className={`${className} mobile:text-[1.8rem] pc:text-[2.4rem] font-[900] font-[NanumSquare] text-black whitespace-break-spaces leading-[1.5]`}
                 data-report-id={`서브페이지 섹션 제목 ${title}`}
                 data-report-type="item"
             >
                 {title}
-                {/* <div className="w-full bg-[var(--adaptive-grey300)] h-[0.1rem]" /> */}
             </h2>
 
             {children}
@@ -279,17 +276,15 @@ export function NoticeBox() {
                     alt=""
                     width={32}
                     height={32}
-                    className="mobile:hidden pc:block"
                 />
                 <section className="flex flex-col gap-[0.8rem]">
-                    <h5 className="font-[900] mobile:text-[1.6rem] pc:text-[1.8rem]">문의가 필요하신가요?</h5>
+                    <h5 className="font-[900] mobile:text-[1.4rem] pc:text-[1.8rem]">문의가 필요하신가요?</h5>
                     <p className="leading-[1.5]">장비 상담 및 렌탈 관련 문의는 언제든지 연락주세요.</p>
                 </section>
             </section>
 
             <UI.Button
-                size="sm"
-                className="w-full bg-[var(--adaptive-black50)] text-[var(--adaptive-black500)] rounded-[1.6rem]"
+                className="w-full bg-[var(--adaptive-black50)] text-[var(--adaptive-black500)] rounded-[1.6rem] h-[5.4rem]"
                 // href="/bjSupport"
             >
                 1:1 문의하기
@@ -387,151 +382,135 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
             data-report-type="group"
         >
             {chips.length ? (
-                <section className="flex flex-col gap-[1.6rem]">
-                    <SubPageSection title="서비스 선택" />
+                <SubPageSection title="서비스 선택">
+                    {chips.map((group) => (
+                        <div
+                            className="grid gap-3"
+                            key={group.label}
+                        >
+                            <h6>
+                                {group.label} {group.required ? <span className="text-[#f04452]">*</span> : null}
+                            </h6>
 
-                    <section className="flex flex-col gap-[3.2rem]">
-                        {chips.map((group) => (
-                            <div
-                                className="grid gap-3"
-                                key={group.label}
-                            >
-                                <h6>
-                                    {group.label} {group.required ? <span className="text-[#f04452]">*</span> : null}
-                                </h6>
+                            <div className="flex flex-wrap gap-[0.4rem]">
+                                {group.options.map((option) => {
+                                    const active = selected[group.label] === option;
 
-                                <div className="flex flex-wrap gap-[0.4rem]">
-                                    {group.options.map((option) => {
-                                        const active = selected[group.label] === option;
-
-                                        return (
-                                            <UI.Button
-                                                className={`border ${active ? "border-[var(--adaptive-red500)] text-[var(--adaptive-red400)]" : "border-[var(--adaptive-black100)] text-[var(--adaptive-black300)]"} font-[500] px-[1.2rem] rounded-[1.4rem]`}
-                                                size="sm"
-                                                key={option}
-                                                onClick={() => setSelected((prev) => ({ ...prev, [group.label]: option }))}
-                                                type="button"
-                                            >
-                                                {option}
-                                            </UI.Button>
-                                        );
-                                    })}
-                                </div>
+                                    return (
+                                        <UI.Button
+                                            className={`border ${active ? "border-[var(--adaptive-red500)] text-[var(--adaptive-red400)]" : "border-[var(--adaptive-black100)] text-[var(--adaptive-black300)]"} font-[500] px-[1.2rem] rounded-[1.4rem]`}
+                                            size="sm"
+                                            key={option}
+                                            onClick={() => setSelected((prev) => ({ ...prev, [group.label]: option }))}
+                                            type="button"
+                                        >
+                                            {option}
+                                        </UI.Button>
+                                    );
+                                })}
                             </div>
-                        ))}
-                    </section>
-                </section>
+                        </div>
+                    ))}
+                </SubPageSection>
             ) : null}
 
             {/* <section className="w-full bg-[var(--adaptive-black100)] h-[0.1rem]" /> */}
 
-            <section className="flex flex-col gap-[1.6rem]">
+            <section className="flex flex-col gap-[3.2rem]">
                 <SubPageSection title={title} />
-
-                <section className="flex flex-col gap-[3.2rem]">
+                <label className="grid gap-3 text-[1.6rem] font-[700] text-black font-[NanumSquare]">
+                    이름
+                    <UI.Input
+                        name="name"
+                        placeholder="이름을 남겨주세요"
+                        maxLength={20}
+                        onChange={(event) => {
+                            event.currentTarget.value = sanitizeNameInput(event.currentTarget.value);
+                        }}
+                    />
+                </label>
+                <label className="grid gap-3 text-[1.6rem] font-[700] text-black font-[NanumSquare]">
+                    연락처
+                    <UI.Input
+                        name="phone"
+                        placeholder="연락처를 남겨주세요"
+                        type="tel"
+                        inputMode="numeric"
+                        maxLength={13}
+                        onChange={(event) => {
+                            event.currentTarget.value = formatPhoneNumber(event.currentTarget.value);
+                        }}
+                    />
+                </label>
+                {showEmail ? (
                     <label className="grid gap-3 text-[1.6rem] font-[700] text-black font-[NanumSquare]">
-                        이름
+                        이메일
                         <UI.Input
-                            size="sm"
-                            name="name"
-                            placeholder="이름을 남겨주세요"
-                            maxLength={20}
-                            onChange={(event) => {
-                                event.currentTarget.value = sanitizeNameInput(event.currentTarget.value);
-                            }}
+                            name="email"
+                            placeholder="이메일을 남겨주세요"
+                            type="email"
                         />
                     </label>
-
-                    <label className="grid gap-3 text-[1.6rem] font-[700] text-black font-[NanumSquare]">
-                        연락처
-                        <UI.Input
-                            size="sm"
-                            name="phone"
-                            placeholder="연락처를 남겨주세요"
-                            type="tel"
-                            inputMode="numeric"
-                            maxLength={13}
-                            onChange={(event) => {
-                                event.currentTarget.value = formatPhoneNumber(event.currentTarget.value);
-                            }}
-                        />
-                    </label>
-
-                    {showEmail ? (
-                        <label className="grid gap-3 text-[1.6rem] font-[700] text-black font-[NanumSquare]">
-                            이메일
-                            <UI.Input
-                                size="sm"
-                                name="email"
-                                placeholder="이메일을 남겨주세요"
-                                type="email"
-                            />
-                        </label>
-                    ) : null}
-
-                    <label className="grid gap-3 text-[1.6rem] font-[700] text-black font-[NanumSquare]">
-                        지역
-                        <div className="grid gap-[0.8rem]">
-                            <div className="grid grid-cols-2 gap-[0.8rem]">
-                                <UI.Select
-                                    className="rounded-[1.4rem] border border-[var(--adaptive-black100)] px-[1.6rem]"
-                                    options={[{ label: "~도 선택", value: "" }, ...Object.keys(REGION_OPTIONS).map((option) => ({ label: option, value: option }))]}
-                                    size="sm"
-                                    value={province}
-                                    onChange={(event) => {
-                                        setProvince(event.target.value);
-                                        setCity("");
-                                    }}
-                                />
-                                <UI.Select
-                                    className="rounded-[1.4rem] border border-[var(--adaptive-black100)] px-[1.6rem]"
-                                    disabled={!province}
-                                    options={[{ label: "~시 선택", value: "" }, ...cityOptions.map((option) => ({ label: option, value: option }))]}
-                                    size="sm"
-                                    value={city}
-                                    onChange={(event) => setCity(event.target.value)}
-                                />
-                            </div>
-                            <UI.Input
-                                size="sm"
-                                name="detailAddress"
-                                placeholder="상세 주소를 입력해주세요"
-                                value={detailAddress}
-                                onChange={(event) => setDetailAddress(event.target.value)}
-                            />
-                        </div>
-                    </label>
-
-                    <label className="grid gap-3 text-[1.6rem] font-[700] text-black font-[NanumSquare]">
-                        연락 가능한 시각
+                ) : null}
+                <label className="grid gap-3 text-[1.6rem] font-[700] text-black font-[NanumSquare]">
+                    지역
+                    <div className="grid gap-[0.8rem]">
                         <div className="grid grid-cols-2 gap-[0.8rem]">
                             <UI.Select
-                                className="rounded-[1.4rem] border border-[var(--adaptive-black100)] px-[1.6rem]"
-                                options={[{ label: "오전/오후 선택", value: "" }, ...CONTACT_PERIOD_OPTIONS.map((option) => ({ label: option, value: option }))]}
-                                size="sm"
-                                value={contactPeriod}
-                                onChange={(event) => setContactPeriod(event.target.value)}
+                                className="rounded-[1.4rem] border border-[var(--adaptive-black100)] px-[1.6rem] h-[5.2rem]"
+                                options={[{ label: "~도 선택", value: "" }, ...Object.keys(REGION_OPTIONS).map((option) => ({ label: option, value: option }))]}
+                                // size="md"
+                                value={province}
+                                onChange={(event) => {
+                                    setProvince(event.target.value);
+                                    setCity("");
+                                }}
                             />
                             <UI.Select
-                                className="rounded-[1.4rem] border border-[var(--adaptive-black100)] px-[1.6rem]"
-                                options={[{ label: "시간 선택", value: "" }, ...CONTACT_HOUR_OPTIONS.map((option) => ({ label: option, value: option }))]}
-                                size="sm"
-                                value={contactHour}
-                                onChange={(event) => setContactHour(event.target.value)}
+                                className="rounded-[1.4rem] border border-[var(--adaptive-black100)] px-[1.6rem] h-[5.2rem]"
+                                disabled={!province}
+                                options={[{ label: "~시 선택", value: "" }, ...cityOptions.map((option) => ({ label: option, value: option }))]}
+                                // size="md"
+                                value={city}
+                                onChange={(event) => setCity(event.target.value)}
                             />
                         </div>
-                    </label>
-
-                    <label className="grid gap-3 text-[1.6rem] font-[700] text-black font-[NanumSquare]">
-                        {messageLabel}
-                        <UI.TextArea
-                            className="leading-[1.5]"
-                            // className="mi[5.2rem]h-[17rem][1.2rem]esize-none rounded-xl border b-grde3-[var(--adaptiveGrey300)] p-5 text-base font-semibold"
-                            name="message"
-                            placeholder="문의를 남겨주세요"
+                        <UI.Input
+                            name="detailAddress"
+                            placeholder="상세 주소를 입력해주세요"
+                            value={detailAddress}
+                            onChange={(event) => setDetailAddress(event.target.value)}
                         />
-                    </label>
-                </section>
+                    </div>
+                </label>
+                <label className="grid gap-3 text-[1.6rem] font-[700] text-black font-[NanumSquare]">
+                    연락 가능한 시각
+                    <div className="grid grid-cols-2 gap-[0.8rem]">
+                        <UI.Select
+                            className="rounded-[1.4rem] border border-[var(--adaptive-black100)] px-[1.6rem] h-[5.2rem]"
+                            options={[{ label: "오전/오후 선택", value: "" }, ...CONTACT_PERIOD_OPTIONS.map((option) => ({ label: option, value: option }))]}
+                            size="md"
+                            value={contactPeriod}
+                            onChange={(event) => setContactPeriod(event.target.value)}
+                        />
+                        <UI.Select
+                            className="rounded-[1.4rem] border border-[var(--adaptive-black100)] px-[1.6rem] h-[5.2rem]"
+                            options={[{ label: "시간 선택", value: "" }, ...CONTACT_HOUR_OPTIONS.map((option) => ({ label: option, value: option }))]}
+                            size="md"
+                            value={contactHour}
+                            onChange={(event) => setContactHour(event.target.value)}
+                        />
+                    </div>
+                </label>
+                <label className="grid gap-3 text-[1.6rem] font-[700] text-black font-[NanumSquare]">
+                    {messageLabel}
+                    <UI.TextArea
+                        className="leading-[1.5]"
+                        // className="mi[5.2rem]h-[17rem][1.2rem]esize-none rounded-xl border b-grde3-[var(--adaptiveGrey300)] p-5 text-base font-semibold"
+                        name="message"
+                        placeholder="문의를 남겨주세요"
+                    />
+                </label>
             </section>
 
             <section className="w-full bg-[var(--adaptive-black100)] h-[0.1rem]" />

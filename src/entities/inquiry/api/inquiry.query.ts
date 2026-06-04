@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createInquiryCommentFetch, createInquiryFetch, deleteInquiryFetch, getAdminInquiriesFetch, getInquiryCommentsFetch, updateInquiryStatusFetch } from "@/entities/inquiry/api/inquiry.api";
-import type { AdminInquiry, CreateInquiryCommentPayload, CreateInquiryPayload, DeleteInquiryPayload, Inquiry, InquiryComment, UpdateInquiryStatusPayload } from "@/entities/inquiry/model/inquiry.type";
+import { createInquiryCommentFetch, createInquiryFetch, deleteInquiryFetch, getAdminInquiriesFetch, getInquiryCommentsFetch, updateInquiryCommentFetch, updateInquiryStatusFetch } from "@/entities/inquiry/api/inquiry.api";
+import type { AdminInquiry, CreateInquiryCommentPayload, CreateInquiryPayload, DeleteInquiryPayload, Inquiry, InquiryComment, UpdateInquiryCommentPayload, UpdateInquiryStatusPayload } from "@/entities/inquiry/model/inquiry.type";
 import { useToastStore } from "@/shared/model/stores/useToastStore";
 
 export const InquiryRoutes = {
@@ -98,6 +98,26 @@ export const useCreateInquiryCommentMutation = () => {
         mutationFn: (payload: CreateInquiryCommentPayload) => createInquiryCommentFetch(payload),
         onSuccess: (_data, payload) => {
             setToast({ msg: "담당자 답변을 저장했어요", time: 3, type: "success" });
+            queryClient.invalidateQueries({ queryKey: [MUTATION_KEY, payload.inquiry_id] });
+            queryClient.invalidateQueries({ queryKey: [InquiryRoutes.ADMIN_INQUIRIES] });
+        },
+        onError: (err: Error) => {
+            setToast({ msg: err.message ?? "에러 발생", time: 2, type: "fail" });
+        },
+    });
+
+    return { mutate, mutateAsync, isError, isIdle, isSuccess, isPending, isPaused, data, error, reset };
+};
+
+export const useUpdateInquiryCommentMutation = () => {
+    const { setToast } = useToastStore();
+    const MUTATION_KEY = InquiryRoutes.ADMIN_INQUIRY_COMMENTS;
+    const queryClient = useQueryClient();
+    const { data, mutate, mutateAsync, error, isError, isSuccess, isIdle, isPending, isPaused, reset } = useMutation({
+        mutationKey: [MUTATION_KEY, "useUpdateInquiryCommentMutation"],
+        mutationFn: (payload: UpdateInquiryCommentPayload) => updateInquiryCommentFetch(payload),
+        onSuccess: (_data, payload) => {
+            setToast({ msg: "담당자 답변을 수정했어요", time: 3, type: "success" });
             queryClient.invalidateQueries({ queryKey: [MUTATION_KEY, payload.inquiry_id] });
             queryClient.invalidateQueries({ queryKey: [InquiryRoutes.ADMIN_INQUIRIES] });
         },

@@ -317,13 +317,28 @@
 }
 
 html {
+    height: 100%;
     line-height: 1 !important; /* 1 */
     -webkit-text-size-adjust: 100% !important; /* 2 */
+    overflow-x: hidden;
+    overscroll-behavior-y: none;
     transition: background-color 0.25s cubic-bezier(0.42, 0, 0.58, 1); /* ease-in-out */
 }
 
 body {
     font-size: 1.4rem;
+    min-height: 100svh;
+    overflow-x: hidden;
+}
+
+@supports (-webkit-touch-callout: none) {
+    html {
+        height: -webkit-fill-available;
+    }
+
+    body {
+        min-height: -webkit-fill-available;
+    }
 }
 
 input[type="password"] {
@@ -355,23 +370,38 @@ input[type="password"] {
 @media (width >= 9.375rem) {
     #chatterbox-root {
         .chat-icon {
-            right: 1.8rem !important;
-            bottom: 14.8rem !important;
+            z-index: 10 !important;
+            transition: 0.45s cubic-bezier(0.22, 1, 0.36, 1) !important;
+            /* right: 1.6rem !important; */
+            bottom: calc(50% - 6rem) !important;
         }
 
         img {
-            width: 4.2rem !important;
+            width: 4.8rem !important;
         }
+    }
+
+    body[data-quick-menu-mobile-hidden="true"] #chatterbox-root {
+        .chat-icon {
+            opacity: 0;
+            right: -4.8rem !important;
+        }
+    }
+
+    body[data-quick-menu-mobile-hidden="false"] #chatterbox-root {
+        opacity: 1;
+        right: 1.6rem !important;
     }
 }
 
-@media (width >= 90rem) {
+@media (width >= 768px) {
     body {
         font-size: 1.6rem;
     }
 
     #chatterbox-root {
         .chat-icon {
+            z-index: 10 !important;
             bottom: 13.8rem !important;
             right: 1.8rem !important;
         }

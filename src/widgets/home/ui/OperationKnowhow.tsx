@@ -23,7 +23,7 @@ export function OperationKnowhow() {
     return (
         <section
             ref={sectionRef}
-            className="relative mobile:min-h-[100dvh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[150dvh]"
+            className="relative mobile:min-h-[100svh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[150dvh]"
             data-report-id="운영 노하우 섹션"
             data-report-type="group"
         >

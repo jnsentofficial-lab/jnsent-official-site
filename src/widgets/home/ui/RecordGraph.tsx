@@ -2,14 +2,16 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Bar, CartesianGrid, ComposedChart, LabelList, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { Text } from "@/shared/ui/kit/Text";
 
-const datas = [
-    { name: "2023", amount: 29.8, growth: 213.1 },
-    { name: "2024", amount: 93.2, growth: 100.6 },
-    { name: "2025", amount: 187, growth: null },
+const ACCENT_COLOR = "#ff6b75";
+const GRAPH_BASELINE = 88;
+
+const graphBars = [
+    { name: "2023", amount: 29.8, left: "10%", width: "10rem", height: 18, center: 14 },
+    { name: "2024", amount: 93.2, left: "41%", width: "13rem", height: 50, center: 48 },
+    { name: "2025", amount: 187, left: "81%", width: "15rem", height: 82, center: 86 },
 ];
 
 const records = [
@@ -18,295 +20,418 @@ const records = [
     { value: 8007828, label: "크루방송 단일 회차 최고" },
 ];
 
-function GrowthLabel({ x = 0, y = 0, value }: { x?: number; y?: number; value?: number | null }) {
-    if (value == null) {
-        return null;
-    }
-
-    return (
-        <g transform={`translate(${x - 52}, ${y - 96})`}>
-            <line
-                x1="52"
-                y1="84"
-                x2="52"
-                y2="136"
-                stroke="#ffb3bc"
-                strokeDasharray="4 4"
-                opacity="0.8"
-            />
-            <rect
-                width="104"
-                height="60"
-                rx="18"
-                fill="rgba(255,255,255,0.96)"
-                stroke="rgba(255, 132, 146, 0.18)"
-            />
-            <text
-                x="52"
-                y="24"
-                textAnchor="middle"
-                fontSize="12"
-                fontWeight="700"
-                fill="#ff5b68"
-            >
-                {`+${value}%`}
-            </text>
-            <text
-                x="52"
-                y="42"
-                textAnchor="middle"
-                fontSize="10"
-                fontWeight="600"
-                fill="#4b5563"
-            >
-                전년 대비
-            </text>
-        </g>
-    );
-}
-
-function AmountLabel({ x = 0, y = 0, value }: { x?: number; y?: number; value?: number }) {
-    if (value == null) {
-        return null;
-    }
-
-    return (
-        <text
-            x={x}
-            y={y - 18}
-            textAnchor="middle"
-            fontSize="14"
-            fontWeight="700"
-            fill="#111111"
-        >
-            <tspan>약 </tspan>
-            <tspan
-                fill="#ff5b68"
-                fontSize="18"
-            >
-                {value}
-            </tspan>
-            <tspan>억</tspan>
-        </text>
-    );
-}
-
-function CurveDot(props: { cx?: number; cy?: number; index?: number }) {
-    const { cx = 0, cy = 0, index = 0 } = props;
-
-    return (
-        <g>
-            {index === datas.length - 1 ? (
-                <path
-                    d={`M ${cx + 8} ${cy - 3} Q ${cx + 22} ${cy - 22} ${cx + 34} ${cy - 38}`}
-                    fill="none"
-                    stroke="#ff5b68"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                />
-            ) : null}
-            {index === datas.length - 1 ? (
-                <path
-                    d={`M ${cx + 30} ${cy - 42} L ${cx + 40} ${cy - 40} L ${cx + 35} ${cy - 30} Z`}
-                    fill="#ff5b68"
-                />
-            ) : null}
-            <circle
-                cx={cx}
-                cy={cy}
-                r="7"
-                fill="rgba(255,91,104,0.12)"
-            />
-            <circle
-                cx={cx}
-                cy={cy}
-                r="4"
-                fill="#ff5b68"
-            />
-        </g>
-    );
-}
-
 export function RecordGraph() {
     return (
-        <section
-            className="relative h-dvh min-h-0 overflow-x-clip"
-            data-report-id="플랫폼 기록 섹션"
-            data-report-type="group"
-        >
-            <div
-                className="absolute top-[calc(50%-(1.6rem*2))] left-1/2 z-10 w-full -translate-x-1/2 translate-y-[-50%] px-[clamp(1.6rem,4vw,4rem)]"
-                // className="absolute top-[clamp(1.6rem,4vw,4rem)] left-1/2 z-10 w-full -translate-x-1/2 px-[clamp(1.6rem,4vw,4rem)]"
-
-                data-report-id="플랫폼 기록 카피"
-                data-report-type="item"
+        <>
+            <section
+                className="relative h-svh min-h-0 overflow-x-clip flex flex-col"
+                data-report-id="플랫폼 기록 섹션"
+                data-report-type="group"
             >
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ amount: 0.25 }}
-                    transition={{ duration: 0.7 }}
-                    className="flex flex-col gap-[1.6rem] max-w-[var(--size-pc)] mx-auto"
+                <div
+                    className="absolute top-[calc(50%-(1.6rem*2))] left-1/2 z-10 w-full -translate-x-1/2 translate-y-[-50%] px-[clamp(1.6rem,4vw,4rem)]"
+                    // className="absolute top-[clamp(1.6rem,4vw,4rem)] left-1/2 z-10 w-full -translate-x-1/2 px-[clamp(1.6rem,4vw,4rem)]"
+
+                    data-report-id="플랫폼 기록 카피"
+                    data-report-type="item"
                 >
-                    <section className="flex items-center">
-                        <Image
-                            src={"/images/icon/filled/ico-filled-bay-tree.svg"}
-                            alt=""
-                            width={32}
-                            height={32}
-                            className="mobile:w-[2.4rem] mobile:h-[2.4rem] pc:w-[3.2rem] pc:h-[3.2rem]"
-                        />
-
-                        <Text.Shimmer
-                            className="mobile:text-[1.8rem] pc:text-[2.4rem] font-[700] font-[NanumSquare]"
-                            color={{
-                                start: "#000000",
-                                end: "#e0e0e0",
-                            }}
-                            duration={10}
-                        >
-                            플랫폼 신기록
-                        </Text.Shimmer>
-
-                        <Image
-                            src={"/images/icon/filled/ico-filled-bay-tree.svg"}
-                            alt=""
-                            height={32}
-                            width={32}
-                            style={{
-                                transform: "scaleX(-1)",
-                                // width: "2.4rem",
-                                // height: "2.4rem",
-                            }}
-                            className="mobile:w-[2.4rem] mobile:h-[2.4rem] pc:w-[3.2rem] pc:h-[3.2rem]"
-                        />
-                    </section>
-
-                    <Text.Reveal
-                        as="h2"
-                        className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]"
-                        // className="max-w-[92rem] mobile:text-[2.4rem] pc:text-[3.8rem] leading-[1.5] max-[64rem]:text-5xl max-[48rem]:text-4xl"
-                        initialColor="#ffffff00"
-                        revealColor="#000000"
-                        subHighlightColor="#A953FF"
-                        highlightColor="#FF6B75"
-                        revealWindow={0.5}
-                        revealStartPosition={20}
-                        revealEndPosition={60}
-                        align="left"
-                        // delay={2}
-                        // transition={0}
-                        transition={2}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ amount: 0.25 }}
+                        transition={{ duration: 0.7 }}
+                        className="flex flex-col gap-[1.6rem] max-w-[var(--size-pc)] mx-auto"
                     >
-                        {`기록은 거짓말하지 않습니다\n결과로 증명된 운영성과`}
-                    </Text.Reveal>
-
-                    <div
-                        className="mt-8 grid gap-6 max-[48rem]:mt-6 max-[48rem]:gap-4 min-[86rem]:mt-12 min-[86rem]:gap-8"
-                        data-report-id="플랫폼 기록 수치 목록"
-                        data-report-type="item"
-                    >
-                        {records.map((record) => (
-                            <div key={record.label}>
-                                <Text.Rolling
-                                    value={record.value}
-                                    textSize={28}
-                                    rollingCount={5}
-                                />
-                                <span className="mt-2 block text-[1.8rem] text-base font-bold text-neutral-500">{record.label}</span>
-                            </div>
-                        ))}
-                    </div>
-                </motion.div>
-            </div>
-
-            <motion.div
-                // className="pointer-events-none absolute left-[50%] inset-0 z-0 flex items-center justify-center overflow-x-hidden"
-                // className="pointer-events-none absolute left-[25%] inset-0 z-0 flex items-center justify-center overflow-x-hidden"
-                className="pointer-events-none absolute inset-x-0 mobile:bottom-0 mobile:left-0 mobile:h-1/2 mobile:opacity-50 pc:left-[25%] pc:inset-y-0 pc:h-full pc:opacity-100 z-0 flex items-center justify-center overflow-x-hidden"
-                data-report-id="플랫폼 기록 그래프"
-                data-report-type="item"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ amount: 0.2, once: false }}
-                transition={{ duration: 0.9 }}
-                style={{
-                    maskImage: "linear-gradient(90deg, transparent 0%, transparent 10%, black 35%, black 100%)",
-                    WebkitMaskImage: "linear-gradient(90deg, transparent 0%, transparent 18%, black 55%, black 100%)",
-                }}
-            >
-                <ResponsiveContainer>
-                    <ComposedChart
-                        data={datas}
-                        // margin={{ top: 72, right: 50, bottom: 18, left: 24 }}
-                        margin={{ top: 72 }}
-                    >
-                        <CartesianGrid
-                            vertical={false}
-                            stroke="rgba(148, 163, 184, 0.25)"
-                            strokeDasharray="4 6"
-                        />
-                        <XAxis
-                            dataKey="name"
-                            axisLine={false}
-                            tickLine={false}
-                            tick={{ fill: "#374151", fontSize: 13, fontWeight: 500 }}
-                        />
-                        <YAxis
-                            axisLine={false}
-                            tickLine={false}
-                            tickMargin={12}
-                            domain={[0, 200]}
-                            ticks={[0, 50, 100, 150, 200]}
-                            tick={{ fill: "#9ca3af", fontSize: 12 }}
-                        />
-
-                        <Tooltip
-                            contentStyle={{
-                                borderRadius: "1.6rem",
-                                background: "rgba(255,255,255,0.98)",
-                                boxShadow: "0 16px 50px rgba(255, 91, 104, 0.18)",
-                                border: "none",
-                            }}
-                            itemStyle={{
-                                color: "#ff5b68",
-                            }}
-                            wrapperStyle={{
-                                borderRadius: "1rem",
-                            }}
-                            formatter={(value) => [`${value ?? 0}억`, "매출"]}
-                            labelFormatter={(label) => `${label}년`}
-                        />
-                        <Line
-                            type="monotone"
-                            dataKey="amount"
-                            stroke="#ff5b68"
-                            strokeWidth={2}
-                            dot={<CurveDot />}
-                            activeDot={false}
-                        />
-                        <Bar
-                            dataKey="amount"
-                            barSize={128}
-                            fill="#111111"
-                            radius={[24, 24, 0, 0]}
-                            activeBar={{
-                                fill: "#111111",
-                            }}
-                        >
-                            <LabelList
-                                dataKey="amount"
-                                position="top"
-                                content={<AmountLabel />}
+                        <section className="flex items-center">
+                            <Image
+                                src={"/images/icon/filled/ico-filled-bay-tree.svg"}
+                                alt=""
+                                width={32}
+                                height={32}
+                                className="mobile:w-[2.4rem] mobile:h-[2.4rem] pc:w-[3.2rem] pc:h-[3.2rem]"
                             />
-                            <LabelList
-                                dataKey="growth"
-                                content={<GrowthLabel />}
+
+                            <Text.Shimmer
+                                className="mobile:text-[1.8rem] pc:text-[2.4rem] font-[700] font-[NanumSquare]"
+                                color={{
+                                    start: "#000000",
+                                    end: "#e0e0e0",
+                                }}
+                                duration={10}
+                            >
+                                플랫폼 신기록
+                            </Text.Shimmer>
+
+                            <Image
+                                src={"/images/icon/filled/ico-filled-bay-tree.svg"}
+                                alt=""
+                                height={32}
+                                width={32}
+                                style={{
+                                    transform: "scaleX(-1)",
+                                    // width: "2.4rem",
+                                    // height: "2.4rem",
+                                }}
+                                className="mobile:w-[2.4rem] mobile:h-[2.4rem] pc:w-[3.2rem] pc:h-[3.2rem]"
                             />
-                        </Bar>
-                    </ComposedChart>
-                </ResponsiveContainer>
-            </motion.div>
-        </section>
+                        </section>
+
+                        <Text.Reveal
+                            as="h2"
+                            className="mobile:text-[2.4rem] pc:text-[3.8rem] font-[900] leading-[1.5]"
+                            // className="max-w-[92rem] mobile:text-[2.4rem] pc:text-[3.8rem] leading-[1.5] max-[64rem]:text-5xl max-[48rem]:text-4xl"
+                            initialColor="#ffffff00"
+                            revealColor="#000000"
+                            subHighlightColor="#A953FF"
+                            highlightColor="#FF6B75"
+                            revealWindow={0.5}
+                            revealStartPosition={20}
+                            revealEndPosition={60}
+                            align="left"
+                            // delay={2}
+                            // transition={0}
+                            transition={2}
+                        >
+                            {`기록은 거짓말하지 않습니다\n결과로 증명된 운영성과`}
+                        </Text.Reveal>
+
+                        <div
+                            className="mt-8 grid gap-6 max-[48rem]:mt-6 max-[48rem]:gap-4 min-[86rem]:mt-12 min-[86rem]:gap-8"
+                            data-report-id="플랫폼 기록 수치 목록"
+                            data-report-type="item"
+                        >
+                            {records.map((record) => (
+                                <div key={record.label}>
+                                    <span className="block mobile:hidden">
+                                        <Text.Rolling
+                                            value={record.value}
+                                            textSize={28}
+                                            rollingCount={5}
+                                        />
+                                    </span>
+                                    <span className="hidden mobile:block">
+                                        <Text.Rolling
+                                            value={record.value}
+                                            textSize={20}
+                                            rollingCount={5}
+                                        />
+                                    </span>
+                                    <span className="mt-2 block mobile:text-[1.4rem] pc:text-[1.8rem] text-base font-bold text-neutral-500">{record.label}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </motion.div>
+                </div>
+
+                <GraphVer3 />
+                {/* <GraphVer2 /> */}
+            </section>
+        </>
     );
 }
+
+const GraphVer3 = () => {
+    const graphEase = [0.22, 1, 0.36, 1] as const;
+    const hoverEase = [0.44, 0.05, 0.55, 0.95] as const;
+    const chartConfigs = {
+        desktop: {
+            reportChartWidth: 920,
+            reportChartHeight: 600,
+            chartLeftPadding: 86,
+            chartRightPadding: 48,
+            chartTopPadding: 90,
+            chartBottomPadding: 84,
+            barWidth: 90,
+            amountY: 18,
+            growthLabelY: 64,
+            growthValueFontSize: 20,
+            growthCaptionFontSize: 17,
+            amountPrefixFontSize: 14,
+            amountValueFontSize: 24,
+            yearFontSize: 22,
+            dotOuter: 12,
+            dotInner: 7,
+        },
+        mobile: {
+            reportChartWidth: 412,
+            reportChartHeight: 420,
+            chartLeftPadding: 28,
+            chartRightPadding: 20,
+            chartTopPadding: 76,
+            chartBottomPadding: 32,
+            barWidth: 80,
+            amountY: 22,
+            growthLabelY: 62,
+            growthValueFontSize: 19,
+            growthCaptionFontSize: 17,
+            amountPrefixFontSize: 18,
+            amountValueFontSize: 24,
+            yearFontSize: 24,
+            dotOuter: 17,
+            dotInner: 9,
+        },
+    } as const;
+
+    const renderChart = (mode: keyof typeof chartConfigs) => {
+        const config = chartConfigs[mode];
+        const innerWidth = config.reportChartWidth - config.chartLeftPadding - config.chartRightPadding;
+        const innerHeight = config.reportChartHeight - config.chartTopPadding - config.chartBottomPadding;
+        const maxAmount = 200;
+        const stepX = innerWidth / Math.max(graphBars.length - 1, 1);
+        const linePoints = graphBars.map((bar, index) => {
+            const x = config.chartLeftPadding + stepX * index;
+            const y = config.chartTopPadding + innerHeight - (bar.amount / maxAmount) * innerHeight;
+            let growthValue: string | undefined;
+
+            if (index > 0) {
+                const prevAmount = graphBars[index - 1].amount;
+                const growth = ((bar.amount - prevAmount) / prevAmount) * 100;
+                growthValue = `+${growth.toFixed(1)}%`;
+            }
+
+            return {
+                ...bar,
+                x,
+                y,
+                formattedAmount: bar.amount.toLocaleString("ko-KR"),
+                growthValue,
+            };
+        });
+        const linePath = linePoints.reduce((path, point, index) => {
+            if (index === 0) {
+                return `M ${point.x} ${point.y}`;
+            }
+
+            const previousPoint = linePoints[index - 1];
+            const rise = point.y - previousPoint.y;
+            const controlX1 = previousPoint.x + stepX * (mode === "mobile" ? 0.38 : 0.42);
+            const controlY1 = previousPoint.y + rise * 0.1;
+            const controlX2 = point.x - stepX * (mode === "mobile" ? 0.12 : 0.16);
+            const controlY2 = point.y - rise * (mode === "mobile" ? 0.7 : 0.78);
+
+            return `${path} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${point.x} ${point.y}`;
+        }, "");
+
+        return (
+            <svg
+                viewBox={`0 0 ${config.reportChartWidth} ${config.reportChartHeight}`}
+                className="h-full w-full"
+            >
+                {linePoints.map((point) => (
+                    <g key={`${mode}-${point.name}`}>
+                        {/* 
+                          To have an 8px rounded top on the bar,
+                          Use <rect> instead of <line> for the bar, with rx only on the top side.
+                          In SVG, rx/ry round all corners, but we can "clip" the bottom by overlaying a rect, or via a clipPath.
+                          For clarity and cross-browser reliability, use a clipPath that only rounds the top corners.
+                        */}
+                        <clipPath id={`bar-clip-${mode}-${point.name}`}>
+                            <path
+                                d={`
+                                    M ${point.x - config.barWidth / 2} ${point.y + 8}
+                                    a 8 8 0 0 1 8 -8
+                                    h ${config.barWidth - 16}
+                                    a 8 8 0 0 1 8 8
+                                    v ${config.reportChartHeight - config.chartBottomPadding - point.y - 8}
+                                    h -${config.barWidth}
+                                    Z
+                                `}
+                            />
+                        </clipPath>
+
+                        <motion.rect
+                            x={point.x - config.barWidth / 2}
+                            y={point.y}
+                            width={config.barWidth}
+                            height={config.reportChartHeight - config.chartBottomPadding - point.y}
+                            fill="var(--adaptive-grey900)"
+                            clipPath={`url(#bar-clip-${mode}-${point.name})`}
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: config.reportChartHeight - config.chartBottomPadding - point.y, opacity: 1 }}
+                            whileInView={{ height: config.reportChartHeight - config.chartBottomPadding - point.y, opacity: 1 }}
+                            viewport={{ amount: 0.25, once: false }}
+                            transition={{ duration: 0.8, delay: 0.16 * linePoints.indexOf(point), ease: graphEase }}
+                        />
+
+                        {point.growthValue ? (
+                            <>
+                                <motion.text
+                                    x={point.x}
+                                    y={point.y - config.growthLabelY - 12}
+                                    textAnchor="middle"
+                                    fontWeight="700"
+                                    fill="var(--adaptive-grey500)"
+                                    initial={{ opacity: 0, y: 16 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ amount: 0.25, once: false }}
+                                    transition={{ duration: 0.55, delay: 0.4 * linePoints.indexOf(point) + 0.15, ease: graphEase }}
+                                >
+                                    <tspan
+                                        fontSize={config.growthCaptionFontSize}
+                                        fontWeight="700"
+                                    >
+                                        전년대비
+                                    </tspan>
+                                </motion.text>
+
+                                <motion.text
+                                    x={point.x}
+                                    y={point.y - (config.growthLabelY - (mode === "mobile" ? 10 : 16))}
+                                    textAnchor="middle"
+                                    fontWeight="700"
+                                    fill="var(--adaptive-red500)"
+                                    initial={{ opacity: 0, y: 16 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ amount: 0.25, once: false }}
+                                    transition={{ duration: 0.55, delay: 0.3 * linePoints.indexOf(point) + 0.15, ease: graphEase }}
+                                >
+                                    <tspan
+                                        fontSize={config.growthValueFontSize}
+                                        fontWeight="800"
+                                    >
+                                        {point.growthValue}
+                                    </tspan>
+                                </motion.text>
+                            </>
+                        ) : null}
+
+                        <motion.text
+                            x={point.x}
+                            y={point.y - config.amountY}
+                            textAnchor="middle"
+                            fontWeight="700"
+                            fill="#000000"
+                            initial={{ opacity: 0, y: 16 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ amount: 0.25, once: false }}
+                            transition={{ duration: 0.55, delay: 0.2 * linePoints.indexOf(point) + 0.15, ease: graphEase }}
+                        >
+                            <tspan
+                                fontSize={config.amountPrefixFontSize}
+                                fontWeight="600"
+                            >
+                                약&nbsp;
+                            </tspan>
+                            <tspan
+                                fontSize={config.amountValueFontSize}
+                                fontWeight="800"
+                            >
+                                {point.formattedAmount}
+                            </tspan>
+                            <tspan
+                                fontSize={config.amountValueFontSize}
+                                fontWeight="800"
+                            >
+                                억
+                            </tspan>
+                        </motion.text>
+
+                        <text
+                            x={point.x}
+                            y={config.reportChartHeight - (mode === "mobile" ? 14 : 60)}
+                            textAnchor="middle"
+                            fontSize={config.yearFontSize}
+                            fontWeight="900"
+                            fill="var(--adaptive-grey900)"
+                        >
+                            {point.name}
+                        </text>
+                    </g>
+                ))}
+
+                <motion.path
+                    d={linePath}
+                    fill="none"
+                    stroke="var(--adaptive-red500)"
+                    strokeWidth={mode === "mobile" ? 2 : 4}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    initial={{ pathLength: 0, opacity: 0.4 }}
+                    whileInView={{ pathLength: 1, opacity: 1 }}
+                    viewport={{ amount: 0.25, once: false }}
+                    transition={{ duration: 1.8, ease: graphEase }}
+                />
+
+                {linePoints.map((point, index) => (
+                    <motion.g
+                        key={`${mode}-${point.name}-dot`}
+                        initial={{ scale: 0, opacity: 0 }}
+                        whileInView={{ scale: 1, opacity: 1 }}
+                        viewport={{ amount: 0.25, once: false }}
+                        transition={{ duration: 0.45, delay: 0.24 * index + 0.25, ease: graphEase }}
+                        style={{ transformOrigin: `${point.x}px ${point.y}px` }}
+                    >
+                        <circle
+                            cx={point.x}
+                            cy={point.y}
+                            r={config.dotOuter}
+                            fill="var(--adaptive-redOpacity100)"
+                        />
+                        <circle
+                            cx={point.x}
+                            cy={point.y}
+                            r={config.dotInner}
+                            fill="var(--adaptive-red500)"
+                        />
+                    </motion.g>
+                ))}
+            </svg>
+        );
+    };
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ amount: 0.2, once: false }}
+            transition={{ duration: 0.7, ease: graphEase }}
+            className="mt-auto ml-auto flex w-full justify-end"
+        >
+            <div className="relative mt-[5.6rem] h-[46dvh] w-full px-[1.2rem] pb-[1.2rem] pt-[1.6rem] md:h-[80dvh] md:w-[80dvw] md:px-[2.4rem] md:pb-[2.4rem] md:pt-[3.2rem]">
+                <div className="h-full md:hidden">{renderChart("mobile")}</div>
+                <div className="hidden h-full md:block">{renderChart("desktop")}</div>
+
+                {false ? (
+                    <motion.div
+                        className="absolute right-[4%] top-[5%] rounded-[1.8rem] bg-[#48c3bc] px-[1.4rem] py-[1.2rem] text-center text-white shadow-[0_24px_40px_rgba(72,195,188,0.2)] md:right-[0.8rem] md:top-[-2.2rem] md:rounded-[2.6rem] md:px-[2.4rem] md:py-[2rem]"
+                        initial={{ opacity: 0, scale: 0.2 }}
+                        whileInView={{
+                            opacity: 1,
+                            scale: 1,
+                            y: [-10, 10, -10],
+                        }}
+                        viewport={{ amount: 0.25, once: false }}
+                        transition={{
+                            opacity: { duration: 0.35, delay: 0.5, ease: graphEase },
+                            scale: { duration: 0.45, delay: 0.5, ease: graphEase },
+                            y: { duration: 2.8, ease: hoverEase, repeat: Infinity, repeatType: "loop", repeatDelay: 0.1 },
+                        }}
+                    >
+                        <div className="flex items-center text-[1.8rem] font-black md:text-[2.8rem]">
+                            <span className="block mobile:hidden">
+                                <Text.Rolling
+                                    value={187}
+                                    rollingCount={5}
+                                    textSize={38}
+                                />
+                            </span>
+
+                            <span className="hidden mobile:block">
+                                <Text.Rolling
+                                    value={187}
+                                    rollingCount={5}
+                                    textSize={30}
+                                />
+                            </span>
+
+                            <p>억</p>
+                        </div>
+
+                        <div className="mt-[0.4rem] text-[1.6rem] font-black leading-[1.1] md:mt-[0.6rem] md:text-[2.4rem]">돌파!!</div>
+                        <div className="absolute bottom-[-1rem] left-1/2 h-0 w-0 -translate-x-1/2 border-l-[1rem] border-r-[1rem] border-t-[1.4rem] border-l-transparent border-r-transparent border-t-[#48c3bc] md:bottom-[-1.6rem] md:border-l-[1.6rem] md:border-r-[1.6rem] md:border-t-[2.2rem]" />
+                    </motion.div>
+                ) : null}
+            </div>
+        </motion.div>
+    );
+};
