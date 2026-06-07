@@ -435,3 +435,310 @@ const GraphVer3 = () => {
         </motion.div>
     );
 };
+
+// 건드리지마세요
+const GraphVerBackup = () => {
+    const graphEase = [0.22, 1, 0.36, 1] as const;
+    const hoverEase = [0.44, 0.05, 0.55, 0.95] as const;
+    const chartConfigs = {
+        desktop: {
+            reportChartWidth: 920,
+            reportChartHeight: 600,
+            chartLeftPadding: 86,
+            chartRightPadding: 48,
+            chartTopPadding: 90,
+            chartBottomPadding: 84,
+            barWidth: 90,
+            amountY: 18,
+            growthLabelY: 64,
+            growthValueFontSize: 20,
+            growthCaptionFontSize: 17,
+            amountPrefixFontSize: 14,
+            amountValueFontSize: 24,
+            yearFontSize: 22,
+            dotOuter: 12,
+            dotInner: 7,
+        },
+        mobile: {
+            reportChartWidth: 412,
+            reportChartHeight: 420,
+            chartLeftPadding: 28,
+            chartRightPadding: 20,
+            chartTopPadding: 76,
+            chartBottomPadding: 32,
+            barWidth: 80,
+            amountY: 22,
+            growthLabelY: 62,
+            growthValueFontSize: 19,
+            growthCaptionFontSize: 17,
+            amountPrefixFontSize: 18,
+            amountValueFontSize: 24,
+            yearFontSize: 24,
+            dotOuter: 17,
+            dotInner: 9,
+        },
+    } as const;
+
+    const renderChart = (mode: keyof typeof chartConfigs) => {
+        const config = chartConfigs[mode];
+        const innerWidth = config.reportChartWidth - config.chartLeftPadding - config.chartRightPadding;
+        const innerHeight = config.reportChartHeight - config.chartTopPadding - config.chartBottomPadding;
+        const maxAmount = 200;
+        const stepX = innerWidth / Math.max(graphBars.length - 1, 1);
+        const linePoints = graphBars.map((bar, index) => {
+            const x = config.chartLeftPadding + stepX * index;
+            const y = config.chartTopPadding + innerHeight - (bar.amount / maxAmount) * innerHeight;
+            let growthValue: string | undefined;
+
+            if (index > 0) {
+                const prevAmount = graphBars[index - 1].amount;
+                const growth = ((bar.amount - prevAmount) / prevAmount) * 100;
+                growthValue = `+${growth.toFixed(1)}%`;
+            }
+
+            return {
+                ...bar,
+                x,
+                y,
+                formattedAmount: bar.amount.toLocaleString("ko-KR"),
+                growthValue,
+            };
+        });
+        const linePath = linePoints.reduce((path, point, index) => {
+            if (index === 0) {
+                return `M ${point.x} ${point.y}`;
+            }
+
+            const previousPoint = linePoints[index - 1];
+            const rise = point.y - previousPoint.y;
+            const controlX1 = previousPoint.x + stepX * (mode === "mobile" ? 0.38 : 0.42);
+            const controlY1 = previousPoint.y + rise * 0.1;
+            const controlX2 = point.x - stepX * (mode === "mobile" ? 0.12 : 0.16);
+            const controlY2 = point.y - rise * (mode === "mobile" ? 0.7 : 0.78);
+
+            return `${path} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${point.x} ${point.y}`;
+        }, "");
+
+        return (
+            <svg
+                viewBox={`0 0 ${config.reportChartWidth} ${config.reportChartHeight}`}
+                className="h-full w-full"
+            >
+                {linePoints.map((point) => (
+                    <g key={`${mode}-${point.name}`}>
+                        {/* 
+                          To have an 8px rounded top on the bar,
+                          Use <rect> instead of <line> for the bar, with rx only on the top side.
+                          In SVG, rx/ry round all corners, but we can "clip" the bottom by overlaying a rect, or via a clipPath.
+                          For clarity and cross-browser reliability, use a clipPath that only rounds the top corners.
+                        */}
+                        <clipPath id={`bar-clip-${mode}-${point.name}`}>
+                            <path
+                                d={`
+                                    M ${point.x - config.barWidth / 2} ${point.y + 8}
+                                    a 8 8 0 0 1 8 -8
+                                    h ${config.barWidth - 16}
+                                    a 8 8 0 0 1 8 8
+                                    v ${config.reportChartHeight - config.chartBottomPadding - point.y - 8}
+                                    h -${config.barWidth}
+                                    Z
+                                `}
+                            />
+                        </clipPath>
+
+                        <motion.rect
+                            x={point.x - config.barWidth / 2}
+                            y={point.y}
+                            width={config.barWidth}
+                            height={config.reportChartHeight - config.chartBottomPadding - point.y}
+                            fill="var(--adaptive-grey900)"
+                            clipPath={`url(#bar-clip-${mode}-${point.name})`}
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: config.reportChartHeight - config.chartBottomPadding - point.y, opacity: 1 }}
+                            whileInView={{ height: config.reportChartHeight - config.chartBottomPadding - point.y, opacity: 1 }}
+                            viewport={{ amount: 0.25, once: false }}
+                            transition={{ duration: 0.8, delay: 0.16 * linePoints.indexOf(point), ease: graphEase }}
+                        />
+
+                        {point.growthValue ? (
+                            <>
+                                <motion.text
+                                    x={point.x}
+                                    y={point.y - config.growthLabelY - 12}
+                                    textAnchor="middle"
+                                    fontWeight="700"
+                                    fill="var(--adaptive-grey500)"
+                                    initial={{ opacity: 0, y: 16 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ amount: 0.25, once: false }}
+                                    transition={{ duration: 0.55, delay: 0.4 * linePoints.indexOf(point) + 0.15, ease: graphEase }}
+                                >
+                                    <tspan
+                                        fontSize={config.growthCaptionFontSize}
+                                        fontWeight="700"
+                                    >
+                                        전년대비
+                                    </tspan>
+                                </motion.text>
+
+                                <motion.text
+                                    x={point.x}
+                                    y={point.y - (config.growthLabelY - (mode === "mobile" ? 10 : 16))}
+                                    textAnchor="middle"
+                                    fontWeight="700"
+                                    fill="var(--adaptive-red500)"
+                                    initial={{ opacity: 0, y: 16 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ amount: 0.25, once: false }}
+                                    transition={{ duration: 0.55, delay: 0.3 * linePoints.indexOf(point) + 0.15, ease: graphEase }}
+                                >
+                                    <tspan
+                                        fontSize={config.growthValueFontSize}
+                                        fontWeight="800"
+                                    >
+                                        {point.growthValue}
+                                    </tspan>
+                                </motion.text>
+                            </>
+                        ) : null}
+
+                        <motion.text
+                            x={point.x}
+                            y={point.y - config.amountY}
+                            textAnchor="middle"
+                            fontWeight="700"
+                            fill="#000000"
+                            initial={{ opacity: 0, y: 16 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ amount: 0.25, once: false }}
+                            transition={{ duration: 0.55, delay: 0.2 * linePoints.indexOf(point) + 0.15, ease: graphEase }}
+                        >
+                            <tspan
+                                fontSize={config.amountPrefixFontSize}
+                                fontWeight="600"
+                            >
+                                약&nbsp;
+                            </tspan>
+                            <tspan
+                                fontSize={config.amountValueFontSize}
+                                fontWeight="800"
+                            >
+                                {point.formattedAmount}
+                            </tspan>
+                            <tspan
+                                fontSize={config.amountValueFontSize}
+                                fontWeight="800"
+                            >
+                                억
+                            </tspan>
+                        </motion.text>
+
+                        <text
+                            x={point.x}
+                            y={config.reportChartHeight - (mode === "mobile" ? 14 : 60)}
+                            textAnchor="middle"
+                            fontSize={config.yearFontSize}
+                            fontWeight="900"
+                            fill="var(--adaptive-grey900)"
+                        >
+                            {point.name}
+                        </text>
+                    </g>
+                ))}
+
+                <motion.path
+                    d={linePath}
+                    fill="none"
+                    stroke="var(--adaptive-red500)"
+                    strokeWidth={mode === "mobile" ? 2 : 4}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    initial={{ pathLength: 0, opacity: 0.4 }}
+                    whileInView={{ pathLength: 1, opacity: 1 }}
+                    viewport={{ amount: 0.25, once: false }}
+                    transition={{ duration: 1.8, ease: graphEase }}
+                />
+
+                {linePoints.map((point, index) => (
+                    <motion.g
+                        key={`${mode}-${point.name}-dot`}
+                        initial={{ scale: 0, opacity: 0 }}
+                        whileInView={{ scale: 1, opacity: 1 }}
+                        viewport={{ amount: 0.25, once: false }}
+                        transition={{ duration: 0.45, delay: 0.24 * index + 0.25, ease: graphEase }}
+                        style={{ transformOrigin: `${point.x}px ${point.y}px` }}
+                    >
+                        <circle
+                            cx={point.x}
+                            cy={point.y}
+                            r={config.dotOuter}
+                            fill="var(--adaptive-redOpacity100)"
+                        />
+                        <circle
+                            cx={point.x}
+                            cy={point.y}
+                            r={config.dotInner}
+                            fill="var(--adaptive-red500)"
+                        />
+                    </motion.g>
+                ))}
+            </svg>
+        );
+    };
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ amount: 0.2, once: false }}
+            transition={{ duration: 0.7, ease: graphEase }}
+            className="mt-auto ml-auto flex w-full justify-end"
+        >
+            <div className="relative mt-[5.6rem] h-[46dvh] w-full px-[1.2rem] pb-[1.2rem] pt-[1.6rem] md:h-[80dvh] md:w-[80dvw] md:px-[2.4rem] md:pb-[2.4rem] md:pt-[3.2rem]">
+                <div className="h-full md:hidden">{renderChart("mobile")}</div>
+                <div className="hidden h-full md:block">{renderChart("desktop")}</div>
+
+                {false ? (
+                    <motion.div
+                        className="absolute right-[4%] top-[5%] rounded-[1.8rem] bg-[#48c3bc] px-[1.4rem] py-[1.2rem] text-center text-white shadow-[0_24px_40px_rgba(72,195,188,0.2)] md:right-[0.8rem] md:top-[-2.2rem] md:rounded-[2.6rem] md:px-[2.4rem] md:py-[2rem]"
+                        initial={{ opacity: 0, scale: 0.2 }}
+                        whileInView={{
+                            opacity: 1,
+                            scale: 1,
+                            y: [-10, 10, -10],
+                        }}
+                        viewport={{ amount: 0.25, once: false }}
+                        transition={{
+                            opacity: { duration: 0.35, delay: 0.5, ease: graphEase },
+                            scale: { duration: 0.45, delay: 0.5, ease: graphEase },
+                            y: { duration: 2.8, ease: hoverEase, repeat: Infinity, repeatType: "loop", repeatDelay: 0.1 },
+                        }}
+                    >
+                        <div className="flex items-center text-[1.8rem] font-black md:text-[2.8rem]">
+                            <span className="block mobile:hidden">
+                                <Text.Rolling
+                                    value={187}
+                                    rollingCount={5}
+                                    textSize={38}
+                                />
+                            </span>
+
+                            <span className="hidden mobile:block">
+                                <Text.Rolling
+                                    value={187}
+                                    rollingCount={5}
+                                    textSize={30}
+                                />
+                            </span>
+
+                            <p>억</p>
+                        </div>
+
+                        <div className="mt-[0.4rem] text-[1.6rem] font-black leading-[1.1] md:mt-[0.6rem] md:text-[2.4rem]">돌파!!</div>
+                        <div className="absolute bottom-[-1rem] left-1/2 h-0 w-0 -translate-x-1/2 border-l-[1rem] border-r-[1rem] border-t-[1.4rem] border-l-transparent border-r-transparent border-t-[#48c3bc] md:bottom-[-1.6rem] md:border-l-[1.6rem] md:border-r-[1.6rem] md:border-t-[2.2rem]" />
+                    </motion.div>
+                ) : null}
+            </div>
+        </motion.div>
+    );
+};
