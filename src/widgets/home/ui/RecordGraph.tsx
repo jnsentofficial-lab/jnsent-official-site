@@ -275,7 +275,7 @@ const GraphVer3 = () => {
                 cardHeight,
                 cardX,
                 cardY,
-                pointerX: index === 0 ? point.x - 10 : point.x,
+                pointerX: cardX + cardWidth / 2,
             };
         });
 
