@@ -137,57 +137,71 @@ const GraphVer3 = () => {
         desktop: {
             reportChartWidth: 920,
             reportChartHeight: 600,
-            chartLeftPadding: 86,
-            chartRightPadding: 48,
-            chartTopPadding: 90,
-            chartBottomPadding: 84,
-            barWidth: 90,
-            amountY: 18,
-            growthLabelY: 64,
+            panelX: 58,
+            panelY: 108,
+            panelWidth: 790,
+            panelHeight: 414,
+            chartLeftPadding: 60,
+            chartRightPadding: 68,
+            chartTopPadding: 92,
+            chartBottomPadding: 74,
+            dotOuter: 14,
+            dotInner: 7,
+            lineWidth: 4,
+            startOffset: 96,
+            firstCardWidth: 126,
+            detailCardWidth: 150,
+            cardHeight: 102,
+            cardRadius: 18,
+            amountValueFontSize: 24,
+            amountPrefixFontSize: 15,
             growthValueFontSize: 20,
             growthCaptionFontSize: 17,
-            amountPrefixFontSize: 14,
-            amountValueFontSize: 24,
-            yearFontSize: 22,
-            dotOuter: 12,
-            dotInner: 7,
+            guideBottomOffset: 34,
+            plotOffsetY: 10,
         },
         mobile: {
             reportChartWidth: 412,
             reportChartHeight: 420,
-            chartLeftPadding: 28,
-            chartRightPadding: 20,
-            chartTopPadding: 76,
-            chartBottomPadding: 32,
-            barWidth: 80,
-            amountY: 22,
-            growthLabelY: 62,
-            growthValueFontSize: 19,
-            growthCaptionFontSize: 17,
-            amountPrefixFontSize: 18,
-            amountValueFontSize: 24,
-            yearFontSize: 24,
-            dotOuter: 17,
-            dotInner: 9,
+            panelX: 22,
+            panelY: 112,
+            panelWidth: 348,
+            panelHeight: 246,
+            chartLeftPadding: 18,
+            chartRightPadding: 22,
+            chartTopPadding: 86,
+            chartBottomPadding: 40,
+            dotOuter: 13,
+            dotInner: 6,
+            lineWidth: 3,
+            startOffset: 44,
+            firstCardWidth: 92,
+            detailCardWidth: 108,
+            cardHeight: 76,
+            cardRadius: 14,
+            amountValueFontSize: 18,
+            amountPrefixFontSize: 11,
+            growthValueFontSize: 14,
+            growthCaptionFontSize: 12,
+            guideBottomOffset: 20,
+            plotOffsetY: 0,
         },
     } as const;
 
     const renderChart = (mode: keyof typeof chartConfigs) => {
         const config = chartConfigs[mode];
-        const innerWidth = config.reportChartWidth - config.chartLeftPadding - config.chartRightPadding;
-        const innerHeight = config.reportChartHeight - config.chartTopPadding - config.chartBottomPadding;
+        const innerWidth = config.panelWidth - config.chartLeftPadding - config.chartRightPadding;
+        const innerHeight = config.panelHeight - config.chartTopPadding - config.chartBottomPadding;
         const maxAmount = 200;
         const stepX = innerWidth / Math.max(graphBars.length - 1, 1);
+        const chartBottom = config.panelY + config.panelHeight - config.chartBottomPadding;
+        const chartTop = config.panelY + config.chartTopPadding;
         const linePoints = graphBars.map((bar, index) => {
-            const x = config.chartLeftPadding + stepX * index;
-            const y = config.chartTopPadding + innerHeight - (bar.amount / maxAmount) * innerHeight;
-            let growthValue: string | undefined;
-
-            if (index > 0) {
-                const prevAmount = graphBars[index - 1].amount;
-                const growth = ((bar.amount - prevAmount) / prevAmount) * 100;
-                growthValue = `+${growth.toFixed(1)}%`;
-            }
+            const x = config.panelX + config.chartLeftPadding + stepX * index;
+            const normalizedY = chartBottom - (bar.amount / maxAmount) * innerHeight + config.plotOffsetY;
+            const y = Math.max(chartTop, normalizedY);
+            const prevAmount = graphBars[index - 1]?.amount;
+            const growthValue = prevAmount ? `+${(((bar.amount - prevAmount) / prevAmount) * 100).toFixed(1)}%` : undefined;
 
             return {
                 ...bar,
@@ -197,153 +211,105 @@ const GraphVer3 = () => {
                 growthValue,
             };
         });
+        const lineStartX = linePoints[0].x - config.startOffset;
+        const lineStartY = linePoints[0].y + (mode === "mobile" ? 10 : 14);
         const linePath = linePoints.reduce((path, point, index) => {
             if (index === 0) {
-                return `M ${point.x} ${point.y}`;
+                const entryControlX = lineStartX + config.startOffset * 0.48;
+                const entryControlY = lineStartY - (mode === "mobile" ? 10 : 14);
+
+                return `M ${lineStartX} ${lineStartY} C ${entryControlX} ${entryControlY}, ${point.x - config.startOffset * 0.18} ${point.y}, ${point.x} ${point.y}`;
             }
 
             const previousPoint = linePoints[index - 1];
-            const rise = point.y - previousPoint.y;
-            const controlX1 = previousPoint.x + stepX * (mode === "mobile" ? 0.38 : 0.42);
-            const controlY1 = previousPoint.y + rise * 0.1;
-            const controlX2 = point.x - stepX * (mode === "mobile" ? 0.12 : 0.16);
-            const controlY2 = point.y - rise * (mode === "mobile" ? 0.7 : 0.78);
+            const deltaY = point.y - previousPoint.y;
+            const controlX1 = previousPoint.x + stepX * (mode === "mobile" ? 0.34 : 0.36);
+            const controlY1 = previousPoint.y + deltaY * 0.06;
+            const controlX2 = point.x - stepX * (mode === "mobile" ? 0.16 : 0.18);
+            const controlY2 = point.y - deltaY * (mode === "mobile" ? 0.58 : 0.68);
 
             return `${path} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${point.x} ${point.y}`;
         }, "");
+        const areaPath = `${linePath} L ${linePoints[linePoints.length - 1].x} ${chartBottom} L ${lineStartX} ${chartBottom} Z`;
+        const cardData = linePoints.map((point, index) => {
+            const cardWidth = index === 0 ? config.firstCardWidth : config.detailCardWidth;
+            const cardHeight = config.cardHeight;
+            const baseCardY = point.y - cardHeight - (mode === "mobile" ? 20 : 30);
+            const cardY = index === 2 ? Math.max(12, baseCardY - (mode === "mobile" ? 12 : 22)) : baseCardY;
+            const cardX =
+                index === 0
+                    ? point.x - cardWidth * 0.86
+                    : index === 2
+                      ? point.x - cardWidth * 0.52
+                      : point.x - cardWidth / 2;
+
+            return {
+                point,
+                cardWidth,
+                cardHeight,
+                cardX,
+                cardY,
+                pointerX: index === 0 ? point.x - 10 : point.x,
+            };
+        });
 
         return (
             <svg
                 viewBox={`0 0 ${config.reportChartWidth} ${config.reportChartHeight}`}
                 className="h-full w-full"
             >
-                {linePoints.map((point) => (
-                    <g key={`${mode}-${point.name}`}>
-                        {/* 
-                          To have an 8px rounded top on the bar,
-                          Use <rect> instead of <line> for the bar, with rx only on the top side.
-                          In SVG, rx/ry round all corners, but we can "clip" the bottom by overlaying a rect, or via a clipPath.
-                          For clarity and cross-browser reliability, use a clipPath that only rounds the top corners.
-                        */}
-                        <clipPath id={`bar-clip-${mode}-${point.name}`}>
-                            <path
-                                d={`
-                                    M ${point.x - config.barWidth / 2} ${point.y + 8}
-                                    a 8 8 0 0 1 8 -8
-                                    h ${config.barWidth - 16}
-                                    a 8 8 0 0 1 8 8
-                                    v ${config.reportChartHeight - config.chartBottomPadding - point.y - 8}
-                                    h -${config.barWidth}
-                                    Z
-                                `}
-                            />
-                        </clipPath>
+                <defs>
+                    <linearGradient id={`graph-area-${mode}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#ff6b75" stopOpacity="0.1" />
+                        <stop offset="50%" stopColor="#ff6b75" stopOpacity="0.28" />
+                        <stop offset="100%" stopColor="#ff6b75" stopOpacity="0.06" />
+                    </linearGradient>
+                    <linearGradient id={`graph-area-fade-${mode}`} x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
+                        <stop offset="100%" stopColor="#ffffff" stopOpacity="1" />
+                    </linearGradient>
+                    <filter id={`card-shadow-${mode}`} x="-40%" y="-40%" width="180%" height="220%">
+                        <feDropShadow dx="0" dy={mode === "mobile" ? "8" : "14"} stdDeviation={mode === "mobile" ? "10" : "14"} floodColor="#111827" floodOpacity="0.12" />
+                    </filter>
+                    <filter id={`glow-${mode}`} x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation={mode === "mobile" ? "16" : "22"} />
+                    </filter>
+                </defs>
 
-                        <motion.rect
-                            x={point.x - config.barWidth / 2}
-                            y={point.y}
-                            width={config.barWidth}
-                            height={config.reportChartHeight - config.chartBottomPadding - point.y}
-                            fill="var(--adaptive-grey900)"
-                            clipPath={`url(#bar-clip-${mode}-${point.name})`}
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: config.reportChartHeight - config.chartBottomPadding - point.y, opacity: 1 }}
-                            whileInView={{ height: config.reportChartHeight - config.chartBottomPadding - point.y, opacity: 1 }}
-                            viewport={{ amount: 0.25, once: false }}
-                            transition={{ duration: 0.8, delay: 0.16 * linePoints.indexOf(point), ease: graphEase }}
-                        />
+                <rect
+                    x={config.panelX}
+                    y={config.panelY}
+                    width={config.panelWidth}
+                    height={config.panelHeight}
+                    rx={mode === "mobile" ? 16 : 20}
+                    fill="transparent"
+                    stroke="rgba(15,23,42,0.08)"
+                    strokeWidth="1.5"
+                />
 
-                        {point.growthValue ? (
-                            <>
-                                <motion.text
-                                    x={point.x}
-                                    y={point.y - config.growthLabelY - 12}
-                                    textAnchor="middle"
-                                    fontWeight="700"
-                                    fill="var(--adaptive-grey500)"
-                                    initial={{ opacity: 0, y: 16 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ amount: 0.25, once: false }}
-                                    transition={{ duration: 0.55, delay: 0.4 * linePoints.indexOf(point) + 0.15, ease: graphEase }}
-                                >
-                                    <tspan
-                                        fontSize={config.growthCaptionFontSize}
-                                        fontWeight="700"
-                                    >
-                                        전년대비
-                                    </tspan>
-                                </motion.text>
+                <motion.path
+                    d={areaPath}
+                    fill={`url(#graph-area-${mode})`}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ amount: 0.25, once: false }}
+                    transition={{ duration: 0.8, delay: 0.2, ease: graphEase }}
+                />
 
-                                <motion.text
-                                    x={point.x}
-                                    y={point.y - (config.growthLabelY - (mode === "mobile" ? 10 : 16))}
-                                    textAnchor="middle"
-                                    fontWeight="700"
-                                    fill="var(--adaptive-red500)"
-                                    initial={{ opacity: 0, y: 16 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ amount: 0.25, once: false }}
-                                    transition={{ duration: 0.55, delay: 0.3 * linePoints.indexOf(point) + 0.15, ease: graphEase }}
-                                >
-                                    <tspan
-                                        fontSize={config.growthValueFontSize}
-                                        fontWeight="800"
-                                    >
-                                        {point.growthValue}
-                                    </tspan>
-                                </motion.text>
-                            </>
-                        ) : null}
-
-                        <motion.text
-                            x={point.x}
-                            y={point.y - config.amountY}
-                            textAnchor="middle"
-                            fontWeight="700"
-                            fill="#000000"
-                            initial={{ opacity: 0, y: 16 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ amount: 0.25, once: false }}
-                            transition={{ duration: 0.55, delay: 0.2 * linePoints.indexOf(point) + 0.15, ease: graphEase }}
-                        >
-                            <tspan
-                                fontSize={config.amountPrefixFontSize}
-                                fontWeight="600"
-                            >
-                                약&nbsp;
-                            </tspan>
-                            <tspan
-                                fontSize={config.amountValueFontSize}
-                                fontWeight="800"
-                            >
-                                {point.formattedAmount}
-                            </tspan>
-                            <tspan
-                                fontSize={config.amountValueFontSize}
-                                fontWeight="800"
-                            >
-                                억
-                            </tspan>
-                        </motion.text>
-
-                        <text
-                            x={point.x}
-                            y={config.reportChartHeight - (mode === "mobile" ? 14 : 60)}
-                            textAnchor="middle"
-                            fontSize={config.yearFontSize}
-                            fontWeight="900"
-                            fill="var(--adaptive-grey900)"
-                        >
-                            {point.name}
-                        </text>
-                    </g>
-                ))}
+                <motion.path
+                    d={areaPath}
+                    fill={`url(#graph-area-fade-${mode})`}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 0.9 }}
+                    viewport={{ amount: 0.25, once: false }}
+                    transition={{ duration: 1, delay: 0.25, ease: graphEase }}
+                />
 
                 <motion.path
                     d={linePath}
                     fill="none"
                     stroke="var(--adaptive-red500)"
-                    strokeWidth={mode === "mobile" ? 2 : 4}
+                    strokeWidth={config.lineWidth}
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     initial={{ pathLength: 0, opacity: 0.4 }}
@@ -351,6 +317,25 @@ const GraphVer3 = () => {
                     viewport={{ amount: 0.25, once: false }}
                     transition={{ duration: 1.8, ease: graphEase }}
                 />
+
+                {linePoints.map((point, index) =>
+                    index === 0 ? null : (
+                        <motion.line
+                            key={`${mode}-${point.name}-guide`}
+                            x1={point.x}
+                            y1={point.y + config.dotOuter}
+                            x2={point.x}
+                            y2={config.panelY + config.panelHeight - config.guideBottomOffset}
+                            stroke="rgba(100,116,139,0.36)"
+                            strokeWidth="1.5"
+                            strokeDasharray={mode === "mobile" ? "4 4" : "5 5"}
+                            initial={{ opacity: 0, pathLength: 0 }}
+                            whileInView={{ opacity: 1, pathLength: 1 }}
+                            viewport={{ amount: 0.25, once: false }}
+                            transition={{ duration: 0.7, delay: 0.22 * index + 0.4, ease: graphEase }}
+                        />
+                    ),
+                )}
 
                 {linePoints.map((point, index) => (
                     <motion.g
@@ -364,8 +349,18 @@ const GraphVer3 = () => {
                         <circle
                             cx={point.x}
                             cy={point.y}
+                            r={config.dotOuter + (mode === "mobile" ? 4 : 5)}
+                            fill="var(--adaptive-red500)"
+                            opacity="0.14"
+                            filter={`url(#glow-${mode})`}
+                        />
+                        <circle
+                            cx={point.x}
+                            cy={point.y}
                             r={config.dotOuter}
-                            fill="var(--adaptive-redOpacity100)"
+                            fill="#ffffff"
+                            stroke="rgba(255,107,117,0.32)"
+                            strokeWidth={mode === "mobile" ? 4 : 5}
                         />
                         <circle
                             cx={point.x}
@@ -373,6 +368,107 @@ const GraphVer3 = () => {
                             r={config.dotInner}
                             fill="var(--adaptive-red500)"
                         />
+                    </motion.g>
+                ))}
+
+                {cardData.map(({ point, cardWidth, cardHeight, cardX, cardY, pointerX }, index) => (
+                    <motion.g
+                        key={`${mode}-${point.name}-card`}
+                        initial={{ opacity: 0, y: 18 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ amount: 0.25, once: false }}
+                        transition={{ duration: 0.55, delay: 0.22 * index + 0.2, ease: graphEase }}
+                    >
+                        <rect
+                            x={cardX}
+                            y={cardY}
+                            width={cardWidth}
+                            height={cardHeight}
+                            rx={config.cardRadius}
+                            fill="rgba(255,255,255,0.96)"
+                            filter={`url(#card-shadow-${mode})`}
+                        />
+                        <path
+                            d={`M ${pointerX - 10} ${cardY + cardHeight - 2} L ${pointerX} ${cardY + cardHeight + 10} L ${pointerX + 10} ${cardY + cardHeight - 2} Z`}
+                            fill="rgba(255,255,255,0.96)"
+                        />
+
+                        {index === 0 ? (
+                            <text
+                                x={cardX + cardWidth / 2}
+                                y={cardY + cardHeight / 2 + (mode === "mobile" ? 4 : 6)}
+                                textAnchor="middle"
+                                fill="#111111"
+                            >
+                                <tspan
+                                    fontSize={config.amountPrefixFontSize}
+                                    fontWeight="700"
+                                >
+                                    약&nbsp;
+                                </tspan>
+                                <tspan
+                                    fontSize={config.amountValueFontSize}
+                                    fontWeight="900"
+                                    fill="var(--adaptive-red500)"
+                                >
+                                    {point.formattedAmount}
+                                </tspan>
+                                <tspan
+                                    fontSize={config.amountValueFontSize}
+                                    fontWeight="900"
+                                >
+                                    억
+                                </tspan>
+                            </text>
+                        ) : (
+                            <>
+                                <text
+                                    x={cardX + cardWidth / 2}
+                                    y={cardY + (mode === "mobile" ? 21 : 28)}
+                                    textAnchor="middle"
+                                    fontSize={config.growthCaptionFontSize}
+                                    fontWeight="800"
+                                    fill="var(--adaptive-grey500)"
+                                >
+                                    전년대비
+                                </text>
+                                <text
+                                    x={cardX + cardWidth / 2}
+                                    y={cardY + (mode === "mobile" ? 43 : 58)}
+                                    textAnchor="middle"
+                                    fontSize={config.growthValueFontSize}
+                                    fontWeight="900"
+                                    fill="var(--adaptive-red500)"
+                                >
+                                    {point.growthValue}
+                                </text>
+                                <text
+                                    x={cardX + cardWidth / 2}
+                                    y={cardY + (mode === "mobile" ? 67 : 86)}
+                                    textAnchor="middle"
+                                    fill="#111111"
+                                >
+                                    <tspan
+                                        fontSize={config.amountPrefixFontSize}
+                                        fontWeight="700"
+                                    >
+                                        약&nbsp;
+                                    </tspan>
+                                    <tspan
+                                        fontSize={config.amountValueFontSize}
+                                        fontWeight="900"
+                                    >
+                                        {point.formattedAmount}
+                                    </tspan>
+                                    <tspan
+                                        fontSize={config.amountValueFontSize}
+                                        fontWeight="900"
+                                    >
+                                        억
+                                    </tspan>
+                                </text>
+                            </>
+                        )}
                     </motion.g>
                 ))}
             </svg>
