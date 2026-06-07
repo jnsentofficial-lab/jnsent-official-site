@@ -197,9 +197,9 @@ const GraphVer3 = () => {
             startOffset: 42,
             endOffset: 20,
             firstCardWidth: 88,
-            firstCardHeight: 48,
+            firstCardHeight: 58,
             detailCardWidth: 104,
-            cardHeight: 72,
+            cardHeight: 98,
             cardRadius: 14,
             amountValueFontSize: 17,
             amountPrefixFontSize: 11,
@@ -208,7 +208,7 @@ const GraphVer3 = () => {
             guideBottomOffset: 18,
             plotOffsetY: 0,
             entryLift: 8,
-            lineLift: 8,
+            lineLift: 2,
             exitLift: 4,
             cardOffsetY: 18,
             cardLastExtraOffsetY: 8,
@@ -533,7 +533,7 @@ const GraphVer3 = () => {
                         {index === 0 ? (
                             <text
                                 x={cardX + cardWidth / 2}
-                                y={cardY + cardHeight / 2 + (mode === "mobile" ? 9 : 14)}
+                                y={cardY + cardHeight / 2 + (mode === "mobile" ? 10 : 14)}
                                 textAnchor="middle"
                                 fill="#111111"
                             >
@@ -561,7 +561,7 @@ const GraphVer3 = () => {
                             <>
                                 <text
                                     x={cardX + cardWidth / 2}
-                                    y={cardY + (mode === "mobile" ? 21 : 38)}
+                                    y={cardY + (mode === "mobile" ? 28 : 38)}
                                     textAnchor="middle"
                                     fontSize={config.growthCaptionFontSize}
                                     fontWeight="800"
@@ -571,7 +571,7 @@ const GraphVer3 = () => {
                                 </text>
                                 <text
                                     x={cardX + cardWidth / 2}
-                                    y={cardY + (mode === "mobile" ? 43 : 68)}
+                                    y={cardY + (mode === "mobile" ? 58 : 68)}
                                     textAnchor="middle"
                                     fontSize={config.growthValueFontSize}
                                     fontWeight="900"
@@ -581,7 +581,7 @@ const GraphVer3 = () => {
                                 </text>
                                 <text
                                     x={cardX + cardWidth / 2}
-                                    y={cardY + (mode === "mobile" ? 67 : 100)}
+                                    y={cardY + (mode === "mobile" ? 90 : 100)}
                                     textAnchor="middle"
                                     fill="#111111"
                                 >
