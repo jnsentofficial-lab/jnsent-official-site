@@ -533,7 +533,7 @@ const GraphVer3 = () => {
                         {index === 0 ? (
                             <text
                                 x={cardX + cardWidth / 2}
-                                y={cardY + cardHeight / 2 + (mode === "mobile" ? 7 : 10)}
+                                y={cardY + cardHeight / 2 + (mode === "mobile" ? 9 : 14)}
                                 textAnchor="middle"
                                 fill="#111111"
                             >
