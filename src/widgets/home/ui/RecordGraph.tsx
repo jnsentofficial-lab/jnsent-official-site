@@ -135,69 +135,88 @@ const GraphVer3 = () => {
     const hoverEase = [0.44, 0.05, 0.55, 0.95] as const;
     const chartConfigs = {
         desktop: {
-            reportChartWidth: 920,
-            reportChartHeight: 600,
-            panelX: 58,
-            panelY: 108,
-            panelWidth: 790,
-            panelHeight: 414,
-            chartLeftPadding: 60,
-            chartRightPadding: 68,
-            chartTopPadding: 92,
-            chartBottomPadding: 74,
+            reportChartWidth: 1260,
+            reportChartHeight: 900,
+            panelX: 0,
+            panelY: 116,
+            panelWidth: 1260,
+            panelHeight: 700,
+            chartLeftPadding: 78,
+            chartRightPadding: 2,
+            chartTopPadding: 128,
+            chartBottomPadding: 92,
+            pointInsetStart: 68,
+            pointInsetEnd: 74,
+            pointRatios: [0.08, 0.52, 0.9] as const,
             dotOuter: 14,
             dotInner: 7,
-            lineWidth: 4,
-            startOffset: 96,
-            firstCardWidth: 126,
-            detailCardWidth: 150,
-            cardHeight: 102,
-            cardRadius: 18,
-            amountValueFontSize: 24,
-            amountPrefixFontSize: 15,
-            growthValueFontSize: 20,
-            growthCaptionFontSize: 17,
-            guideBottomOffset: 34,
-            plotOffsetY: 10,
+            lineWidth: 3.2,
+            startOffset: 112,
+            firstCardWidth: 146,
+            detailCardWidth: 184,
+            cardHeight: 120,
+            cardRadius: 22,
+            amountValueFontSize: 28,
+            amountPrefixFontSize: 16,
+            growthValueFontSize: 22,
+            growthCaptionFontSize: 18,
+            guideBottomOffset: 40,
+            plotOffsetY: 0,
+            entryLift: 12,
+            cardOffsetY: 42,
+            cardLastExtraOffsetY: 26,
+            firstCardOffsetXFactor: 0.8,
+            lastCardOffsetXFactor: 0.72,
         },
         mobile: {
-            reportChartWidth: 412,
-            reportChartHeight: 420,
-            panelX: 22,
-            panelY: 112,
-            panelWidth: 348,
-            panelHeight: 246,
-            chartLeftPadding: 18,
-            chartRightPadding: 22,
-            chartTopPadding: 86,
-            chartBottomPadding: 40,
-            dotOuter: 13,
+            reportChartWidth: 390,
+            reportChartHeight: 540,
+            panelX: 0,
+            panelY: 120,
+            panelWidth: 390,
+            panelHeight: 332,
+            chartLeftPadding: 14,
+            chartRightPadding: 4,
+            chartTopPadding: 98,
+            chartBottomPadding: 36,
+            pointInsetStart: 22,
+            pointInsetEnd: 26,
+            pointRatios: [0.08, 0.52, 0.9] as const,
+            dotOuter: 12,
             dotInner: 6,
-            lineWidth: 3,
-            startOffset: 44,
-            firstCardWidth: 92,
-            detailCardWidth: 108,
-            cardHeight: 76,
+            lineWidth: 2.35,
+            startOffset: 34,
+            firstCardWidth: 88,
+            detailCardWidth: 104,
+            cardHeight: 72,
             cardRadius: 14,
-            amountValueFontSize: 18,
+            amountValueFontSize: 17,
             amountPrefixFontSize: 11,
             growthValueFontSize: 14,
             growthCaptionFontSize: 12,
-            guideBottomOffset: 20,
+            guideBottomOffset: 18,
             plotOffsetY: 0,
+            entryLift: 8,
+            cardOffsetY: 18,
+            cardLastExtraOffsetY: 8,
+            firstCardOffsetXFactor: 0.78,
+            lastCardOffsetXFactor: 0.72,
         },
     } as const;
 
     const renderChart = (mode: keyof typeof chartConfigs) => {
         const config = chartConfigs[mode];
-        const innerWidth = config.panelWidth - config.chartLeftPadding - config.chartRightPadding;
+        const pointStartX = config.panelX + config.pointInsetStart;
+        const pointEndX = config.panelX + config.panelWidth - config.pointInsetEnd;
+        const innerWidth = pointEndX - pointStartX;
         const innerHeight = config.panelHeight - config.chartTopPadding - config.chartBottomPadding;
         const maxAmount = 200;
         const stepX = innerWidth / Math.max(graphBars.length - 1, 1);
         const chartBottom = config.panelY + config.panelHeight - config.chartBottomPadding;
         const chartTop = config.panelY + config.chartTopPadding;
         const linePoints = graphBars.map((bar, index) => {
-            const x = config.panelX + config.chartLeftPadding + stepX * index;
+            const pointRatio = config.pointRatios[index] ?? index / Math.max(graphBars.length - 1, 1);
+            const x = pointStartX + innerWidth * pointRatio;
             const normalizedY = chartBottom - (bar.amount / maxAmount) * innerHeight + config.plotOffsetY;
             const y = Math.max(chartTop, normalizedY);
             const prevAmount = graphBars[index - 1]?.amount;
@@ -212,21 +231,22 @@ const GraphVer3 = () => {
             };
         });
         const lineStartX = linePoints[0].x - config.startOffset;
-        const lineStartY = linePoints[0].y + (mode === "mobile" ? 10 : 14);
+        const lineStartY = linePoints[0].y + config.entryLift;
         const linePath = linePoints.reduce((path, point, index) => {
             if (index === 0) {
                 const entryControlX = lineStartX + config.startOffset * 0.48;
-                const entryControlY = lineStartY - (mode === "mobile" ? 10 : 14);
+                const entryControlY = lineStartY - config.entryLift;
 
                 return `M ${lineStartX} ${lineStartY} C ${entryControlX} ${entryControlY}, ${point.x - config.startOffset * 0.18} ${point.y}, ${point.x} ${point.y}`;
             }
 
             const previousPoint = linePoints[index - 1];
+            const segmentWidth = point.x - previousPoint.x;
             const deltaY = point.y - previousPoint.y;
-            const controlX1 = previousPoint.x + stepX * (mode === "mobile" ? 0.34 : 0.36);
-            const controlY1 = previousPoint.y + deltaY * 0.06;
-            const controlX2 = point.x - stepX * (mode === "mobile" ? 0.16 : 0.18);
-            const controlY2 = point.y - deltaY * (mode === "mobile" ? 0.58 : 0.68);
+            const controlX1 = previousPoint.x + segmentWidth * (mode === "mobile" ? 0.42 : 0.44);
+            const controlY1 = previousPoint.y + deltaY * 0.22;
+            const controlX2 = point.x - segmentWidth * (mode === "mobile" ? 0.34 : 0.32);
+            const controlY2 = point.y - deltaY * (mode === "mobile" ? 0.22 : 0.2);
 
             return `${path} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${point.x} ${point.y}`;
         }, "");
@@ -234,14 +254,9 @@ const GraphVer3 = () => {
         const cardData = linePoints.map((point, index) => {
             const cardWidth = index === 0 ? config.firstCardWidth : config.detailCardWidth;
             const cardHeight = config.cardHeight;
-            const baseCardY = point.y - cardHeight - (mode === "mobile" ? 20 : 30);
-            const cardY = index === 2 ? Math.max(12, baseCardY - (mode === "mobile" ? 12 : 22)) : baseCardY;
-            const cardX =
-                index === 0
-                    ? point.x - cardWidth * 0.86
-                    : index === 2
-                      ? point.x - cardWidth * 0.52
-                      : point.x - cardWidth / 2;
+            const baseCardY = point.y - cardHeight - config.cardOffsetY;
+            const cardY = index === 2 ? Math.max(12, baseCardY - config.cardLastExtraOffsetY) : baseCardY;
+            const cardX = index === 0 ? point.x - cardWidth * config.firstCardOffsetXFactor : index === 2 ? point.x - cardWidth * config.lastCardOffsetXFactor : point.x - cardWidth / 2;
 
             return {
                 point,
@@ -256,44 +271,144 @@ const GraphVer3 = () => {
         return (
             <svg
                 viewBox={`0 0 ${config.reportChartWidth} ${config.reportChartHeight}`}
-                className="h-full w-full"
+                className="h-full w-full mx-auto"
+                // className="h-full w-[05] pc:ml-[21.2rem] mx-auto"
+                // className="h-full w-full"
             >
                 <defs>
-                    <linearGradient id={`graph-area-${mode}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#ff6b75" stopOpacity="0.1" />
-                        <stop offset="50%" stopColor="#ff6b75" stopOpacity="0.28" />
-                        <stop offset="100%" stopColor="#ff6b75" stopOpacity="0.06" />
+                    <linearGradient
+                        id={`graph-line-${mode}`}
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                    >
+                        <stop
+                            offset="0%"
+                            stopColor="#ff5d72"
+                            stopOpacity="0.78"
+                        />
+                        <stop
+                            offset="55%"
+                            stopColor="#ff4a66"
+                            stopOpacity="0.92"
+                        />
+                        <stop
+                            offset="100%"
+                            stopColor="#ff7d8c"
+                            stopOpacity="0.8"
+                        />
                     </linearGradient>
-                    <linearGradient id={`graph-area-fade-${mode}`} x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
-                        <stop offset="100%" stopColor="#ffffff" stopOpacity="1" />
+                    <linearGradient
+                        id={`graph-area-${mode}`}
+                        x1="0%"
+                        y1="8%"
+                        x2="0%"
+                        y2="100%"
+                    >
+                        <stop
+                            offset="0%"
+                            stopColor="#ff8d99"
+                            stopOpacity="0.22"
+                        />
+                        <stop
+                            offset="38%"
+                            stopColor="#ff9ca4"
+                            stopOpacity="0.54"
+                        />
+                        <stop
+                            offset="100%"
+                            stopColor="#fff4f5"
+                            stopOpacity="0.02"
+                        />
                     </linearGradient>
-                    <filter id={`card-shadow-${mode}`} x="-40%" y="-40%" width="180%" height="220%">
-                        <feDropShadow dx="0" dy={mode === "mobile" ? "8" : "14"} stdDeviation={mode === "mobile" ? "10" : "14"} floodColor="#111827" floodOpacity="0.12" />
+                    <radialGradient
+                        id={`graph-area-glow-${mode}`}
+                        cx="72%"
+                        cy="40%"
+                        r="74%"
+                    >
+                        <stop
+                            offset="0%"
+                            stopColor="#ff8f9b"
+                            stopOpacity="1"
+                        />
+                        <stop
+                            offset="45%"
+                            stopColor="#ff8f9b"
+                            stopOpacity="0.52"
+                        />
+                        <stop
+                            offset="100%"
+                            stopColor="#ffffff"
+                            stopOpacity="0"
+                        />
+                    </radialGradient>
+                    <linearGradient
+                        id={`graph-area-fade-${mode}`}
+                        x1="0%"
+                        y1="0%"
+                        x2="0%"
+                        y2="100%"
+                    >
+                        <stop
+                            offset="0%"
+                            stopColor="#ffffff"
+                            stopOpacity="0"
+                        />
+                        <stop
+                            offset="70%"
+                            stopColor="#ffffff"
+                            stopOpacity="0.56"
+                        />
+                        <stop
+                            offset="100%"
+                            stopColor="#ffffff"
+                            stopOpacity="0.96"
+                        />
+                    </linearGradient>
+                    <filter
+                        id={`card-shadow-${mode}`}
+                        x="-40%"
+                        y="-40%"
+                        width="180%"
+                        height="220%"
+                    >
+                        <feDropShadow
+                            dx="0"
+                            dy={mode === "mobile" ? "8" : "14"}
+                            stdDeviation={mode === "mobile" ? "10" : "14"}
+                            floodColor="#111827"
+                            floodOpacity="0.12"
+                        />
                     </filter>
-                    <filter id={`glow-${mode}`} x="-50%" y="-50%" width="200%" height="200%">
+                    <filter
+                        id={`glow-${mode}`}
+                        x="-50%"
+                        y="-50%"
+                        width="200%"
+                        height="200%"
+                    >
                         <feGaussianBlur stdDeviation={mode === "mobile" ? "16" : "22"} />
                     </filter>
                 </defs>
-
-                <rect
-                    x={config.panelX}
-                    y={config.panelY}
-                    width={config.panelWidth}
-                    height={config.panelHeight}
-                    rx={mode === "mobile" ? 16 : 20}
-                    fill="transparent"
-                    stroke="rgba(15,23,42,0.08)"
-                    strokeWidth="1.5"
-                />
 
                 <motion.path
                     d={areaPath}
                     fill={`url(#graph-area-${mode})`}
                     initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
+                    whileInView={{ opacity: 0.82 }}
                     viewport={{ amount: 0.25, once: false }}
                     transition={{ duration: 0.8, delay: 0.2, ease: graphEase }}
+                />
+
+                <motion.path
+                    d={areaPath}
+                    fill={`url(#graph-area-glow-${mode})`}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 0.9 }}
+                    viewport={{ amount: 0.25, once: false }}
+                    transition={{ duration: 0.95, delay: 0.24, ease: graphEase }}
                 />
 
                 <motion.path
@@ -308,7 +423,7 @@ const GraphVer3 = () => {
                 <motion.path
                     d={linePath}
                     fill="none"
-                    stroke="var(--adaptive-red500)"
+                    stroke={`url(#graph-line-${mode})`}
                     strokeWidth={config.lineWidth}
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -481,9 +596,9 @@ const GraphVer3 = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ amount: 0.2, once: false }}
             transition={{ duration: 0.7, ease: graphEase }}
-            className="mt-auto ml-auto flex w-full justify-end"
+            className="mt-auto flex w-full"
         >
-            <div className="relative mt-[5.6rem] h-[46dvh] w-full px-[1.2rem] pb-[1.2rem] pt-[1.6rem] md:h-[80dvh] md:w-[80dvw] md:px-[2.4rem] md:pb-[2.4rem] md:pt-[3.2rem]">
+            <div className="relative mt-[3.2rem] h-[46rem] w-full px-[0.8rem] pb-[0.8rem] pt-[0.8rem] mobile:h-[52rem] mobile:px-[0.4rem] md:mt-[4rem] md:ml-auto md:h-[96dvh] md:min-h-[84rem] md:w-[70%] md:px-[0.8rem] md:pb-[1.6rem] md:pt-[1.6rem]">
                 <div className="h-full md:hidden">{renderChart("mobile")}</div>
                 <div className="hidden h-full md:block">{renderChart("desktop")}</div>
 

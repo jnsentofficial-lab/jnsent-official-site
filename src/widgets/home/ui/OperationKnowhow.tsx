@@ -57,7 +57,7 @@ export function OperationKnowhow() {
                 data-report-id="운영 노하우 카피"
                 data-report-type="item"
             >
-                <div className="w-full h-full flex flex-col justify-center mobile:ml-[2.0rem] pc:ml-0 pc:items-start mobile:gap-[1.6rem] pc:gap-[5.2rem]">
+                <div className="w-full h-full flex flex-col justify-center pc:pl-[25.2rem] mobile:ml-[2.0rem] pc:ml-0 pc:items-start mobile:gap-[1.6rem] pc:gap-[5.2rem]">
                     <Text.Reveal
                         as="h2"
                         className="mobile:text-[2.4rem] pc:text-[3.8rem] text-right font-[900] leading-[1.5]"
