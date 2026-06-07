@@ -152,6 +152,7 @@ const GraphVer3 = () => {
             dotInner: 7,
             lineWidth: 3.2,
             startOffset: 112,
+            endOffset: 36,
             firstCardWidth: 146,
             detailCardWidth: 184,
             cardHeight: 120,
@@ -163,6 +164,8 @@ const GraphVer3 = () => {
             guideBottomOffset: 40,
             plotOffsetY: 0,
             entryLift: 12,
+            lineLift: 14,
+            exitLift: 8,
             cardOffsetY: 42,
             cardLastExtraOffsetY: 26,
             firstCardOffsetXFactor: 0.8,
@@ -186,6 +189,7 @@ const GraphVer3 = () => {
             dotInner: 6,
             lineWidth: 2.35,
             startOffset: 34,
+            endOffset: 14,
             firstCardWidth: 88,
             detailCardWidth: 104,
             cardHeight: 72,
@@ -197,6 +201,8 @@ const GraphVer3 = () => {
             guideBottomOffset: 18,
             plotOffsetY: 0,
             entryLift: 8,
+            lineLift: 8,
+            exitLift: 4,
             cardOffsetY: 18,
             cardLastExtraOffsetY: 8,
             firstCardOffsetXFactor: 0.78,
@@ -231,26 +237,31 @@ const GraphVer3 = () => {
             };
         });
         const lineStartX = linePoints[0].x - config.startOffset;
-        const lineStartY = linePoints[0].y + config.entryLift;
+        const lineStartY = linePoints[0].y + config.entryLift - config.lineLift;
+        const lineEndX = linePoints[linePoints.length - 1].x + config.endOffset;
+        const lineEndY = linePoints[linePoints.length - 1].y - config.lineLift - config.exitLift;
         const linePath = linePoints.reduce((path, point, index) => {
+            const liftedPointY = point.y - config.lineLift;
             if (index === 0) {
                 const entryControlX = lineStartX + config.startOffset * 0.48;
                 const entryControlY = lineStartY - config.entryLift;
 
-                return `M ${lineStartX} ${lineStartY} C ${entryControlX} ${entryControlY}, ${point.x - config.startOffset * 0.18} ${point.y}, ${point.x} ${point.y}`;
+                return `M ${lineStartX} ${lineStartY} C ${entryControlX} ${entryControlY}, ${point.x - config.startOffset * 0.18} ${liftedPointY}, ${point.x} ${liftedPointY}`;
             }
 
             const previousPoint = linePoints[index - 1];
             const segmentWidth = point.x - previousPoint.x;
-            const deltaY = point.y - previousPoint.y;
+            const previousPointY = previousPoint.y - config.lineLift;
+            const deltaY = liftedPointY - previousPointY;
             const controlX1 = previousPoint.x + segmentWidth * (mode === "mobile" ? 0.42 : 0.44);
-            const controlY1 = previousPoint.y + deltaY * 0.22;
+            const controlY1 = previousPointY + deltaY * 0.22;
             const controlX2 = point.x - segmentWidth * (mode === "mobile" ? 0.34 : 0.32);
-            const controlY2 = point.y - deltaY * (mode === "mobile" ? 0.22 : 0.2);
+            const controlY2 = liftedPointY - deltaY * (mode === "mobile" ? 0.22 : 0.2);
 
-            return `${path} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${point.x} ${point.y}`;
+            return `${path} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${point.x} ${liftedPointY}`;
         }, "");
-        const areaPath = `${linePath} L ${linePoints[linePoints.length - 1].x} ${chartBottom} L ${lineStartX} ${chartBottom} Z`;
+        const extendedLinePath = `${linePath} L ${lineEndX} ${lineEndY}`;
+        const areaPath = `${extendedLinePath} L ${lineEndX} ${chartBottom} L ${lineStartX} ${chartBottom} Z`;
         const cardData = linePoints.map((point, index) => {
             const cardWidth = index === 0 ? config.firstCardWidth : config.detailCardWidth;
             const cardHeight = config.cardHeight;
@@ -421,7 +432,7 @@ const GraphVer3 = () => {
                 />
 
                 <motion.path
-                    d={linePath}
+                    d={extendedLinePath}
                     fill="none"
                     stroke={`url(#graph-line-${mode})`}
                     strokeWidth={config.lineWidth}
