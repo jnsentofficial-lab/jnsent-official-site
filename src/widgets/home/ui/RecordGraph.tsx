@@ -462,7 +462,7 @@ const GraphVer3 = () => {
                         style={{ transformOrigin: `${point.x}px ${point.y}px` }}
                     >
                         <circle
-                            cx={point.x}
+                            cx={point.x - 50}
                             cy={point.y}
                             r={config.dotOuter + (mode === "mobile" ? 4 : 5)}
                             fill="var(--adaptive-red500)"
@@ -470,7 +470,7 @@ const GraphVer3 = () => {
                             filter={`url(#glow-${mode})`}
                         />
                         <circle
-                            cx={point.x}
+                            cx={point.x - 50}
                             cy={point.y}
                             r={config.dotOuter}
                             fill="#ffffff"
@@ -478,7 +478,7 @@ const GraphVer3 = () => {
                             strokeWidth={mode === "mobile" ? 4 : 5}
                         />
                         <circle
-                            cx={point.x}
+                            cx={point.x - 50}
                             cy={point.y}
                             r={config.dotInner}
                             fill="var(--adaptive-red500)"
