@@ -147,6 +147,7 @@ const GraphVer3 = () => {
             chartBottomPadding: 92,
             pointInsetStart: 68,
             pointInsetEnd: 74,
+            pointVisualOffsetX: 50,
             pointRatios: [0.08, 0.52, 0.9] as const,
             dotOuter: 14,
             dotInner: 7,
@@ -184,6 +185,7 @@ const GraphVer3 = () => {
             chartBottomPadding: 36,
             pointInsetStart: 22,
             pointInsetEnd: 26,
+            pointVisualOffsetX: 50,
             pointRatios: [0.08, 0.52, 0.9] as const,
             dotOuter: 12,
             dotInner: 6,
@@ -267,7 +269,8 @@ const GraphVer3 = () => {
             const cardHeight = config.cardHeight;
             const baseCardY = point.y - cardHeight - config.cardOffsetY;
             const cardY = index === 2 ? Math.max(12, baseCardY - config.cardLastExtraOffsetY) : baseCardY;
-            const cardX = index === 0 ? point.x - cardWidth * config.firstCardOffsetXFactor : index === 2 ? point.x - cardWidth * config.lastCardOffsetXFactor : point.x - cardWidth / 2;
+            const pointVisualX = point.x - config.pointVisualOffsetX;
+            const cardX = pointVisualX - cardWidth / 2;
 
             return {
                 point,
@@ -275,7 +278,7 @@ const GraphVer3 = () => {
                 cardHeight,
                 cardX,
                 cardY,
-                pointerX: cardX + cardWidth / 2,
+                pointerX: pointVisualX,
             };
         });
 
