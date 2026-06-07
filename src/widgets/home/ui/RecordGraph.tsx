@@ -156,6 +156,7 @@ const GraphVer3 = () => {
             startOffset: 112,
             endOffset: 36,
             firstCardWidth: 146,
+            firstCardHeight: 98,
             detailCardWidth: 184,
             cardHeight: 120,
             cardRadius: 22,
@@ -196,6 +197,7 @@ const GraphVer3 = () => {
             startOffset: 42,
             endOffset: 20,
             firstCardWidth: 88,
+            firstCardHeight: 60,
             detailCardWidth: 104,
             cardHeight: 72,
             cardRadius: 14,
@@ -270,7 +272,7 @@ const GraphVer3 = () => {
         const areaPath = `${extendedLinePath} L ${lineEndX} ${chartBottom} L ${lineStartX} ${chartBottom} Z`;
         const cardData = linePoints.map((point, index) => {
             const cardWidth = index === 0 ? config.firstCardWidth : config.detailCardWidth;
-            const cardHeight = config.cardHeight;
+            const cardHeight = index === 0 ? config.firstCardHeight : config.cardHeight;
             const pointVisualX = point.x - config.pointVisualOffsetX;
             const pointVisualY = point.y + (config.pointVisualOffsetY[index] ?? 0);
             const baseCardY = pointVisualY - cardHeight - config.cardOffsetY;
@@ -531,7 +533,7 @@ const GraphVer3 = () => {
                         {index === 0 ? (
                             <text
                                 x={cardX + cardWidth / 2}
-                                y={cardY + cardHeight / 2 + (mode === "mobile" ? 4 : 6)}
+                                y={cardY + cardHeight / 2 + (mode === "mobile" ? 7 : 10)}
                                 textAnchor="middle"
                                 fill="#111111"
                             >
