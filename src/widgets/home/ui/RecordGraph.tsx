@@ -148,6 +148,7 @@ const GraphVer3 = () => {
             pointInsetStart: 68,
             pointInsetEnd: 74,
             pointVisualOffsetX: 50,
+            pointVisualOffsetY: [-6, 0, 4] as const,
             pointRatios: [0.08, 0.52, 0.9] as const,
             dotOuter: 14,
             dotInner: 7,
@@ -186,13 +187,14 @@ const GraphVer3 = () => {
             chartBottomPadding: 36,
             pointInsetStart: 22,
             pointInsetEnd: 26,
-            pointVisualOffsetX: 50,
+            pointVisualOffsetX: 0,
+            pointVisualOffsetY: [0, 0, 0] as const,
             pointRatios: [0.08, 0.52, 0.9] as const,
             dotOuter: 12,
             dotInner: 6,
             lineWidth: 2.35,
-            startOffset: 34,
-            endOffset: 14,
+            startOffset: 42,
+            endOffset: 20,
             firstCardWidth: 88,
             detailCardWidth: 104,
             cardHeight: 72,
@@ -269,8 +271,9 @@ const GraphVer3 = () => {
         const cardData = linePoints.map((point, index) => {
             const cardWidth = index === 0 ? config.firstCardWidth : config.detailCardWidth;
             const cardHeight = config.cardHeight;
-            const baseCardY = point.y - cardHeight - config.cardOffsetY;
             const pointVisualX = point.x - config.pointVisualOffsetX;
+            const pointVisualY = point.y + (config.pointVisualOffsetY[index] ?? 0);
+            const baseCardY = pointVisualY - cardHeight - config.cardOffsetY;
             const cardY = index === 2 ? Math.max(12, baseCardY - config.cardLastExtraOffsetY + config.cardLastLowerOffsetY) : baseCardY;
             const cardX = pointVisualX - cardWidth / 2;
 
@@ -281,6 +284,7 @@ const GraphVer3 = () => {
                 cardX,
                 cardY,
                 pointerX: pointVisualX,
+                pointVisualY,
             };
         });
 
@@ -454,7 +458,7 @@ const GraphVer3 = () => {
                         <motion.line
                             key={`${mode}-${point.name}-guide`}
                             x1={point.x - config.pointVisualOffsetX}
-                            y1={point.y + config.dotOuter}
+                            y1={point.y + (config.pointVisualOffsetY[index] ?? 0) + config.dotOuter}
                             x2={point.x - config.pointVisualOffsetX}
                             y2={config.panelY + config.panelHeight - config.guideBottomOffset}
                             stroke="rgba(100,116,139,0.36)"
@@ -478,24 +482,24 @@ const GraphVer3 = () => {
                         style={{ transformOrigin: `${point.x}px ${point.y}px` }}
                     >
                         <circle
-                            cx={point.x - 50}
-                            cy={point.y}
+                            cx={point.x - config.pointVisualOffsetX}
+                            cy={point.y + (config.pointVisualOffsetY[index] ?? 0)}
                             r={config.dotOuter + (mode === "mobile" ? 4 : 5)}
                             fill="var(--adaptive-red500)"
                             opacity="0.14"
                             filter={`url(#glow-${mode})`}
                         />
                         <circle
-                            cx={point.x - 50}
-                            cy={point.y}
+                            cx={point.x - config.pointVisualOffsetX}
+                            cy={point.y + (config.pointVisualOffsetY[index] ?? 0)}
                             r={config.dotOuter}
                             fill="#ffffff"
                             stroke="rgba(255,107,117,0.32)"
                             strokeWidth={mode === "mobile" ? 4 : 5}
                         />
                         <circle
-                            cx={point.x - 50}
-                            cy={point.y}
+                            cx={point.x - config.pointVisualOffsetX}
+                            cy={point.y + (config.pointVisualOffsetY[index] ?? 0)}
                             r={config.dotInner}
                             fill="var(--adaptive-red500)"
                         />
@@ -511,16 +515,16 @@ const GraphVer3 = () => {
                         transition={{ duration: 0.55, delay: 0.22 * index + 0.2, ease: graphEase }}
                     >
                         <rect
-                            x={cardX}
-                            y={cardY}
-                            width={cardWidth}
-                            height={cardHeight}
+                            x={cardX + 10}
+                            y={cardY + 15}
+                            width={cardWidth - 20}
+                            height={cardHeight - 20}
                             rx={config.cardRadius}
                             fill="rgba(255,255,255,0.96)"
                             filter={`url(#card-shadow-${mode})`}
                         />
                         <path
-                            d={`M ${pointerX - 10} ${cardY + cardHeight - 2} L ${pointerX} ${cardY + cardHeight + 10} L ${pointerX + 10} ${cardY + cardHeight - 2} Z`}
+                            d={`M ${pointerX - 10} ${cardY + cardHeight - 6} L ${pointerX} ${cardY + cardHeight + 6} L ${pointerX + 10} ${cardY + cardHeight - 6} Z`}
                             fill="rgba(255,255,255,0.96)"
                         />
 
@@ -555,7 +559,7 @@ const GraphVer3 = () => {
                             <>
                                 <text
                                     x={cardX + cardWidth / 2}
-                                    y={cardY + (mode === "mobile" ? 21 : 28)}
+                                    y={cardY + (mode === "mobile" ? 21 : 38)}
                                     textAnchor="middle"
                                     fontSize={config.growthCaptionFontSize}
                                     fontWeight="800"
@@ -565,7 +569,7 @@ const GraphVer3 = () => {
                                 </text>
                                 <text
                                     x={cardX + cardWidth / 2}
-                                    y={cardY + (mode === "mobile" ? 43 : 58)}
+                                    y={cardY + (mode === "mobile" ? 43 : 68)}
                                     textAnchor="middle"
                                     fontSize={config.growthValueFontSize}
                                     fontWeight="900"
@@ -575,7 +579,7 @@ const GraphVer3 = () => {
                                 </text>
                                 <text
                                     x={cardX + cardWidth / 2}
-                                    y={cardY + (mode === "mobile" ? 67 : 86)}
+                                    y={cardY + (mode === "mobile" ? 67 : 100)}
                                     textAnchor="middle"
                                     fill="#111111"
                                 >
