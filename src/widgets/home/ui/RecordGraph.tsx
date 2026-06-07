@@ -169,6 +169,7 @@ const GraphVer3 = () => {
             exitLift: 8,
             cardOffsetY: 42,
             cardLastExtraOffsetY: 26,
+            cardLastLowerOffsetY: 12,
             firstCardOffsetXFactor: 0.8,
             lastCardOffsetXFactor: 0.72,
         },
@@ -207,6 +208,7 @@ const GraphVer3 = () => {
             exitLift: 4,
             cardOffsetY: 18,
             cardLastExtraOffsetY: 8,
+            cardLastLowerOffsetY: 6,
             firstCardOffsetXFactor: 0.78,
             lastCardOffsetXFactor: 0.72,
         },
@@ -268,8 +270,8 @@ const GraphVer3 = () => {
             const cardWidth = index === 0 ? config.firstCardWidth : config.detailCardWidth;
             const cardHeight = config.cardHeight;
             const baseCardY = point.y - cardHeight - config.cardOffsetY;
-            const cardY = index === 2 ? Math.max(12, baseCardY - config.cardLastExtraOffsetY) : baseCardY;
             const pointVisualX = point.x - config.pointVisualOffsetX;
+            const cardY = index === 2 ? Math.max(12, baseCardY - config.cardLastExtraOffsetY + config.cardLastLowerOffsetY) : baseCardY;
             const cardX = pointVisualX - cardWidth / 2;
 
             return {
@@ -451,9 +453,9 @@ const GraphVer3 = () => {
                     index === 0 ? null : (
                         <motion.line
                             key={`${mode}-${point.name}-guide`}
-                            x1={point.x}
+                            x1={point.x - config.pointVisualOffsetX}
                             y1={point.y + config.dotOuter}
-                            x2={point.x}
+                            x2={point.x - config.pointVisualOffsetX}
                             y2={config.panelY + config.panelHeight - config.guideBottomOffset}
                             stroke="rgba(100,116,139,0.36)"
                             strokeWidth="1.5"
