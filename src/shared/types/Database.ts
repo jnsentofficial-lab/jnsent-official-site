@@ -106,6 +106,8 @@ export type Database = {
                     available_time: string | null;
                     support_label: string | null;
                     source: string;
+                    ip_hash: string | null;
+                    payload_hash: string | null;
                     status: "new" | "in_progress" | "done" | "spam";
                     created_at: string;
                     updated_at: string;
@@ -124,6 +126,8 @@ export type Database = {
                     available_time?: string | null;
                     support_label?: string | null;
                     source?: string;
+                    ip_hash?: string | null;
+                    payload_hash?: string | null;
                     status?: "new" | "in_progress" | "done" | "spam";
                     created_at?: string;
                     updated_at?: string;

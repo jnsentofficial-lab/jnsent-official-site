@@ -1,5 +1,7 @@
 import { createSupabaseServiceClient } from "@/shared/api/SupabaseServer";
 import { buildAvailableTime, buildRegion, formatPhoneNumber, sanitizeAgeInput, sanitizeNameInput } from "@/entities/inquiry/lib/formFields";
+import { sendInquiryNotification } from "@/entities/inquiry/lib/inquiryNotification.server";
+import { buildInquiryIpHash, buildInquiryPayloadHash, extractClientIp, validateInquirySubmissionLimit } from "@/entities/inquiry/lib/inquiryRateLimit.server";
 import { apiError, apiOk } from "@/shared/lib/api/server";
 
 export async function POST(request: Request) {
@@ -12,9 +14,40 @@ export async function POST(request: Request) {
     const availableTime = body.available_time
         ? String(body.available_time).trim()
         : buildAvailableTime(String(body.available_period ?? "").trim(), String(body.available_hour ?? "").trim());
+    const category = String(body.category ?? "bj_support").trim() || "bj_support";
+    const source = String(body.source ?? "bj_support").trim() || "bj_support";
+    const email = body.email ? String(body.email).trim() : null;
+    const supportLabel = body.support_label ? String(body.support_label).trim() : null;
+    const gender = body.gender ? String(body.gender).trim() : null;
+    const ipHash = buildInquiryIpHash(extractClientIp(request));
+    const payloadHash = buildInquiryPayloadHash({
+        name,
+        phone,
+        email: email ?? "",
+        category,
+        gender: gender ?? "",
+        age: age ?? "",
+        region: region || "",
+        availableTime: availableTime || "",
+        supportLabel: supportLabel ?? "",
+        source,
+        message,
+        messageBody: body.message_body ?? null,
+    });
 
     if (!name || !phone || !message) {
         return apiError("이름, 연락처, 문의 내용을 입력해주세요.", 400);
+    }
+
+    const limitError = await validateInquirySubmissionLimit({
+        category,
+        phone,
+        ipHash,
+        payloadHash,
+    });
+
+    if (limitError) {
+        return apiError(limitError.message, limitError.status);
     }
 
     const supabase = createSupabaseServiceClient();
@@ -23,20 +56,32 @@ export async function POST(request: Request) {
         .insert({
             name,
             phone,
-            email: body.email ? String(body.email).trim() : null,
+            email,
             message,
             message_body: body.message_body ?? null,
-            category: String(body.category ?? "bj_support").trim() || "bj_support",
-            gender: body.gender ? String(body.gender).trim() : null,
+            category,
+            gender,
             age,
             region: region || null,
             available_time: availableTime || null,
-            support_label: body.support_label ? String(body.support_label).trim() : null,
-            source: String(body.source ?? "bj_support").trim() || "bj_support",
+            support_label: supportLabel,
+            source,
+            ip_hash: ipHash,
+            payload_hash: payloadHash,
             status: "new",
         })
         .select("*")
         .single();
 
-    return error ? apiError(error.message, 400) : apiOk(data, { status: 201 });
+    if (error) {
+        return apiError(error.message, 400);
+    }
+
+    try {
+        await sendInquiryNotification(data);
+    } catch (mailError) {
+        console.error("Failed to send inquiry notification", mailError);
+    }
+
+    return apiOk(data, { status: 201 });
 }

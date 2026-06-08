@@ -107,11 +107,11 @@ export function GlobalModalLayer({ includePublic = true }: GlobalModalLayerProps
                     open
                     placement={{ col: modal.col, row: modal.row }}
                     onClose={() => closeModal(modal)}
-                    className="w-fit max-w-[calc(100vw-3.2rem)] bg-transparent shadow-none"
+                    className="w-fit max-w-[calc(100vw-3.2rem)] bg-transparent "
                     // className="w-fit max-w-[calc(100vw-3.2rem)] bg-transparent shadow-none"
                     actions={[
-                        ...(modal.dismiss_type === "today" ? [{ title: "오늘 하루 닫기", type: "action" as const, onClick: () => closeModal(modal) }] : []),
-                        ...(modal.dismiss_type === "days" ? [{ title: `${modal.dismiss_days ?? 1}일 동안 닫기`, type: "action" as const, onClick: () => closeModal(modal) }] : []),
+                        ...(modal.dismiss_type === "today" ? [{ title: "오늘 하루 그만보기", type: "action" as const, onClick: () => closeModal(modal) }] : []),
+                        ...(modal.dismiss_type === "days" ? [{ title: `${modal.dismiss_days ?? 1}일 동안 보지않기`, type: "action" as const, onClick: () => closeModal(modal) }] : []),
                         { title: "닫기", type: "close" },
                     ]}
                 >

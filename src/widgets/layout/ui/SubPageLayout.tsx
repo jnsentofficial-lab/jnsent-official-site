@@ -348,6 +348,7 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
             phone,
             email: email || null,
             category,
+            source: category,
             region,
             message: plainMessage,
             available_time: availableTime,
