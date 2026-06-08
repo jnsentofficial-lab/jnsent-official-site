@@ -102,14 +102,14 @@ export function RecordGraph() {
                         >
                             {records.map((record) => (
                                 <div key={record.label}>
-                                    <span className="block mobile:hidden">
+                                    <span className="pc:block mobile:hidden">
                                         <Text.Rolling
                                             value={record.value}
                                             textSize={28}
                                             rollingCount={5}
                                         />
                                     </span>
-                                    <span className="hidden mobile:block">
+                                    <span className="pc:hidden mobile:block">
                                         <Text.Rolling
                                             value={record.value}
                                             textSize={20}
@@ -139,7 +139,8 @@ const GraphVer3 = () => {
             reportChartHeight: 900,
             panelX: 0,
             panelY: 116,
-            panelWidth: 1260,
+            // panelWidth: 1440,
+            panelWidth: 1300,
             panelHeight: 700,
             chartLeftPadding: 78,
             chartRightPadding: 2,
