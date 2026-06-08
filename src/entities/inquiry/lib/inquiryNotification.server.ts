@@ -16,7 +16,7 @@ const INQUIRY_CATEGORY_ROUTE_MAP: Record<string, string> = {
     studio_rental: "/studioRental",
 };
 
-const INQUIRY_MESSAGE_HIDDEN_LABELS = new Set(["이름", "연락처", "지역", "연락 가능한 시각"]);
+const INQUIRY_MESSAGE_HIDDEN_LABELS = new Set(["이름", "연락처", "지역", "연락 가능한 시각", "이메일"]);
 
 function escapeHtml(value: string) {
     return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");

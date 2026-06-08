@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, useEffect, useRef, useState } from "react";
-import { useAdminInquiriesQuery, useDeleteInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
+import { useAdminInquiriesQuery, useDeleteInquiryMutation, useResendInquiryAnswerMutation } from "@/entities/inquiry/api/inquiry.query";
 import type { AdminInquiry, Inquiry } from "@/entities/inquiry/model/inquiry.type";
 import { AdminListRow, AdminListSection, AdminPagination, ConfirmDialog } from "@/widgets/admin/shared/AdminLayout";
 import UI from "@/shared/ui/UIComponent";
@@ -24,7 +24,9 @@ const inquiryCategoryLabelMap: Record<string, string> = {
 export function InquiryTable({ pendingInquiryId, selectedInquiryId, onSelectInquiry }: InquiryTableProps) {
     const { data: inquiries = [], isLoading } = useAdminInquiriesQuery();
     const deleteInquiry = useDeleteInquiryMutation();
+    const resendInquiryAnswer = useResendInquiryAnswerMutation();
     const [deleteTarget, setDeleteTarget] = useState<Inquiry | null>(null);
+    const [resendTarget, setResendTarget] = useState<Inquiry | null>(null);
     const pageSize = useAdminSidePanelStore((state) => state.listPageSize);
     const [page, setPage] = useState(1);
     const autoSelectedInquiryIdRef = useRef("");
@@ -84,20 +86,39 @@ export function InquiryTable({ pendingInquiryId, selectedInquiryId, onSelectInqu
                                 reportId={`문의 행 ${inquiry.name}`}
                                 reportType="item"
                                 actions={
-                                    <UI.Button
-                                        className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
-                                        onClick={() => setDeleteTarget(inquiry)}
-                                        type="button"
-                                    >
-                                        <Image
-                                            src={"/images/icon/outlined/ico-outlined-trash.svg"}
-                                            alt=""
-                                            width={32}
-                                            height={32}
-                                        />
+                                    <>
+                                        {inquiry.hasAnswer ? (
+                                            <UI.Button
+                                                className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-blue500)] hover:text-white"
+                                                onClick={() => setResendTarget(inquiry)}
+                                                type="button"
+                                            >
+                                                <Image
+                                                    src={"/images/icon/outlined/ico-outlined-copy.svg"}
+                                                    alt=""
+                                                    width={32}
+                                                    height={32}
+                                                />
 
-                                        <p>삭제</p>
-                                    </UI.Button>
+                                                <p>재발송하기</p>
+                                            </UI.Button>
+                                        ) : null}
+
+                                        <UI.Button
+                                            className="flex items-center gap-[1.6rem] h-full px-[3.2rem] bg-transparent hover:bg-[var(--adaptive-red500)]"
+                                            onClick={() => setDeleteTarget(inquiry)}
+                                            type="button"
+                                        >
+                                            <Image
+                                                src={"/images/icon/outlined/ico-outlined-trash.svg"}
+                                                alt=""
+                                                width={32}
+                                                height={32}
+                                            />
+
+                                            <p>삭제</p>
+                                        </UI.Button>
+                                    </>
                                 }
                                 contentClassName="flex-col items-start"
                                 description={
@@ -140,6 +161,21 @@ export function InquiryTable({ pendingInquiryId, selectedInquiryId, onSelectInqu
                     );
                 })}
             </section>
+
+            <ConfirmDialog
+                open={Boolean(resendTarget)}
+                title="답변 메일을 재발송할까요?"
+                description="선택하신 문의의 최신 답변 메일을 다시 발송합니다. 문의자 이메일과 답변 상태를 다시 확인해주세요."
+                targetLabel={resendTarget?.message}
+                confirmLabel="재발송하기"
+                onCancel={() => setResendTarget(null)}
+                onConfirm={() => {
+                    if (resendTarget) {
+                        resendInquiryAnswer.mutate({ id: resendTarget.id });
+                    }
+                    setResendTarget(null);
+                }}
+            />
 
             <ConfirmDialog
                 open={Boolean(deleteTarget)}

@@ -3,7 +3,16 @@
 import { FormEvent, Fragment, ReactNode, useEffect, useRef, useState } from "react";
 import { motion, PanInfo, useAnimationFrame, useMotionValue } from "framer-motion";
 import { useCreateInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
-import { buildAvailableTime, buildRegion, CONTACT_HOUR_OPTIONS, CONTACT_PERIOD_OPTIONS, formatPhoneNumber, REGION_OPTIONS, requiresInquiryEmail, sanitizeNameInput } from "@/entities/inquiry/lib/formFields";
+import {
+    buildAvailableTime,
+    buildRegion,
+    CONTACT_HOUR_OPTIONS,
+    CONTACT_PERIOD_OPTIONS,
+    formatPhoneNumber,
+    REGION_OPTIONS,
+    requiresInquiryEmail,
+    sanitizeNameInput,
+} from "@/entities/inquiry/lib/formFields";
 import type { CreateInquiryPayload } from "@/entities/inquiry/model/inquiry.type";
 import { buildInquiryMessageBody } from "@/entities/inquiry/lib/buildMessageBody";
 import { showErrorToast } from "@/shared/lib/toast";
@@ -467,7 +476,8 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
 
                     {showEmail ? (
                         <label className="grid gap-3 text-[1.6rem] font-[700] text-black font-[NanumSquare]">
-                            이메일 {emailRequired ? <span className="text-[#f04452]">*</span> : null}
+                            <p className="flex gap-[0.4rem]">이메일 {emailRequired ? <span className="text-[#f04452]">*</span> : null}</p>
+
                             <UI.Input
                                 size="sm"
                                 name="email"
