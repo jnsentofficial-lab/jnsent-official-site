@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 import { AdminAuthGuard } from "@/features/auth/AdminAuthGuard";
 
 type AuthProviderProps = {
@@ -8,5 +8,5 @@ type AuthProviderProps = {
 };
 
 export function AuthProvider({ children }: AuthProviderProps) {
-    return <AdminAuthGuard>{children}</AdminAuthGuard>;
+    return <Suspense fallback={children}><AdminAuthGuard>{children}</AdminAuthGuard></Suspense>;
 }

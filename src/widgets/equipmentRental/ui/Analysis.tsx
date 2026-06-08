@@ -87,6 +87,7 @@ export function Analysis() {
                         category="equipment_rental"
                         chips={equipmentChips}
                         buttonLabel="요청하기"
+                        showEmail
                     />
                 }
             />

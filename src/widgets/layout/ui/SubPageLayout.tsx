@@ -3,7 +3,7 @@
 import { FormEvent, Fragment, ReactNode, useEffect, useRef, useState } from "react";
 import { motion, PanInfo, useAnimationFrame, useMotionValue } from "framer-motion";
 import { useCreateInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
-import { buildAvailableTime, buildRegion, CONTACT_HOUR_OPTIONS, CONTACT_PERIOD_OPTIONS, formatPhoneNumber, REGION_OPTIONS, sanitizeNameInput } from "@/entities/inquiry/lib/formFields";
+import { buildAvailableTime, buildRegion, CONTACT_HOUR_OPTIONS, CONTACT_PERIOD_OPTIONS, formatPhoneNumber, REGION_OPTIONS, requiresInquiryEmail, sanitizeNameInput } from "@/entities/inquiry/lib/formFields";
 import type { CreateInquiryPayload } from "@/entities/inquiry/model/inquiry.type";
 import { buildInquiryMessageBody } from "@/entities/inquiry/lib/buildMessageBody";
 import { showErrorToast } from "@/shared/lib/toast";
@@ -310,6 +310,7 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
     const [agreed, setAgreed] = useState(false);
     const [status, setStatus] = useState("");
     const cityOptions = province ? REGION_OPTIONS[province as keyof typeof REGION_OPTIONS] : [];
+    const emailRequired = showEmail || requiresInquiryEmail(category);
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -325,6 +326,12 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
         if (!name || !phone || !agreed) {
             setStatus("이름, 연락처, 개인정보 동의를 확인해주세요.");
             showErrorToast("이름, 연락처, 개인정보 동의를 확인해주세요.", 2);
+            return;
+        }
+
+        if (emailRequired && !email) {
+            setStatus("이메일을 입력해주세요.");
+            showErrorToast("이메일을 입력해주세요.", 2);
             return;
         }
 
@@ -460,12 +467,13 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
 
                     {showEmail ? (
                         <label className="grid gap-3 text-[1.6rem] font-[700] text-black font-[NanumSquare]">
-                            이메일
+                            이메일 {emailRequired ? <span className="text-[#f04452]">*</span> : null}
                             <UI.Input
                                 size="sm"
                                 name="email"
                                 placeholder="이메일을 남겨주세요"
                                 type="email"
+                                required={emailRequired}
                             />
                         </label>
                     ) : null}

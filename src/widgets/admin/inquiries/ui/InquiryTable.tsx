@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { useAdminInquiriesQuery, useDeleteInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
 import type { AdminInquiry, Inquiry } from "@/entities/inquiry/model/inquiry.type";
 import { AdminListRow, AdminListSection, AdminPagination, ConfirmDialog } from "@/widgets/admin/shared/AdminLayout";
@@ -10,6 +10,7 @@ import { useAdminSidePanelStore } from "@/widgets/admin/shared/model/useAdminSid
 import Image from "next/image";
 
 type InquiryTableProps = {
+    pendingInquiryId?: string;
     selectedInquiryId?: string;
     onSelectInquiry: (inquiry: AdminInquiry) => void;
 };
@@ -20,18 +21,36 @@ const inquiryCategoryLabelMap: Record<string, string> = {
     equipment_rental: "장비 렌탈 문의",
 };
 
-export function InquiryTable({ selectedInquiryId, onSelectInquiry }: InquiryTableProps) {
+export function InquiryTable({ pendingInquiryId, selectedInquiryId, onSelectInquiry }: InquiryTableProps) {
     const { data: inquiries = [], isLoading } = useAdminInquiriesQuery();
     const deleteInquiry = useDeleteInquiryMutation();
     const [deleteTarget, setDeleteTarget] = useState<Inquiry | null>(null);
     const pageSize = useAdminSidePanelStore((state) => state.listPageSize);
     const [page, setPage] = useState(1);
+    const autoSelectedInquiryIdRef = useRef("");
     const totalPages = Math.max(1, Math.ceil(inquiries.length / pageSize));
     const visibleInquiries = inquiries.slice((page - 1) * pageSize, page * pageSize);
 
     useEffect(() => {
         setPage(1);
     }, [pageSize]);
+
+    useEffect(() => {
+        if (!pendingInquiryId || !inquiries.length || selectedInquiryId === pendingInquiryId || autoSelectedInquiryIdRef.current === pendingInquiryId) {
+            return;
+        }
+
+        const targetIndex = inquiries.findIndex((inquiry) => inquiry.id === pendingInquiryId);
+
+        autoSelectedInquiryIdRef.current = pendingInquiryId;
+
+        if (targetIndex === -1) {
+            return;
+        }
+
+        setPage(Math.floor(targetIndex / pageSize) + 1);
+        onSelectInquiry(inquiries[targetIndex]);
+    }, [inquiries, onSelectInquiry, pageSize, pendingInquiryId, selectedInquiryId]);
 
     return (
         <AdminListSection

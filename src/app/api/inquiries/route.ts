@@ -1,5 +1,5 @@
 import { createSupabaseServiceClient } from "@/shared/api/SupabaseServer";
-import { buildAvailableTime, buildRegion, formatPhoneNumber, sanitizeAgeInput, sanitizeNameInput } from "@/entities/inquiry/lib/formFields";
+import { buildAvailableTime, buildRegion, formatPhoneNumber, requiresInquiryEmail, sanitizeAgeInput, sanitizeNameInput } from "@/entities/inquiry/lib/formFields";
 import { sendInquiryNotification } from "@/entities/inquiry/lib/inquiryNotification.server";
 import { buildInquiryIpHash, buildInquiryPayloadHash, extractClientIp, validateInquirySubmissionLimit } from "@/entities/inquiry/lib/inquiryRateLimit.server";
 import { apiError, apiOk } from "@/shared/lib/api/server";
@@ -37,6 +37,10 @@ export async function POST(request: Request) {
 
     if (!name || !phone || !message) {
         return apiError("이름, 연락처, 문의 내용을 입력해주세요.", 400);
+    }
+
+    if (requiresInquiryEmail(category) && !email) {
+        return apiError("이메일을 입력해주세요.", 400);
     }
 
     const limitError = await validateInquirySubmissionLimit({

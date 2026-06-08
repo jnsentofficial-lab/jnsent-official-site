@@ -1,4 +1,5 @@
 import { createSupabaseServiceClient } from "@/shared/api/SupabaseServer";
+import { sendInquiryAnswerNotification } from "@/entities/inquiry/lib/inquiryNotification.server";
 import { apiError, apiOk } from "@/shared/lib/api/server";
 import { getAdminApiName, hasAdminApiSession } from "@/shared/lib/adminApi";
 
@@ -52,7 +53,25 @@ export async function POST(request: Request, { params }: RouteProps) {
         .update({ status: "done" })
         .eq("id", id);
 
-    return inquiryError ? apiError(inquiryError.message, 400) : apiOk(data, { status: 201 });
+    if (inquiryError) {
+        return apiError(inquiryError.message, 400);
+    }
+
+    const { data: inquiry, error: inquiryFetchError } = await supabase.from("inquiries").select("*").eq("id", id).maybeSingle();
+
+    if (inquiryFetchError) {
+        return apiError(inquiryFetchError.message, 400);
+    }
+
+    if (inquiry) {
+        try {
+            await sendInquiryAnswerNotification(inquiry, data);
+        } catch (mailError) {
+            console.error("Failed to send inquiry answer notification", mailError);
+        }
+    }
+
+    return apiOk(data, { status: 201 });
 }
 
 export async function PATCH(request: Request, { params }: RouteProps) {
