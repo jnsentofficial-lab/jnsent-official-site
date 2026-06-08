@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, Fragment, ReactNode, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, PanInfo, useAnimationFrame, useMotionValue } from "framer-motion";
 import { useCreateInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
 import {
@@ -60,6 +61,8 @@ type StudioSliderProps = {
     }[];
     touch?: boolean;
 };
+
+const INQUIRY_RESULT_REDIRECT_CATEGORIES = new Set(["consulting", "equipment_rental", "studio_rental"]);
 
 export function SubPageHero({ current, title, description }: SubPageHeroProps) {
     return (
@@ -309,6 +312,7 @@ export function NoticeBox() {
 
 export function InquiryRequestForm({ category, title = "기본정보", messageLabel = "문의사항", buttonLabel = "요청하기", showEmail = false, chips = [] }: InquiryRequestFormProps) {
     const { setToast } = useToastStore();
+    const router = useRouter();
     const createInquiry = useCreateInquiryMutation();
     const [selected, setSelected] = useState<Record<string, string>>({});
     const [province, setProvince] = useState("");
@@ -391,8 +395,16 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
             setContactHour("");
             setAgreed(false);
             setStatus("요청이 접수되었습니다.");
+
+            if (INQUIRY_RESULT_REDIRECT_CATEGORIES.has(category)) {
+                router.push("/send/success");
+            }
         } catch (error) {
             setStatus(error instanceof Error ? error.message : "요청 저장에 실패했습니다.");
+
+            if (INQUIRY_RESULT_REDIRECT_CATEGORIES.has(category)) {
+                router.push("/send/failed");
+            }
         }
     }
 
