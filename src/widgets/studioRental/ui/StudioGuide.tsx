@@ -12,7 +12,7 @@ const studioItems = [
     { title: "개인방송 스튜디오", image: "/images/landing/room.jpg" },
 ];
 
-export function Analysis() {
+export function StudioGuide() {
     const { data: content } = usePublishedPageContentQuery("studioRental");
 
     return (

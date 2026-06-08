@@ -16,7 +16,7 @@ import Portal from "@/shared/ui/kit/Portal";
 type SidebarMode = "create" | "edit" | "empty";
 const PANEL_KEY = "/admin/account/manager";
 
-export function Analysis() {
+export function ManagerAccountWorkspace() {
     const { data: accounts = [], isLoading } = useManagerAccountsQuery();
 
     const [selectedAccount, setSelectedAccount] = useState<ManagerAccount | null>(null);

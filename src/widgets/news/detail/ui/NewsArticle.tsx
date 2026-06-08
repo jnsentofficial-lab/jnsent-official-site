@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
-type AnalysisProps = {
+type NewsArticleProps = {
     slug: string;
 };
 
@@ -92,7 +92,7 @@ function NewsDetailSkeleton() {
     );
 }
 
-export function Analysis({ slug }: AnalysisProps) {
+export function NewsArticle({ slug }: NewsArticleProps) {
     const { data: news, isLoading } = usePublishedNewsDetailQuery(slug);
     const { data: newsList, isLoading: isNewsListLoading } = usePublishedNewsQuery();
     const currentIndex = newsList.findIndex((item) => item.slug === slug);

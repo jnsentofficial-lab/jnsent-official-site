@@ -12,7 +12,7 @@ import { Text } from "@/shared/ui/kit/Text";
 
 const PANEL_KEY = "/admin/news";
 
-export function Analysis() {
+export function NewsManagement() {
     const { data: newsItems = [], isLoading } = useAdminNewsQuery();
     const [selectedNews, setSelectedNews] = useState<News | null>(null);
     const [deleteTarget, setDeleteTarget] = useState<News | null>(null);
