@@ -14,7 +14,7 @@ import { useToastStore } from "@/shared/model/stores/useToastStore";
 
 const PANEL_KEY = "/admin/modals";
 
-export function Analysis() {
+export function ModalManagement() {
     const { setToast } = useToastStore();
     const { data: modals = [], isLoading } = useAdminGlobalModalsQuery();
     const [selectedModal, setSelectedModal] = useState<GlobalModal | null>(null);

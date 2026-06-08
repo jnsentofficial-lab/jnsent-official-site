@@ -6,7 +6,7 @@ import * as ConsultingLayer from "@/widgets/consulting/ui";
 export default function Panel() {
     return (
         <ConsultingPageProvider>
-            <ConsultingLayer.Analysis />
+            <ConsultingLayer.ConsultingGuide />
         </ConsultingPageProvider>
     );
 }

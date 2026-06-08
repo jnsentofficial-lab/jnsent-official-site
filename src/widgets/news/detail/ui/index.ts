@@ -1,1 +1,1 @@
-export { Analysis } from "./Analysis";
+export { NewsArticle } from "./NewsArticle";

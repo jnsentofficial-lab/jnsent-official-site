@@ -10,7 +10,7 @@ import { InquiryTable } from "@/widgets/admin/inquiries/ui/InquiryTable";
 
 const PANEL_KEY = "/admin/inquiries";
 
-export function Analysis() {
+export function InquiryManagement() {
     const searchParams = useSearchParams();
     const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
     const openPanel = useAdminSidePanelStore((state) => state.openPanel);

@@ -6,8 +6,7 @@ import * as AdminNewsLayer from "@/widgets/admin/news/ui";
 export default function Panel() {
     return (
         <AdminNewsPageProvider>
-            {/* <AdminNewsLayer.Title /> */}
-            <AdminNewsLayer.Analysis />
+            <AdminNewsLayer.NewsManagement />
         </AdminNewsPageProvider>
     );
 }

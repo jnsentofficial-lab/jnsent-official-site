@@ -6,7 +6,7 @@ import * as EquipmentRentalLayer from "@/widgets/equipmentRental/ui";
 export default function Panel() {
     return (
         <EquipmentRentalPageProvider>
-            <EquipmentRentalLayer.Analysis />
+            <EquipmentRentalLayer.RentalGuide />
         </EquipmentRentalPageProvider>
     );
 }

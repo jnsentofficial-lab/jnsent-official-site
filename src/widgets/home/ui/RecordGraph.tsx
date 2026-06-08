@@ -1,7 +1,8 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 
 import { Text } from "@/shared/ui/kit/Text";
 
@@ -133,6 +134,8 @@ export function RecordGraph() {
 const GraphVer3 = () => {
     const graphEase = [0.22, 1, 0.36, 1] as const;
     const hoverEase = [0.44, 0.05, 0.55, 0.95] as const;
+    const graphRef = useRef<HTMLDivElement>(null);
+    const isGraphInView = useInView(graphRef, { amount: 0.2 });
     const chartConfigs = {
         desktop: {
             reportChartWidth: 1260,
@@ -420,8 +423,7 @@ const GraphVer3 = () => {
                     d={areaPath}
                     fill={`url(#graph-area-${mode})`}
                     initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 0.82 }}
-                    viewport={{ amount: 0.25, once: false }}
+                    animate={{ opacity: isGraphInView ? 0.82 : 0 }}
                     transition={{ duration: 0.8, delay: 0.2, ease: graphEase }}
                 />
 
@@ -429,8 +431,7 @@ const GraphVer3 = () => {
                     d={areaPath}
                     fill={`url(#graph-area-glow-${mode})`}
                     initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 0.9 }}
-                    viewport={{ amount: 0.25, once: false }}
+                    animate={{ opacity: isGraphInView ? 0.9 : 0 }}
                     transition={{ duration: 0.95, delay: 0.24, ease: graphEase }}
                 />
 
@@ -438,8 +439,7 @@ const GraphVer3 = () => {
                     d={areaPath}
                     fill={`url(#graph-area-fade-${mode})`}
                     initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 0.9 }}
-                    viewport={{ amount: 0.25, once: false }}
+                    animate={{ opacity: isGraphInView ? 0.9 : 0 }}
                     transition={{ duration: 1, delay: 0.25, ease: graphEase }}
                 />
 
@@ -451,8 +451,7 @@ const GraphVer3 = () => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     initial={{ pathLength: 0, opacity: 0.4 }}
-                    whileInView={{ pathLength: 1, opacity: 1 }}
-                    viewport={{ amount: 0.25, once: false }}
+                    animate={{ pathLength: isGraphInView ? 1 : 0, opacity: isGraphInView ? 1 : 0.4 }}
                     transition={{ duration: 1.8, ease: graphEase }}
                 />
 
@@ -468,8 +467,7 @@ const GraphVer3 = () => {
                             strokeWidth="1.5"
                             strokeDasharray={mode === "mobile" ? "4 4" : "5 5"}
                             initial={{ opacity: 0, pathLength: 0 }}
-                            whileInView={{ opacity: 1, pathLength: 1 }}
-                            viewport={{ amount: 0.25, once: false }}
+                            animate={{ opacity: isGraphInView ? 1 : 0, pathLength: isGraphInView ? 1 : 0 }}
                             transition={{ duration: 0.7, delay: 0.22 * index + 0.4, ease: graphEase }}
                         />
                     ),
@@ -479,8 +477,7 @@ const GraphVer3 = () => {
                     <motion.g
                         key={`${mode}-${point.name}-dot`}
                         initial={{ scale: 0, opacity: 0 }}
-                        whileInView={{ scale: 1, opacity: 1 }}
-                        viewport={{ amount: 0.25, once: false }}
+                        animate={{ scale: isGraphInView ? 1 : 0, opacity: isGraphInView ? 1 : 0 }}
                         transition={{ duration: 0.45, delay: 0.24 * index + 0.25, ease: graphEase }}
                         style={{ transformOrigin: `${point.x}px ${point.y}px` }}
                     >
@@ -513,8 +510,7 @@ const GraphVer3 = () => {
                     <motion.g
                         key={`${mode}-${point.name}-card`}
                         initial={{ opacity: 0, y: 18 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ amount: 0.25, once: false }}
+                        animate={{ opacity: isGraphInView ? 1 : 0, y: isGraphInView ? 0 : 18 }}
                         transition={{ duration: 0.55, delay: 0.22 * index + 0.2, ease: graphEase }}
                     >
                         <rect
@@ -615,9 +611,9 @@ const GraphVer3 = () => {
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ amount: 0.2, once: false }}
+            ref={graphRef}
+            initial={false}
+            animate={{ opacity: isGraphInView ? 1 : 0, y: isGraphInView ? 0 : 40 }}
             transition={{ duration: 0.7, ease: graphEase }}
             className="mt-auto flex w-full"
         >

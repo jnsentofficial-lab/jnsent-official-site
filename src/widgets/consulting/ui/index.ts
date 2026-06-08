@@ -1,1 +1,1 @@
-export { Analysis } from "./Analysis";
+export { ConsultingGuide } from "./ConsultingGuide";
