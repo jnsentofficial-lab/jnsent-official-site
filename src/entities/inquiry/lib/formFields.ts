@@ -2,6 +2,11 @@ export { REGION_OPTIONS } from "@/entities/inquiry/constants/regionOptions";
 
 export const CONTACT_PERIOD_OPTIONS = ["오전", "오후"] as const;
 export const CONTACT_HOUR_OPTIONS = Array.from({ length: 12 }, (_, index) => `${index + 1}시`);
+export const INQUIRY_EMAIL_REQUIRED_CATEGORIES = new Set(["consulting", "equipment_rental", "studio_rental"]);
+
+export function requiresInquiryEmail(category: string) {
+    return INQUIRY_EMAIL_REQUIRED_CATEGORIES.has(category);
+}
 
 export function sanitizeNameInput(value: string) {
     return value.replace(/[^A-Za-zㄱ-ㅎㅏ-ㅣ가-힣\s]/g, "").replace(/\s{2,}/g, " ");

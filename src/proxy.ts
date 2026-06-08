@@ -11,6 +11,17 @@ function canManageAccounts(request: NextRequest) {
     return canAccessManagerAccountPage(request.cookies.get("admin_role")?.value);
 }
 
+function buildAdminLoginUrl(request: NextRequest) {
+    const loginUrl = new URL(adminLoginPath, request.url);
+    const redirectPath = `${request.nextUrl.pathname}${request.nextUrl.search}`;
+
+    if (redirectPath.startsWith("/admin") && redirectPath !== adminLoginPath) {
+        loginUrl.searchParams.set("redirect", redirectPath);
+    }
+
+    return loginUrl;
+}
+
 export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
     const isAdminApi = pathname.startsWith("/api/admin");
@@ -37,7 +48,7 @@ export function proxy(request: NextRequest) {
     }
 
     if (pathname !== adminLoginPath) {
-        return NextResponse.redirect(new URL(adminLoginPath, request.url));
+        return NextResponse.redirect(buildAdminLoginUrl(request));
     }
 
     return NextResponse.next();

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useLoginAdminMutation } from "@/entities/auth/api/auth.query";
@@ -10,9 +10,19 @@ import Image from "next/image";
 
 const inputClassName = "h-[5.2rem] border-b border-b-[var(--adaptive-grey200)] hover:border-[var(--adaptive-grey700)] text-[2.0rem] text-black font-semibold";
 const labelClassName = "flex flex-col gap-[0.8rem] font-[NanumSquare]";
+const adminDefaultPath = "/admin/inquiries";
+
+function resolveRedirectPath(redirectPath: string | null) {
+    if (!redirectPath?.startsWith("/admin")) {
+        return adminDefaultPath;
+    }
+
+    return redirectPath;
+}
 
 export function AdminLoginForm() {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const queryClient = useQueryClient();
     const [errorMessage, setErrorMessage] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -30,7 +40,7 @@ export function AdminLoginForm() {
         try {
             const response = await loginAdmin.mutateAsync({ email, password });
             queryClient.setQueryData([AuthRoutes.ADMIN_SESSION, "useAdminSessionQuery"], response);
-            router.replace("/admin/inquiries");
+            router.replace(resolveRedirectPath(searchParams.get("redirect")));
         } catch {
             setErrorMessage("로그인 정보를 확인해주세요.");
         } finally {

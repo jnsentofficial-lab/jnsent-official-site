@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { Inquiry } from "@/entities/inquiry/model/inquiry.type";
 import { useAdminSidePanelStore } from "@/widgets/admin/shared/model/useAdminSidePanelStore";
@@ -10,9 +11,11 @@ import { InquiryTable } from "@/widgets/admin/inquiries/ui/InquiryTable";
 const PANEL_KEY = "/admin/inquiries";
 
 export function Analysis() {
+    const searchParams = useSearchParams();
     const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
     const openPanel = useAdminSidePanelStore((state) => state.openPanel);
     const closePanel = useAdminSidePanelStore((state) => state.closePanel);
+    const pendingInquiryId = searchParams.get("inquiryId")?.trim() ?? "";
 
     useEffect(() => {
         closePanel(PANEL_KEY);
@@ -26,6 +29,7 @@ export function Analysis() {
                 title="문의 관리"
                 left={
                     <InquiryTable
+                        pendingInquiryId={pendingInquiryId}
                         selectedInquiryId={selectedInquiry?.id}
                         onSelectInquiry={(inquiry) => {
                             setSelectedInquiry(inquiry);

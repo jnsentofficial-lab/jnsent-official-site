@@ -47,6 +47,7 @@ export function Analysis() {
                         category="studio_rental"
                         chips={[{ label: "서비스 선택", options: ["개인방송 스튜디오를 대여할게요", "엑셀스튜디오를 대관할게요"], required: true }]}
                         buttonLabel="문의하기"
+                        showEmail
                     />
                 }
             />
