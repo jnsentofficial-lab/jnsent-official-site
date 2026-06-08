@@ -89,6 +89,10 @@ const Modal = ({ title, description, open, onClose, children, className, actions
         };
     }, [isClient]);
 
+    useEffect(() => {
+        console.log("actions", actions);
+    }, [actions]);
+
     if (!isClient) return null; // SSR 단계에서는 아무것도 렌더링하지 않음
 
     // const modalClassName = `${className ? className : "max-w-[calc(var(--modal-width)-(1.6rem*4))]"} max-h-[calc(100dvh-(1.6rem*2))] z-[100000000] w-full bg-[var(--color-gray-100)] rounded-[3.2rem] flex flex-col shadow-[0_0_20rem_10rem_#00000060] overflow-hidden`;
@@ -103,15 +107,6 @@ const Modal = ({ title, description, open, onClose, children, className, actions
                 <AnimatePresence mode="popLayout">
                     {open && !currentPathName.includes("/qna") && (
                         <Fragment>
-                            {/* Dimmed */}
-                            {/* <motion.div
-                                className="fixed inset-0 z-[100000000] bg-[#000000a3]"
-                                onClick={onClose}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                            /> */}
-
                             {placement ? (
                                 <motion.div
                                     className="fixed inset-0 z-[100000000] grid pointer-events-none mobile:grid-cols-1 mobile:grid-rows-1 pc:grid-cols-[1fr_1fr_1fr] pc:grid-rows-[1fr_1fr_1fr] p-[3.2rem]"
@@ -169,32 +164,41 @@ const Modal = ({ title, description, open, onClose, children, className, actions
                                         {/* Body */}
                                         {children ? (
                                             <section className="relative">
-                                                <section className="absolute right-[1.6rem] top-[1.6rem]">
-                                                    {actions.map((action, i) => (
-                                                        <button
-                                                            key={i}
-                                                            disabled={action.disabled}
-                                                            aria-label={action.ariaLabel ? action.ariaLabel : action.title}
-                                                            //             className={`h-[var(--button-height-sm)] whitespace-nowrap px-[2.0rem] rounded-[var(--button-radius-sm)] transition-colors
-                                                            //     ${action.disabled ? "opacity-50 text-white" : ""}
-                                                            //     ${action.className ? action.className : "bg-[var(--color-gray-700)] hover:bg-[var(--color-gray-700)] text-white"}
-                                                            // `}
-                                                            className="cursor-pointer bg-[var(--adaptive-black500)] hover:bg-[var(--adaptive-black300)] text-[var(--adaptive-black200)] w-[2.4rem] h-[2.4rem] rounded-full"
-                                                            onClick={async () => {
-                                                                if (action.type === "close") return onClose?.();
-
-                                                                const result = await action?.onClick?.();
-                                                                const IS_PASSED = result === undefined || result;
-
-                                                                if (IS_PASSED) onClose?.();
-                                                            }}
-                                                        >
-                                                            ×{/* {action.loading ? "처리중..." : action.title} */}
-                                                        </button>
-                                                    ))}
-                                                </section>
-
+                                                {/* <section className="absolute right-[1.6rem] top-[1.6rem]"> */}
                                                 {children}
+
+                                                <section className="bg-white w-full h-[5.2rem] flex items-center justify-end">
+                                                    {actions.map((action, i) => {
+                                                        const IS_FIRST = i === 0;
+
+                                                        return (
+                                                            <Fragment key={i}>
+                                                                {!IS_FIRST ? <div className="w-[0.1rem] h-full bg-[var(--adaptive-grey200)]" /> : null}
+
+                                                                <button
+                                                                    key={i}
+                                                                    disabled={action.disabled}
+                                                                    aria-label={action.ariaLabel ? action.ariaLabel : action.title}
+                                                                    //             className={`h-[var(--button-height-sm)] whitespace-nowrap px-[2.0rem] rounded-[var(--button-radius-sm)] transition-colors
+                                                                    //     ${action.disabled ? "opacity-50 text-white" : ""}
+                                                                    //     ${action.className ? action.className : "bg-[var(--color-gray-700)] hover:bg-[var(--color-gray-700)] text-white"}
+                                                                    // `}
+                                                                    className={`flex-1 cursor-pointer text-[var(--adaptive-grey700)] w-full h-full hover:bg-[var(--adaptive-grey100)]`}
+                                                                    onClick={async () => {
+                                                                        if (action.type === "close") return onClose?.();
+
+                                                                        const result = await action?.onClick?.();
+                                                                        const IS_PASSED = result === undefined || result;
+
+                                                                        if (IS_PASSED) onClose?.();
+                                                                    }}
+                                                                >
+                                                                    {action.type === "action" ? action.title : "닫기"}
+                                                                </button>
+                                                            </Fragment>
+                                                        );
+                                                    })}
+                                                </section>
                                             </section>
                                         ) : null}
 

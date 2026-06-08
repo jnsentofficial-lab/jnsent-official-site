@@ -23,7 +23,8 @@ export function OperationKnowhow() {
     return (
         <section
             ref={sectionRef}
-            className="relative mobile:min-h-[100svh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[150dvh]"
+            // className="relative mobile:min-h-[100svh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[150dvh]"
+            className="relative flex justify-center items-center mobile:min-h-[100svh] mobile:px-[1.6rem] mobile:py-[8rem] pc:h-[150dvh]"
             data-report-id="운영 노하우 섹션"
             data-report-type="group"
         >
@@ -35,13 +36,13 @@ export function OperationKnowhow() {
                 }}
             >
                 <motion.img
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-center"
                     src={"/images/landing/studio.jpg"}
                     alt=""
                     style={{
                         maskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
                         WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
-                        objectPosition: `0 ${progress / 1}%`,
+                        // objectPosition: `0 ${progress / 1}%`,
                     }}
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
@@ -53,59 +54,61 @@ export function OperationKnowhow() {
 
             <div
                 ref={ref}
-                className="ml-auto flex h-full items-center justify-center mobile:w-full pc:w-[calc(50dvw-7.2rem)]"
+                className="ml-auto flex flex-col items-end justify-center h-[calc(100svh-(8rem*2))] w-full pc:pr-[12.8rem]"
+                // className="ml-auto flex h-full items-center justify-center mobile:w-full pc:w-[calc(50dvw-7.2rem)]"
                 data-report-id="운영 노하우 카피"
                 data-report-type="item"
             >
-                <div className="w-full h-full flex flex-col justify-center mobile:ml-[2.0rem] pc:ml-0 pc:items-start mobile:gap-[1.6rem] pc:gap-[5.2rem]">
-                    <Text.Reveal
-                        as="h2"
-                        className="mobile:text-[2.4rem] pc:text-[3.8rem] text-right font-[900] leading-[1.5]"
-                        initialColor="#00000000"
-                        midColor="rgb(255, 92, 118)"
-                        revealColor="rgb(255, 255, 255)"
-                        revealWindow={0.5}
-                        align="left"
-                        revealStartPosition={20}
-                        revealEndPosition={60}
-                        // delay={2}
-                        // transition={0}
-                        transition={2}
-                    >
-                        {`2017년부터 쌓아온 운영 노하우\n당신의 성장에만 집중합니다`}
-                    </Text.Reveal>
-                    {/* <p>{progress}</p> */}
+                {/* <div className="w-full h-full flex flex-col justify-center pc:pl-[25.2rem] mobile:ml-[2.0rem] pc:ml-0 pc:items-start mobile:gap-[1.6rem] pc:gap-[5.2rem]"> */}
+                {/* <div className="w-full h-full flex flex-col justify-center mobile:ml-[2.0rem] pc:ml-0 pc:items-start mobile:gap-[1.6rem] pc:gap-[5.2rem]"> */}
+                <Text.Reveal
+                    as="h2"
+                    className="mobile:text-[2.4rem] pc:text-[3.8rem] text-right font-[900] leading-[1.5]"
+                    initialColor="#00000000"
+                    midColor="rgb(255, 92, 118)"
+                    revealColor="rgb(255, 255, 255)"
+                    revealWindow={0.5}
+                    align="left"
+                    revealStartPosition={20}
+                    revealEndPosition={60}
+                    // delay={2}
+                    // transition={0}
+                    transition={2}
+                >
+                    {`2017년부터 쌓아온 운영 노하우\n당신의 성장에만 집중합니다`}
+                </Text.Reveal>
+                {/* <p>{progress}</p> */}
 
-                    <motion.div
-                        className="flex flex-col gap-[2.4rem] mt-[1.4rem] pl-[9.0rem]"
-                        data-report-id="운영 노하우 목록"
-                        data-report-type="item"
-                        // variants={{
-                        //     visible: {
-                        //         transition: {
-                        //             staggerChildren: 0.22,
-                        //         },
-                        //     },
-                        // }}
-                        // initial="hidden"
-                        // animate={progress === 100 ? "visible" : "hidden"}
-                    >
-                        {knowhowItems.map((item, index) => (
-                            <motion.div
-                                key={item.title}
-                                className="flex flex-col mobile:gap-[0.4rem] pc:gap-[1.2rem]"
-                                // variants={{
-                                //     hidden: { opacity: 0, y: 132 },
-                                //     visible: { opacity: 1, y: 0 },
-                                // }}
-                                // transition={{ duration: 0, ease: "easeInOut" }}
-                            >
-                                <h3 className="mobile:text-[1.8rem] text-right pc:text-[2.4rem]">{item.title}</h3>
-                                <p className="mobile:text-[1.4rem] text-right pc:text-[1.8rem] font-[700] leading-[1.5] text-[#ffffffc1]">{item.text}</p>
-                            </motion.div>
-                        ))}
-                    </motion.div>
-                </div>
+                <motion.div
+                    className="flex flex-col gap-[2.4rem] mt-[1.4rem] pl-[9.0rem]"
+                    data-report-id="운영 노하우 목록"
+                    data-report-type="item"
+                    // variants={{
+                    //     visible: {
+                    //         transition: {
+                    //             staggerChildren: 0.22,
+                    //         },
+                    //     },
+                    // }}
+                    // initial="hidden"
+                    // animate={progress === 100 ? "visible" : "hidden"}
+                >
+                    {knowhowItems.map((item, index) => (
+                        <motion.div
+                            key={item.title}
+                            className="flex flex-col mobile:gap-[0.4rem] pc:gap-[1.2rem]"
+                            // variants={{
+                            //     hidden: { opacity: 0, y: 132 },
+                            //     visible: { opacity: 1, y: 0 },
+                            // }}
+                            // transition={{ duration: 0, ease: "easeInOut" }}
+                        >
+                            <h3 className="mobile:text-[1.8rem] text-right pc:text-[2.4rem]">{item.title}</h3>
+                            <p className="mobile:text-[1.4rem] text-right pc:text-[1.8rem] font-[700] leading-[1.5] text-[#ffffffc1]">{item.text}</p>
+                        </motion.div>
+                    ))}
+                </motion.div>
+                {/* <div className="w-full h-full flex flex-col justify-center mobile:ml-[2.0rem] pc:ml-0 pc:items-end mobile:gap-[1.6rem] pc:gap-[5.2rem]"></div> */}
             </div>
         </section>
     );

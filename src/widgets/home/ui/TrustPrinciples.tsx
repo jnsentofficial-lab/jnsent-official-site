@@ -98,7 +98,7 @@ export function TrustPrinciples() {
                     />
 
                     <motion.article
-                        className="relative flex flex-1 flex-col justify-between self-stretch overflow-hidden rounded-[2.4rem] bg-[linear-gradient(0deg,#000000f7_10%,#00000050)] mobile:p-[2.0rem] pc:p-[3.2rem] gap-[1.6rem] text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
+                        className="relative flex flex-1 flex-col justify-between self-stretch overflow-hidden rounded-[2.4rem] mobile:p-[2.0rem] pc:p-[3.2rem] gap-[1.6rem] text-white shadow-[0_2rem_5rem_rgba(20,30,40,0.18)]"
                         data-report-id="신뢰 원칙 증빙 카드"
                         data-report-type="item"
                         initial={{ opacity: 0 }}
@@ -106,10 +106,11 @@ export function TrustPrinciples() {
                         viewport={{ amount: 0.25 }}
                         whileInView={{ opacity: 1 }}
                     >
+                        <div className="absolute top-0 left-0 w-full h-full object-cover z-[-1] bg-[linear-gradient(0deg,#000000f7_10%,#00000050)]" />
                         <img
                             src={"/images/landing/meeting.png"}
                             alt=""
-                            className="absolute top-0 left-0 w-full h-full object-cover z-[-1]"
+                            className="absolute top-0 left-0 w-full h-full object-cover z-[-10]"
                         />
                         {/* <section className="bg-[linear-gradient(0deg,#000000f7_10%,#00000050)] h-full flex-1 p-[3.2rem] flex flex-col justify-between"> */}
                         <section className="flex flex-col mobile:gap-[0.8rem] pc:gap-[1.6rem]">
