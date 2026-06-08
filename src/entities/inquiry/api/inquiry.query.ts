@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createInquiryCommentFetch, createInquiryFetch, deleteInquiryFetch, getAdminInquiriesFetch, getInquiryCommentsFetch, updateInquiryCommentFetch, updateInquiryStatusFetch } from "@/entities/inquiry/api/inquiry.api";
-import type { AdminInquiry, CreateInquiryCommentPayload, CreateInquiryPayload, DeleteInquiryPayload, Inquiry, InquiryComment, UpdateInquiryCommentPayload, UpdateInquiryStatusPayload } from "@/entities/inquiry/model/inquiry.type";
+import { createInquiryCommentFetch, createInquiryFetch, deleteInquiryFetch, getAdminInquiriesFetch, getInquiryCommentsFetch, resendInquiryAnswerFetch, updateInquiryCommentFetch, updateInquiryStatusFetch } from "@/entities/inquiry/api/inquiry.api";
+import type { AdminInquiry, CreateInquiryCommentPayload, CreateInquiryPayload, DeleteInquiryPayload, Inquiry, InquiryComment, ResendInquiryAnswerPayload, UpdateInquiryCommentPayload, UpdateInquiryStatusPayload } from "@/entities/inquiry/model/inquiry.type";
 import { useToastStore } from "@/shared/model/stores/useToastStore";
 
 export const InquiryRoutes = {
@@ -67,6 +67,23 @@ export const useDeleteInquiryMutation = () => {
         onSuccess: () => {
             setToast({ msg: "문의를 삭제했어요", time: 3, type: "success" });
             queryClient.invalidateQueries({ queryKey: [MUTATION_KEY] });
+        },
+        onError: (err: Error) => {
+            setToast({ msg: err.message ?? "에러 발생", time: 2, type: "fail" });
+        },
+    });
+
+    return { mutate, mutateAsync, isError, isIdle, isSuccess, isPending, isPaused, data, error, reset };
+};
+
+export const useResendInquiryAnswerMutation = () => {
+    const { setToast } = useToastStore();
+    const MUTATION_KEY = InquiryRoutes.ADMIN_INQUIRIES;
+    const { data, mutate, mutateAsync, error, isError, isSuccess, isIdle, isPending, isPaused, reset } = useMutation({
+        mutationKey: [MUTATION_KEY, "useResendInquiryAnswerMutation"],
+        mutationFn: (payload: ResendInquiryAnswerPayload) => resendInquiryAnswerFetch(payload),
+        onSuccess: () => {
+            setToast({ msg: "답변 메일을 재발송했어요", time: 3, type: "success" });
         },
         onError: (err: Error) => {
             setToast({ msg: err.message ?? "에러 발생", time: 2, type: "fail" });

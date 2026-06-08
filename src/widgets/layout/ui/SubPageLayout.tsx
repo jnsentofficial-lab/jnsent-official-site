@@ -1,9 +1,19 @@
 "use client";
 
 import { FormEvent, Fragment, ReactNode, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, PanInfo, useAnimationFrame, useMotionValue } from "framer-motion";
 import { useCreateInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
-import { buildAvailableTime, buildRegion, CONTACT_HOUR_OPTIONS, CONTACT_PERIOD_OPTIONS, formatPhoneNumber, REGION_OPTIONS, sanitizeNameInput } from "@/entities/inquiry/lib/formFields";
+import {
+    buildAvailableTime,
+    buildRegion,
+    CONTACT_HOUR_OPTIONS,
+    CONTACT_PERIOD_OPTIONS,
+    formatPhoneNumber,
+    REGION_OPTIONS,
+    requiresInquiryEmail,
+    sanitizeNameInput,
+} from "@/entities/inquiry/lib/formFields";
 import type { CreateInquiryPayload } from "@/entities/inquiry/model/inquiry.type";
 import { buildInquiryMessageBody } from "@/entities/inquiry/lib/buildMessageBody";
 import { showErrorToast } from "@/shared/lib/toast";
@@ -51,6 +61,8 @@ type StudioSliderProps = {
     }[];
     touch?: boolean;
 };
+
+const INQUIRY_RESULT_REDIRECT_CATEGORIES = new Set(["consulting", "equipment_rental", "studio_rental"]);
 
 export function SubPageHero({ current, title, description }: SubPageHeroProps) {
     return (
@@ -300,6 +312,7 @@ export function NoticeBox() {
 
 export function InquiryRequestForm({ category, title = "기본정보", messageLabel = "문의사항", buttonLabel = "요청하기", showEmail = false, chips = [] }: InquiryRequestFormProps) {
     const { setToast } = useToastStore();
+    const router = useRouter();
     const createInquiry = useCreateInquiryMutation();
     const [selected, setSelected] = useState<Record<string, string>>({});
     const [province, setProvince] = useState("");
@@ -310,6 +323,7 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
     const [agreed, setAgreed] = useState(false);
     const [status, setStatus] = useState("");
     const cityOptions = province ? REGION_OPTIONS[province as keyof typeof REGION_OPTIONS] : [];
+    const emailRequired = showEmail || requiresInquiryEmail(category);
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -325,6 +339,12 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
         if (!name || !phone || !agreed) {
             setStatus("이름, 연락처, 개인정보 동의를 확인해주세요.");
             showErrorToast("이름, 연락처, 개인정보 동의를 확인해주세요.", 2);
+            return;
+        }
+
+        if (emailRequired && !email) {
+            setStatus("이메일을 입력해주세요.");
+            showErrorToast("이메일을 입력해주세요.", 2);
             return;
         }
 
@@ -375,8 +395,16 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
             setContactHour("");
             setAgreed(false);
             setStatus("요청이 접수되었습니다.");
+
+            if (INQUIRY_RESULT_REDIRECT_CATEGORIES.has(category)) {
+                router.push("/send/success");
+            }
         } catch (error) {
             setStatus(error instanceof Error ? error.message : "요청 저장에 실패했습니다.");
+
+            if (INQUIRY_RESULT_REDIRECT_CATEGORIES.has(category)) {
+                router.push("/send/failed");
+            }
         }
     }
 
@@ -460,12 +488,14 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
 
                     {showEmail ? (
                         <label className="grid gap-3 text-[1.6rem] font-[700] text-black font-[NanumSquare]">
-                            이메일
+                            <p className="flex gap-[0.4rem]">이메일 {emailRequired ? <span className="text-[#f04452]">*</span> : null}</p>
+
                             <UI.Input
                                 size="sm"
                                 name="email"
                                 placeholder="이메일을 남겨주세요"
                                 type="email"
+                                required={emailRequired}
                             />
                         </label>
                     ) : null}
