@@ -6,8 +6,7 @@ import * as AdminModalsLayer from "@/widgets/admin/modals/ui";
 export default function Panel() {
     return (
         <AdminModalsPageProvider>
-            {/* <AdminModalsLayer.Title /> */}
-            <AdminModalsLayer.Analysis />
+            <AdminModalsLayer.ModalManagement />
         </AdminModalsPageProvider>
     );
 }

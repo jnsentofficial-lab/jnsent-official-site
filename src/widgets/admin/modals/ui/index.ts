@@ -1,1 +1,1 @@
-export { Analysis } from "./Analysis";
+export { ModalManagement } from "./ModalManagement";

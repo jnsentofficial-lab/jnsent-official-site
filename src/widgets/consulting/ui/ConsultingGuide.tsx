@@ -1,6 +1,6 @@
 "use client";
 
-import { InfoCard, InquiryRequestForm, SubPageHero, SubPageSplit } from "@/widgets/layout/ui";
+import { InquiryRequestForm, SubPageHero, SubPageSplit } from "@/widgets/layout/ui";
 import { DottedItem, SubPageSection } from "@/widgets/layout/ui/SubPageLayout";
 
 const consultingAreas = [
@@ -26,7 +26,7 @@ const consultingAreas = [
     },
 ];
 
-export function Analysis() {
+export function ConsultingGuide() {
     return (
         <section
             data-report-id="엔터창업 페이지"
@@ -77,7 +77,6 @@ export function Analysis() {
                         </SubPageSection>
 
                         <SubPageSection title={"이런 분들께 추천드립니다"}>
-                            {/* <div className="m-0 grid gap-2 pl-5 text-lg font-semibold leading-[1.5] text-black"> */}
                             <div className="flex flex-col gap-[0.8rem]">
                                 <DottedItem>엔터테인먼트 사업을 처음 시작하시는 분</DottedItem>
                                 <DottedItem>방송 스튜디오 운영을 준비 중이신 분</DottedItem>

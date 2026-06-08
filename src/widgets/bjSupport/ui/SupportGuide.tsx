@@ -19,7 +19,7 @@ const supportItems = [
     },
 ];
 
-export function Analysis() {
+export function SupportGuide() {
     const { data: content, isLoading } = usePublishedPageContentQuery("bjSupport");
 
     return (

@@ -6,7 +6,7 @@ import * as BjSupportLayer from "@/widgets/bjSupport/ui";
 export default function Panel() {
     return (
         <BjSupportPageProvider>
-            <BjSupportLayer.Analysis />
+            <BjSupportLayer.SupportGuide />
         </BjSupportPageProvider>
     );
 }

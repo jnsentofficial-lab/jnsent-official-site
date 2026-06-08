@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 
 import { AuthProvider } from "@/app/providers/AuthProvider";
 import { PopupProvider } from "@/app/providers/PopupProvider";
@@ -21,33 +20,6 @@ import { Report } from "@/widgets/layout/Report";
 import { QuickMenu } from "@/widgets/home/ui";
 
 const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
-
-// const nanumSquare = localFont({
-//     src: [
-//         {
-//             path: "../../public/fonts/NanumSquare/NanumSquareL.woff2",
-//             weight: "300",
-//             style: "normal",
-//         },
-//         {
-//             path: "../../public/fonts/NanumSquare/NanumSquareR.woff2",
-//             weight: "400",
-//             style: "normal",
-//         },
-//         {
-//             path: "../../public/fonts/NanumSquare/NanumSquareB.woff2",
-//             weight: "700",
-//             style: "normal",
-//         },
-//         {
-//             path: "../../public/fonts/NanumSquare/NanumSquareEB.woff2",
-//             weight: "800",
-//             style: "normal",
-//         },
-//     ],
-//     display: "swap",
-//     variable: "--font-nanum-square",
-// });
 
 export const metadata: Metadata = {
     metadataBase: new URL(siteUrl),
@@ -84,34 +56,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="ko">
-            {/* <head>
-                <script
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-                    type="application/ld+json"
-                />
-                <Script
-                    id="smartlog-script"
-                    strategy="afterInteractive" // 주석 풀고 사용하시는 걸 추천합니다
-                    dangerouslySetInnerHTML={{
-                        __html: `
-      var hpt_info={'_account':'UHPT-300051', '_server': 'a300'};
-      
-      // 외부 스크립트를 동적으로 로드하는 로직
-      (function() {
-        var s = document.createElement('script');
-        s.type = 'text/javascript';
-        s.async = true;
-        s.src = '//cdn.smlog.co.kr/core/smart_renew.js';
-        s.charset = 'utf-8';
-        var x = document.getElementsByTagName('script')[0];
-        x.parentNode.insertBefore(s, x);
-      })();
-    `,
-                    }}
-                />
-            </head> */}
             <body>
-                {/* <body className={`${nanumSquare.variable} ${nanumSquare.className}`}> */}
                 <GlobalErrorBoundary>
                     <QueryProvider>
                         <AuthProvider>
@@ -120,8 +65,6 @@ export default function RootLayout({
                             <Sidebar />
                             <PopupProvider>
                                 {children}
-                                {/* <RouteTransition className="flex min-h-screen flex-col">{children}</RouteTransition> */}
-                                {/* <Transition.FadeInOut>{children}</Transition.FadeInOut> */}
                             </PopupProvider>
                             <Footer />
                             <Progress />

@@ -64,7 +64,7 @@ function NewsListSkeleton() {
     );
 }
 
-export function Analysis() {
+export function NewsFeed() {
     const { data: news, isLoading } = usePublishedNewsQuery();
     const [page, setPage] = useState(1);
     const pageSize = 9;

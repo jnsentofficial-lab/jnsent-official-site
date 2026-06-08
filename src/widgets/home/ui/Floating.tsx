@@ -6,7 +6,6 @@ import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import { Text } from "@/shared/ui/kit/Text";
 import { useLayoutStore } from "@/shared/stores/useLayoutStore";
 import { InquiryModal } from "@/widgets/home/modal";
-import { QuickMenu } from "./QuickMenu";
 
 export const Floating = () => {
     const [isInquiryOpen, setIsInquiryOpen] = useState(false);
@@ -18,17 +17,8 @@ export const Floating = () => {
                 onClose={() => setIsInquiryOpen(false)}
             />
 
-            {/* 하단 플로팅 바 */}
             <FloatingBar onInquiryClick={() => setIsInquiryOpen(true)} />
-            {/* 하단 플로팅 바 */}
-
-            {/* 퀵 메뉴 */}
-            {/* <QuickMenu /> */}
-            {/* 퀵 메뉴 END */}
-
-            {/* 스크롤 가이드 */}
             <ScrollGuide />
-            {/* 스크롤 가이드 END */}
         </Fragment>
     );
 };
@@ -46,7 +36,6 @@ const FloatingBar = ({ onInquiryClick }: { onInquiryClick: () => void }) => {
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: 100, opacity: 0 }}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    // className="fixed mobile:bottom-0 pc:bottom-[1.6rem] left-[50%] z-10 flex mobile:h-[5.2rem] pc:h-[6.2rem] mobile:w-auto pc:w-[calc(100vw-1.6rem)] max-w-[var(--size-tablet)] -translate-x-1/2 items-center mobile:rounded-0 pc:rounded-full bg-black p-[0.4rem]"
                     className="fixed bottom-[2.4rem] left-[50%] z-1000 flex mobile:h-[5.2rem] pc:h-[6.2rem] mobile:w-[calc(100vw-5.6rem)] pc:w-[calc(100vw-1.6rem)] max-w-[var(--size-tablet)] -translate-x-1/2 items-center rounded-full bg-black p-[0.4rem]"
                 >
                     <div className="mobile:px-[0.8rem] pc:px-[1.6rem]">
@@ -63,7 +52,6 @@ const FloatingBar = ({ onInquiryClick }: { onInquiryClick: () => void }) => {
                         <Text.Marquee
                             speed={1}
                             classNameInner="gap-[3.2rem]"
-                            // interaction
                         >
                             <p className="mobile:text-[1.6rem] pc:text-[1.8rem] font-[700] text-white">단일 방송 최고 250만 개 달성, 다음 주인공은 당신입니다</p>
                             <p className="mobile:text-[1.6rem] pc:text-[1.8rem] font-[700] text-white">✦</p>
@@ -109,7 +97,6 @@ const ScrollGuide = () => {
                             className="absolute top-0 left-0 w-full h-full"
                             style={{
                                 background: "linear-gradient(180deg, transparent 0%, black 40%, black 70%, transparent 100%)",
-                                // background: "linear-gradient(180deg, transparent 0%, #ff6673 40%, #ffb5c1 70%, transparent 100%)",
                             }}
                             animate={{
                                 y: ["100%", "-100%"],
