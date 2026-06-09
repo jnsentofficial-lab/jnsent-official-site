@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
 import { useCreateInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
@@ -28,10 +29,10 @@ type BjSupportInquiryFormProps = {
     source: "home_modal" | "bj_support";
     buttonLabel?: string;
     animated?: boolean;
-    onSuccess?: () => void;
 };
 
-export function BjSupportInquiryForm({ source, buttonLabel = "문의하기", animated = false, onSuccess }: BjSupportInquiryFormProps) {
+export function BjSupportInquiryForm({ source, buttonLabel = "문의하기", animated = false }: BjSupportInquiryFormProps) {
+    const router = useRouter();
     const createInquiry = useCreateInquiryMutation();
     const [gender, setGender] = useState<Gender>("female");
     const [referralSource, setReferralSource] = useState<BjSupportReferralSource | "">("");
@@ -118,9 +119,9 @@ export function BjSupportInquiryForm({ source, buttonLabel = "문의하기", ani
                 }),
             });
             resetForm(form);
-            onSuccess?.();
-        } catch (error) {
-            setStatusMessage(error instanceof Error ? error.message : "문의 저장에 실패했습니다.");
+            router.push("/send/success");
+        } catch {
+            router.push("/send/failed");
         }
     };
 

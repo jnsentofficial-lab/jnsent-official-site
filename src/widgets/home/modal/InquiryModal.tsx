@@ -101,7 +101,6 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
                         <BjSupportInquiryForm
                             source="home_modal"
                             animated
-                            onSuccess={onClose}
                         />
                     </section>
                 </motion.div>
