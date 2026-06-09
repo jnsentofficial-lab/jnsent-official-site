@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { FormEvent, type InputHTMLAttributes, type ReactNode, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { useCreateInquiryMutation } from "@/entities/inquiry/api/inquiry.query";
@@ -19,38 +19,9 @@ import {
 import { HOME_INQUIRY_SUPPORT_FIELDS, SUPPORT_FIELD_CATEGORY_MAP, type HomeInquirySupportField } from "@/entities/inquiry/lib/supportFieldCategory";
 import { showErrorToast } from "@/shared/lib/toast";
 import UI from "@/shared/ui/UIComponent";
-
-type Gender = "male" | "female";
-
-type FieldErrors = {
-    name?: string;
-    age?: string;
-    region?: string;
-    phone?: string;
-    availableTime?: string;
-    agreed?: string;
-};
-
-interface InquiryModalProps {
-    open: boolean;
-    onClose: () => void;
-}
-
-function validateInquiryFields(values: { name: string; age: string; region: string; phone: string; availableTime: string; agreed: boolean }): FieldErrors {
-    const errors: FieldErrors = {};
-
-    if (!values.name) errors.name = "이름을 입력해 주세요.";
-    if (!values.age) errors.age = "나이를 입력해 주세요.";
-    if (!values.region) errors.region = "지역을 입력해 주세요.";
-    if (!values.phone) errors.phone = "전화번호를 입력해 주세요.";
-    if (!values.availableTime) errors.availableTime = "연락 가능한 시각을 입력해 주세요.";
-    if (!values.agreed) errors.agreed = "개인정보 취급 방침에 동의해 주세요.";
-
-    return errors;
-}
-
-const selectedOptionClass = "border-[#FF4B8B] text-[#FF4B8B] bg-white";
-const unselectedOptionClass = "border-[#E5E5E5] text-[#999999] bg-white hover:border-[#d0d0d0]";
+import { FormField, OptionButton, SelectInput, TextInput } from "@/widgets/home/modal/inquiryModal/InquiryModalFields";
+import type { FieldErrors, Gender, InquiryModalProps } from "@/widgets/home/modal/inquiryModal/types";
+import { validateInquiryFields } from "@/widgets/home/modal/inquiryModal/validateInquiryFields";
 
 export function InquiryModal({ open, onClose }: InquiryModalProps) {
     const createInquiry = useCreateInquiryMutation();
@@ -516,108 +487,5 @@ export function InquiryModal({ open, onClose }: InquiryModalProps) {
             ) : null}
         </AnimatePresence>,
         document.body,
-    );
-}
-
-function FormField({ label, children, delay = 1, error }: { label: string; children: ReactNode; delay: number; error?: string }) {
-    return (
-        <motion.div
-            className="flex flex-col gap-[0.8rem]"
-            initial={{ opacity: 0, transform: "translateY(100px)" }}
-            animate={{ opacity: 1, transform: "translateY(0px)" }}
-            exit={{ opacity: 0, transform: "translateY(100px)" }}
-            transition={{
-                delay: 0.05 * delay,
-                type: "spring",
-                mass: 0.1,
-                stiffness: 100,
-                damping: 10,
-            }}
-        >
-            <label className="text-[1.6rem] font-bold text-black font-[NanumSquare]">{label}</label>
-            {children}
-            {error ? (
-                <p
-                    className="m-0 -mt-[0.4rem] text-[1.4rem] font-medium text-[#FF4B8B]"
-                    role="alert"
-                >
-                    {error}
-                </p>
-            ) : null}
-        </motion.div>
-    );
-}
-
-function TextInput({ className = "", hasError = false, ...props }: InputHTMLAttributes<HTMLInputElement> & { className?: string; hasError?: boolean }) {
-    return (
-        <input
-            {...props}
-            className={`h-[5.2rem] w-full rounded-[1.6rem] border bg-white px-[1.6rem] text-[1.6rem] font-medium text-black outline-none transition-colors placeholder:text-[#BBBBBB] focus:border-[#FF4B8B] ${
-                hasError ? "border-[#FF4B8B]" : "border-[#E5E5E5]"
-            } ${className}`}
-        />
-    );
-}
-
-function SelectInput({ className = "", hasError = false, options, ...props }: React.ComponentProps<typeof UI.Select> & { hasError?: boolean }) {
-    return (
-        <UI.Select
-            {...props}
-            className={`rounded-[1.6rem] border bg-white px-[1.6rem] text-[1.6rem] font-medium text-black outline-none transition-colors disabled:bg-[#f7f7f7] ${
-                hasError ? "border-[#FF4B8B]" : "border-[#E5E5E5]"
-            } ${className}`}
-            options={options}
-            size="md"
-        />
-    );
-}
-
-function OptionButton({ children, selected, onClick, className = "" }: { children: ReactNode; selected: boolean; onClick: () => void; className?: string }) {
-    return (
-        <button
-            type="button"
-            onClick={onClick}
-            className={`h-[5.2rem] rounded-[1.6rem] border text-[1.6rem] font-bold transition-colors ${selected ? selectedOptionClass : unselectedOptionClass} ${className}`}
-        >
-            {children}
-        </button>
-    );
-}
-
-function InquiryModalFooter() {
-    return (
-        <footer className="bg-black py-[4.8rem] text-white">
-            <div className="mx-auto grid w-[min(112rem,calc(100%_-_3.2rem))] grid-cols-2 gap-[4rem] max-[86rem]:grid-cols-1">
-                <div className="flex items-start gap-[1.6rem]">
-                    <img
-                        src="/images/common/ico-logo.svg"
-                        alt=""
-                        className="h-[4.8rem] w-[4.8rem] brightness-0 invert"
-                    />
-                    <div>
-                        <p className="text-[2rem] font-[700] leading-[1.5]">JNS ENTERTAINMENT</p>
-                        <p className="mt-[0.4rem] text-[1.6rem] font-bold text-white/45">제이엔에스엔터테인먼트</p>
-                    </div>
-                </div>
-                <address className="not-italic text-[1.4rem] font-semibold leading-[1.5] text-white/55">
-                    <strong className="text-white/35">INFORMATION</strong>
-                    <br />
-                    제이엔에스 엔터테인먼트 | 대표 우인식 | 사업자등록번호 -
-                    <br />
-                    <br />
-                    <strong className="text-white/35">CONTACT</strong>
-                    <br />
-                    02-6949-0286
-                    <br />
-                    <br />
-                    <strong className="text-white/35">ADDRESS</strong>
-                    <br />
-                    서울특별시 강남구 강남대로 100길 30
-                    <br />
-                    <br />
-                    Copyright 제이엔에스. All rights reserved.
-                </address>
-            </div>
-        </footer>
     );
 }

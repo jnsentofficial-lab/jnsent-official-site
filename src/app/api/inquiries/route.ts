@@ -1,24 +1,35 @@
 import { createSupabaseServiceClient } from "@/shared/api/SupabaseServer";
-import { buildAvailableTime, buildRegion, formatPhoneNumber, requiresInquiryEmail, sanitizeAgeInput, sanitizeNameInput } from "@/entities/inquiry/lib/formFields";
+import type { Json } from "@/shared/types/Database";
+import { buildAvailableTime, buildRegion, formatPhoneNumber, sanitizeAgeInput, sanitizeNameInput } from "@/entities/inquiry/lib/formFields";
 import { sendInquiryNotification } from "@/entities/inquiry/lib/inquiryNotification.server";
 import { buildInquiryIpHash, buildInquiryPayloadHash, extractClientIp, validateInquirySubmissionLimit } from "@/entities/inquiry/lib/inquiryRateLimit.server";
 import { apiError, apiOk } from "@/shared/lib/api/server";
+import { parseJsonBody } from "@/shared/lib/validation/parseRequest";
+import { createInquirySchema } from "@/shared/lib/validation/schemas/inquiry";
 
 export async function POST(request: Request) {
-    const body = await request.json();
-    const name = sanitizeNameInput(String(body.name ?? "")).trim();
-    const phone = formatPhoneNumber(String(body.phone ?? "").trim());
-    const message = String(body.message ?? "").trim();
-    const age = body.age ? sanitizeAgeInput(String(body.age).trim()) : null;
-    const region = body.region ? String(body.region).trim() : buildRegion(String(body.province ?? "").trim(), String(body.city ?? "").trim(), String(body.town ?? "").trim());
+    const parsed = await parseJsonBody(request, createInquirySchema);
+
+    if (!parsed.success) {
+        return parsed.response;
+    }
+
+    const body = parsed.data;
+    const name = sanitizeNameInput(body.name).trim();
+    const phone = formatPhoneNumber(body.phone.trim());
+    const message = body.message.trim();
+    const age = body.age ? sanitizeAgeInput(body.age.trim()) : null;
+    const region = body.region
+        ? body.region.trim()
+        : buildRegion(String(body.province ?? "").trim(), String(body.city ?? "").trim(), String(body.town ?? "").trim());
     const availableTime = body.available_time
-        ? String(body.available_time).trim()
+        ? body.available_time.trim()
         : buildAvailableTime(String(body.available_period ?? "").trim(), String(body.available_hour ?? "").trim());
-    const category = String(body.category ?? "bj_support").trim() || "bj_support";
-    const source = String(body.source ?? "bj_support").trim() || "bj_support";
-    const email = body.email ? String(body.email).trim() : null;
-    const supportLabel = body.support_label ? String(body.support_label).trim() : null;
-    const gender = body.gender ? String(body.gender).trim() : null;
+    const category = body.category.trim() || "bj_support";
+    const source = body.source.trim() || "bj_support";
+    const email = body.email ? body.email.trim() : null;
+    const supportLabel = body.support_label ? body.support_label.trim() : null;
+    const gender = body.gender ? body.gender.trim() : null;
     const ipHash = buildInquiryIpHash(extractClientIp(request));
     const payloadHash = buildInquiryPayloadHash({
         name,
@@ -34,14 +45,6 @@ export async function POST(request: Request) {
         message,
         messageBody: body.message_body ?? null,
     });
-
-    if (!name || !phone || !message) {
-        return apiError("이름, 연락처, 문의 내용을 입력해주세요.", 400);
-    }
-
-    if (requiresInquiryEmail(category) && !email) {
-        return apiError("이메일을 입력해주세요.", 400);
-    }
 
     const limitError = await validateInquirySubmissionLimit({
         category,
@@ -62,7 +65,7 @@ export async function POST(request: Request) {
             phone,
             email,
             message,
-            message_body: body.message_body ?? null,
+            message_body: (body.message_body ?? null) as Json | null,
             category,
             gender,
             age,

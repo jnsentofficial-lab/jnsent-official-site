@@ -1,5 +1,7 @@
 import { createSupabaseServerClient } from "@/shared/api/SupabaseServer";
 import { apiError, apiOk } from "@/shared/lib/api/server";
+import { parseJsonBody } from "@/shared/lib/validation/parseRequest";
+import { createReportSchema } from "@/shared/lib/validation/schemas/report";
 
 const DESIGN_WIDTH = 1920;
 const DESIGN_HEIGHT = 1080;
@@ -19,28 +21,19 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-    const body = await request.json();
-    const pathname = String(body.pathname ?? "").trim();
-    const reportId = String(body.report_id ?? "").trim();
-    const reportType = String(body.report_type ?? "").trim();
-    const message = String(body.message ?? "").trim();
-    const xRatio = Number(body.x_ratio);
-    const yRatio = Number(body.y_ratio);
-    const elementXRatio = body.element_x_ratio === null || body.element_x_ratio === undefined ? null : Number(body.element_x_ratio);
-    const elementYRatio = body.element_y_ratio === null || body.element_y_ratio === undefined ? null : Number(body.element_y_ratio);
-    const scrollY = Number(body.scroll_y);
-    const documentY = Number(body.document_y);
-    const viewportWidth = Number(body.viewport_width);
-    const viewportHeight = Number(body.viewport_height);
-    const isValidRatio = Number.isFinite(xRatio) && Number.isFinite(yRatio) && xRatio >= 0 && xRatio <= 1 && yRatio >= 0 && yRatio <= 1;
-    const hasElementRatio = elementXRatio !== null && elementYRatio !== null;
-    const isValidElementRatio =
-        (!hasElementRatio && elementXRatio === null && elementYRatio === null) ||
-        (hasElementRatio && Number.isFinite(elementXRatio) && Number.isFinite(elementYRatio) && elementXRatio >= 0 && elementXRatio <= 1 && elementYRatio >= 0 && elementYRatio <= 1);
-    const isValidPosition = Number.isInteger(scrollY) && scrollY >= 0 && Number.isInteger(documentY) && documentY >= 0;
-    const isValidViewport = Number.isInteger(viewportWidth) && Number.isInteger(viewportHeight) && viewportWidth > 0 && viewportHeight > 0;
+    const parsed = await parseJsonBody(request, createReportSchema);
 
-    if (!pathname || !reportId || !["group", "item"].includes(reportType) || !message || !isValidRatio || !isValidElementRatio || !isValidPosition || !isValidViewport) {
+    if (!parsed.success) {
+        return parsed.response;
+    }
+
+    const body = parsed.data;
+    const hasElementRatio = body.element_x_ratio !== null && body.element_x_ratio !== undefined && body.element_y_ratio !== null && body.element_y_ratio !== undefined;
+    const isValidElementRatio =
+        (!hasElementRatio && body.element_x_ratio == null && body.element_y_ratio == null) ||
+        (hasElementRatio && body.element_x_ratio !== undefined && body.element_y_ratio !== undefined);
+
+    if (!isValidElementRatio) {
         return apiError("리포트 정보를 다시 확인해주세요.", 400);
     }
 
@@ -48,20 +41,20 @@ export async function POST(request: Request) {
     const { data, error } = await supabase
         .from("ui_reports")
         .insert({
-            pathname,
-            report_id: reportId,
-            report_type: reportType as "group" | "item",
-            message,
-            x_ratio: xRatio,
-            y_ratio: yRatio,
-            element_x_ratio: elementXRatio,
-            element_y_ratio: elementYRatio,
-            scroll_y: scrollY,
-            document_y: documentY,
-            viewport_width: viewportWidth,
-            viewport_height: viewportHeight,
-            design_width: Number(body.design_width) || DESIGN_WIDTH,
-            design_height: Number(body.design_height) || DESIGN_HEIGHT,
+            pathname: body.pathname,
+            report_id: body.report_id,
+            report_type: body.report_type,
+            message: body.message,
+            x_ratio: body.x_ratio,
+            y_ratio: body.y_ratio,
+            element_x_ratio: body.element_x_ratio ?? null,
+            element_y_ratio: body.element_y_ratio ?? null,
+            scroll_y: body.scroll_y,
+            document_y: body.document_y,
+            viewport_width: body.viewport_width,
+            viewport_height: body.viewport_height,
+            design_width: body.design_width ?? DESIGN_WIDTH,
+            design_height: body.design_height ?? DESIGN_HEIGHT,
         })
         .select("*")
         .single();

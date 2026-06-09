@@ -21,6 +21,9 @@ export function useSectionTheme(ref: RefObject<HTMLElement | null>, { activeThem
     // 상태 셋터 직접 레퍼런스
     const setIsNowDarkMode = useLayoutStore((s) => s.setIsNowDarkMode);
 
+    // 다크모드 조건: defaultTheme이 "light"나 "mild"가 아닐 때 true
+    const isDarkModeTheme = (theme: Theme) => theme !== "light" && theme !== "mild";
+
     useEffect(() => {
         const section = ref.current;
 
@@ -40,7 +43,8 @@ export function useSectionTheme(ref: RefObject<HTMLElement | null>, { activeThem
                 setTheme(isActive ? activeTheme : defaultTheme);
                 // 상태 업데이트는 변화 있을 때만
                 if (prevActive !== isActive) {
-                    setIsNowDarkMode(isActive);
+                    const themeToCheck = isActive ? activeTheme : defaultTheme;
+                    setIsNowDarkMode(isDarkModeTheme(themeToCheck));
                     prevActive = isActive;
                 }
             },
@@ -56,7 +60,8 @@ export function useSectionTheme(ref: RefObject<HTMLElement | null>, { activeThem
             const isInView = rect.top < window.innerHeight * (1 - threshold) && rect.bottom > window.innerHeight * threshold;
             const isActive = isInView;
             setTheme(isActive ? activeTheme : defaultTheme);
-            setIsNowDarkMode(isActive);
+            const themeToCheck = isActive ? activeTheme : defaultTheme;
+            setIsNowDarkMode(isDarkModeTheme(themeToCheck));
             prevActive = isActive;
         };
 
@@ -65,7 +70,7 @@ export function useSectionTheme(ref: RefObject<HTMLElement | null>, { activeThem
         return () => {
             observer.disconnect();
             setTheme(defaultTheme);
-            setIsNowDarkMode(defaultTheme === "dark");
+            setIsNowDarkMode(isDarkModeTheme(defaultTheme));
         };
     }, [activeTheme, defaultTheme, ref, threshold, setIsNowDarkMode]);
 }

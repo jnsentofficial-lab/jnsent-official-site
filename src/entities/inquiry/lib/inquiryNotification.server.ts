@@ -166,7 +166,7 @@ export function buildInquiryEmailHtml(inquiry: Inquiry) {
         title: "문의가 접수되었습니다.",
         description: "내용을 확인해주세요",
         leadText: "제이엔에스 엔터테인먼트 웹사이트를 통해 새로운 문의가 접수되었습니다. 아래 내용을 확인하신 뒤 필요한 후속 응대를 진행해주세요.",
-        footerText: "접수 정보와 상세 문의 내용은 메일 하단에 정리되어 있으며, 문의자 정보와 요청 항목이 잘 구분되도록 구성했습니다.",
+        footerText: "접수 정보와 상세 문의 내용은 메일 하단에 정리되어 있습니다.",
         body: `
             <div style="margin:0 0 18px;font-size:20px;font-weight:800;line-height:1.4;color:#222222">유저 정보</div>
             <table style="width:100%;border-collapse:collapse;border-top:1px solid #eceef2;border-bottom:1px solid #eceef2;margin:0 0 36px">
@@ -227,8 +227,9 @@ export function buildInquiryAnswerEmailHtml(inquiry: Inquiry) {
         accentTitle: categoryLabel,
         title: "문의에 답변이 등록되었습니다.",
         description: "답변 내용을 확인해주세요",
-        leadText: "제이엔에스 엔터테인먼트 웹사이트를 통해 남겨주신 문의에 답변이 등록되었습니다. 아래 버튼을 눌러 답변 내용을 바로 확인하실 수 있습니다.",
-        footerText: "접수 정보와 상세 문의 내용은 메일 하단에 정리되어 있으며, 문의자 정보와 요청 항목이 잘 구분되도록 구성했습니다.",
+        leadText: `안녕하세요! 남겨주신 문의에 대한 답변을 등록이 되었습니다,\n 아래 버튼을 눌러 답변을 확인해주세요.`,
+        footerText: `문의 접수 정보와 자세한 내용은 메일 아래쪽에서 확인하실 수 있습니다.\n자세한 사항은 홈페이지 내부의 상담 기능을 통해 문의 바랍니다.`,
+
         body: "",
         buttonLabel: "답변 내용 확인하기",
         buttonHref: buildAbsoluteUrl(buildPublicInquiryPath(inquiry.id)),
