@@ -77,7 +77,7 @@ export function SiteHeader() {
                 </nav>
 
                 <UI.Linker
-                    className="whitespace-nowrap p-[0.8rem_1.2rem] bg-[var(--adaptive-grey900)] text-white rounded-full"
+                    className="mobile:hidden pc:block whitespace-nowrap p-[0.8rem_1.2rem] bg-[var(--adaptive-grey900)] text-white rounded-full"
                     // className="text-[1.6rem] inline-flex shrink-0 items-center justify-center rounded-full bg-black px-6 py-[0.2rem] text-base text-white"
                     href="/bjSupport"
                     data-report-id="상단 헤더 지원 버튼"
@@ -159,6 +159,36 @@ export function SiteHeader() {
                                     </UI.Linker>
                                 </motion.div>
                             ))}
+                            <motion.div
+                                initial={{ opacity: 0, translateY: 100 }}
+                                animate={{ opacity: 1, translateY: 0 }}
+                                exit={{ opacity: 0 }}
+                                transition={{
+                                    delay: 0.1 * (navigationItems.length + 1),
+                                    duration: 0.5,
+                                    ease: [0.22, 1, 0.36, 1],
+                                }}
+                                className="w-full h-[0.1rem] bg-[var(--adaptive-black100)]"
+                            />
+                            <motion.div
+                                initial={{ opacity: 0, translateY: 100 }}
+                                animate={{ opacity: 1, translateY: 0 }}
+                                exit={{ opacity: 0 }}
+                                transition={{
+                                    delay: 0.1 * (navigationItems.length + 2),
+                                    duration: 0.5,
+                                    ease: [0.22, 1, 0.36, 1],
+                                }}
+                            >
+                                <UI.Linker
+                                    className={`${currentPathName === "/bjSupport" ? "text-[var(--adaptive-red500)]" : "text-[var(--adaptive-grey500)]"} text-[2.8rem] hover:text-[#ff6673] flex items-center gap-[1.6rem]`}
+                                    href={"/bjSupport"}
+                                    // key={item.href}
+                                    onClick={() => setIsMobileNavOpen(false)}
+                                >
+                                    BJ 지원하기
+                                </UI.Linker>
+                            </motion.div>
                         </nav>
 
                         {/* <section className="w-full flex flex-col gap-[1.6rem]">
