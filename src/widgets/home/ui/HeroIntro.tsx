@@ -32,16 +32,11 @@ export function HeroIntro() {
 
     useEffect(() => {
         if (isRevealComplete) {
-            console.log("끝");
             setIsReadyLanding(true);
-
-            return;
-        } else {
-            console.log("시작");
-            setIsReadyLanding(false);
-
             return;
         }
+
+        setIsReadyLanding(false);
     }, [isRevealComplete, setIsReadyLanding]);
 
     return (
@@ -52,7 +47,7 @@ export function HeroIntro() {
                 data-report-type="item"
             >
                 <Text.Reveal
-                    as="h2"
+                    as="p"
                     interaction={false}
                     className="mobile:text-[2.4rem] pc:text-[4.2rem] font-[900] font-[NanumSquare] leading-[1.5]"
                     initialColor="#ffffff00"
@@ -63,7 +58,6 @@ export function HeroIntro() {
                     transition={2}
                     delay={1}
                     onRevealComplete={() => {
-                        console.log(1);
                         setIntroStep(2);
                     }}
                 >
@@ -79,7 +73,7 @@ export function HeroIntro() {
                 >
                     <span className="hidden pc:block">
                         <Text.Reveal
-                            as="h2"
+                            as="h1"
                             interaction={false}
                             className="mobile:text-[2.4rem] pc:text-[4.2rem] font-[900] leading-[1.5]"
                             initialColor="#ffffff00"
@@ -90,7 +84,6 @@ export function HeroIntro() {
                             delay={0.1}
                             transition={2}
                             onRevealComplete={() => {
-                                console.log("2");
                                 setIsRevealComplete(true);
                             }}
                         >
@@ -99,7 +92,7 @@ export function HeroIntro() {
                     </span>
                     <span className="block pc:hidden">
                         <Text.Reveal
-                            as="h2"
+                            as="h1"
                             interaction={false}
                             className="mobile:text-[2.4rem] pc:text-[4.2rem] font-[900] leading-[1.5] mobile:whitespace-break-spaces pc:whitespace-nowrap"
                             initialColor="#ffffff00"
@@ -110,7 +103,6 @@ export function HeroIntro() {
                             delay={0.1}
                             transition={2}
                             onRevealComplete={() => {
-                                console.log("2");
                                 setIsRevealComplete(true);
                             }}
                         >

@@ -53,7 +53,7 @@ export function SiteHeader() {
                         src={"/images/common/ico-logo.svg"}
                         width={52}
                         height={52}
-                        alt=""
+                        alt="제이엔에스 엔터테인먼트"
                         className={`${isNowDarkMode ? "invert" : ""}`}
                     />
                 </UI.Linker>
@@ -118,7 +118,7 @@ export function SiteHeader() {
                                     src={"/images/common/ico-logo.svg"}
                                     width={52}
                                     height={52}
-                                    alt=""
+                                    alt="제이엔에스 엔터테인먼트"
                                 />
                             </UI.Linker>
 

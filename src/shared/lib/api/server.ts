@@ -5,12 +5,10 @@ type ServerFetchOptions = Omit<RequestInit, "body"> & {
     body?: unknown;
 };
 
-function getBaseUrl() {
-    return (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
-}
+import { getSiteUrl } from "@/shared/lib/siteUrl";
 
 export async function serverFetch<T>(url: string, options: ServerFetchOptions = {}): Promise<T> {
-    const target = url.startsWith("http") ? url : `${getBaseUrl()}${url}`;
+    const target = url.startsWith("http") ? url : `${getSiteUrl()}${url}`;
     const response = await fetch(target, {
         ...options,
         headers: {

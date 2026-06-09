@@ -1,6 +1,17 @@
+import { createSupabaseServerClient } from "@/shared/api/SupabaseServer";
 import { clientApi, type ApiResponse } from "@/shared/lib/api/client";
-import { serverApi } from "@/shared/lib/api/server";
 import type { PageContent, TogglePageContentPayload, UpsertPageContentPayload } from "@/entities/pageContent/model/pageContent.type";
+
+export async function getPublishedPageContentServer(slug: string) {
+    const supabase = createSupabaseServerClient();
+    const { data, error } = await supabase.from("page_contents").select("*").eq("slug", slug).eq("is_published", true).maybeSingle();
+
+    if (error) {
+        return null;
+    }
+
+    return data;
+}
 
 export async function getPublishedPageContentFetch(slug: string) {
     return clientApi.get<ApiResponse<PageContent | null>>(`/api/page-contents/${slug}`);

@@ -1,13 +1,14 @@
 import type { MetadataRoute } from "next";
-import { createSupabaseServiceClient } from "@/shared/api/SupabaseServer";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
+import { createSupabaseServiceClient } from "@/shared/api/SupabaseServer";
+import { getSiteUrl } from "@/shared/lib/siteUrl";
 
 export const dynamic = "force-dynamic";
 
 const routes = ["", "/consulting", "/equipmentRental", "/studioRental", "/bjSupport", "/news"];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+    const siteUrl = getSiteUrl();
     const supabase = createSupabaseServiceClient();
     const { data } = await supabase
         .from("news")

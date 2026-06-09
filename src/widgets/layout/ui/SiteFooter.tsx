@@ -13,7 +13,7 @@ export function SiteFooter() {
                         src={"/images/common/ico-logo.svg"}
                         width={72}
                         height={72}
-                        alt=""
+                        alt="제이엔에스 엔터테인먼트"
                         className="invert mobile:w-[5.2rem] pc:w-[7.2rem]"
                         // className={`${isNowDarkMode ? "invert" : ""}`}
                     />

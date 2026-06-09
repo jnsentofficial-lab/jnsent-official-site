@@ -1,5 +1,3 @@
-"use client";
-
 import { NewsDetailPanel } from "@/widgets/news/detail";
 
 type NewsDetailViewProps = {

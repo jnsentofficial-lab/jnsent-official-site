@@ -1,6 +1,7 @@
 import type { Inquiry, InquiryComment } from "@/entities/inquiry/model/inquiry.type";
 import { buildAdminInquiryPath, buildPublicInquiryPath } from "@/entities/inquiry/lib/publicPath";
 import { getResendClient } from "@/shared/lib/resend";
+import { getSiteUrl } from "@/shared/lib/siteUrl";
 
 const INQUIRY_EMAIL_CATEGORIES = new Set(["consulting", "equipment_rental", "studio_rental"]);
 
@@ -20,10 +21,6 @@ const INQUIRY_MESSAGE_HIDDEN_LABELS = new Set(["이름", "연락처", "지역", 
 
 function escapeHtml(value: string) {
     return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
-}
-
-function getSiteUrl() {
-    return (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
 }
 
 function buildAbsoluteUrl(path: string) {
