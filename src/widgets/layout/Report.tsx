@@ -536,7 +536,8 @@ export function Report() {
                         >
                             <span
                                 className="absolute left-0 top-0 -translate-y-[calc(100%+0.6rem)] rounded-full px-[0.8rem] py-[0.4rem] text-[1.1rem] font-semibold text-white"
-                                style={{ backgroundColor: TARGET_COLOR[hoveredTarget.type] }}
+                                style={{ backgroundColor: "#0ed1b4" }}
+                                // style={{ backgroundColor: TARGET_COLOR[hoveredTarget.type] }}
                             >
                                 {hoveredTarget.type} · {hoveredTarget.id}
                             </span>
@@ -551,7 +552,8 @@ export function Report() {
                                 top: selectedTarget.rect.top + 5,
                                 width: selectedTarget.rect.width - 10,
                                 height: selectedTarget.rect.height - 10,
-                                boxShadow: `0 0 0 3px ${TARGET_COLOR[selectedTarget.type]}`,
+                                boxShadow: `0 0 0 3px #0ed1b4`,
+                                // boxShadow: `0 0 0 3px ${TARGET_COLOR[selectedTarget.type]}`,
                             }}
                         />
                     ) : null}

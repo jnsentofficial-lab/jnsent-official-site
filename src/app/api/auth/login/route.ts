@@ -4,6 +4,8 @@ import { createSupabaseServiceClient } from "@/shared/api/SupabaseServer";
 import { createAuthManagerUser, resolveAdminIdentity, toAuthEmail, toManagerRole, verifyPasswordHash } from "@/shared/lib/AdminAccountAuth";
 import { apiError, apiOk } from "@/shared/lib/api/server";
 import { isMissingIsActiveColumnError } from "@/shared/lib/managerAccountSchema";
+import { parseJsonBody } from "@/shared/lib/validation/parseRequest";
+import { adminLoginSchema } from "@/shared/lib/validation/schemas/auth";
 
 async function migrateLegacyManagerAccount(loginId: string, password: string) {
     const supabase = createSupabaseServiceClient();
@@ -26,9 +28,14 @@ async function migrateLegacyManagerAccount(loginId: string, password: string) {
 }
 
 export async function POST(request: Request) {
-    const body = await request.json();
-    const loginId = String(body.email ?? "").trim();
-    const password = String(body.password ?? "");
+    const parsed = await parseJsonBody(request, adminLoginSchema);
+
+    if (!parsed.success) {
+        return parsed.response;
+    }
+
+    const loginId = parsed.data.email;
+    const password = parsed.data.password;
     const supabase = createSupabaseServerClient();
     let { data, error } = await supabase.auth.signInWithPassword({
         email: toAuthEmail(loginId),

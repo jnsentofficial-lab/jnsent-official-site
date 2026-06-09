@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
 
-import { HomePageProvider } from "@/features/home/model/SubscriptionContext";
 import * as HomeLayer from "@/widgets/home/ui";
 
 export default function Panel() {
@@ -27,7 +26,7 @@ export default function Panel() {
     }, []);
 
     return (
-        <HomePageProvider>
+        <>
             <HomeLayer.Floating />
             <HomeLayer.HeroIntro />
             <HomeLayer.TransparencyProof />
@@ -38,6 +37,6 @@ export default function Panel() {
             <HomeLayer.TrustPrinciples />
             <HomeLayer.ExpertNetwork />
             <HomeLayer.FinalCtaSection />
-        </HomePageProvider>
+        </>
     );
 }

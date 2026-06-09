@@ -13,7 +13,7 @@ export function Toast() {
     // }
 
     return (
-        <div className="fixed left-[50%] transform translate-x-[-50%] top-[3.2rem] z-[1000] grid w-[min(36rem,calc(100vw-2.4rem))] gap-2">
+        <div className="fixed left-[50%] transform translate-x-[-50%] top-[3.2rem] z-[100000000000] grid w-[min(36rem,calc(100vw-2.4rem))] gap-2">
             <AnimatePresence>
                 {toastList.map((toast) => (
                     <motion.div

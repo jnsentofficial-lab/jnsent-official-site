@@ -77,7 +77,7 @@ export function SiteHeader() {
                 </nav>
 
                 <UI.Linker
-                    className="mobile:hidden rounded-full bg-black px-[1.2rem] text-white flex items-center justify-center"
+                    className="whitespace-nowrap p-[0.8rem_1.2rem] bg-[var(--adaptive-grey900)] text-white rounded-full"
                     // className="text-[1.6rem] inline-flex shrink-0 items-center justify-center rounded-full bg-black px-6 py-[0.2rem] text-base text-white"
                     href="/bjSupport"
                     data-report-id="상단 헤더 지원 버튼"

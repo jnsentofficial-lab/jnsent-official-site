@@ -11,20 +11,20 @@ export function SiteFooter() {
                 <div>
                     <Image
                         src={"/images/common/ico-logo.svg"}
-                        width={72}
-                        height={72}
+                        width={52}
+                        height={52}
                         alt="제이엔에스 엔터테인먼트"
-                        className="invert mobile:w-[5.2rem] pc:w-[7.2rem]"
+                        className="invert mobile:w-[3.2rem] pc:w-[5.8rem]"
                         // className={`${isNowDarkMode ? "invert" : ""}`}
                     />
-                    <p className="mt-5 mb-0 mobile:text-[1.6rem] pc:text-[2.4rem] font-[900] leading-[1.5] text-white/45">
+                    <h5 className="mt-5 mb-0 mobile:text-[1.6rem] pc:text-[2.0rem] leading-[1.5] font-[900]">
                         JNS ENTERTAINMENT
                         <br />
                         제이엔에스엔터테인먼트
-                    </p>
+                    </h5>
                 </div>
-                <address className="not-italic text-base font-semibold leading-[1.5] text-white/55">
-                    <strong className="text-white/35">INFORMATION</strong>
+                <address className="not-italic text-base font-semibold leading-[1.5] text-white">
+                    <strong className="text-white/50 text-[1.4rem] font-[500]">INFORMATION</strong>
                     <br />
                     제이엔에스 엔터테인먼트
                     <br />
@@ -33,12 +33,12 @@ export function SiteFooter() {
                     사업자등록번호 -
                     <br />
                     <br />
-                    <strong className="text-white/35">CONTACT</strong>
+                    <strong className="text-white/50 text-[1.4rem] font-[500]">CONTACT</strong>
                     <br />
                     02-6949-0286
                     <br />
                     <br />
-                    <strong className="text-white/35">ADDRESS</strong>
+                    <strong className="text-white/50 text-[1.4rem] font-[500]">ADDRESS</strong>
                     <br />
                     서울특별시 강남구 강남대로 100길 30
                     <br />

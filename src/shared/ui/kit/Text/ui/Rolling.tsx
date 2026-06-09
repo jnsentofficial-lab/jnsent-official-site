@@ -1,4 +1,4 @@
-import { util } from "@/shared/utils/util";
+import { formatPriceWithCommas } from "@/shared/utils/formatPrice";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
@@ -71,8 +71,8 @@ export const Rolling = ({
     const containerRef = useRef<HTMLDivElement>(null);
     const [active, setActive] = useState(false);
     const normalizedLength = Math.max(digit, String(Math.trunc(Math.abs(value))).length, String(Math.trunc(Math.abs(initialValue))).length);
-    const FORMAT_VALUE = util.string.getCommaOnPrice(value).padStart(normalizedLength, "0").split("");
-    const FORMAT_INITIAL_VALUE = util.string.getCommaOnPrice(initialValue).padStart(normalizedLength, "0").split("");
+    const FORMAT_VALUE = formatPriceWithCommas(value).padStart(normalizedLength, "0").split("");
+    const FORMAT_INITIAL_VALUE = formatPriceWithCommas(initialValue).padStart(normalizedLength, "0").split("");
 
     const sizeMap = {
         12: { text: "1.2", height: "1.2" },
