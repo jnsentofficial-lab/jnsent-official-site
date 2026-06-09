@@ -1,4 +1,4 @@
-import React from "react";
+import { createSiteJsonLd } from "@/shared/lib/JsonLd";
 import Script from "next/script";
 
 interface LayoutProps {
@@ -6,13 +6,7 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
-    const jsonLd = {
-        // 여기에 실제 JSON-LD 스키마 내용을 넣으세요 (예시)
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        name: "제이엔에스 엔터테인먼트",
-        url: "https://도메인주소",
-    };
+    const jsonLd = createSiteJsonLd();
 
     return (
         <>
@@ -23,12 +17,11 @@ export default function Layout({ children }: LayoutProps) {
             />
             <Script
                 id="smartlog-script"
-                strategy="afterInteractive" // 주석 풀고 사용하시는 걸 추천합니다
+                strategy="afterInteractive"
                 dangerouslySetInnerHTML={{
                     __html: `
       var hpt_info={'_account':'UHPT-300051', '_server': 'a300'};
       
-      // 외부 스크립트를 동적으로 로드하는 로직
       (function() {
         var s = document.createElement('script');
         s.type = 'text/javascript';

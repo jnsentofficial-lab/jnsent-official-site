@@ -1,12 +1,14 @@
-import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { FailedView } from "@/views/send/failed/FailedView";
 import Main from "@/widgets/layout/Main";
+import { buildPageMetadata } from "@/shared/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
     title: "문의 접수 실패 | 제이엔에스 엔터테인먼트",
     description: "문의 전송 중 오류가 발생했습니다.",
-};
+    path: "/send/failed",
+    noIndex: true,
+});
 
 export default async function SendFailedPage() {
     const cookieStore = await cookies();

@@ -7,13 +7,18 @@ import { useEffect, useState } from "react";
 import { useLayoutStore } from "@/shared/stores/useLayoutStore";
 import useNavigate from "@/shared/hooks/useNavigate";
 
-const socialItems = ["kakao", "insta", "blog", ""];
+const socialItems = [
+    { key: "kakao", href: "https://open.kakao.com/o/s0UmPOAc", label: "카카오톡 오픈채팅" },
+    { key: "insta", href: "https://www.instagram.com/jns_ent__?igsh=MTc0M3RnMTluMzFqNQ%3D%3D&utm_source=qr", label: "인스타그램" },
+    { key: "blog", href: "https://blog.naver.com/js_ent_", label: "네이버 블로그" },
+    { key: "", href: "", label: "" },
+];
 
 const MOBILE_BREAKPOINT = 768;
 const MOBILE_HIDE_X = "120%";
 const QUICK_MENU_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-export const QuickMenu = () => {
+export function QuickMenu() {
     const { isReadyLanding } = useLayoutStore();
     const { currentPathName } = useNavigate();
 
@@ -86,15 +91,17 @@ export const QuickMenu = () => {
                     transition={{ duration: 0.45, ease: QUICK_MENU_EASE }}
                 >
                     <section className="flex flex-col gap-[0.8rem]">
-                        {socialItems.map((item) => (
+                        {socialItems.map(({ key, href, label }) => (
                             <a
-                                className={`grid mobile:h-[4.8rem] mobile:w-[4.8rem] pc:h-[7.2rem] pc:w-[7.2rem] place-items-center rounded-full ${!!item ? "bg-white" : "bg-transparent"} text-sm font-[700] text-black shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.14)]`}
-                                href="/bjSupport"
-                                key={item}
+                                className={`grid mobile:h-[4.8rem] mobile:w-[4.8rem] pc:h-[7.2rem] pc:w-[7.2rem] place-items-center rounded-full ${!!key ? "bg-white" : "bg-transparent"} text-sm font-[700] text-black shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.14)]`}
+                                href={href || undefined}
+                                key={key || "spacer"}
+                                aria-label={label || undefined}
+                                {...(href ? { target: "_blank", rel: "noreferrer" } : {})}
                             >
-                                {item ? (
+                                {key ? (
                                     <Image
-                                        src={`/images/icon/route/home/ico-floating-${item}.svg`}
+                                        src={`/images/icon/route/home/ico-floating-${key}.svg`}
                                         alt=""
                                         height={58}
                                         width={58}
@@ -105,9 +112,10 @@ export const QuickMenu = () => {
                         ))}
                     </section>
                     <div className="mx-auto h-[0.1rem] w-8 bg-[var(--adaptive-black400)]" />
-                    <a
-                        className="grid mobile:h-[4.8rem] mobile:w-[4.8rem] pc:h-[7.2rem] pc:w-[7.2rem] place-items-center rounded-full bg-black text-3xl font-light text-white shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.16)]"
-                        // href="#home"
+                    <button
+                        type="button"
+                        aria-label="맨 위로 이동"
+                        className="cursor-pointer grid mobile:h-[4.8rem] mobile:w-[4.8rem] pc:h-[7.2rem] pc:w-[7.2rem] place-items-center rounded-full bg-black text-3xl font-light text-white shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.16)]"
                         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                     >
                         <Image
@@ -115,12 +123,11 @@ export const QuickMenu = () => {
                             alt=""
                             height={58}
                             width={58}
-                            // className="invert"
                             className="mobile:w-[4.2rem] pc:w-[5.8rem] invert"
                         />
-                    </a>
+                    </button>
                 </motion.aside>
             ) : null}
         </AnimatePresence>
     );
-};
+}

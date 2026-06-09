@@ -84,29 +84,24 @@ export function SubPageHero({ current, title, description }: SubPageHeroProps) {
             // }}
         >
             <div className="mx-auto max-w-[var(--size-pc)] w-full flex flex-col mobile:gap-[1.6rem] pc:gap-[0.8rem]">
-                <motion.section
+                <nav
+                    aria-label="현재 페이지 위치"
                     className="flex items-center mobile:gap-[0.2rem] pc:gap-[0.8rem]"
                     data-report-id={`${current} 히어로 브레드크럼`}
                     data-report-type="item"
-                    initial={{ opacity: 0, transform: "translateY(100px)" }}
-                    animate={{ opacity: 1, transform: "translateY(0px)" }}
-                    exit={{ opacity: 0, transform: "translateY(100px)" }}
-                    transition={{
-                        delay: 0.1,
-                        type: "spring",
-                        mass: 0.1,
-                        stiffness: 100,
-                        damping: 10,
-                    }}
                 >
-                    <p className="mobile:text-[1.8rem] pc:text-[2.4rem] text-[var(--adaptive-grey500)]">메인</p>
-                    <img
-                        src={"/images/icon/outlined/ico-outlined-arrow-right.svg"}
-                        alt=""
-                        className="mobile:w-[2.4rem] pc:w-[3.6rem]"
-                    />
-                    <p className="mobile:text-[1.8rem] pc:text-[2.4rem] font-[700]">{current}</p>
-                </motion.section>
+                    <ol className="flex items-center mobile:gap-[0.2rem] pc:gap-[0.8rem]">
+                        <li className="mobile:text-[1.8rem] pc:text-[2.4rem] text-[var(--adaptive-grey500)]">메인</li>
+                        <li aria-hidden="true">
+                            <img
+                                src={"/images/icon/outlined/ico-outlined-arrow-right.svg"}
+                                alt=""
+                                className="mobile:w-[2.4rem] pc:w-[3.6rem]"
+                            />
+                        </li>
+                        <li className="mobile:text-[1.8rem] pc:text-[2.4rem] font-[700]">{current}</li>
+                    </ol>
+                </nav>
 
                 {/* <section className="grid grid-cols-4 mobile:gap-[0.8rem] pc:gap-16 max-[86rem]:grid-cols-1"> */}
                 <section className="grid mobile:grid-cols-1 pc:grid-cols-4 mobile:gap-[1.2rem] pc:gap-[5.2rem]">
@@ -302,7 +297,7 @@ export function NoticeBox() {
             <UI.Button
                 size="sm"
                 className="w-full bg-[var(--adaptive-black50)] text-[var(--adaptive-black500)] rounded-[1.6rem]"
-                // href="/bjSupport"
+                onClick={() => window.open("https://open.kakao.com/o/s0UmPOAc", "_blank", "noopener,noreferrer")}
             >
                 1:1 문의하기
             </UI.Button>
