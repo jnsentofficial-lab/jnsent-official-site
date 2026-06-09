@@ -7,7 +7,12 @@ import { useEffect, useState } from "react";
 import { useLayoutStore } from "@/shared/stores/useLayoutStore";
 import useNavigate from "@/shared/hooks/useNavigate";
 
-const socialItems = ["kakao", "insta", "blog", ""];
+const socialItems = [
+    { key: "kakao", href: "https://open.kakao.com/o/s0UmPOAc" },
+    { key: "insta", href: "https://www.instagram.com/jns_ent__?igsh=MTc0M3RnMTluMzFqNQ%3D%3D&utm_source=qr" },
+    { key: "blog", href: "https://blog.naver.com/js_ent_" },
+    { key: "", href: "" },
+];
 
 const MOBILE_BREAKPOINT = 768;
 const MOBILE_HIDE_X = "120%";
@@ -86,15 +91,16 @@ export const QuickMenu = () => {
                     transition={{ duration: 0.45, ease: QUICK_MENU_EASE }}
                 >
                     <section className="flex flex-col gap-[0.8rem]">
-                        {socialItems.map((item) => (
+                        {socialItems.map(({ key, href }) => (
                             <a
-                                className={`grid mobile:h-[4.8rem] mobile:w-[4.8rem] pc:h-[7.2rem] pc:w-[7.2rem] place-items-center rounded-full ${!!item ? "bg-white" : "bg-transparent"} text-sm font-[700] text-black shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.14)]`}
-                                href="/bjSupport"
-                                key={item}
+                                className={`grid mobile:h-[4.8rem] mobile:w-[4.8rem] pc:h-[7.2rem] pc:w-[7.2rem] place-items-center rounded-full ${!!key ? "bg-white" : "bg-transparent"} text-sm font-[700] text-black shadow-[0_0.8rem_2.6rem_rgba(0,0,0,0.14)]`}
+                                href={href || undefined}
+                                key={key || "spacer"}
+                                {...(href ? { target: "_blank", rel: "noreferrer" } : {})}
                             >
-                                {item ? (
+                                {key ? (
                                     <Image
-                                        src={`/images/icon/route/home/ico-floating-${item}.svg`}
+                                        src={`/images/icon/route/home/ico-floating-${key}.svg`}
                                         alt=""
                                         height={58}
                                         width={58}
