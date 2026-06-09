@@ -11,7 +11,8 @@ type SubPageSectionProps = {
 export function SubPageSection({ title, className, children }: SubPageSectionProps) {
     return (
         <section
-            className="flex flex-col mobile:gap-[1.2rem] pc:gap-[3.2rem]"
+            className="flex flex-col mobile:gap-[1.2rem] pc:gap-[1.6rem]"
+            // className="flex flex-col mobile:gap-[1.2rem] pc:gap-[3.2rem]"
             data-report-id={`서브페이지 섹션 ${title}`}
             data-report-type="group"
         >

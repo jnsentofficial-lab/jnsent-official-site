@@ -1,9 +1,26 @@
 "use client";
 
-import { FormEvent, Fragment, ReactNode, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { motion, PanInfo, useAnimationFrame, useMotionValue } from "framer-motion";
+import { createContext, ReactNode, useCallback, useContext, useState } from "react";
+import { motion } from "framer-motion";
 import Image from "next/image";
+
+type SubPageSplitTab = "left" | "right";
+
+type SubPageSplitNavigationContextValue = {
+    showRightPanel: () => void;
+};
+
+const SubPageSplitNavigationContext = createContext<SubPageSplitNavigationContextValue | null>(null);
+
+export function useSubPageSplitNavigation() {
+    const context = useContext(SubPageSplitNavigationContext);
+
+    if (!context) {
+        throw new Error("useSubPageSplitNavigation must be used within SubPageSplit");
+    }
+
+    return context;
+}
 
 type SubPageSplitProps = {
     left: ReactNode;
@@ -11,13 +28,37 @@ type SubPageSplitProps = {
     className?: string;
     leftTabLabel?: ReactNode;
     rightTabLabel?: ReactNode;
+    rightPanelId?: string;
 };
-export function SubPageSplit({ left, right, className = "", leftTabLabel = "좌측", rightTabLabel = "우측" }: SubPageSplitProps) {
-    const [mobileTab, setMobileTab] = useState<"left" | "right">("left");
+
+export function SubPageSplit({
+    left,
+    right,
+    className = "",
+    leftTabLabel = "좌측",
+    rightTabLabel = "우측",
+    rightPanelId,
+}: SubPageSplitProps) {
+    const [mobileTab, setMobileTab] = useState<SubPageSplitTab>("left");
 
     const IS_LEFT_SIDE_VIEW = mobileTab === "left";
 
+    const showRightPanel = useCallback(() => {
+        const isMobileLayout = window.matchMedia("(max-width: 86rem)").matches;
+
+        if (isMobileLayout) {
+            setMobileTab("right");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            return;
+        }
+
+        if (rightPanelId) {
+            document.getElementById(rightPanelId)?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    }, [rightPanelId]);
+
     return (
+        <SubPageSplitNavigationContext.Provider value={{ showRightPanel }}>
         <section
             className={`mx-[1.6rem] pb-[14rem] mobile:pb-24 ${className}`}
             data-report-id="서브페이지 분할 섹션"
@@ -69,6 +110,7 @@ export function SubPageSplit({ left, right, className = "", leftTabLabel = "좌�
                 </motion.div>
 
                 <motion.div
+                    id={rightPanelId}
                     className={`col-span-2 ${mobileTab === "left" ? "max-[86rem]:hidden" : ""}`}
                     data-report-id="서브페이지 우측 영역"
                     data-report-type="item"
@@ -87,5 +129,6 @@ export function SubPageSplit({ left, right, className = "", leftTabLabel = "좌�
                 </motion.div>
             </div>
         </section>
+        </SubPageSplitNavigationContext.Provider>
     );
 }

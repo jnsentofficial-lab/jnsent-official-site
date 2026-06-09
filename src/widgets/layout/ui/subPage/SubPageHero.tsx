@@ -72,7 +72,7 @@ export function SubPageHero({ current, title, description }: SubPageHeroProps) {
                     </motion.h1>
 
                     <motion.p
-                        className="col-span-2 mobile:text-[2rem] pc:text-[2.4rem] font-[NanumSquare] whitespace-break-spaces leading-[1.5]"
+                        className="col-span-2 mobile:text-[2rem] pc:text-[2.4rem] font-[NanumSquare] font-[700] whitespace-break-spaces leading-[1.5]"
                         data-report-id={`${current} 히어로 설명`}
                         data-report-type="item"
                         // className="col-span-2 m-0 pt-5 text-[2.4rem] font-[NanumSquare] whitespace-break-spaces leading-[1.5] text-black max-[86rem]:pt-0 max-[86rem]:text-2xl"
