@@ -232,7 +232,7 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
                             <div className="grid grid-cols-2 gap-[0.8rem]">
                                 <UI.Select
                                     className="rounded-[1.4rem] border border-[var(--adaptive-black100)] px-[1.6rem]"
-                                    options={[{ label: "~도 선택", value: "" }, ...Object.keys(REGION_OPTIONS).map((option) => ({ label: option, value: option }))]}
+                                    options={[{ label: "광역시·도 선택", value: "" }, ...Object.keys(REGION_OPTIONS).map((option) => ({ label: option, value: option }))]}
                                     size="sm"
                                     value={province}
                                     onChange={(event) => {
@@ -243,7 +243,7 @@ export function InquiryRequestForm({ category, title = "기본정보", messageLa
                                 <UI.Select
                                     className="rounded-[1.4rem] border border-[var(--adaptive-black100)] px-[1.6rem]"
                                     disabled={!province}
-                                    options={[{ label: "~시 선택", value: "" }, ...cityOptions.map((option) => ({ label: option, value: option }))]}
+                                    options={[{ label: "시·군·구 선택", value: "" }, ...cityOptions.map((option) => ({ label: option, value: option }))]}
                                     size="sm"
                                     value={city}
                                     onChange={(event) => setCity(event.target.value)}

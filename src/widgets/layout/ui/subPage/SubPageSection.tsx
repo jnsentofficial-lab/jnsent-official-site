@@ -5,19 +5,20 @@ import type { ReactNode } from "react";
 type SubPageSectionProps = {
     title: string;
     className?: string;
+    containerClassName?: string;
     children?: ReactNode;
 };
 
-export function SubPageSection({ title, className, children }: SubPageSectionProps) {
+export function SubPageSection({ title, className, containerClassName, children }: SubPageSectionProps) {
     return (
         <section
-            className="flex flex-col mobile:gap-[1.2rem] pc:gap-[1.6rem]"
+            className={`${containerClassName} flex flex-col mobile:gap-[1.2rem] pc:gap-[1.6rem]`}
             // className="flex flex-col mobile:gap-[1.2rem] pc:gap-[3.2rem]"
             data-report-id={`서브페이지 섹션 ${title}`}
             data-report-type="group"
         >
             <h2
-                className={`${className} flex items-center whitespace-break-spaces gap-[1.2rem] mobile:text-[2rem] pc:text-[2.4rem] font-[900] font-[NanumSquare] text-black leading-[1.5]`}
+                className={`${className} flex items-center whitespace-break-spaces gap-[1.2rem] mobile:text-[1.6rem] pc:text-[2.0rem] font-[900] font-[NanumSquare] text-black leading-[1.5]`}
                 data-report-id={`서브페이지 섹션 제목 ${title}`}
                 data-report-type="item"
             >

@@ -77,7 +77,7 @@ export function SiteHeader() {
                 </nav>
 
                 <UI.Linker
-                    className="text-[1.8rem] whitespace-nowrap hover:text-[#000000] p-[0.8rem_1.2rem] bg-[var(--adaptive-grey900)] text-white rounded-full hover:bg-[#ff6673]"
+                    className="whitespace-nowrap p-[0.8rem_1.2rem] bg-[var(--adaptive-grey900)] text-white rounded-full"
                     // className="text-[1.6rem] inline-flex shrink-0 items-center justify-center rounded-full bg-black px-6 py-[0.2rem] text-base text-white"
                     href="/bjSupport"
                     data-report-id="상단 헤더 지원 버튼"

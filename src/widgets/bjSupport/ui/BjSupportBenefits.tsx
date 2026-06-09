@@ -5,6 +5,7 @@ import Image from "next/image";
 import UI from "@/shared/ui/UIComponent";
 import { useSubPageSplitNavigation } from "@/widgets/layout/ui/subPage/SubPageSplit";
 import { SubPageSection } from "@/widgets/layout/ui/SubPageLayout";
+import { Text } from "@/shared/ui/kit/Text";
 
 const BJ_SUPPORT_ACCENT = "rgb(255, 92, 118)";
 
@@ -25,7 +26,7 @@ const benefits = [
         lines: ["경험이 없어도 괜찮아요!", "처음부터 차근차근 알려드립니다."],
     },
     {
-        icon: "ico-outlined-unlock",
+        icon: "ico-outlined-check",
         title: "투잡 가능",
         lines: ["본업과 병행하며 활동 가능!", "부담 없이 시작할 수 있습니다."],
     },
@@ -52,11 +53,13 @@ export function BjSupportBenefits() {
         >
             {/* <div className="flex flex-col mobile:gap-[0.8rem] pc:gap-[1.2rem]"> */}
             <SubPageSection title={"지원 혜택 및 조건"}>
-                <article className="grid mobile:grid-cols-1 pc:grid-cols-2 mobile:gap-[0.8rem] pc:gap-[1.2rem]">
+                {/* <article className="grid mobile:grid-cols-1 pc:grid-cols-2 mobile:gap-[0.8rem] pc:gap-[1.2rem]"> */}
+                <article className="grid mobile:grid-cols-1 pc:grid-cols-2 mobile:gap-[0.4rem] rounded-[2.4rem] p-[0.4rem]">
                     {benefits.map((item) => (
                         <article
                             key={item.title}
-                            className="flex mobile:gap-[1.2rem] pc:gap-[1.6rem] rounded-[2.4rem] border border-[var(--adaptive-black100)] mobile:p-[1.6rem] pc:p-[1.6rem_2rem]"
+                            className="flex mobile:gap-[1.2rem] pc:gap-[1.6rem] rounded-[2.4rem] bg-[var(--adaptive-black50)] mobile:p-[1.6rem] pc:p-[1.6rem_2rem]"
+                            // className="flex mobile:gap-[1.2rem] pc:gap-[1.6rem] rounded-[2.4rem] mobile:p-[1.6rem] pc:p-[1.6rem_2rem]"
                             data-report-id={`BJ 지원 혜택 ${item.title}`}
                             data-report-type="item"
                         >
@@ -65,7 +68,7 @@ export function BjSupportBenefits() {
                                 alt=""
                                 width={32}
                                 height={32}
-                                className="shrink-0 mobile:w-[2.8rem] pc:w-[3.2rem]"
+                                className={`${item.icon === "ico-outlined-account" ? "invert" : ""} shrink-0 mobile:w-[2.8rem] pc:w-[3.2rem]`}
                             />
                             <div className="flex min-w-0 flex-col mobile:gap-[0.4rem] pc:gap-[0.6rem]">
                                 <h3 className="m-0 mobile:text-[1.4rem] pc:text-[1.6rem] font-[700] leading-[1.4] text-black">{item.title}</h3>
@@ -85,32 +88,38 @@ export function BjSupportBenefits() {
                 </article>
             </SubPageSection>
 
-            <SubPageSection title={"문의사항"}>
+            <SubPageSection title={"망설이지 말고, 지금 바로 시작하세요!"}>
                 <article
-                    className="flex flex-col rounded-[2.4rem] border border-[var(--adaptive-grey200)] bg-white p-[1.6rem] gap-[1.6rem]"
                     data-report-id="BJ 지원 상담 CTA"
                     data-report-type="item"
+                    className="flex items-center justify-between gap-[1.2rem] p-[1.6rem] bg-[#eeeeee99] rounded-[2.4rem]"
                 >
                     <section className="flex items-center gap-[1.6rem]">
-                        <Image
-                            src="/images/icon/outlined/ico-outlined-headset.svg"
-                            alt=""
-                            width={32}
-                            height={32}
-                            className="mobile:hidden pc:block shrink-0"
-                        />
-                        <section className="flex flex-col mobile:gap-[0.4rem] pc:gap-[0.8rem]">
-                            <h5 className="m-0 font-[900] mobile:text-[1.6rem] pc:text-[1.8rem] text-black">망설이지 말고 지금 바로 시작하세요!</h5>
-                            <p className="m-0 leading-[1.5] text-[var(--adaptive-grey700)]">더 궁금한 점이 있으신가요? 전담 매니저와 1:1 상담을 통해 자세히 안내해드립니다.</p>
-                        </section>
+                        <div className="bg-white rounded-full p-[0.8rem]">
+                            <Image
+                                src="/images/icon/outlined/ico-outlined-headset.svg"
+                                alt=""
+                                width={32}
+                                height={32}
+                            />
+                        </div>
+
+                        <p className="m-0 leading-[1.5] font-bold text-[var(--adaptive-black500)] whitespace-break-spaces text-[1.6rem]">{`더 궁금한 점이 있으신가요?\n전담 매니저와 1:1 상담을 통해 자세히 안내해드립니다.`}</p>
                     </section>
 
                     <UI.Button
-                        size="sm"
-                        className="w-full bg-[var(--adaptive-black50)] text-[var(--adaptive-black500)] rounded-[1.6rem]"
-                        onClick={showRightPanel}
+                        className="px-[2.0rem] flex items-center gap-[1.2rem] bg-[var(--adaptive-black900)] text-[var(--adaptive-black50)] rounded-[1.6rem] font-bold text-[1.6rem]"
+                        onClick={() => window.open("https://open.kakao.com/o/s0UmPOAc", "_blank", "noopener,noreferrer")}
                     >
-                        1:1 상담 신청하기
+                        <Text.Shimmer
+                            color={{
+                                start: "#ffffff",
+                                end: "#555555",
+                            }}
+                            duration={10}
+                        >
+                            1:1 상담 신청하기
+                        </Text.Shimmer>
                     </UI.Button>
                 </article>
             </SubPageSection>
