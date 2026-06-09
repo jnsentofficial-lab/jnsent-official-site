@@ -4,7 +4,7 @@ import type { MotionValue } from "motion/react";
 import type { ReactNode } from "react";
 import { Fragment, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { animate, motion, useAnimationFrame, useMotionTemplate, useMotionValue, useScroll, useTransform, useVelocity } from "motion/react";
-import { util } from "@/shared/utils/util";
+import { formatPriceWithCommas } from "@/shared/utils/formatPrice";
 
 type TextElement = "h1" | "h2" | "h3" | "p" | "span";
 
@@ -339,8 +339,8 @@ const Rolling = ({
     const containerRef = useRef<HTMLDivElement>(null);
     const [active, setActive] = useState(false);
     const normalizedLength = Math.max(digit, String(Math.trunc(Math.abs(value))).length, String(Math.trunc(Math.abs(initialValue))).length);
-    const FORMAT_VALUE = util.string.getCommaOnPrice(value).padStart(normalizedLength, "0").split("");
-    const FORMAT_INITIAL_VALUE = util.string.getCommaOnPrice(initialValue).padStart(normalizedLength, "0").split("");
+    const FORMAT_VALUE = formatPriceWithCommas(value).padStart(normalizedLength, "0").split("");
+    const FORMAT_INITIAL_VALUE = formatPriceWithCommas(initialValue).padStart(normalizedLength, "0").split("");
 
     const sizeMap = {
         12: { text: "1.2", height: "1.2" },

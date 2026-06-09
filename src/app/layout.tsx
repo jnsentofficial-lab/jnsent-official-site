@@ -34,14 +34,12 @@ export default function RootLayout({
                             <GlobalErrorListener />
                             <Header />
                             <Sidebar />
-                            <PopupProvider>
-                                {children}
-                            </PopupProvider>
+                            <PopupProvider>{children}</PopupProvider>
                             <Footer />
                             <Progress />
                             <Toast />
                             <ApiPendingOverlay />
-                            <Report />
+                            {/* <Report /> */}
                             <QuickMenu />
                         </AuthProvider>
                     </QueryProvider>

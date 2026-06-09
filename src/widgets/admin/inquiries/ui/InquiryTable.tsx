@@ -93,12 +93,12 @@ export function InquiryTable({ pendingInquiryId, selectedInquiryId, onSelectInqu
                                                 onClick={() => setResendTarget(inquiry)}
                                                 type="button"
                                             >
-                                                <Image
+                                                {/* <Image
                                                     src={"/images/icon/outlined/ico-outlined-copy.svg"}
                                                     alt=""
                                                     width={32}
                                                     height={32}
-                                                />
+                                                /> */}
 
                                                 <p>재발송하기</p>
                                             </UI.Button>
@@ -109,12 +109,12 @@ export function InquiryTable({ pendingInquiryId, selectedInquiryId, onSelectInqu
                                             onClick={() => setDeleteTarget(inquiry)}
                                             type="button"
                                         >
-                                            <Image
+                                            {/* <Image
                                                 src={"/images/icon/outlined/ico-outlined-trash.svg"}
                                                 alt=""
                                                 width={32}
                                                 height={32}
-                                            />
+                                            /> */}
 
                                             <p>삭제</p>
                                         </UI.Button>

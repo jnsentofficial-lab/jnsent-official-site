@@ -36,14 +36,14 @@ export function ConsultingGuide() {
                 <SubPageHero
                     current="엔터창업"
                     title={"엔터창업"}
-                    description={"라이브 콘텐츠 및 BJ 매니지먼트 운영 경험을 바탕으로\n엔터테인먼트 및 방송 관련 창업 컨설팅을 진행하고 있습니다."}
+                    description={"라이브 콘텐츠 및 BJ 매니지먼트 운영 경험을 바탕으로\n엔터테인먼트 및 방송 관련 창업 컨설팅을 진행중입니다."}
                 />
             </div>
             <div className="mobile:block pc:hidden">
                 <SubPageHero
                     current="엔터창업"
                     title={"엔터창업"}
-                    description={"라이브 콘텐츠 및\nBJ 매니지먼트 운영 경험을 바탕으로\n엔터테인먼트 및 방송 관련 창업 컨설팅을 진행하고 있습니다."}
+                    description={"라이브 콘텐츠 및\nBJ 매니지먼트 운영 경험을 바탕으로\n엔터테인먼트 및 방송 관련 창업 컨설팅을 진행중입니다."}
                 />
             </div>
 

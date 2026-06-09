@@ -37,11 +37,7 @@ export function StudioGuide() {
             <SubPageSplit
                 leftTabLabel="이용 안내"
                 rightTabLabel="대여 문의하기"
-                left={
-                    <SubPageSection title={"문의사항"}>
-                        <NoticeBox />
-                    </SubPageSection>
-                }
+                left={<NoticeBox />}
                 right={
                     <InquiryRequestForm
                         category="studio_rental"

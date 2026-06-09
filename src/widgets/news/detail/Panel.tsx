@@ -1,6 +1,5 @@
 "use client";
 
-import { NewsDetailPageProvider } from "@/features/news/detail/model/SubscriptionContext";
 import * as NewsDetailLayer from "@/widgets/news/detail/ui";
 
 type PanelProps = {
@@ -8,9 +7,5 @@ type PanelProps = {
 };
 
 export default function Panel({ slug }: PanelProps) {
-    return (
-        <NewsDetailPageProvider slug={slug}>
-            <NewsDetailLayer.NewsArticle slug={slug} />
-        </NewsDetailPageProvider>
-    );
+    return <NewsDetailLayer.NewsArticle slug={slug} />;
 }
