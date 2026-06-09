@@ -58,6 +58,17 @@ export function SelectInput({ className = "", hasError = false, options, ...prop
     );
 }
 
+export function TextArea({ className = "", hasError = false, ...props }: React.TextareaHTMLAttributes<HTMLTextAreaElement> & { className?: string; hasError?: boolean }) {
+    return (
+        <textarea
+            {...props}
+            className={`min-h-[12rem] w-full resize-none rounded-[1.6rem] border bg-white px-[1.6rem] py-[1.4rem] text-[1.6rem] font-medium text-black outline-none transition-colors placeholder:text-[#BBBBBB] focus:border-[#FF4B8B] ${
+                hasError ? "border-[#FF4B8B]" : "border-[#E5E5E5]"
+            } ${className}`}
+        />
+    );
+}
+
 export function OptionButton({ children, selected, onClick, className = "" }: { children: ReactNode; selected: boolean; onClick: () => void; className?: string }) {
     return (
         <button

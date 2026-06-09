@@ -6,6 +6,8 @@ export type FieldErrors = {
     region?: string;
     phone?: string;
     availableTime?: string;
+    referralSource?: string;
+    referralDetail?: string;
     agreed?: string;
 };
 

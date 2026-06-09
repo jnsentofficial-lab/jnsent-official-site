@@ -2,7 +2,8 @@
 
 import { usePublishedPageContentQuery } from "@/entities/pageContent/api/pageContent.query";
 import Skeleton from "@/shared/ui/kit/Skeleton";
-import { InfoCard, InquiryRequestForm, SubPageHero, SubPageSplit } from "@/widgets/layout/ui";
+import { BjSupportInquiryForm } from "@/widgets/bjSupport/ui/BjSupportInquiryForm";
+import { InfoCard, SubPageHero, SubPageSplit } from "@/widgets/layout/ui";
 
 const supportItems = [
     {
@@ -50,9 +51,8 @@ export function SupportGuide() {
                     </div>
                 }
                 right={
-                    <InquiryRequestForm
-                        category="bj_support"
-                        showEmail
+                    <BjSupportInquiryForm
+                        source="bj_support"
                         buttonLabel="신청하기"
                     />
                 }

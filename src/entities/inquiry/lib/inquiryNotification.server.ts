@@ -3,15 +3,17 @@ import { buildAdminInquiryPath, buildPublicInquiryPath } from "@/entities/inquir
 import { getResendClient } from "@/shared/lib/resend";
 import { getSiteUrl } from "@/shared/lib/siteUrl";
 
-const INQUIRY_EMAIL_CATEGORIES = new Set(["consulting", "equipment_rental", "studio_rental"]);
+const INQUIRY_EMAIL_CATEGORIES = new Set(["bj_support", "consulting", "equipment_rental", "studio_rental"]);
 
 const INQUIRY_CATEGORY_LABEL_MAP: Record<string, string> = {
+    bj_support: "BJ 지원",
     consulting: "컨설팅",
     equipment_rental: "장비 렌탈",
     studio_rental: "스튜디오 대여",
 };
 
 const INQUIRY_CATEGORY_ROUTE_MAP: Record<string, string> = {
+    bj_support: "/bjSupport",
     consulting: "/consulting",
     equipment_rental: "/equipmentRental",
     studio_rental: "/studioRental",
