@@ -302,7 +302,7 @@ export function NoticeBox() {
             <UI.Button
                 size="sm"
                 className="w-full bg-[var(--adaptive-black50)] text-[var(--adaptive-black500)] rounded-[1.6rem]"
-                // href="/bjSupport"
+                onClick={() => window.open("https://open.kakao.com/o/s0UmPOAc", "_blank", "noopener,noreferrer")}
             >
                 1:1 문의하기
             </UI.Button>
