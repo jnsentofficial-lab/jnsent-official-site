@@ -18,7 +18,7 @@ export function SubPageSection({ title, className, containerClassName, children 
             data-report-type="group"
         >
             <h2
-                className={`${className} flex items-center whitespace-break-spaces gap-[1.2rem] mobile:text-[1.6rem] pc:text-[2.0rem] font-[900] font-[NanumSquare] text-black leading-[1.5]`}
+                className={`${className} flex items-center whitespace-break-spaces gap-[1.2rem] mobile:text-[1.8rem] pc:text-[2.0rem] font-[900] font-[NanumSquare] text-black leading-[1.5]`}
                 data-report-id={`서브페이지 섹션 제목 ${title}`}
                 data-report-type="item"
             >
