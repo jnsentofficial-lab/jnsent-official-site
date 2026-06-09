@@ -5,7 +5,6 @@ export { FinalCtaSection } from "./FinalCtaSection";
 export { HeroIntro } from "./HeroIntro";
 export { OperationKnowhow } from "./OperationKnowhow";
 export { PartnerRecruit } from "./PartnerRecruit";
-export { QuickMenu } from "./QuickMenu";
 export { RecordGraph } from "./RecordGraph";
 export { TransparencyProof } from "./TransparencyProof";
 export { TrustPrinciples } from "./TrustPrinciples";

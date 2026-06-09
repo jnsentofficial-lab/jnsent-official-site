@@ -1,5 +1,3 @@
-"use client";
-
 import { SendFailedPanel } from "@/widgets/send/failed";
 
 export function FailedView() {

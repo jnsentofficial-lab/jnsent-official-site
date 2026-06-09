@@ -1,7 +1,11 @@
 import type { Inquiry } from "@/entities/inquiry/model/inquiry.type";
 import { buildInquiryMessageBody } from "@/entities/inquiry/lib/buildMessageBody";
 import { buildInquiryEmailHtml } from "@/entities/inquiry/lib/inquiryNotification.server";
+import { AdminInquiryEmailPreviewView } from "@/views/admin/inquiries/AdminInquiryEmailPreviewView";
 import Main from "@/widgets/layout/Main";
+import { buildNoIndexMetadata } from "@/shared/lib/seo";
+
+export const metadata = buildNoIndexMetadata("문의 메일 미리보기");
 
 const sampleInquiry: Inquiry = {
     id: "preview-inquiry-id",
@@ -43,18 +47,7 @@ export default function AdminInquiryEmailPreviewPage() {
             id="admin-inquiry-email-preview"
             className={{ container: "min-h-[calc(100dvh-10.8rem)] bg-[#f4f4f5]" }}
         >
-            <section className="mx-auto flex w-full max-w-[1200px] flex-col gap-4 px-4 py-8">
-                <div className="">
-                    <h1 className="text-xl font-bold text-slate-900">문의 메일 미리보기</h1>
-                    <p className="mt-1 text-sm text-slate-600">`buildInquiryEmailHtml` 결과를 브라우저에서 바로 확인하는 개발용 페이지입니다.</p>
-                </div>
-
-                <iframe
-                    title="Inquiry Email Preview"
-                    srcDoc={previewHtml}
-                    className="h-[1400px] w-full bg-white"
-                />
-            </section>
+            <AdminInquiryEmailPreviewView previewHtml={previewHtml} />
         </Main>
     );
 }

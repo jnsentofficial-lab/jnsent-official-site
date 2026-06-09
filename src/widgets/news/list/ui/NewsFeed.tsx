@@ -105,6 +105,7 @@ export function NewsFeed() {
                                     href={`/news/${item.slug}`}
                                     key={item.slug}
                                 >
+                                    <article className="flex flex-col justify-start gap-[2.4rem]">
                                     {item.thumbnail_url ? (
                                         <img
                                             alt={item.title}
@@ -127,9 +128,10 @@ export function NewsFeed() {
                                         </section>
 
                                         <section>
-                                            <h6 className="mobile:text-[1.6rem] pc:text-[2.4rem] leading-[1.5] text-left line-clamp-2 break-words">{item.title}</h6>
+                                            <h2 className="mobile:text-[1.6rem] pc:text-[2.4rem] leading-[1.5] text-left line-clamp-2 break-words">{item.title}</h2>
                                         </section>
                                     </div>
+                                    </article>
                                 </UI.Linker>
                             ))}
                         </div>
