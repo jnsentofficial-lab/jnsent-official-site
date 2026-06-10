@@ -6,6 +6,7 @@ export async function POST() {
     cookieStore.delete("admin_session");
     cookieStore.delete("admin_role");
     cookieStore.delete("admin_name");
+    cookieStore.delete("admin_login_id");
 
-    return apiOk({ isAdmin: false, role: null, name: null });
+    return apiOk({ isAdmin: false, role: null, name: null, loginId: null });
 }

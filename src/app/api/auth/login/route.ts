@@ -96,6 +96,12 @@ export async function POST(request: Request) {
         secure: process.env.NODE_ENV === "production",
         path: "/",
     });
+    cookieStore.set("admin_login_id", encodeURIComponent(loginId), {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production",
+        path: "/",
+    });
 
-    return apiOk({ isAdmin: true, role: identity.role, name: identity.name });
+    return apiOk({ isAdmin: true, role: identity.role, name: identity.name, loginId });
 }

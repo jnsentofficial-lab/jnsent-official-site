@@ -1,5 +1,6 @@
 import type { JSONContent } from "@tiptap/core";
 import type React from "react";
+import type { CSSProperties } from "react";
 import type { Json } from "@/shared/types/Database";
 import { hasRichTextContent, toRichTextContent } from "@/shared/lib/richText/richText";
 
@@ -11,6 +12,18 @@ type RichTextRendererProps = {
 
 function isSafeHref(href: string) {
     return href.startsWith("https://") || href.startsWith("http://") || href.startsWith("mailto:") || href.startsWith("tel:");
+}
+
+function isSafeColor(color: string) {
+    return /^#[0-9a-fA-F]{3,8}$/.test(color) || /^rgb\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*\)$/.test(color);
+}
+
+function getTextAlignStyle(textAlign?: string): CSSProperties | undefined {
+    if (textAlign === "center" || textAlign === "right" || textAlign === "left") {
+        return { textAlign };
+    }
+
+    return undefined;
 }
 
 function renderMarks(children: React.ReactNode, marks: JSONContent["marks"]) {
@@ -25,6 +38,14 @@ function renderMarks(children: React.ReactNode, marks: JSONContent["marks"]) {
 
         if (mark.type === "underline") {
             return <u>{current}</u>;
+        }
+
+        if (mark.type === "textStyle" || mark.type === "color") {
+            const color = String(mark.attrs?.color ?? "");
+
+            if (color && isSafeColor(color)) {
+                return <span style={{ color }}>{current}</span>;
+            }
         }
 
         if (mark.type === "link") {
@@ -49,19 +70,41 @@ function renderMarks(children: React.ReactNode, marks: JSONContent["marks"]) {
 
 function renderNode(node: JSONContent, index: number): React.ReactNode {
     const children = node.content?.map(renderNode);
+    const textAlignStyle = getTextAlignStyle(typeof node.attrs?.textAlign === "string" ? node.attrs.textAlign : undefined);
 
     if (node.type === "text") {
         return <span key={index}>{renderMarks(node.text ?? "", node.marks)}</span>;
     }
 
     if (node.type === "paragraph") {
-        return <p key={index}>{children?.length ? children : <br />}</p>;
+        return (
+            <p
+                key={index}
+                style={textAlignStyle}
+            >
+                {children?.length ? children : <br />}
+            </p>
+        );
     }
 
     if (node.type === "heading") {
         const level = node.attrs?.level === 3 ? 3 : 2;
 
-        return level === 3 ? <h3 key={index}>{children}</h3> : <h2 key={index}>{children}</h2>;
+        return level === 3 ? (
+            <h3
+                key={index}
+                style={textAlignStyle}
+            >
+                {children}
+            </h3>
+        ) : (
+            <h2
+                key={index}
+                style={textAlignStyle}
+            >
+                {children}
+            </h2>
+        );
     }
 
     if (node.type === "bulletList") {

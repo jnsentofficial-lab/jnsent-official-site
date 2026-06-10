@@ -7,4 +7,5 @@ export type AuthSessionResponse = {
     isAdmin: boolean;
     role: "manager" | "admin" | "viewer" | null;
     name: string | null;
+    loginId: string | null;
 };

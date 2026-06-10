@@ -45,7 +45,13 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
         >
             {visibleAccounts.map((account, mappedIdx) => {
                 const SELECTED = selectedAccountId === account.id;
-                const canDelete = canEditManagerAccount(session?.role, account.role) && !isReservedMasterLoginId(account.login_id);
+                const isSelfAccount = Boolean(session?.loginId && account.login_id === session.loginId);
+                const canDelete = canEditManagerAccount(session?.role, account.role) && !isReservedMasterLoginId(account.login_id) && !isSelfAccount;
+                const deleteDisabledMessage = isSelfAccount
+                    ? "본인 계정은 삭제할 수 없습니다."
+                    : isReservedMasterLoginId(account.login_id)
+                      ? "마스터 계정은 삭제할 수 없습니다."
+                      : "삭제 권한이 없는 계정입니다.";
 
                 return (
                     <Fragment key={account.id}>
@@ -75,7 +81,7 @@ export function ManagerAccountList({ accounts, selectedAccountId, onSelectAccoun
                                     tooltip={[
                                         {
                                             type: "disabled",
-                                            msg: isReservedMasterLoginId(account.login_id) ? "마스터 계정은 삭제할 수 없습니다." : "삭제 권한이 없는 계정입니다.",
+                                            msg: deleteDisabledMessage,
                                         },
                                     ]}
                                 >

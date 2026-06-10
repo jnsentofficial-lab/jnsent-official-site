@@ -20,3 +20,10 @@ export async function getAdminApiRole() {
 
     return role === "admin" || role === "manager" || role === "viewer" ? (role as ManagerAccountRole) : null;
 }
+
+export async function getAdminApiLoginId() {
+    const cookieStore = await cookies();
+    const loginId = cookieStore.get("admin_login_id")?.value;
+
+    return loginId ? decodeURIComponent(loginId) : null;
+}

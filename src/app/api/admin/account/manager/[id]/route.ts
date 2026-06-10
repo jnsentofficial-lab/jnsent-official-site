@@ -1,7 +1,7 @@
 import { createSupabaseServiceClient } from "@/shared/api/SupabaseServer";
 import { canEditManagerAccount, createAuthManagerUser, isReservedMasterLoginId, sanitizeAccount, toManagerRole, toPasswordHash, updateAuthManagerUser } from "@/shared/lib/AdminAccountAuth";
 import { apiError, apiOk } from "@/shared/lib/api/server";
-import { getAdminApiRole } from "@/shared/lib/adminApi";
+import { getAdminApiLoginId, getAdminApiRole } from "@/shared/lib/adminApi";
 import { isMissingIsActiveColumnError, normalizeManagerAccount } from "@/shared/lib/managerAccountSchema";
 import type { Database } from "@/shared/types/Database";
 
@@ -103,12 +103,17 @@ export async function PATCH(request: Request, { params }: RouteProps) {
 
 export async function DELETE(_request: Request, { params }: RouteProps) {
     const actorRole = await getAdminApiRole();
+    const actorLoginId = await getAdminApiLoginId();
     const { id } = await params;
     const supabase = createSupabaseServiceClient();
     const { data: currentAccount, error: currentError } = await supabase.from("manager_accounts").select("*").eq("id", id).single();
 
     if (currentError) {
         return apiError(currentError.message, 400);
+    }
+
+    if (actorLoginId && currentAccount.login_id === actorLoginId) {
+        return apiError("본인 계정은 삭제할 수 없습니다.", 400);
     }
 
     if (!canEditManagerAccount(actorRole, currentAccount.role)) {

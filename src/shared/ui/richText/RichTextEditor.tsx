@@ -1,6 +1,9 @@
 "use client";
 
+import Color from "@tiptap/extension-color";
 import Image from "@tiptap/extension-image";
+import TextAlign from "@tiptap/extension-text-align";
+import { TextStyle } from "@tiptap/extension-text-style";
 import { Placeholder } from "@tiptap/extensions/placeholder";
 import { EditorContent, useEditor, useEditorState } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -24,7 +27,14 @@ const toolbarButtons = [
     { label: "1.", action: "orderedList" },
 ] as const;
 
-// const toolbarButtonClassName = "flex h-[3.2rem] w-[4.2rem] items-center justify-center rounded-[1.2rem] border text-[1.4rem] font-semibold transition-colors select-none";
+const textAlignButtons = [
+    { label: "←", align: "left" as const },
+    { label: "↔", align: "center" as const },
+    { label: "→", align: "right" as const },
+];
+
+const textColorPresets = ["#000000", "#FF6B75", "#2563EB", "#16A34A", "#CA8A04", "#9333EA"];
+
 const toolbarButtonClassName = "flex flex-1 h-[5.2rem] items-center justify-center text-[1.4rem] font-semibold transition-colors select-none bg-[var(--adaptive-black200)]";
 const toolbarButtonIdleClassName = "border-slate-200 bg-white text-slate-700 hover:bg-[var(--adaptive-grey100)]";
 const toolbarButtonActiveClassName = "border-blue-500 bg-blue-50 text-blue-700";
@@ -33,6 +43,7 @@ const editorContentClassName =
 
 export function RichTextEditor({ value = emptyRichTextContent, onChange, onImageUpload, placeholder = "본문을 입력하세요." }: RichTextEditorProps) {
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const colorInputRef = useRef<HTMLInputElement>(null);
     const lastSyncedValueRef = useRef(JSON.stringify(value));
     const [isUploading, setIsUploading] = useState(false);
     const editor = useEditor({
@@ -47,6 +58,11 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
                     defaultProtocol: "https",
                 },
                 underline: {},
+            }),
+            TextStyle,
+            Color,
+            TextAlign.configure({
+                types: ["heading", "paragraph"],
             }),
             Placeholder.configure({
                 placeholder,
@@ -92,6 +108,14 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
             isBulletList: currentEditor?.isActive("bulletList") ?? false,
             isOrderedList: currentEditor?.isActive("orderedList") ?? false,
             isLink: currentEditor?.isActive("link") ?? false,
+            textAlign: currentEditor?.isActive({ textAlign: "left" })
+                ? "left"
+                : currentEditor?.isActive({ textAlign: "center" })
+                  ? "center"
+                  : currentEditor?.isActive({ textAlign: "right" })
+                    ? "right"
+                    : null,
+            textColor: (currentEditor?.getAttributes("textStyle").color as string | undefined) ?? null,
         }),
     });
 
@@ -141,6 +165,17 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
         editor.chain().focus(undefined, { scrollIntoView: false }).extendMarkRange("link").setLink({ href: url.trim() }).run();
     }
 
+    function setTextColor(color: string) {
+        runToolbarCommand(() => {
+            if (!color) {
+                editor?.chain().unsetColor().run();
+                return;
+            }
+
+            editor?.chain().setColor(color).run();
+        });
+    }
+
     async function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
         const file = event.target.files?.[0];
         event.target.value = "";
@@ -162,7 +197,7 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
     return (
         <div>
             <div
-                className="sticky z-10 bg-white flex border-b border-b-[var(--adaptive-black100)]"
+                className="sticky z-10 bg-white flex flex-wrap border-b border-b-[var(--adaptive-black100)]"
                 data-rich-text-toolbar
             >
                 {toolbarButtons.map((button) => (
@@ -198,6 +233,72 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
                         <div className="h-[3.2rem] w-[0.1rem] my-auto bg-[var(--adaptive-black100)]" />
                     </Fragment>
                 ))}
+                {textAlignButtons.map((button) => (
+                    <Fragment key={button.align}>
+                        <button
+                            aria-label={`${button.align} 정렬`}
+                            className={`${toolbarButtonClassName} ${editorState?.textAlign === button.align ? toolbarButtonActiveClassName : toolbarButtonIdleClassName}`}
+                            onPointerDown={(event) => {
+                                event.preventDefault();
+                                runToolbarCommand(() => {
+                                    editor?.chain().setTextAlign(button.align).run();
+                                });
+                            }}
+                            type="button"
+                        >
+                            {button.label}
+                        </button>
+
+                        <div className="h-[3.2rem] w-[0.1rem] my-auto bg-[var(--adaptive-black100)]" />
+                    </Fragment>
+                ))}
+                <div className="flex items-center gap-[0.4rem] px-[0.8rem]">
+                    {textColorPresets.map((color) => (
+                        <button
+                            aria-label={`글자 색상 ${color}`}
+                            className={`h-[2.4rem] w-[2.4rem] rounded-full border ${editorState?.textColor === color ? "border-blue-500 ring-2 ring-blue-200" : "border-[var(--adaptive-grey300)]"}`}
+                            key={color}
+                            onPointerDown={(event) => {
+                                event.preventDefault();
+                                setTextColor(color);
+                            }}
+                            style={{ backgroundColor: color }}
+                            type="button"
+                        />
+                    ))}
+                    <button
+                        aria-label="사용자 지정 글자 색상"
+                        className={`${toolbarButtonClassName} relative min-w-[5.2rem] ${toolbarButtonIdleClassName}`}
+                        onPointerDown={(event) => {
+                            event.preventDefault();
+                            colorInputRef.current?.click();
+                        }}
+                        type="button"
+                    >
+                        A
+                        <input
+                            className="pointer-events-none absolute inset-0 opacity-0"
+                            onChange={(event) => {
+                                setTextColor(event.target.value);
+                            }}
+                            ref={colorInputRef}
+                            type="color"
+                            value={editorState?.textColor ?? "#000000"}
+                        />
+                    </button>
+                    <button
+                        aria-label="글자 색상 제거"
+                        className={`${toolbarButtonClassName} min-w-[5.2rem] ${toolbarButtonIdleClassName}`}
+                        onPointerDown={(event) => {
+                            event.preventDefault();
+                            setTextColor("");
+                        }}
+                        type="button"
+                    >
+                        A×
+                    </button>
+                </div>
+                <div className="h-[3.2rem] w-[0.1rem] my-auto bg-[var(--adaptive-black100)]" />
                 <button
                     className={`${toolbarButtonClassName} ${editorState?.isLink ? toolbarButtonActiveClassName : toolbarButtonIdleClassName}`}
                     onPointerDown={(event) => {
