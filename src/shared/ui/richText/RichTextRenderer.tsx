@@ -18,15 +18,47 @@ function isSafeColor(color: string) {
     return /^#[0-9a-fA-F]{3,8}$/.test(color) || /^rgb\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*\)$/.test(color);
 }
 
-function getTextAlignStyle(textAlign?: string): CSSProperties | undefined {
-    if (textAlign === "center" || textAlign === "right" || textAlign === "left") {
-        return { textAlign };
+function getBlockStyle(attrs?: JSONContent["attrs"]): CSSProperties | undefined {
+    const style: CSSProperties = {};
+    const textAlign = attrs?.textAlign;
+
+    if (textAlign === "center" || textAlign === "right" || textAlign === "left" || textAlign === "justify") {
+        style.textAlign = textAlign;
     }
 
-    return undefined;
+    if (typeof attrs?.lineHeight === "string" && attrs.lineHeight) {
+        style.lineHeight = attrs.lineHeight;
+    }
+
+    return Object.keys(style).length > 0 ? style : undefined;
+}
+
+function getTextStyle(marks: JSONContent["marks"]): CSSProperties | undefined {
+    const textStyleMark = marks?.find((mark) => mark.type === "textStyle");
+    const colorMark = marks?.find((mark) => mark.type === "color");
+    const style: CSSProperties = {};
+
+    if (typeof textStyleMark?.attrs?.fontFamily === "string" && textStyleMark.attrs.fontFamily) {
+        style.fontFamily = textStyleMark.attrs.fontFamily;
+    }
+
+    if (typeof textStyleMark?.attrs?.fontSize === "string" && textStyleMark.attrs.fontSize) {
+        style.fontSize = textStyleMark.attrs.fontSize;
+    }
+
+    const color = String(textStyleMark?.attrs?.color ?? colorMark?.attrs?.color ?? "");
+
+    if (color && isSafeColor(color)) {
+        style.color = color;
+    }
+
+    return Object.keys(style).length > 0 ? style : undefined;
 }
 
 function renderMarks(children: React.ReactNode, marks: JSONContent["marks"]) {
+    const inlineStyle = getTextStyle(marks);
+    let content = inlineStyle ? <span style={inlineStyle}>{children}</span> : children;
+
     return (marks ?? []).reduce((current, mark) => {
         if (mark.type === "bold") {
             return <strong>{current}</strong>;
@@ -40,11 +72,23 @@ function renderMarks(children: React.ReactNode, marks: JSONContent["marks"]) {
             return <u>{current}</u>;
         }
 
-        if (mark.type === "textStyle" || mark.type === "color") {
+        if (mark.type === "strike") {
+            return <s>{current}</s>;
+        }
+
+        if (mark.type === "superscript") {
+            return <sup>{current}</sup>;
+        }
+
+        if (mark.type === "subscript") {
+            return <sub>{current}</sub>;
+        }
+
+        if (mark.type === "highlight") {
             const color = String(mark.attrs?.color ?? "");
 
             if (color && isSafeColor(color)) {
-                return <span style={{ color }}>{current}</span>;
+                return <mark style={{ backgroundColor: color }}>{current}</mark>;
             }
         }
 
@@ -65,12 +109,12 @@ function renderMarks(children: React.ReactNode, marks: JSONContent["marks"]) {
         }
 
         return current;
-    }, children);
+    }, content);
 }
 
 function renderNode(node: JSONContent, index: number): React.ReactNode {
     const children = node.content?.map(renderNode);
-    const textAlignStyle = getTextAlignStyle(typeof node.attrs?.textAlign === "string" ? node.attrs.textAlign : undefined);
+    const blockStyle = getBlockStyle(node.attrs);
 
     if (node.type === "text") {
         return <span key={index}>{renderMarks(node.text ?? "", node.marks)}</span>;
@@ -80,7 +124,7 @@ function renderNode(node: JSONContent, index: number): React.ReactNode {
         return (
             <p
                 key={index}
-                style={textAlignStyle}
+                style={blockStyle}
             >
                 {children?.length ? children : <br />}
             </p>
@@ -93,14 +137,14 @@ function renderNode(node: JSONContent, index: number): React.ReactNode {
         return level === 3 ? (
             <h3
                 key={index}
-                style={textAlignStyle}
+                style={blockStyle}
             >
                 {children}
             </h3>
         ) : (
             <h2
                 key={index}
-                style={textAlignStyle}
+                style={blockStyle}
             >
                 {children}
             </h2>
