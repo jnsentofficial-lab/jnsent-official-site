@@ -3,6 +3,7 @@ import type React from "react";
 import type { CSSProperties } from "react";
 import type { Json } from "@/shared/types/Database";
 import { hasRichTextContent, toRichTextContent } from "@/shared/lib/richText/richText";
+import { getImageElementStyle, getImageFrameStyle, getImageWrapperStyle, normalizeImageAlign, normalizeImageWidth } from "@/shared/ui/richText/extensions/imageLayout";
 
 type RichTextRendererProps = {
     content: Json | null | undefined;
@@ -170,18 +171,27 @@ function renderNode(node: JSONContent, index: number): React.ReactNode {
     if (node.type === "image") {
         const src = String(node.attrs?.src ?? "");
         const alt = String(node.attrs?.alt ?? "");
+        const align = normalizeImageAlign(node.attrs?.align);
+        const width = normalizeImageWidth(node.attrs?.imageWidth);
 
         if (!isSafeHref(src)) {
             return null;
         }
 
         return (
-            <img
-                alt={alt}
-                className="my-5 h-auto max-w-full rounded-lg border border-slate-200 object-contain"
+            <div
                 key={index}
-                src={src}
-            />
+                style={getImageWrapperStyle(align)}
+            >
+                <span style={getImageFrameStyle(width)}>
+                    <img
+                        alt={alt}
+                        className="rounded-lg border border-slate-200 object-contain"
+                        src={src}
+                        style={getImageElementStyle()}
+                    />
+                </span>
+            </div>
         );
     }
 

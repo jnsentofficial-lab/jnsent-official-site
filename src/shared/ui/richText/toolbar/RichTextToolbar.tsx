@@ -21,6 +21,7 @@ import {
 } from "@/shared/ui/richText/toolbar/icons";
 
 type RichTextToolbarState = {
+    isImageActive: boolean;
     isBold: boolean;
     isItalic: boolean;
     isUnderline: boolean;
@@ -488,6 +489,12 @@ export function RichTextToolbar({ editor, editorState, isUploading, hasImageUplo
                 <DropdownMenu
                     onSelect={(value) => {
                         runCommand(() => {
+                            if (editorState?.isImageActive) {
+                                const imageAlign = value === "justify" ? "left" : value;
+                                editor?.chain().setImageAlign(imageAlign as "left" | "center" | "right").run();
+                                return;
+                            }
+
                             editor?.chain().setTextAlign(value as "left" | "center" | "right" | "justify").run();
                         });
                         closeMenus();

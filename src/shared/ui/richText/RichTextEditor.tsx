@@ -3,7 +3,6 @@
 import Color from "@tiptap/extension-color";
 import FontFamily from "@tiptap/extension-font-family";
 import Highlight from "@tiptap/extension-highlight";
-import Image from "@tiptap/extension-image";
 import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import TextAlign from "@tiptap/extension-text-align";
@@ -15,6 +14,8 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import type { RichTextContent } from "@/shared/lib/richText/richText";
 import { emptyRichTextContent } from "@/shared/lib/richText/richText";
 import { FontSize, LineHeight } from "@/shared/ui/richText/extensions/richTextExtensions";
+import { normalizeImageAlign } from "@/shared/ui/richText/extensions/imageLayout";
+import { ResizableImage } from "@/shared/ui/richText/extensions/resizableImage";
 import { RichTextToolbar } from "@/shared/ui/richText/toolbar/RichTextToolbar";
 
 type RichTextEditorProps = {
@@ -25,7 +26,7 @@ type RichTextEditorProps = {
 };
 
 const editorContentClassName =
-    "min-h-[18rem] bg-white text-base leading-[1.5] outline-none [&_.is-editor-empty:first-child::before]:pointer-events-none [&_.is-editor-empty:first-child::before]:float-left [&_.is-editor-empty:first-child::before]:h-0 [&_.is-editor-empty:first-child::before]:text-slate-400 [&_.is-editor-empty:first-child::before]:content-[attr(data-placeholder)] [&_a]:text-blue-700 [&_a]:underline [&_h2]:mb-3 [&_h2]:mt-5 [&_h2]:text-2xl [&_h2]:font-bold [&_h3]:mb-2 [&_h3]:mt-4 [&_h3]:text-xl [&_h3]:font-bold [&_ol]:list-decimal [&_ol]:pl-6 [&_ul]:list-disc [&_ul]:pl-6";
+    "min-h-[18rem] bg-white text-base leading-[1.5] outline-none [&_.is-editor-empty:first-child::before]:pointer-events-none [&_.is-editor-empty:first-child::before]:float-left [&_.is-editor-empty:first-child::before]:h-0 [&_.is-editor-empty:first-child::before]:text-slate-400 [&_.is-editor-empty:first-child::before]:content-[attr(data-placeholder)] [&_a]:text-blue-700 [&_a]:underline [&_h2]:mb-3 [&_h2]:mt-5 [&_h2]:text-2xl [&_h2]:font-bold [&_h3]:mb-2 [&_h3]:mt-4 [&_h3]:text-xl [&_h3]:font-bold [&_ol]:list-decimal [&_ol]:pl-6 [&_ul]:list-disc [&_ul]:pl-6 [&_.rich-text-image-node]:w-full";
 
 export function RichTextEditor({ value = emptyRichTextContent, onChange, onImageUpload, placeholder = "본문을 입력하세요." }: RichTextEditorProps) {
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -61,7 +62,7 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
             Placeholder.configure({
                 placeholder,
             }),
-            Image.configure({
+            ResizableImage.configure({
                 allowBase64: false,
                 inline: false,
             }),
@@ -97,8 +98,11 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
         selector: ({ editor: currentEditor }) => {
             const textStyle = currentEditor?.getAttributes("textStyle") ?? {};
             const parentAttrs = currentEditor?.state.selection.$head.parent.attrs ?? {};
+            const isImageActive = currentEditor?.isActive("image") ?? false;
+            const imageAlign = normalizeImageAlign(currentEditor?.getAttributes("image").align);
 
             return {
+                isImageActive,
                 isBold: currentEditor?.isActive("bold") ?? false,
                 isItalic: currentEditor?.isActive("italic") ?? false,
                 isUnderline: currentEditor?.isActive("underline") ?? false,
@@ -108,15 +112,17 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
                 isBulletList: currentEditor?.isActive("bulletList") ?? false,
                 isOrderedList: currentEditor?.isActive("orderedList") ?? false,
                 isLink: currentEditor?.isActive("link") ?? false,
-                textAlign: (currentEditor?.isActive({ textAlign: "justify" })
-                    ? "justify"
-                    : currentEditor?.isActive({ textAlign: "center" })
-                      ? "center"
-                      : currentEditor?.isActive({ textAlign: "right" })
-                        ? "right"
-                        : currentEditor?.isActive({ textAlign: "left" })
-                          ? "left"
-                          : null) as "left" | "center" | "right" | "justify" | null,
+                textAlign: (isImageActive
+                    ? imageAlign
+                    : currentEditor?.isActive({ textAlign: "justify" })
+                      ? "justify"
+                      : currentEditor?.isActive({ textAlign: "center" })
+                        ? "center"
+                        : currentEditor?.isActive({ textAlign: "right" })
+                          ? "right"
+                          : currentEditor?.isActive({ textAlign: "left" })
+                            ? "left"
+                            : null) as "left" | "center" | "right" | "justify" | null,
                 textColor: (textStyle.color as string | undefined) ?? null,
                 highlightColor: (currentEditor?.getAttributes("highlight").color as string | undefined) ?? null,
                 fontFamily: (textStyle.fontFamily as string | undefined) ?? null,
@@ -160,7 +166,12 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
 
         try {
             const url = await onImageUpload(file);
-            editor.chain().focus(undefined, { scrollIntoView: false }).setImage({ src: url, alt: file.name }).run();
+            editor
+                .chain()
+                .focus(undefined, { scrollIntoView: false })
+                .setImage({ src: url, alt: file.name })
+                .updateAttributes("image", { align: "left", imageWidth: "100%" })
+                .run();
         } finally {
             setIsUploading(false);
         }
