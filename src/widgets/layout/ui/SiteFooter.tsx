@@ -30,7 +30,7 @@ export function SiteFooter() {
                     <br />
                     대표 우인식
                     <br />
-                    사업자등록번호 -
+                    사업자등록번호 414-77-00332
                     <br />
                     <br />
                     <strong className="text-white/50 text-[1.4rem] font-[500]">CONTACT</strong>
