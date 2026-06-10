@@ -181,9 +181,9 @@ function renderNode(node: JSONContent, index: number): React.ReactNode {
         return (
             <div
                 key={index}
-                style={getImageWrapperStyle(align)}
+                style={getImageWrapperStyle()}
             >
-                <span style={getImageFrameStyle(width)}>
+                <span style={getImageFrameStyle(width, align)}>
                     <img
                         alt={alt}
                         className="rounded-lg border border-slate-200 object-contain"

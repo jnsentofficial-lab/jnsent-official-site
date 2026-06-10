@@ -57,13 +57,13 @@ export function ResizableImageNodeView({ node, selected, updateAttributes }: Nod
             as="div"
             className="rich-text-image-node"
             data-align={align}
-            style={getImageWrapperStyle(align)}
+            style={getImageWrapperStyle()}
         >
             <div
                 className={`relative ${selected ? "outline outline-2 outline-[#3b82f6]" : ""}`}
                 contentEditable={false}
                 ref={frameRef}
-                style={getImageFrameStyle(width)}
+                style={getImageFrameStyle(width, align)}
             >
                 <img
                     alt={String(node.attrs.alt ?? "")}

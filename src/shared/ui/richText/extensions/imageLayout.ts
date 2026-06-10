@@ -30,20 +30,22 @@ export function normalizeImageWidth(value: unknown) {
     return "100%";
 }
 
-export function getImageWrapperStyle(align: ImageAlign) {
+export function getImageWrapperStyle() {
     return {
-        textAlign: align,
-        lineHeight: 0,
+        display: "block",
+        width: "100%",
         margin: "1.6rem 0",
+        lineHeight: 0,
     } as const;
 }
 
-export function getImageFrameStyle(width: string) {
+export function getImageFrameStyle(width: string, align: ImageAlign) {
     return {
         width,
         maxWidth: "100%",
-        display: "inline-block",
-        verticalAlign: "top",
+        display: "block",
+        marginLeft: align === "center" || align === "right" ? "auto" : "0",
+        marginRight: align === "center" ? "auto" : "0",
     } as const;
 }
 

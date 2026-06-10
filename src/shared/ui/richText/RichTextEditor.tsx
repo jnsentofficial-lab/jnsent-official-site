@@ -11,6 +11,7 @@ import { Placeholder } from "@tiptap/extensions/placeholder";
 import { EditorContent, useEditor, useEditorState } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { getSelectedImagePosition } from "@/shared/ui/richText/extensions/imageSelection";
 import type { RichTextContent } from "@/shared/lib/richText/richText";
 import { emptyRichTextContent } from "@/shared/lib/richText/richText";
 import { FontSize, LineHeight } from "@/shared/ui/richText/extensions/richTextExtensions";
@@ -30,6 +31,7 @@ const editorContentClassName =
 
 export function RichTextEditor({ value = emptyRichTextContent, onChange, onImageUpload, placeholder = "본문을 입력하세요." }: RichTextEditorProps) {
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const selectedImagePositionRef = useRef<number | null>(null);
     const lastSyncedValueRef = useRef(JSON.stringify(value));
     const [isUploading, setIsUploading] = useState(false);
     const editor = useEditor({
@@ -98,8 +100,11 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
         selector: ({ editor: currentEditor }) => {
             const textStyle = currentEditor?.getAttributes("textStyle") ?? {};
             const parentAttrs = currentEditor?.state.selection.$head.parent.attrs ?? {};
-            const isImageActive = currentEditor?.isActive("image") ?? false;
-            const imageAlign = normalizeImageAlign(currentEditor?.getAttributes("image").align);
+            const selectedImagePosition = getSelectedImagePosition(currentEditor);
+            const isImageActive = selectedImagePosition !== null;
+            const imageAlign = isImageActive
+                ? normalizeImageAlign(currentEditor?.state.doc.nodeAt(selectedImagePosition)?.attrs.align)
+                : normalizeImageAlign(currentEditor?.getAttributes("image").align);
 
             return {
                 isImageActive,
@@ -136,6 +141,23 @@ export function RichTextEditor({ value = emptyRichTextContent, onChange, onImage
             };
         },
     });
+
+    useEffect(() => {
+        if (!editor) {
+            return;
+        }
+
+        function syncSelectedImagePosition() {
+            selectedImagePositionRef.current = getSelectedImagePosition(editor);
+        }
+
+        syncSelectedImagePosition();
+        editor.on("selectionUpdate", syncSelectedImagePosition);
+
+        return () => {
+            editor.off("selectionUpdate", syncSelectedImagePosition);
+        };
+    }, [editor]);
 
     useEffect(() => {
         if (!editor) {

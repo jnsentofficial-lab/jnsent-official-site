@@ -2,6 +2,7 @@
 
 import type { Editor } from "@tiptap/react";
 import { useEffect, useRef, useState } from "react";
+import { applyImageAlign, getSelectedImagePosition } from "@/shared/ui/richText/extensions/imageSelection";
 import { ColorPickerPopover } from "@/shared/ui/richText/toolbar/ColorPickerPopover";
 import { isSameColor } from "@/shared/ui/richText/toolbar/colorPalette";
 import {
@@ -137,6 +138,7 @@ function DropdownMenu({
 
 export function RichTextToolbar({ editor, editorState, isUploading, hasImageUpload, onImageUploadClick }: RichTextToolbarProps) {
     const toolbarRef = useRef<HTMLDivElement>(null);
+    const pendingImagePositionRef = useRef<number | null>(null);
     const [openDropdown, setOpenDropdown] = useState<DropdownKey>(null);
     const [openColorPicker, setOpenColorPicker] = useState<ColorPickerKey>(null);
     const [recentTextColors, setRecentTextColors] = useState<string[]>([]);
@@ -175,8 +177,29 @@ export function RichTextToolbar({ editor, editorState, isUploading, hasImageUplo
     }
 
     function toggleDropdown(key: DropdownKey) {
+        if (key === "align") {
+            pendingImagePositionRef.current = getSelectedImagePosition(editor);
+        }
+
         setOpenColorPicker(null);
         setOpenDropdown((prev) => (prev === key ? null : key));
+    }
+
+    function applyAlignment(value: string) {
+        if (!editor) {
+            return;
+        }
+
+        const imagePosition = getSelectedImagePosition(editor) ?? pendingImagePositionRef.current;
+
+        if (imagePosition !== null) {
+            const imageAlign = value === "justify" ? "left" : (value as "left" | "center" | "right");
+            applyImageAlign(editor, imagePosition, imageAlign);
+            pendingImagePositionRef.current = imagePosition;
+            return;
+        }
+
+        editor.chain().setTextAlign(value as "left" | "center" | "right" | "justify").focus(undefined, { scrollIntoView: false }).run();
     }
 
     function toggleColorPicker(key: ColorPickerKey) {
@@ -248,6 +271,9 @@ export function RichTextToolbar({ editor, editorState, isUploading, hasImageUplo
         <div
             className="sticky z-10 flex flex-wrap items-center border-b border-b-[var(--adaptive-grey200)] bg-[#f7f8fa]"
             data-rich-text-toolbar
+            onMouseDown={(event) => {
+                event.preventDefault();
+            }}
             ref={toolbarRef}
         >
             <div
@@ -488,15 +514,7 @@ export function RichTextToolbar({ editor, editorState, isUploading, hasImageUplo
                 </button>
                 <DropdownMenu
                     onSelect={(value) => {
-                        runCommand(() => {
-                            if (editorState?.isImageActive) {
-                                const imageAlign = value === "justify" ? "left" : value;
-                                editor?.chain().setImageAlign(imageAlign as "left" | "center" | "right").run();
-                                return;
-                            }
-
-                            editor?.chain().setTextAlign(value as "left" | "center" | "right" | "justify").run();
-                        });
+                        applyAlignment(value);
                         closeMenus();
                     }}
                     open={openDropdown === "align"}
