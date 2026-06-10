@@ -2,7 +2,7 @@
 
 import type { Editor } from "@tiptap/react";
 import { useEffect, useRef, useState } from "react";
-import { applyImageAlign, getSelectedImagePosition } from "@/shared/ui/richText/extensions/imageSelection";
+import { applyAlignmentToSelection, getSelectedImagePosition } from "@/shared/ui/richText/extensions/imageSelection";
 import { ColorPickerPopover } from "@/shared/ui/richText/toolbar/ColorPickerPopover";
 import { isSameColor } from "@/shared/ui/richText/toolbar/colorPalette";
 import {
@@ -190,16 +190,8 @@ export function RichTextToolbar({ editor, editorState, isUploading, hasImageUplo
             return;
         }
 
-        const imagePosition = getSelectedImagePosition(editor) ?? pendingImagePositionRef.current;
-
-        if (imagePosition !== null) {
-            const imageAlign = value === "justify" ? "left" : (value as "left" | "center" | "right");
-            applyImageAlign(editor, imagePosition, imageAlign);
-            pendingImagePositionRef.current = imagePosition;
-            return;
-        }
-
-        editor.chain().setTextAlign(value as "left" | "center" | "right" | "justify").focus(undefined, { scrollIntoView: false }).run();
+        applyAlignmentToSelection(editor, value);
+        pendingImagePositionRef.current = getSelectedImagePosition(editor);
     }
 
     function toggleColorPicker(key: ColorPickerKey) {

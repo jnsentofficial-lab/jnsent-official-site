@@ -1,7 +1,8 @@
 "use client";
 
 import { NodeViewWrapper, type NodeViewProps } from "@tiptap/react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { startImageDrag } from "@/shared/ui/richText/extensions/imageDrag";
 import { getImageElementStyle, getImageFrameStyle, getImageWrapperStyle, normalizeImageAlign, normalizeImageWidth } from "@/shared/ui/richText/extensions/imageLayout";
 
 function clampWidthPercent(nextWidth: number, parentWidth: number) {
@@ -14,10 +15,39 @@ function clampWidthPercent(nextWidth: number, parentWidth: number) {
     return Math.min(100, Math.max(20, percent));
 }
 
-export function ResizableImageNodeView({ node, selected, updateAttributes }: NodeViewProps) {
+export function ResizableImageNodeView({ node, selected, updateAttributes, getPos, editor }: NodeViewProps) {
     const frameRef = useRef<HTMLDivElement>(null);
+    const dragSessionRef = useRef<{ cleanup: () => void } | null>(null);
+    const [isDragging, setIsDragging] = useState(false);
     const align = normalizeImageAlign(node.attrs.align);
     const width = normalizeImageWidth(node.attrs.imageWidth);
+
+    function endDragState() {
+        dragSessionRef.current?.cleanup();
+        dragSessionRef.current = null;
+        setIsDragging(false);
+    }
+
+    useEffect(() => {
+        return () => {
+            dragSessionRef.current?.cleanup();
+            dragSessionRef.current = null;
+        };
+    }, []);
+
+    useEffect(() => {
+        function handleTransaction() {
+            if (dragSessionRef.current) {
+                endDragState();
+            }
+        }
+
+        editor.on("transaction", handleTransaction);
+
+        return () => {
+            editor.off("transaction", handleTransaction);
+        };
+    }, [editor]);
 
     function startResize(event: React.PointerEvent<HTMLButtonElement>) {
         event.preventDefault();
@@ -52,6 +82,44 @@ export function ResizableImageNodeView({ node, selected, updateAttributes }: Nod
         document.addEventListener("pointerup", handlePointerUp);
     }
 
+    function startMove(event: React.PointerEvent<HTMLDivElement>) {
+        if (event.button !== 0) {
+            return;
+        }
+
+        if (isDragging) {
+            endDragState();
+            return;
+        }
+
+        const frame = frameRef.current;
+        const position = getPos();
+
+        if (!frame || typeof position !== "number") {
+            return;
+        }
+
+        dragSessionRef.current?.cleanup();
+        dragSessionRef.current = startImageDrag({
+            captureElement: frame,
+            editor,
+            event,
+            getFromPos: () => {
+                const nextPosition = getPos();
+
+                return typeof nextPosition === "number" ? nextPosition : null;
+            },
+            onComplete: () => {
+                dragSessionRef.current = null;
+                setIsDragging(false);
+            },
+            onDragStateChange: setIsDragging,
+            onSelect: (position) => {
+                editor.chain().setNodeSelection(position).focus(undefined, { scrollIntoView: false }).run();
+            },
+        });
+    }
+
     return (
         <NodeViewWrapper
             as="div"
@@ -60,8 +128,9 @@ export function ResizableImageNodeView({ node, selected, updateAttributes }: Nod
             style={getImageWrapperStyle()}
         >
             <div
-                className={`relative ${selected ? "outline outline-2 outline-[#3b82f6]" : ""}`}
+                className={`relative ${selected ? "outline outline-2 outline-[#3b82f6]" : ""} ${isDragging ? "cursor-grabbing opacity-60" : "cursor-grab"}`}
                 contentEditable={false}
+                onPointerDown={startMove}
                 ref={frameRef}
                 style={getImageFrameStyle(width, align)}
             >
