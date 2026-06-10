@@ -58,7 +58,7 @@ export function BjSupportBenefits() {
                     {benefits.map((item) => (
                         <article
                             key={item.title}
-                            className="flex mobile:gap-[1.2rem] pc:gap-[1.6rem] rounded-[2.4rem] bg-[var(--adaptive-black50)] mobile:p-[1.6rem] pc:p-[1.6rem_2rem]"
+                            className="flex mobile:gap-[1.2rem] pc:gap-[1.6rem] rounded-[2.4rem] border border-[var(--adaptive-black100)] mobile:p-[1.6rem] pc:p-[1.6rem_2rem]"
                             // className="flex mobile:gap-[1.2rem] pc:gap-[1.6rem] rounded-[2.4rem] mobile:p-[1.6rem] pc:p-[1.6rem_2rem]"
                             data-report-id={`BJ 지원 혜택 ${item.title}`}
                             data-report-type="item"
@@ -92,7 +92,7 @@ export function BjSupportBenefits() {
                 <article
                     data-report-id="BJ 지원 상담 CTA"
                     data-report-type="item"
-                    className="flex items-center justify-between mobile:flex-col pc:flex-row gap-[1.2rem] p-[1.6rem] bg-[#eeeeee99] rounded-[2.4rem]"
+                    className="flex items-center justify-between mobile:flex-col pc:flex-row gap-[1.2rem] p-[1.6rem] bg-[var(--adaptive-black50)] rounded-[2.4rem]"
                 >
                     <section className="flex items-center gap-[1.6rem]">
                         <div className="mobile:hidden pc:block bg-white rounded-full p-[0.8rem]">
@@ -108,13 +108,13 @@ export function BjSupportBenefits() {
                     </section>
 
                     <UI.Button
-                        className="px-[2.0rem] flex items-center gap-[1.2rem] bg-[var(--adaptive-black900)] text-[var(--adaptive-black50)] rounded-[1.6rem] font-bold text-[1.6rem] mobile:w-full pc:w-fit justify-center"
+                        className="px-[2.0rem] border border-[var(--adaptive-black100)] flex items-center gap-[1.2rem] text-[var(--adaptive-black50)] rounded-[1.6rem] font-bold text-[1.6rem] mobile:w-full pc:w-fit justify-center"
                         onClick={() => window.open("https://open.kakao.com/o/s0UmPOAc", "_blank", "noopener,noreferrer")}
                     >
                         <Text.Shimmer
                             color={{
-                                start: "#ffffff",
-                                end: "#555555",
+                                start: "#cc0c50",
+                                end: "#000000",
                             }}
                             duration={10}
                         >
