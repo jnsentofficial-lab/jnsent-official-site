@@ -14,6 +14,10 @@ import { Report } from "@/widgets/layout/Report";
 import { QuickMenu } from "@/widgets/layout/QuickMenu";
 
 import { buildRootMetadata } from "@/shared/lib/seo";
+import {
+    GoogleTagManager,
+    GoogleTagManagerNoscript,
+} from "@/shared/lib/analytics/GoogleTagManager";
 
 import "@/shared/style/scss/index.scss";
 import "./globals.css";
@@ -27,7 +31,11 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="ko">
+            <head>
+                <GoogleTagManager />
+            </head>
             <body>
+                <GoogleTagManagerNoscript />
                 <GlobalErrorBoundary>
                     <QueryProvider>
                         <AuthProvider>
