@@ -3,7 +3,10 @@
 import { useSectionTheme } from "@/shared/hooks";
 import { Text } from "@/shared/ui/kit/Text";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { useRef } from "react";
+
+const MotionImage = motion.create(Image);
 
 export function FinalCtaSection() {
     const sectionRef = useRef<HTMLElement>(null);
@@ -23,10 +26,13 @@ export function FinalCtaSection() {
                 //     width: `${progress}%`,
                 // }}
             >
-                <motion.img
+                <MotionImage
                     className="w-full h-full object-cover"
-                    src={"/images/landing/cta.png"}
+                    src="/images/landing/optimized/cta.c65112b2.avif"
                     alt=""
+                    width={1536}
+                    height={1024}
+                    sizes="100vw"
                     style={{
                         maskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
                         WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",

@@ -4,7 +4,10 @@ import { useSectionTheme } from "@/shared/hooks";
 import useScrollProgress from "@/shared/hooks/useScrollProgress";
 import { Text } from "@/shared/ui/kit/Text";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { useRef } from "react";
+
+const MotionImage = motion.create(Image);
 
 const proofCards = [
     { icon: "▣", title: "실제 10:0 계약서", text: "일부 업체의 허위 홍보와 다릅니다. 실제 계약 사례와 계약서를 즉시 대조해드립니다." },
@@ -36,10 +39,13 @@ export function TransparencyProof() {
                 // ref={ref}
                 className="absolute inset-0 pointer-events-none z-0"
             >
-                <motion.img
+                <MotionImage
                     className="w-full h-full object-cover"
-                    src={"/images/landing/meeting.png"}
+                    src="/images/landing/optimized/meeting.50114570.avif"
                     alt=""
+                    width={1672}
+                    height={941}
+                    sizes="100vw"
                     style={{
                         maskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
                         WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
