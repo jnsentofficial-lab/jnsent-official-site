@@ -4,7 +4,10 @@ import { useSectionTheme } from "@/shared/hooks";
 import useScrollProgress from "@/shared/hooks/useScrollProgress";
 import { Text } from "@/shared/ui/kit/Text";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { useRef } from "react";
+
+const MotionImage = motion.create(Image);
 
 const knowhowItems = [
     { title: "플랫폼 직속 엔터", text: "협력 포함 120명 이상의 BJ 네트워크 보유" },
@@ -35,10 +38,13 @@ export function OperationKnowhow() {
                     WebkitMaskImage: "radial-gradient(ellipse at left 50%, black 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.2) 55%, transparent 100%)",
                 }}
             >
-                <motion.img
+                <MotionImage
                     className="w-full h-full object-cover object-center"
-                    src={"/images/landing/studio.jpg"}
+                    src="/images/landing/optimized/studio.1e890eed.avif"
                     alt=""
+                    width={2560}
+                    height={2560}
+                    sizes="100vw"
                     style={{
                         maskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
                         WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",

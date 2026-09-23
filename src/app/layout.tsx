@@ -3,6 +3,7 @@ import { PopupProvider } from "@/app/providers/PopupProvider";
 import { QueryProvider } from "@/app/providers/QueryProvider";
 import { GlobalErrorBoundary } from "@/app/providers/GlobalErrorBoundary";
 import { GlobalErrorListener } from "@/app/providers/GlobalErrorListener";
+import localFont from "next/font/local";
 
 import { Toast } from "@/widgets/layout/Toast";
 import { ApiPendingOverlay } from "@/widgets/layout/ApiPendingOverlay";
@@ -24,13 +25,31 @@ import "./globals.css";
 
 export const metadata = buildRootMetadata();
 
+const suit = localFont({
+    src: [
+        { path: "../../public/fonts/suit/woff2/SUIT-Light.woff2", weight: "300" },
+        { path: "../../public/fonts/suit/woff2/SUIT-Regular.woff2", weight: "400" },
+        { path: "../../public/fonts/suit/woff2/SUIT-Medium.woff2", weight: "500" },
+        { path: "../../public/fonts/suit/woff2/SUIT-SemiBold.woff2", weight: "600" },
+        { path: "../../public/fonts/suit/woff2/SUIT-Bold.woff2", weight: "700" },
+        { path: "../../public/fonts/suit/woff2/SUIT-ExtraBold.woff2", weight: "800" },
+        { path: "../../public/fonts/suit/woff2/SUIT-Heavy.woff2", weight: "900" },
+    ],
+    variable: "--font-suit",
+    display: "swap",
+    preload: false,
+});
+
 export default function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="ko">
+        <html
+            lang="ko"
+            className={suit.variable}
+        >
             <head>
                 <GoogleTagManager />
             </head>
