@@ -1,19 +1,9 @@
 @font-face {
     font-family: "NanumSquare";
-    font-weight: 300;
-    font-style: normal;
-    font-display: swap;
-    src: url("/fonts/NanumSquare/woff2/NanumSquareL.woff2") format("woff2");
-    /* Light (L) */
-}
-
-@font-face {
-    font-family: "NanumSquare";
     font-weight: 400;
     font-style: normal;
     font-display: swap;
-    src: url("/fonts/NanumSquare/woff2/NanumSquareR.woff2") format("woff2");
-    /* Regular (R) */
+    src: url("/fonts/optimized/NanumSquareR.aa32197e.woff2") format("woff2");
 }
 
 @font-face {
@@ -21,8 +11,7 @@
     font-weight: 700;
     font-style: normal;
     font-display: swap;
-    src: url("/fonts/NanumSquare/woff2/NanumSquareB.woff2") format("woff2");
-    /* Bold (B) */
+    src: url("/fonts/optimized/NanumSquareB.47d76a82.woff2") format("woff2");
 }
 
 @font-face {
@@ -30,78 +19,5 @@
     font-weight: 800;
     font-style: normal;
     font-display: swap;
-    src: url("/fonts/NanumSquare/woff2/NanumSquareEB.woff2") format("woff2");
-    /* ExtraBold (EB) */
-}
-
-@font-face {
-    font-family: "SUIT";
-    font-weight: 100;
-    font-style: normal;
-    font-display: swap;
-    src: url("/fonts/suit/woff2/SUIT-Thin.woff2") format("woff2");
-}
-
-@font-face {
-    font-family: "SUIT";
-    font-weight: 200;
-    font-style: normal;
-    font-display: swap;
-    src: url("/fonts/suit/woff2/SUIT-ExtraLight.woff2") format("woff2");
-}
-
-@font-face {
-    font-family: "SUIT";
-    font-weight: 300;
-    font-style: normal;
-    font-display: swap;
-    src: url("/fonts/suit/woff2/SUIT-Light.woff2") format("woff2");
-}
-
-@font-face {
-    font-family: "SUIT";
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-    src: url("/fonts/suit/woff2/SUIT-Regular.woff2") format("woff2");
-}
-
-@font-face {
-    font-family: "SUIT";
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-    src: url("/fonts/suit/woff2/SUIT-Medium.woff2") format("woff2");
-}
-
-@font-face {
-    font-family: "SUIT";
-    font-weight: 600;
-    font-style: normal;
-    font-display: swap;
-    src: url("/fonts/suit/woff2/SUIT-SemiBold.woff2") format("woff2");
-}
-
-@font-face {
-    font-family: "SUIT";
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-    src: url("/fonts/suit/woff2/SUIT-Bold.woff2") format("woff2");
-}
-
-@font-face {
-    font-family: "SUIT";
-    font-weight: 800;
-    font-style: normal;
-    font-display: swap;
-    src: url("/fonts/suit/woff2/SUIT-ExtraBold.woff2") format("woff2");
-}
-
-@font-face {
-    font-family: "SUIT";
-    font-weight: 900;
-    font-style: normal;
-    font-display: swap;
-    src: url("/fonts/suit/woff2/SUIT-Heavy.woff2") format("woff2");
+    src: url("/fonts/optimized/NanumSquareEB.e703add6.woff2") format("woff2");
 }

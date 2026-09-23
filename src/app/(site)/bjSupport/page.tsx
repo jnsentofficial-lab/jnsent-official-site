@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import { BjSupportView } from "@/views/bjSupport/BjSupportView";
 import Main from "@/widgets/layout/Main";
 import { buildCmsPageMetadata } from "@/shared/lib/seo";
@@ -14,10 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
     });
 }
 
-export default async function BjSupportPage() {
-    const cookieStore = await cookies();
-    void cookieStore;
-
+export default function BjSupportPage() {
     return (
         <Main
             id="bj-support"

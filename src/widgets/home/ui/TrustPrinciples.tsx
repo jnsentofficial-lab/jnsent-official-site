@@ -107,9 +107,12 @@ export function TrustPrinciples() {
                         whileInView={{ opacity: 1 }}
                     >
                         <div className="absolute top-0 left-0 w-full h-full object-cover z-[-1] bg-[linear-gradient(0deg,#000000f7_10%,#00000050)]" />
-                        <img
-                            src={"/images/landing/meeting.png"}
+                        <Image
+                            src="/images/landing/optimized/meeting.50114570.avif"
                             alt=""
+                            width={1672}
+                            height={941}
+                            sizes="(max-width: 768px) 100vw, 50vw"
                             className="absolute top-0 left-0 w-full h-full object-cover z-[-10]"
                         />
                         {/* <section className="bg-[linear-gradient(0deg,#000000f7_10%,#00000050)] h-full flex-1 p-[3.2rem] flex flex-col justify-between"> */}

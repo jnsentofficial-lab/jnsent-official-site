@@ -1,4 +1,3 @@
-import { cookies } from "next/headers";
 import { HomeView } from "@/views/home/HomeView";
 import Main from "@/widgets/layout/Main";
 import { buildPageMetadata } from "@/shared/lib/seo";
@@ -11,10 +10,7 @@ export const metadata = buildPageMetadata({
     path: "/",
 });
 
-export default async function HomePage() {
-    const cookieStore = await cookies();
-    void cookieStore;
-
+export default function HomePage() {
     return (
         <Main
             id="home"
