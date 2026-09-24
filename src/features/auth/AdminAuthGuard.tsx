@@ -28,7 +28,7 @@ export function AdminAuthGuard({ children }: AdminAuthGuardProps) {
     const searchParams = useSearchParams();
     const isLoginPath = pathname === adminLoginPath;
     const isAdminPath = pathname.startsWith("/admin");
-    const { data, isError, isLoading } = useAdminSessionQuery();
+    const { data, isError, isLoading } = useAdminSessionQuery(isAdminPath);
 
     useEffect(() => {
         if (!isAdminPath) {

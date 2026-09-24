@@ -9,11 +9,12 @@ export const AuthRoutes = {
     ADMIN_LOGOUT: "auth:adminLogout",
 } as const;
 
-export const useAdminSessionQuery = () => {
+export const useAdminSessionQuery = (enabled = true) => {
     const MUTATION_KEY = AuthRoutes.ADMIN_SESSION;
     const { data, isLoading, isError, error, isFetching, isFetched, refetch } = useQuery({
         queryKey: [MUTATION_KEY, "useAdminSessionQuery"],
         queryFn: () => getAdminSessionFetch(),
+        enabled,
         staleTime: 0,
         retry: false,
     });
