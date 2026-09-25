@@ -14,5 +14,11 @@ export async function GET() {
         .order("col", { ascending: true })
         .order("stack_order", { ascending: true });
 
-    return error ? apiError(error.message, 500) : apiOk(data ?? []);
+    return error
+        ? apiError(error.message, 500)
+        : apiOk(data ?? [], {
+              headers: {
+                  "Cache-Control": "public, max-age=15, s-maxage=30",
+              },
+          });
 }

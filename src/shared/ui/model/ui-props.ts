@@ -60,6 +60,7 @@ export interface LinkProps {
     disabled?: boolean;
     disabledMsg?: string;
     href: string;
+    prefetch?: boolean;
     ref?: any;
     ariaLabel?: string;
     defaultHover?: boolean;

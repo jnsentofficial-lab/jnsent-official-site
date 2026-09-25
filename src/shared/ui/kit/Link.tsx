@@ -21,6 +21,7 @@ export const Linker = ({
     defaultHover = false,
     disabled = false,
     href,
+    prefetch,
     disabledMsg,
     rippleColor = "#ffffff",
     ref,
@@ -63,7 +64,7 @@ export const Linker = ({
     const height = sizeHeights[size];
 
     return (
-        <Link href={href}>
+        <Link href={href} prefetch={prefetch}>
             <motion.button
                 type={type}
                 ref={ref}
