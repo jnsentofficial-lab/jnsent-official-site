@@ -80,6 +80,7 @@ export function SiteHeader() {
                     className="mobile:hidden pc:block whitespace-nowrap p-[0.8rem_1.2rem] bg-[var(--adaptive-grey900)] text-white rounded-full"
                     // className="text-[1.6rem] inline-flex shrink-0 items-center justify-center rounded-full bg-black px-6 py-[0.2rem] text-base text-white"
                     href="/bjSupport"
+                    prefetch={false}
                     data-report-id="상단 헤더 지원 버튼"
                     data-report-type="item"
                     size="sm"
@@ -183,6 +184,7 @@ export function SiteHeader() {
                                 <UI.Linker
                                     className={`${currentPathName === "/bjSupport" ? "text-[var(--adaptive-red500)]" : "text-[var(--adaptive-grey500)]"} text-[2.8rem] hover:text-[#ff6673] flex items-center gap-[1.6rem]`}
                                     href={"/bjSupport"}
+                                    prefetch={false}
                                     // key={item.href}
                                     onClick={() => setIsMobileNavOpen(false)}
                                 >
